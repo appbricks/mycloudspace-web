@@ -1,22 +1,30 @@
-import React from "react"
-import { Router } from "@reach/router"
-import Layout from "../components/layout"
-import Details from "../components/Details"
-import Home from "../components/Home"
-import Login from "../components/Login"
-import SignUp from "../components/SignUp"
-import PrivateRoute from "../components/PrivateRoute"
+import React from 'react'
+import { Router } from '@reach/router'
+import {
+  Profile,
+  Home,
+  IndexPage,
+  Reset,
+  SignIn,
+  SignUp,
+} from '../components/Pages'
+import PrivateRoute from '../components/Routes/PrivateRoute'
+import PublicRoute from '../components/Routes/PublicRoute'
+import Amplify from 'aws-amplify'
+import config from '../aws-exports'
 
-
-const App = () => (
-  <Layout>
+const App = () => {
+  Amplify.configure(config)
+  return (
     <Router>
-      <PrivateRoute path="/app/home" component={Home} />
-      <PrivateRoute path="/app/profile" component={Details} />
-      <Login path="/app/login" />
-      <SignUp path="/app/signup" />
+      <PrivateRoute path="/home" component={Home} />
+      <PrivateRoute path="/profile" component={Profile} />
+      <PublicRoute path="/signin" component={SignIn} />
+      <PublicRoute path="/signup" component={SignUp} />
+      <PublicRoute path="/reset" component={Reset} />
+      <PublicRoute path="/" component={IndexPage} />
     </Router>
-  </Layout>
-)
+  )
+}
 
 export default App
