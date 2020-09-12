@@ -1,28 +1,27 @@
 import React from 'react'
 import { Redirect } from '@reach/router'
-import { AppUser } from '../Auth'
+import { AppUser } from '../../../features/authentication/components/Auth'
 import { Layout } from '../Layout'
 
-class PublicRoute extends React.Component {
+class PrivateRoute extends React.Component {
   constructor(props) {
     super(props)
     this.state = {}
   }
-
   componentDidMount() {}
 
   render() {
     const { isLoggedIn } = AppUser
-    if (isLoggedIn()) {
-      return <Redirect to="/home" noThrow />
+    if (!isLoggedIn()) {
+      return <Redirect to="/signin" noThrow />
     }
     const { component: Component, location, ...rest } = this.props
     return (
-      <Layout>
+      <Layout isUserNav={true}>
         <Component {...rest} />
       </Layout>
     )
   }
 }
 
-export default PublicRoute
+export default PrivateRoute

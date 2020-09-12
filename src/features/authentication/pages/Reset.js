@@ -3,7 +3,7 @@ import { Link } from 'gatsby'
 import { navigate } from '@reach/router'
 import { Auth } from 'aws-amplify'
 
-import { AuthForm, Email, Password, ConfirmationCode } from '../Forms'
+import { AuthForm, Email, Password, ConfirmationCode } from '../../../common/components/Forms'
 
 const initialState = {
   email: ``,

@@ -3,8 +3,8 @@ import { Link } from 'gatsby'
 import { navigate } from '@reach/router'
 import { Auth } from 'aws-amplify'
 
-import { AppUser } from '../Auth'
-import { AuthForm, Email, Password } from '../Forms'
+import { AppUser } from '../components/Auth'
+import { AuthForm, Email, Password } from '../../../common/components/Forms'
 
 class SignIn extends React.Component {
   state = {

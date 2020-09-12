@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
 
-import { getCurrentUser } from '../Auth/AppUser'
+import { getCurrentUser } from '../../authentication/components/Auth/AppUser'
 import { AppContent } from '../Layout'
 
 const Profile = () => {
