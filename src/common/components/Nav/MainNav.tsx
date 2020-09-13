@@ -1,26 +1,28 @@
-import React, { Component, FunctionComponent, ReactElement } from 'react';
+import React, { Component, FunctionComponent, ReactElement, useEffect } from 'react';
 import { Box, List, Hidden } from '@material-ui/core';
 import styled from 'styled-components';
 
 import { ILayoutBuilder } from '@mui-treasury/layout/builders/LayoutBuilder';
 import { getDrawerSidebar, getSidebarTrigger, getSidebarContent } from '@mui-treasury/layout';
 import { useSidebarTrigger } from '@mui-treasury/layout/hooks';
-import { NavMenu, NavItem } from '@mui-treasury/components/menu/navigation';
+import { NavMenu } from '@mui-treasury/components/menu/navigation';
 import { useZoomNavigationMenuStyles } from '@mui-treasury/styles/navigationMenu/zoom';
 
 import { MenuDataItem, ToolBarMenuItem, SideBarMenuItem } from './MenuItem';
-import { findBreakingChanges } from 'graphql';
 
 const DrawerSidebar = getDrawerSidebar(styled)
 const SidebarTrigger = getSidebarTrigger(styled)
 const SidebarContent = getSidebarContent(styled)
 
-const CloseSideBar: FunctionComponent<any> = () => {
+// noop element with hook that forces the
+// sidebar navigation pane to close if open
+const CloseSidebar: FunctionComponent<CloseSidebarProps> = ({ delegate }) => {
   const { id, state, setOpen } = useSidebarTrigger('navSidebar', 'SidebarTrigger');  
   if (state.open) {
-    setOpen(id, false);
+    useEffect(() => setOpen(id, false));
   }
-  return (<></>);
+  delegate.sideBarClosed = true;
+  return null;
 }
 
 class ToolbarNav extends Component<NavProps, NavState> {
@@ -28,10 +30,10 @@ class ToolbarNav extends Component<NavProps, NavState> {
   constructor(props: NavProps) {
     super(props);
 
-    this.state = { active: 0 };
-    props.delegate.addDelegate(this.setSelection.bind(this));
+    this.state = { active: props.delegate.active };
+    props.delegate.toolbarNavSelection = this.setSelection.bind(this);
   }
-
+  
   setSelection(itemIndex: number) {
     if (itemIndex != this.state.active) {
       this.setState({ active: itemIndex });  
@@ -60,7 +62,7 @@ class ToolbarNav extends Component<NavProps, NavState> {
               />
             ))}
           </NavMenu>
-          <CloseSideBar />
+          <CloseSidebar delegate={delegate}/>
         </Hidden>
         <Hidden mdUp>
           <SidebarTrigger sidebarId='navSidebar' />
@@ -72,17 +74,29 @@ class ToolbarNav extends Component<NavProps, NavState> {
 
 class SidbarNav extends Component<NavProps, NavState> {
 
+  private _closeSidebar: boolean;
+
   constructor(props: NavProps) {
     super(props);
 
-    this.state = { active: 0 };
-    props.delegate.addDelegate(this.setSelection.bind(this));
+    this.state = { active: props.delegate.active };
+    this._closeSidebar = false;
+
+    props.delegate.sidebarNavSelection = this.setSelection.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.delegate.sideBarClosed = false;
   }
 
   setSelection(itemIndex: number) {
     if (itemIndex != this.state.active) {
       this.setState({ active: itemIndex });  
     }
+
+    // flag sidebar should be 
+    // closed as selection was made
+    this._closeSidebar = true;
   }
   
   render() {
@@ -92,31 +106,43 @@ class SidbarNav extends Component<NavProps, NavState> {
     const isLoggedin = false;
 
     return (
-      <List>
-        {menuItems.map((item, index) => (
-          <SideBarMenuItem 
-            key={index}
-            item={item.getItem(isLoggedin ? 'loggedin' : MenuDataItem.DEFAULT)} 
-            active={this.state.active == index}
-            onClick={() => delegate.setSelection(index)}
-            rightSideBar={rightSideBar}
-          />
-        ))}
-      </List>
+      <>
+        {this._closeSidebar
+          ? <CloseSidebar delegate={delegate}/>
+          : <List>
+              {menuItems.map((item, index) => (
+                <SideBarMenuItem 
+                  key={index}
+                  item={item.getItem(isLoggedin ? 'loggedin' : MenuDataItem.DEFAULT)} 
+                  active={this.state.active == index}
+                  onClick={() => delegate.setSelection(index)}
+                  rightSideBar={rightSideBar}
+                />
+              ))}
+            </List>
+        }
+      </>
     );
   }
 }
 
-class SetSelectionDelegate {
+// this delegate propagates selection 
+// changes to all nav components
+class NavStateDelegate {
 
-  fns: ((itemIndex: number) => void)[] = [];
-
-  addDelegate(fn: (itemIndex: number) => void) {
-    this.fns.push(fn);
-  }
+  active: number = 0;
+  sideBarClosed: boolean = true;
+ 
+  toolbarNavSelection?: (itemIndex: number) => void;
+  sidebarNavSelection?: (itemIndex: number) => void;
 
   setSelection(itemIndex: number) {
-    this.fns.map(fn => fn(itemIndex));
+    this.active = itemIndex;
+
+    this.toolbarNavSelection!(itemIndex);
+    if (!this.sideBarClosed) {
+      this.sidebarNavSelection!(itemIndex);
+    }
   }
 }
 
@@ -134,7 +160,7 @@ const getMainNav = (
       });
   });
 
-  const delegate = new SetSelectionDelegate();
+  const delegate = new NavStateDelegate();
 
   return {
     toolBarNav: <ToolbarNav menuItems={menuItems} delegate={delegate} rightSideBar={rightSideBar}/>,
@@ -148,8 +174,12 @@ const getMainNav = (
 
 type NavProps = {
   menuItems: MenuDataItem[]
-  delegate: SetSelectionDelegate
+  delegate: NavStateDelegate
   rightSideBar?: boolean
+}
+
+type CloseSidebarProps = {
+  delegate: NavStateDelegate
 }
 
 type NavState = {
