@@ -8,7 +8,7 @@ import Header from '../Header';
 import { MetaTitle } from '../Title';
 import { getMainNav } from '../Nav';
 
-import { mainMenu } from '../../../data/config/Menus';
+import { mainMenu } from '../../../data/config/menus';
 
 const scheme = MuiLayout();
 scheme.configureHeader(builder => {
