@@ -128,7 +128,7 @@ const useStyles = makeStyles((props: StyleProps) => ({
     },
   }),
   icon: (props: StyleProps) => ({
-    minWidth: 40,
+    minWidth: '2.2rem',
     opacity: 0.6,
     color: props.accentColor,
   }),
