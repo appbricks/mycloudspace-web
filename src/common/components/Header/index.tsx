@@ -4,10 +4,9 @@ import { getHeader } from '@mui-treasury/layout';
 import styled from 'styled-components';
 
 import { MainNav } from '../Nav/MainNav';
+import { APPBRICKS_LOGO } from '../../../data/config/assets';
 
 const HeaderMain = getHeader(styled);
-
-const logo = require('../../../assets/images/appbricks-logo-name.png');
 
 const useStyles = makeStyles({
   logo: {
@@ -34,7 +33,7 @@ const Header: FunctionComponent<HeaderProps> = ({ mainNav }) => {
           <img
             className={styles.logo}
             alt='appbricks'
-            src={logo}
+            src={APPBRICKS_LOGO}
           />
         </Box>      
         {mainNav.toolBarNav}
