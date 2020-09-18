@@ -41,20 +41,20 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({data, pageContext}) =
           justify='space-between'
           alignItems='center'
         >
-          <Box>
+          <Box className={styles.footerTextBlock}>
             <Icon width={30} icon={linkedinIcon} className={styles.footerIcon} />
-            <Icon width={30} icon={twitterIcon} className={styles.footerIcon} />
-            <Icon width={30} icon={githubIcon} className={styles.footerIcon} />
+            <Icon width={30} icon={twitterIcon} className={cx(styles.footerIcon, styles.footerInsideIcon)} />
+            <Icon width={30} icon={githubIcon} className={cx(styles.footerIcon, styles.footerInsideIcon)} />
           </Box>
-          <Box>
-            <Box component='span'>
+          <Box display='flex' flexWrap='wrap' className={styles.footerTextBlock}>
+            <Box className={styles.footerTextItem}>
               <Box component='span' fontWeight='fontWeightBold'>Phone:</Box> +1-716-575-5305             
             </Box>
-            <Box component='span' ml={1.5}>
+            <Box className={styles.footerTextItem}>
               <Box component='span' fontWeight='fontWeightBold'>Email:</Box> marketing@appbricks.io
             </Box>
           </Box>
-          <Box>© 2020 AppBricks, Inc.</Box>
+          <Box className={styles.footerTextBlock}>© 2020 AppBricks, Inc.</Box>
         </Grid>
       </Footer>
     </>
@@ -96,7 +96,7 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center'
   },
   contentBody: {
-    margin: '1rem 1rem',
+    margin: '0 1rem 0 1rem',
     color: '#fff',
     '& h1': {
       fontSize: '4rem',
@@ -108,9 +108,18 @@ const useStyles = makeStyles(() => ({
     }
   },
   footerIcon: {
-    marginTop: '0.21rem',
-    marginBottom: '-0.3rem',
-    marginLeft: '1rem'
+    marginTop: '0.35rem',
+    marginBottom: '-0.25rem',
+  },
+  footerInsideIcon: {
+    marginLeft: '0.5rem',
+  },
+  footerTextBlock: {
+    margin: '0 1rem 0 1rem'
+  },
+  footerTextItem: {
+    marginRight: '0.5rem',
+    whiteSpace: 'nowrap'
   }
 }));
 
