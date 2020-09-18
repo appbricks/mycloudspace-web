@@ -30,7 +30,7 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({data, pageContext}) =
           }}
         >
           <Container maxWidth='lg' disableGutters>
-            <div dangerouslySetInnerHTML={{ __html: data.markdownRemark.html }} />
+            <div dangerouslySetInnerHTML={{ __html: data.markdownRemark.html }} className={styles.contentBody} />
           </Container>
         </div>
       </Layout>
@@ -42,8 +42,8 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({data, pageContext}) =
           alignItems='center'
         >
           <Box>
-            <Icon width={30} icon={linkedinIcon} className={cx(styles.footerIcon, styles.footerIconSpacing)} />
-            <Icon width={30} icon={twitterIcon} className={cx(styles.footerIcon, styles.footerIconSpacing)} />
+            <Icon width={30} icon={linkedinIcon} className={styles.footerIcon} />
+            <Icon width={30} icon={twitterIcon} className={styles.footerIcon} />
             <Icon width={30} icon={githubIcon} className={styles.footerIcon} />
           </Box>
           <Box>
@@ -93,7 +93,10 @@ const useStyles = makeStyles(() => ({
     backgroundSize: 'cover',
     backgroundPosition: 'bottom',
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'center'
+  },
+  contentBody: {
+    margin: '1rem 1rem',
     color: '#fff',
     '& h1': {
       fontSize: '4rem',
@@ -107,9 +110,7 @@ const useStyles = makeStyles(() => ({
   footerIcon: {
     marginTop: '0.21rem',
     marginBottom: '-0.3rem',
-  },
-  footerIconSpacing: {
-    marginRight: '1rem'
+    marginLeft: '1rem'
   }
 }));
 
