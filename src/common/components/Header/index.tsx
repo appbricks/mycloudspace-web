@@ -6,25 +6,6 @@ import styled from 'styled-components';
 import { MainNav } from '../Nav/MainNav';
 import { APPBRICKS_LOGO } from '../../../data/config/assets';
 
-const HeaderMain = getHeader(styled);
-
-const useStyles = makeStyles({
-  root: {
-    backgroundColor: '#fff',
-  },
-  logo: {
-    height: 40,
-  },
-  toolbar: {
-    minHeight: '64px !important',
-    boxShadow: 'inset 0 -1px 0 rgba(100,121,143,0.122)',
-  }
-});
-
-type HeaderProps = {
-  mainNav: MainNav
-}
-
 const Header: FunctionComponent<HeaderProps> = ({ mainNav }) => {
   const styles = useStyles();
   
@@ -48,3 +29,22 @@ const Header: FunctionComponent<HeaderProps> = ({ mainNav }) => {
 };
 
 export default Header;
+
+const useStyles = makeStyles({
+  root: {
+    backgroundColor: '#fff',
+  },
+  logo: {
+    height: 40,
+  },
+  toolbar: {
+    minHeight: '64px !important',
+    boxShadow: 'inset 0 -1px 0 rgba(100,121,143,0.122)',
+  }
+});
+
+const HeaderMain = getHeader(styled);
+
+type HeaderProps = {
+  mainNav: MainNav
+}
