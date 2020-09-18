@@ -38,9 +38,6 @@ const useDrawerStyles = makeStyles(() => ({
 
 const mainNav = getMainNav(scheme, mainMenu, true);
 
-type LayoutProps = {
-}
-
 const Layout: FunctionComponent<LayoutProps> = ({ children }) => {
   const drawerStyles = useDrawerStyles();
 
@@ -64,3 +61,6 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }) => {
 }
 
 export default Layout;
+
+type LayoutProps = {
+}

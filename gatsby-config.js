@@ -7,8 +7,15 @@ module.exports = {
     {
       resolve: 'gatsby-source-filesystem',
       options: {
-        path: `${__dirname}/src/assets/images`,
+        path: `${__dirname}/assets/images`,
         name: 'images',
+      },
+    },
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        path: `${__dirname}/content/`,
+        name: '/',
       },
     },
     {
@@ -28,7 +35,7 @@ module.exports = {
         background_color: '#663399',
         theme_color: '#663399',
         display: 'minimal-ui',
-        icon: 'src/assets/images/mycloudspace-icon.png',
+        icon: 'assets/images/mycloudspace-icon.png',
       },
     },
     'gatsby-plugin-react-helmet',
@@ -36,6 +43,34 @@ module.exports = {
     'gatsby-plugin-sass',
     'gatsby-plugin-sharp',
     'gatsby-transformer-sharp',
+    {
+      resolve: 'gatsby-transformer-remark',
+      options: {
+        plugins: [
+          {
+            resolve: 'gatsby-remark-relative-images',
+            options: {
+              staticFolderName: 'images'
+            }
+          },
+          {
+            resolve: 'gatsby-remark-images',
+            options: {
+              // It's important to specify the maxWidth (in pixels) of
+              // the content container as this plugin uses this as the
+              // base for generating different widths of each image.
+              maxWidth: 2048
+            }
+          },
+          {
+            resolve: 'gatsby-remark-copy-linked-files',
+            options: {
+              destinationDir: 'static'
+            }
+          }
+        ]
+      }
+    },    
     {
       resolve: 'gatsby-plugin-google-analytics',
       options: {
