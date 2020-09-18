@@ -8,7 +8,7 @@ import Header from '../Header';
 import { MetaTitle } from '../Title';
 import { getMainNav } from '../Nav';
 
-import { mainMenu } from '../../../data/config/menus';
+import { mainMenu } from '../../../config/menus';
 
 const Layout: FunctionComponent<LayoutProps> = ({ bottomGutterHeight, children }) => {
   const styles = useStyles({ bottomGutterHeight });

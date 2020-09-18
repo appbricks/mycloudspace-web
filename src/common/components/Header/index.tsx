@@ -4,7 +4,7 @@ import { getHeader } from '@mui-treasury/layout';
 import styled from 'styled-components';
 
 import { MainNav } from '../Nav/MainNav';
-import { APPBRICKS_LOGO } from '../../../data/config/assets';
+import { LOGO } from '../../../config/assets';
 
 const Header: FunctionComponent<HeaderProps> = ({ mainNav }) => {
   const styles = useStyles();
@@ -17,7 +17,7 @@ const Header: FunctionComponent<HeaderProps> = ({ mainNav }) => {
             <img
               className={styles.logo}
               alt='appbricks'
-              src={APPBRICKS_LOGO}
+              src={LOGO}
             />
           </Box>      
           {mainNav.toolBarNav}
