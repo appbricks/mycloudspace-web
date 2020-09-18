@@ -4,6 +4,20 @@ import { makeStyles } from '@material-ui/core/styles';
 import { NavItem } from '@mui-treasury/components/menu/navigation';
 import cx from 'clsx';
 
+export type MenuItem = {
+  title: string
+  subTitle?: string
+
+  icon?: {
+    element: ReactElement
+    showInMain?: boolean
+    anchorRightInMain?: boolean
+    anchorRightInSideBar?: boolean
+  }
+
+  link: string
+}
+
 export class MenuDataItem {
 
   static DEFAULT = '__default__';
@@ -143,20 +157,6 @@ const useStyles = makeStyles((props: StyleProps) => ({
     opacity: 1,
   },
 }));
-
-export type MenuItem = {
-  title: string
-  subTitle?: string
-
-  icon?: {
-    element: ReactElement
-    showInMain?: boolean
-    anchorRightInMain?: boolean
-    anchorRightInSideBar?: boolean
-  }
-
-  link: string
-}
 
 type ToolBarMenuItemProps = {
   item: MenuItem,

@@ -10,36 +10,8 @@ import { getMainNav } from '../Nav';
 
 import { mainMenu } from '../../../data/config/menus';
 
-const scheme = MuiLayout();
-scheme.configureHeader(builder => {
-  builder.registerConfig('xs', {
-    position: 'fixed',
-    clipped: true,
-    initialHeight: 64,
-  });
-});
-
-const Content = getContent(styled);
-
-const theme = createMuiTheme({
-  palette: {
-    background: {
-      default: '#fff',
-    },
-  },
-});
-
-const useDrawerStyles = makeStyles(() => ({
-  paper: {
-    border: 'none',
-    overflow: 'visible',
-  }
-}));
-
-const mainNav = getMainNav(scheme, mainMenu, true);
-
-const Layout: FunctionComponent<LayoutProps> = ({ children }) => {
-  const drawerStyles = useDrawerStyles();
+const Layout: FunctionComponent<LayoutProps> = ({ bottomGutterHeight, children }) => {
+  const styles = useStyles({ bottomGutterHeight });
 
   return (
     <StylesProvider injectFirst>
@@ -52,7 +24,7 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }) => {
 
         <Header mainNav={mainNav} />
 
-        <Content>
+        <Content className={styles.scrollView}>
           {children}
         </Content>
       </Root>
@@ -62,5 +34,43 @@ const Layout: FunctionComponent<LayoutProps> = ({ children }) => {
 
 export default Layout;
 
+const useStyles = makeStyles((props: StyleProps) => ({
+  paper: {  
+    border: 'none',
+    overflow: 'visible',
+  },
+  scrollView: (props: StyleProps) => ({
+    height: props.bottomGutterHeight 
+      ? `calc(100vh - (64px + ${props.bottomGutterHeight}))`
+      : 'calc(100vh - 64px)',
+    overflowY: 'scroll'
+  })
+}));
+
+const scheme = MuiLayout();
+scheme.configureHeader(builder => {
+  builder.registerConfig('xs', {
+    position: 'fixed',
+    clipped: true,
+    initialHeight: 64,
+  });
+});
+
+const theme = createMuiTheme({
+  palette: {
+    background: {
+      default: '#fff',
+    },
+  },
+});
+
+const mainNav = getMainNav(scheme, mainMenu, true);
+const Content = getContent(styled);
+
 type LayoutProps = {
+  bottomGutterHeight?: string 
+}
+
+type StyleProps = {
+  bottomGutterHeight?: string 
 }
