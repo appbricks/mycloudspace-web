@@ -1,7 +1,7 @@
 import React, { FunctionComponent, ReactElement } from 'react';
 import { Box, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
-import { NavItem } from '@mui-treasury/components/menu/navigation';
 import { makeStyles } from '@material-ui/core/styles';
+import { NavItem } from '@mui-treasury/components/menu/navigation';
 import cx from 'clsx';
 
 export class MenuDataItem {

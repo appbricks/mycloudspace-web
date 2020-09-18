@@ -52,7 +52,7 @@ class ToolbarNav extends Component<NavProps, NavState> {
         mr={rightSideBar ? '' : 'auto'}
       >
         <Hidden smDown>
-          <NavMenu useStyles={useZoomNavigationMenuStyles}  >            
+          <NavMenu useStyles={useZoomNavigationMenuStyles}>
             {menuItems.map((item, index) => (
               <ToolBarMenuItem 
                 key={index}
