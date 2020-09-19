@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { Container, Box, Grid, IconButton, useMediaQuery, makeStyles } from '@material-ui/core';
+import { Container, Box, Grid, useMediaQuery, makeStyles } from '@material-ui/core';
 import { graphql } from 'gatsby';
 import cx from 'clsx';
 
@@ -32,15 +32,15 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({data, pageContext}) =
       alignItems='center'
     >
       <Box className={styles.footerTextBlock}>
-        <IconButton href={social.linkedin} className={styles.footerIcon} >
-          <Icon width={30} icon={linkedinIcon}/>
-        </IconButton>
-        <IconButton href={social.twitter} className={cx(styles.footerIcon, styles.footerInsideIcon)}>
-          <Icon width={30} icon={twitterIcon}/>
-        </IconButton>
-        <IconButton href={social.github} className={cx(styles.footerIcon, styles.footerInsideIcon)}>
-          <Icon width={30} icon={githubIcon}/>
-        </IconButton>
+        <a href={social.linkedin} className={styles.socialLink} target='_blank'>
+          <Icon width={30} icon={linkedinIcon} className={styles.footerIcon} />
+        </a>
+        <a href={social.twitter} className={styles.socialLink} target='_blank'>
+          <Icon width={30} icon={twitterIcon} className={cx(styles.footerIcon, styles.footerInsideIcon)} />
+        </a>
+        <a href={social.github} className={styles.socialLink} target='_blank'>
+          <Icon width={30} icon={githubIcon} className={cx(styles.footerIcon, styles.footerInsideIcon)} />
+        </a>
       </Box>
       <Box display='flex' flexWrap='wrap' className={styles.footerTextBlock}>
         <Box className={styles.footerTextItem}>
@@ -161,13 +161,17 @@ const useStyles = makeStyles(() => ({
       fontWeight: 'lighter'
     }
   },
+  socialLink: {
+    textDecoration: 'none',
+    color: '#fff'
+  },
   footerIcon: {
-    marginLeft: '-17px',
-    padding: '8px',
-    color: '#fff',
+    marginTop: '6px',
+    marginBottom: '-4px',
+    marginLeft: '-4px',
   },
   footerInsideIcon: {
-    marginLeft: '-5px',
+    marginLeft: '8px',
   },
   footerTextBlock: {
     margin: '0 16px 0 16px'
