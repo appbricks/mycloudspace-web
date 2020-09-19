@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { Container, Box, Grid, useMediaQuery, makeStyles } from '@material-ui/core';
+import { Container, Box, Grid, IconButton, useMediaQuery, makeStyles } from '@material-ui/core';
 import { graphql } from 'gatsby';
 import cx from 'clsx';
 
@@ -22,6 +22,8 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({data, pageContext}) =
   const styles = useStyles();
   const { image } = data.markdownRemark.frontmatter;
 
+  const { organization, social, contact } = data.allDataJson.edges[0].node;
+
   const footerContent = (
     <Grid
       container
@@ -30,19 +32,25 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({data, pageContext}) =
       alignItems='center'
     >
       <Box className={styles.footerTextBlock}>
-        <Icon width={30} icon={linkedinIcon} className={styles.footerIcon} />
-        <Icon width={30} icon={twitterIcon} className={cx(styles.footerIcon, styles.footerInsideIcon)} />
-        <Icon width={30} icon={githubIcon} className={cx(styles.footerIcon, styles.footerInsideIcon)} />
+        <IconButton href={social.linkedin} className={styles.footerIcon} >
+          <Icon width={30} icon={linkedinIcon}/>
+        </IconButton>
+        <IconButton href={social.twitter} className={cx(styles.footerIcon, styles.footerInsideIcon)}>
+          <Icon width={30} icon={twitterIcon}/>
+        </IconButton>
+        <IconButton href={social.github} className={cx(styles.footerIcon, styles.footerInsideIcon)}>
+          <Icon width={30} icon={githubIcon}/>
+        </IconButton>
       </Box>
       <Box display='flex' flexWrap='wrap' className={styles.footerTextBlock}>
         <Box className={styles.footerTextItem}>
-          <Box component='span' fontWeight='fontWeightBold'>Phone:</Box> +1-716-575-5305             
+          <Box component='span' fontWeight='fontWeightBold'>Phone: </Box>{contact.phone}
         </Box>
         <Box className={styles.footerTextItem}>
-          <Box component='span' fontWeight='fontWeightBold'>Email:</Box> marketing@appbricks.io
+          <Box component='span' fontWeight='fontWeightBold'>Email: </Box>{contact.email}
         </Box>
       </Box>
-      <Box className={styles.footerTextBlock}>© 2020 AppBricks, Inc.</Box>
+      <Box className={styles.footerTextBlock}>{organization.copyright}</Box>
     </Grid>
   );
 
@@ -110,6 +118,24 @@ export const pageQuery = graphql`
         slug        
       }
     }
+    allDataJson {
+      edges {
+        node {
+          organization {
+            copyright
+          }
+          social {
+            github
+            linkedin
+            twitter
+          }
+          contact {
+            email
+            phone
+          }
+        }
+      }
+    }
   }
 `;
 
@@ -136,11 +162,12 @@ const useStyles = makeStyles(() => ({
     }
   },
   footerIcon: {
-    marginTop: '6px',
-    marginBottom: '-4px',
+    marginLeft: '-17px',
+    padding: '8px',
+    color: '#fff',
   },
   footerInsideIcon: {
-    marginLeft: '8px',
+    marginLeft: '-5px',
   },
   footerTextBlock: {
     margin: '0 16px 0 16px'
@@ -163,6 +190,24 @@ type LandingPageProps = {
         name: string
         slug: string
       }
+    }
+    allDataJson: {
+      edges: {
+        node: {
+          organization: {
+            copyright: string
+          }
+          social: {
+            github: string
+            linkedin: string
+            twitter: string
+          }
+          contact: {
+            email: string
+            phone: string
+          }
+        }
+      }[]
     }
   }
   pageContext: any
