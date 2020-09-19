@@ -9,9 +9,14 @@ import twitterIcon from '@iconify/icons-mdi/twitter';
 import githubIcon from '@iconify/icons-mdi/github';
 
 import Layout from '../common/components/Layout';
-import Footer from '../common/components/Footer';
+import StatusbarFooter from './components/statusbar-footer';
 
-const LandingPage: FunctionComponent<LandingPageProps> = ({data, pageContext}) => {
+const LandingPage: FunctionComponent<LandingPageProps> = ({ 
+  data, 
+  pageContext 
+}) => {
+
+  const styles = useStyles();
 
   var bottomGutterHeight: string | undefined = '49px';
   bottomGutterHeight = useMediaQuery('(max-width:797px)') ? '77px' : bottomGutterHeight;
@@ -19,40 +24,9 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({data, pageContext}) =
   // remove sticky footer for mobile devices
   bottomGutterHeight = useMediaQuery('(max-width:414px)') ? undefined : bottomGutterHeight;
 
-  const styles = useStyles();
   const { image } = data.markdownRemark.frontmatter;
-
   const { organization, social, contact } = data.allDataJson.edges[0].node;
-
-  const footerContent = (
-    <Grid
-      container
-      direction='row'
-      justify='space-between'
-      alignItems='center'
-    >
-      <Box className={styles.footerTextBlock}>
-        <a href={social.linkedin} className={styles.socialLink} target='_blank'>
-          <Icon width={30} icon={linkedinIcon} className={styles.footerIcon} />
-        </a>
-        <a href={social.twitter} className={styles.socialLink} target='_blank'>
-          <Icon width={30} icon={twitterIcon} className={cx(styles.footerIcon, styles.footerInsideIcon)} />
-        </a>
-        <a href={social.github} className={styles.socialLink} target='_blank'>
-          <Icon width={30} icon={githubIcon} className={cx(styles.footerIcon, styles.footerInsideIcon)} />
-        </a>
-      </Box>
-      <Box display='flex' flexWrap='wrap' className={styles.footerTextBlock}>
-        <Box className={styles.footerTextItem}>
-          <Box component='span' fontWeight='fontWeightBold'>Phone: </Box>{contact.phone}
-        </Box>
-        <Box className={styles.footerTextItem}>
-          <Box component='span' fontWeight='fontWeightBold'>Email: </Box>{contact.email}
-        </Box>
-      </Box>
-      <Box className={styles.footerTextBlock}>{organization.copyright}</Box>
-    </Grid>
-  );
+  const topics = data.allMarkdownRemark.edges;
 
   return (
     <>
@@ -71,27 +45,25 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({data, pageContext}) =
             <div dangerouslySetInnerHTML={{ __html: data.markdownRemark.html }} className={styles.contentBody} />
           </Container>
         </div>
-        <p>some content 01</p>
-        <p>some content 02</p>
-        <p>some content 03</p>
-        <p>some content 04</p>
-        <p>some content 05</p>
-        <p>some content 06</p>
-        <p>some content 07</p>
-        <p>some content 08</p>
-        <p>some content 10</p>
+        
+        {topics.map(({ node }, index) => (
+          <div key={index} dangerouslySetInnerHTML={{ __html: node.html }} />
+        ))}
 
         {!bottomGutterHeight &&
-          <Footer>
-            {footerContent}
-          </Footer>
+          <StatusbarFooter 
+            organization={organization}
+            social={social}
+            contact={contact} />            
         }
       </Layout>
 
       {!!bottomGutterHeight &&
-        <Footer sticky>
-          {footerContent}
-        </Footer>
+        <StatusbarFooter 
+          organization={organization}
+          social={social}
+          contact={contact}
+          sticky />
       }
     </>
   )
@@ -100,7 +72,7 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({data, pageContext}) =
 export default LandingPage;
 
 export const pageQuery = graphql`
-  query PageTopics($id: String!) {
+  query PageTopicsQuery($id: String!, $name: String!) {
     markdownRemark(id: { eq: $id }) {
       html
       frontmatter {        
@@ -111,11 +83,26 @@ export const pageQuery = graphql`
               ...GatsbyImageSharpFluid
             }
           }
-        } 
+        }
       }
-      fields {
-        name
-        slug        
+    }
+    allMarkdownRemark(filter: {frontmatter: {contentPage: {eq: $name}}}) {
+      edges {
+        node {
+          html
+          frontmatter {
+            topicOrder
+            image {
+              childImageSharp {
+                fluid(maxWidth: 2048, quality: 100) {
+                  ...GatsbyImageSharpFluid
+                }
+              }
+            }
+            textBlockAlign
+            buttonLink
+          }     
+        }
       }
     }
     allDataJson {
@@ -160,25 +147,6 @@ const useStyles = makeStyles(() => ({
       fontSize: '2rem',
       fontWeight: 'lighter'
     }
-  },
-  socialLink: {
-    textDecoration: 'none',
-    color: '#fff'
-  },
-  footerIcon: {
-    marginTop: '6px',
-    marginBottom: '-4px',
-    marginLeft: '-4px',
-  },
-  footerInsideIcon: {
-    marginLeft: '8px',
-  },
-  footerTextBlock: {
-    margin: '0 16px 0 16px'
-  },
-  footerTextItem: {
-    marginRight: '8px',
-    whiteSpace: 'nowrap'
   }
 }));
 
@@ -190,10 +158,19 @@ type LandingPageProps = {
         title: string
         image: any
       }
-      fields: {
-        name: string
-        slug: string
-      }
+    }
+    allMarkdownRemark: {
+      edges: {
+        node: {
+          html: string
+          frontmatter: {
+            topicOrder: number
+            image: any
+            textBlockAlign: string
+            buttonLink: string
+          }
+        }
+      }[]
     }
     allDataJson: {
       edges: {
