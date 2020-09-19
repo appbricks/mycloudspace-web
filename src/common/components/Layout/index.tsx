@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { StylesProvider,  CssBaseline,  createMuiTheme,  makeStyles } from '@material-ui/core';
+import { StylesProvider, CssBaseline, createMuiTheme, makeStyles } from '@material-ui/core';
 import MuiLayout, { Root, getContent } from '@mui-treasury/layout';
 import styled from 'styled-components';
 
