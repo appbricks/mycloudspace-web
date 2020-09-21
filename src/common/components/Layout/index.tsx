@@ -34,15 +34,21 @@ const Layout: FunctionComponent<LayoutProps> = ({ bottomGutterHeight, children }
 
 export default Layout;
 
-const useStyles = makeStyles((props: StyleProps) => ({
+export const getLayoutViewPortHeight = (bottomGutterHeight?: string) => (
+  bottomGutterHeight 
+    ? `calc(100vh - (${headerHeight}px + ${bottomGutterHeight}))`
+    : `calc(100vh - ${headerHeight}px)`
+)
+
+const headerHeight = 64;
+
+const useStyles = makeStyles(() => ({
   paper: {  
     border: 'none',
     overflow: 'visible',
   },
   scrollView: (props: StyleProps) => ({
-    height: props.bottomGutterHeight 
-      ? `calc(100vh - (64px + ${props.bottomGutterHeight}))`
-      : 'calc(100vh - 64px)',
+    height: getLayoutViewPortHeight(props.bottomGutterHeight),
     overflowY: 'scroll'
   })
 }));
