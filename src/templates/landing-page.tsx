@@ -3,7 +3,8 @@ import { Container, useMediaQuery, makeStyles } from '@material-ui/core';
 import { graphql } from 'gatsby';
 
 import Layout, { getLayoutViewPortHeight } from '../common/components/Layout';
-import ContentTopic from './components/content-topic';
+import ContentTopic, { TopicRefType } from './components/content-topic';
+import ScrollDownButton from './components/scroll-down-button';
 import StatusbarFooter from './components/statusbar-footer';
 
 const LandingPage: FunctionComponent<LandingPageProps> = ({ 
@@ -17,12 +18,18 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({
   // remove sticky footer for mobile devices
   bottomGutterHeight = useMediaQuery('(max-width:414px)') ? undefined : bottomGutterHeight;
 
+  const scrollButtonTop = bottomGutterHeight
+    ? `calc(100vh - ${bottomGutterHeight} - 130px)` 
+    : `calc(100vh - 180px)`;
+
   const viewPortHeight = getLayoutViewPortHeight(bottomGutterHeight);
   const styles = useStyles({ viewPortHeight });
 
   const { image } = data.markdownRemark.frontmatter;
   const { organization, social, contact } = data.allDataJson.edges[0].node;
   const topics = data.allMarkdownRemark.edges;
+
+  const topicRefs: TopicRefType[] = [];
 
   return (
     <>
@@ -38,6 +45,13 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({
           <Container maxWidth='lg' disableGutters>
             <div dangerouslySetInnerHTML={{ __html: data.markdownRemark.html }} className={styles.mainContentBody} />
           </Container>
+          {topics.length < 0 || 
+            <ScrollDownButton 
+              index={0}
+              topicRefs={topicRefs}
+              scrollButtonTop={scrollButtonTop}
+            />
+          }
         </div>
         
         {topics.map(({ node }, index) => {
@@ -45,7 +59,10 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({
           return (
             <ContentTopic
               key={index}
+              index={index}
+              topicRefs={topicRefs}
               height={viewPortHeight}
+              scrollButtonTop={scrollButtonTop}
               content={node.html}
               {...node.frontmatter}
             />

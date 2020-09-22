@@ -1,10 +1,17 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, MutableRefObject, useRef, useEffect } from 'react';
 import { Grid, Paper, Box, Button, makeStyles } from '@material-ui/core';
-import { emphasize } from "@material-ui/core/styles/colorManipulator";
+import { emphasize } from '@material-ui/core/styles/colorManipulator';
+
+import ScrollDownButton from './scroll-down-button';
 
 const ContentTopic: FunctionComponent<ContentTopicProps> = (props) => {
 
+  const ref = useRef<any>(null);
   const styles = useStyles(props);
+
+  useEffect(() => {
+    props.topicRefs.push(ref);
+  });
 
   const button = (<>
     {props.button && (
@@ -22,10 +29,18 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = (props) => {
     )}
   </>);
 
+  const scrollButton = (<>
+    {props.topicRefs.length >= (props.index + 1) || !props.useViewPortHeight || (
+      <ScrollDownButton 
+        index={props.index + 1}
+        topicRefs={props.topicRefs}
+        scrollButtonTop={props.scrollButtonTop}
+      />
+    )}
+  </>)
+
   return (
-    <div
-      className={styles.topicContent}
-    >
+    <div ref={ref} className={styles.topicContent}>
       <Grid
         container
         direction='row'
@@ -38,6 +53,7 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = (props) => {
               {button}
             </Paper>
           </Grid>
+          {scrollButton}
         </>)}
         {(props.textBlockAlign == 'center') && (<>
           <Grid item xs={undefined} sm={1} md={2} lg={3}/>
@@ -88,7 +104,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     width: '100vw',
     height: props.useViewPortHeight ? props.height : 'auto',
-    padding: '32px'
+    padding: '32px',
+    overflow: 'hidden'
   }),
   topicContentBody: (props: ContentTopicProps) => ({
     padding: '8px 32px 8px 32px',
@@ -149,8 +166,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type ContentTopicProps = {
-  height: string,
-  useViewPortHeight: boolean,
+  index: number
+  height: string
+  scrollButtonTop: string
+  useViewPortHeight: boolean
   image: any
   backgroundColor: string
   textBlockAlign: string
@@ -161,4 +180,7 @@ type ContentTopicProps = {
   buttonForegroundColor: string
   buttonBackgroundColor: string
   content: string
+  topicRefs: TopicRefType[] 
 }
+
+export type TopicRefType = MutableRefObject<any>;
