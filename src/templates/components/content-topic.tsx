@@ -145,6 +145,7 @@ const useStyles = makeStyles((theme) => ({
       const styles = {
         backgroundColor: props.buttonBackgroundColor,
         color: props.buttonForegroundColor,
+        margin: props.buttonMargins,
         "&:hover": {
           backgroundColor: emphasize(props.buttonBackgroundColor, 0.1)
         }
@@ -176,6 +177,7 @@ type ContentTopicProps = {
   textBlockForegroundColor: string
   textBlockBackgroundColor: string
   button: string
+  buttonMargins: string
   buttonLink: string
   buttonForegroundColor: string
   buttonBackgroundColor: string

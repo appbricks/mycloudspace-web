@@ -12,6 +12,7 @@ textBlockForegroundColor: '#404040'
 textBlockBackgroundColor: 'rgba(255, 255, 255, 0.7)'
 
 button: 'Our Products'
+buttonMargins: '10px 0 0 0'
 buttonLink: '/products'
 buttonForegroundColor: '#ffffff'
 buttonBackgroundColor: '#4d4d4d'

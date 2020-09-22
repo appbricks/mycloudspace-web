@@ -45,13 +45,13 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({
           <Container maxWidth='lg' disableGutters>
             <div dangerouslySetInnerHTML={{ __html: data.markdownRemark.html }} className={styles.mainContentBody} />
           </Container>
-          {topics.length < 0 || 
+          {topics.length < 0 || (
             <ScrollDownButton 
               index={0}
               topicRefs={topicRefs}
               scrollButtonTop={scrollButtonTop}
             />
-          }
+          )}
         </div>
         
         {topics.map(({ node }, index) => {
@@ -130,6 +130,7 @@ export const pageQuery = graphql`
             textBlockForegroundColor
             textBlockBackgroundColor
             button
+            buttonMargins
             buttonLink
             buttonForegroundColor
             buttonBackgroundColor
@@ -212,6 +213,7 @@ type LandingPageProps = {
             textBlockForegroundColor: string
             textBlockBackgroundColor: string
             button: string
+            buttonMargins: string
             buttonLink: string
             buttonForegroundColor: string
             buttonBackgroundColor: string
