@@ -1,10 +1,26 @@
 import React, { FunctionComponent } from 'react';
-import { Grid, Paper, makeStyles } from '@material-ui/core';
-import cx from 'clsx';
+import { Grid, Paper, Box, Button, makeStyles } from '@material-ui/core';
+import { emphasize } from "@material-ui/core/styles/colorManipulator";
 
 const ContentTopic: FunctionComponent<ContentTopicProps> = (props) => {
-  
+
   const styles = useStyles(props);
+
+  const button = (<>
+    {props.button && (
+      <Box pb={2} display='flex' justifyContent='center'>
+        <Button 
+          href={props.buttonLink}
+          size='large' 
+          variant={props.buttonBackgroundColor == props.textBlockBackgroundColor 
+            ? 'outlined': 'contained'}
+          className={styles.topicButton}
+        >
+          {props.button}
+        </Button>
+      </Box>
+    )}
+  </>);
 
   return (
     <div
@@ -19,24 +35,27 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = (props) => {
           <Grid item xs={12} sm={10} md={8} lg={6}>
             <Paper elevation={4} className={styles.topicContentBody}>
               <div dangerouslySetInnerHTML={{ __html: props.content }} />
+              {button}
             </Paper>
-          </Grid>        
+          </Grid>
         </>)}
         {(props.textBlockAlign == 'center') && (<>
           <Grid item xs={undefined} sm={1} md={2} lg={3}/>
           <Grid item xs={12} sm={10} md={8} lg={6}>
-            <Paper elevation={!!props.backgroundColor ? 4 : 0} className={styles.topicContentBody}>
+            <Paper elevation={props.backgroundColor ? 4 : 0} className={styles.topicContentBody}>
               <div dangerouslySetInnerHTML={{ __html: props.content }} />
+              {button}
             </Paper>
-          </Grid>        
+          </Grid>
           <Grid item xs={undefined} sm={1} md={2} lg={3}/>
         </>)}
         {(props.textBlockAlign == 'left') && (<>
           <Grid item xs={12} sm={10} md={8} lg={6}>
             <Paper elevation={4} className={styles.topicContentBody}>
               <div dangerouslySetInnerHTML={{ __html: props.content }} />
+              {button}
             </Paper>
-          </Grid>        
+          </Grid>
           <Grid item xs={undefined} sm={2} md={4} lg={6}/>
         </>)}
       </Grid>
@@ -50,19 +69,19 @@ const useStyles = makeStyles((theme) => ({
   topicContent: (props: ContentTopicProps) => ({
     backgroundImage: `url(${
       props.image
-        ? !!props.image.childImageSharp 
-          ? props.image.childImageSharp.fluid.src 
+        ? !!props.image.childImageSharp
+          ? props.image.childImageSharp.fluid.src
           : props.image
         : ''
     })`,
     backgroundRepeat: 'no-repeat',
-    backgroundPosition: 
+    backgroundPosition:
       props.textBlockAlign == 'right' ? 'top left' : 'top right',
-    backgroundSize: 
+    backgroundSize:
       props.textBlockAlign == 'center' ? 'cover': 'auto 100%',
-    backgroundAttachment: 
+    backgroundAttachment:
       props.textBlockAlign == 'center' ? 'fixed': 'local',
-    backgroundColor: 
+    backgroundColor:
       props.backgroundColor ? props.backgroundColor : props.textBlockBackgroundColor,
     position: 'relative',
     display: 'flex',
@@ -72,17 +91,17 @@ const useStyles = makeStyles((theme) => ({
     padding: '32px'
   }),
   topicContentBody: (props: ContentTopicProps) => ({
-    padding: '16px',
+    padding: '8px 32px 8px 32px',
     margin: '0 16px 0 16px',
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       // make padding smaller for mobile view in order
       // to fit as much as possible in the text block
-      padding: '4px',
+      padding: '4px 8px 4px 8px',
       margin: '0 0 0 0',
     },
     backgroundColor: props.textBlockBackgroundColor,
     color: props.textBlockForegroundColor,
-    textAlign: 
+    textAlign:
       props.textBlockAlign == 'center' ? 'center' : 'left',
     fontSize: '1rem',
     [theme.breakpoints.up('sm')]: {
@@ -102,7 +121,31 @@ const useStyles = makeStyles((theme) => ({
       fontSize: '2rem',
       fontWeight: 'bold'
     }
-  })
+  }),
+  topicButton: (props: ContentTopicProps) => {
+
+    if (props.button) {
+      const styles = {
+        backgroundColor: props.buttonBackgroundColor,
+        color: props.buttonForegroundColor,
+        "&:hover": {
+          backgroundColor: emphasize(props.buttonBackgroundColor, 0.1)
+        }
+      };
+  
+      if (props.buttonBackgroundColor == props.textBlockBackgroundColor) {
+        Object.assign(styles, {
+          borderColor: props.textBlockForegroundColor,
+          borderWidth: '2px',
+          borderRadius: 0
+        });
+      }
+
+      return styles;
+    } else {
+      return {};
+    }
+  }
 }));
 
 type ContentTopicProps = {
@@ -115,6 +158,7 @@ type ContentTopicProps = {
   textBlockBackgroundColor: string
   button: string
   buttonLink: string
-  buttonColor: string
+  buttonForegroundColor: string
+  buttonBackgroundColor: string
   content: string
 }

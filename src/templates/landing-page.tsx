@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { Container, Grid, Paper, useMediaQuery, makeStyles } from '@material-ui/core';
+import { Container, useMediaQuery, makeStyles } from '@material-ui/core';
 import { graphql } from 'gatsby';
 
 import Layout, { getLayoutViewPortHeight } from '../common/components/Layout';
@@ -188,6 +188,7 @@ type LandingPageProps = {
           html: string
           frontmatter: {
             topicOrder: number
+            useViewPortHeight: boolean
             image: any
             backgroundColor: string
             textBlockAlign: string
@@ -195,7 +196,8 @@ type LandingPageProps = {
             textBlockBackgroundColor: string
             button: string
             buttonLink: string
-            buttonColor: string
+            buttonForegroundColor: string
+            buttonBackgroundColor: string
           }
         }
       }[]
