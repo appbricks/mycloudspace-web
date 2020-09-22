@@ -133,14 +133,17 @@ class NavStateDelegate {
 
   menuItems: MenuDataItem[];
   
-  active: number = -1;
+  active: number;
   sideBarClosed: boolean = true;
  
   toolbarNavSelection?: (itemIndex: number) => void;
   sidebarNavSelection?: (itemIndex: number) => void;
 
   constructor(menuItems: MenuDataItem[]) {
-    this.menuItems = menuItems;styled
+    this.menuItems = menuItems;
+    
+    const pathName = window.location.pathname.replace(/\/$/, "");
+    this.active = menuItems.findIndex(item => (item.getItem().link == pathName));
   }
 
   setSelection(itemIndex: number) {
