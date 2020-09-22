@@ -3,6 +3,7 @@ import { Container, Grid, Paper, useMediaQuery, makeStyles } from '@material-ui/
 import { graphql } from 'gatsby';
 
 import Layout, { getLayoutViewPortHeight } from '../common/components/Layout';
+import ContentTopic from './components/content-topic';
 import StatusbarFooter from './components/statusbar-footer';
 
 const LandingPage: FunctionComponent<LandingPageProps> = ({ 
@@ -16,9 +17,8 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({
   // remove sticky footer for mobile devices
   bottomGutterHeight = useMediaQuery('(max-width:414px)') ? undefined : bottomGutterHeight;
 
-  const styles = useStyles({ 
-    viewPortHeight: getLayoutViewPortHeight(bottomGutterHeight)
-  });
+  const viewPortHeight = getLayoutViewPortHeight(bottomGutterHeight);
+  const styles = useStyles({ viewPortHeight });
 
   const { image } = data.markdownRemark.frontmatter;
   const { organization, social, contact } = data.allDataJson.edges[0].node;
@@ -40,33 +40,17 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({
           </Container>
         </div>
         
-        {topics.map(({ node }, index) => (
-          <div
-            key={index}
-            className={styles.topicContent}
-            style={{
-              backgroundImage: `url(${
-                node.frontmatter.image
-                  ? !!node.frontmatter.image.childImageSharp 
-                    ? node.frontmatter.image.childImageSharp.fluid.src 
-                    : node.frontmatter.image
-                  : ''
-              })`,
-            }}
-          >
-            <Grid
-              container
-              direction='row'
-            >
-              <Grid item xs={undefined} sm={2} md={4} lg={6}/>
-              <Grid item xs={12} sm={10} md={8} lg={6}>
-                <Paper elevation={4} className={styles.topicContentPaper}>
-                  <div dangerouslySetInnerHTML={{ __html: node.html }} className={styles.topicContentBody} />
-                </Paper>
-              </Grid>
-            </Grid>
-          </div>
-        ))}
+        {topics.map(({ node }, index) => {
+
+          return (
+            <ContentTopic
+              key={index}
+              height={viewPortHeight}
+              content={node.html}
+              {...node.frontmatter}
+            />
+          );
+        })}
 
         {!bottomGutterHeight &&
           <StatusbarFooter 
@@ -104,12 +88,19 @@ export const pageQuery = graphql`
         }
       }
     }
-    allMarkdownRemark(filter: {frontmatter: {contentPage: {eq: $name}}}) {
+    allMarkdownRemark(
+      filter: {
+        frontmatter: {contentPage: {eq: $name}}
+      }, 
+      sort: {
+        fields: frontmatter___topicOrder
+      }
+    ) {
       edges {
         node {
           html
           frontmatter {
-            topicOrder
+            useViewPortHeight
             image {
               childImageSharp {
                 fluid(maxWidth: 2048, quality: 100) {
@@ -117,8 +108,14 @@ export const pageQuery = graphql`
                 }
               }
             }
+            backgroundColor
             textBlockAlign
+            textBlockForegroundColor
+            textBlockBackgroundColor
+            button
             buttonLink
+            buttonForegroundColor
+            buttonBackgroundColor
           }     
         }
       }
@@ -149,20 +146,20 @@ const useStyles = makeStyles(() => ({
     flexGrow: 1,
   },
   mainContent: (props: StyleProps) => ({
-    width: '100vw',
-    height: props.viewPortHeight,
-    position: 'relative',
     backgroundSize: 'cover',
     backgroundPosition: 'top left',
     backgroundAttachment: 'fixed',
     // backgroundBlendMode: 'overlay',
     // backgroundColor: '#4d4d4d',
+    position: 'relative',
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    width: '100vw',
+    height: props.viewPortHeight
   }),
   mainContentBody: {
     margin: '0 16px 0 16px',
-    color: '#fff',
+    color: '#ffffff',
     fontSize: '2rem',
     fontWeight: 'lighter',
     '& h1': {
@@ -173,50 +170,7 @@ const useStyles = makeStyles(() => ({
       fontSize: '2rem',
       fontWeight: 'bold'
     }
-  },
-  topicContent: (props: StyleProps) => ({
-    width: '100vw',
-    height: props.viewPortHeight,
-    position: 'relative',
-    backgroundSize: 'auto 100%',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'top left',
-    backgroundAttachment: 'local',
-    backgroundColor: '#EBEBEB',
-    // backgroundBlendMode: 'overlay',
-    // backgroundColor: '#4d4d4d',
-    display: 'flex',
-    alignItems: 'center',
-    padding: '32px'
-  }),
-  topicContentPaper: {
-    padding: '16px',
-    '@media (max-width:414px)': {
-      // make padding smaller for mobile view in order
-      // to fit as much as possible in the text block
-      padding: '4px',
-    },
-    backgroundColor: 'rgba(130, 130, 130, 0.8)',
-    textAlign: 'left'
-  },
-  topicContentBody: {
-    margin: '0 16px 0 16px',
-    '@media (max-width:414px)': {
-      // make margin smaller for mobile view in order
-      // to fit as much as possible in the text block
-      margin: '0 0 0 0',
-    },
-    fontSize: '1rem',
-    color: '#000',
-    '& h1': {
-      fontSize: '4rem',
-      fontWeight: 'bold'
-    },
-    '& h2': {
-      fontSize: '2rem',
-      fontWeight: 'bold'
-    }
-  },  
+  }
 }));
 
 type LandingPageProps = {
@@ -235,8 +189,13 @@ type LandingPageProps = {
           frontmatter: {
             topicOrder: number
             image: any
+            backgroundColor: string
             textBlockAlign: string
+            textBlockForegroundColor: string
+            textBlockBackgroundColor: string
+            button: string
             buttonLink: string
+            buttonColor: string
           }
         }
       }[]

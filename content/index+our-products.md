@@ -1,11 +1,20 @@
 ---
-contentPage: index
+contentPage: 'index'
 topicOrder: 1
 
-image: ../assets/images/backgrounds//digital-experience.jpg
-textBlockAlign: right
+useViewPortHeight: true
+
+image: '../assets/images/backgrounds//digital-experience.jpg'
+backgroundColor: '#ebebeb'
+
+textBlockAlign: 'right'
+textBlockForegroundColor: '#404040'
+textBlockBackgroundColor: 'rgba(255, 255, 255, 0.7)'
+
 button: 'Our Products'
 buttonLink: '/products'
+buttonForegroundColor: '#ffffff'
+buttonBackgroundColor: '#4d4d4d'
 ---
 
 ## Bringing The Cloud Closer To Home

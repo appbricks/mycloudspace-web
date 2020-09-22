@@ -1,6 +1,5 @@
 import React, { FunctionComponent } from 'react';
 import { Box, Grid, makeStyles } from '@material-ui/core';
-import { graphql } from 'gatsby';
 import cx from 'clsx';
 
 import { Icon } from '@iconify/react';
@@ -28,13 +27,13 @@ const StatusbarFooter: FunctionComponent<StatusbarFooterProps> = ({
         alignItems='center'
       >
         <Box className={styles.footerTextBlock}>
-          <a href={social.linkedin} className={styles.socialLink} target='_blank'>
+          <a href={social.linkedin} className={styles.socialLink} tabIndex={-1} target='_blank'>
             <Icon width={30} icon={linkedinIcon} className={styles.footerIcon} />
           </a>
-          <a href={social.twitter} className={styles.socialLink} target='_blank'>
+          <a href={social.twitter} className={styles.socialLink} tabIndex={-1} target='_blank'>
             <Icon width={30} icon={twitterIcon} className={cx(styles.footerIcon, styles.footerInsideIcon)} />
           </a>
-          <a href={social.github} className={styles.socialLink} target='_blank'>
+          <a href={social.github} className={styles.socialLink} tabIndex={-1} target='_blank'>
             <Icon width={30} icon={githubIcon} className={cx(styles.footerIcon, styles.footerInsideIcon)} />
           </a>
         </Box>
