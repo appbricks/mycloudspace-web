@@ -1,4 +1,5 @@
 import React, { Component, FunctionComponent, ReactElement, useEffect } from 'react';
+import { navigate } from "gatsby";
 import { Box, List, Hidden } from '@material-ui/core';
 import styled from 'styled-components';
 
@@ -130,11 +131,17 @@ class SidbarNav extends Component<NavProps, NavState> {
 // changes to all nav components
 class NavStateDelegate {
 
-  active: number = 0;
+  menuItems: MenuDataItem[];
+  
+  active: number = -1;
   sideBarClosed: boolean = true;
  
   toolbarNavSelection?: (itemIndex: number) => void;
   sidebarNavSelection?: (itemIndex: number) => void;
+
+  constructor(menuItems: MenuDataItem[]) {
+    this.menuItems = menuItems;styled
+  }
 
   setSelection(itemIndex: number) {
     this.active = itemIndex;
@@ -142,6 +149,12 @@ class NavStateDelegate {
     this.toolbarNavSelection!(itemIndex);
     if (!this.sideBarClosed) {
       this.sidebarNavSelection!(itemIndex);
+    }
+
+    if (itemIndex >= 0 && itemIndex < this.menuItems.length) {
+      navigate(this.menuItems[itemIndex].getItem().link);
+    } else {
+      navigate('/');
     }
   }
 }
@@ -160,9 +173,10 @@ const getMainNav = (
       });
   });
 
-  const delegate = new NavStateDelegate();
+  const delegate = new NavStateDelegate(menuItems);
 
   return {
+    delegate: delegate,
     toolBarNav: <ToolbarNav menuItems={menuItems} delegate={delegate} rightSideBar={rightSideBar}/>,
     sideBarNav: <DrawerSidebar sidebarId='navSidebar'>
       <SidebarContent>
@@ -187,6 +201,7 @@ type NavState = {
 }
 
 export type MainNav = {
+  delegate: NavStateDelegate
   toolBarNav: ReactElement
   sideBarNav: ReactElement
 }

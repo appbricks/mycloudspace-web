@@ -18,6 +18,7 @@ const Header: FunctionComponent<HeaderProps> = ({ mainNav }) => {
               className={styles.logo}
               alt='appbricks'
               src={LOGO}
+              onClick={() => mainNav.delegate.setSelection(-1)}
             />
           </Box>      
           {mainNav.toolBarNav}
@@ -36,6 +37,7 @@ const useStyles = makeStyles({
   },
   logo: {
     height: 40,
+    cursor: 'pointer'
   },
   toolbar: {
     minHeight: '64px !important',

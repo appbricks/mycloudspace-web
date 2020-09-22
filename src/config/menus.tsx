@@ -16,23 +16,23 @@ export const mainMenu: MenuDataItem[] = [
       element: <Icon width={24} icon={aboutIcon} />, 
       anchorRightInSideBar: true
     },
-    link: '' 
+    link: '/about' 
   }),
   MenuDataItem.newItem({
-    title: 'Product', 
+    title: 'Products', 
     icon: { 
       element: <Icon width={24} icon={productIcon} />, 
       anchorRightInSideBar: true
     },
-    link: '' 
+    link: '/products' 
   }),
   MenuDataItem.newItem({
-    title: 'Contacts', 
+    title: 'Contact', 
     icon: { 
       element: <Icon width={24} icon={contactIcon} />, 
       anchorRightInSideBar: true
   },
-    link: '' 
+    link: '/contact' 
   }),
   MenuDataItem
     .newItem({
