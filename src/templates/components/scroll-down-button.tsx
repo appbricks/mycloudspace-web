@@ -32,7 +32,7 @@ const useStyles = makeStyles(() => ({
   root: (props: ScrollDownButtonType) => ({
     position: 'absolute',
     top: props.scrollButtonTop,
-    left: `calc(100vw - 65px)`,
+    left: `calc(100vw - 70px)`,
   }),
   button: {
     backgroundColor: '#0050ff',

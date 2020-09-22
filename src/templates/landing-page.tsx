@@ -19,7 +19,7 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({
   bottomGutterHeight = useMediaQuery('(max-width:414px)') ? undefined : bottomGutterHeight;
 
   const scrollButtonTop = bottomGutterHeight
-    ? `calc(100vh - ${bottomGutterHeight} - 130px)` 
+    ? `calc(100vh - ${bottomGutterHeight} - 140px)` 
     : `calc(100vh - 180px)`;
 
   const viewPortHeight = getLayoutViewPortHeight(bottomGutterHeight);
