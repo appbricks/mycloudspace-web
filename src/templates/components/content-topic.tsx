@@ -31,11 +31,18 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
     return () => cleanup();
   });
 
+  const scrollButtonPosYLow = headerHeight - scrollButtonShowDelta;
+  const scrollButtonPosYHigh = headerHeight + scrollButtonShowDelta;
+
   const onScroll = (pos: Position) => {
     if (topicMetadata.fillViewPort) {
-      if (hideScrollButton && pos.y == headerHeight) {
+      if (hideScrollButton 
+        && pos.y >= scrollButtonPosYLow && pos.y <= scrollButtonPosYHigh) {
+        
         setHideScrollButton(false);
-      } else if (!hideScrollButton && pos.y != headerHeight) {
+      } else if (!hideScrollButton 
+        && (pos.y < scrollButtonPosYLow || pos.y > scrollButtonPosYHigh)) {
+        
         setHideScrollButton(true);
       }
     } 
@@ -129,6 +136,10 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
 }
 
 export default ContentTopic;
+
+// delta the content page can scroll 
+// before scroll button is hidden
+const scrollButtonShowDelta = 20;
 
 const useStyles = makeStyles((theme) => ({
   topicContent: (props: TopicMetadata) => ({
