@@ -33,25 +33,6 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({
   return (
     <>
       <Layout bottomGutterHeight={bottomGutterHeight}>
-        {/* <div
-          className={styles.mainContent}
-          style={{
-            backgroundImage: `url(${
-              !!image.childImageSharp ? image.childImageSharp.fluid.src : image
-            })`
-          }}
-        >
-          <Container maxWidth='lg' disableGutters>
-            <div dangerouslySetInnerHTML={{ __html: data.markdownRemark.html }} className={styles.mainContentBody} />
-          </Container>
-          {topics.length < 0 || (
-            <ScrollDownButton 
-              index={0}
-              topicRefs={topicRefs}
-              scrollButtonTop={scrollButtonTop}
-            />
-          )}
-        </div> */}
 
         <ContentTopic
           index={0}
