@@ -31,6 +31,7 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
     return () => cleanup();
   });
 
+  // content view scroll bounds for hiding scroll button
   const scrollButtonPosYLow = headerHeight - scrollButtonShowDelta;
   const scrollButtonPosYHigh = headerHeight + scrollButtonShowDelta;
 
