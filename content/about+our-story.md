@@ -1,12 +1,12 @@
 ---
 contentPage: about
-topicOrder: 1
+topicOrder: 2
 
 image: ../assets/images/backgrounds/our-story.jpg
 textBlockAlign: right
 ---
 
-# Our Story
+## Our Story
 
 Our story began in 2015 when we helped a startup build their cloud infrastructure in the Amazon Web Services (AWS) Cloud. Being a Fintech startup it was necessary to think of security right at the inception of the project. Hence, using experience building software-based infrastructure at previous employers, we built a completely sandboxed Virtual Private Cloud (VPC) in AWS secured via VPN. Only required resources were exposed to the public via a DMZ layer in the VPC. This entire solution was automated enabling us to stand up sandboxed environments in any one of the AWS regions. Sadly the Fintech never took off and we moved on with our careers with different employers.
 

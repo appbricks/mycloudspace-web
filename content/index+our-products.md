@@ -2,13 +2,13 @@
 contentPage: 'index'
 topicOrder: 1
 
-useViewPortHeight: true
+fillViewPort: true
 
 image: '../assets/images/backgrounds//digital-experience.jpg'
-backgroundColor: '#ebebeb'
+backgroundColor: '#4d4d4d'
 
 textBlockAlign: 'right'
-textBlockForegroundColor: '#404040'
+textBlockForegroundColor: '#4d4d4d'
 textBlockBackgroundColor: 'rgba(255, 255, 255, 0.7)'
 
 button: 'Our Products'

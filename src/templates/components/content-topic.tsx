@@ -4,37 +4,54 @@ import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
 import ScrollDownButton from './scroll-down-button';
 
-const ContentTopic: FunctionComponent<ContentTopicProps> = (props) => {
+const ContentTopic: FunctionComponent<ContentTopicProps> = ({
+  index,
+  lastTopic = false,
+  height,
+  topicRefs,
+  topicMetadata,
+  scrollButtonTop,
+  content
+}) => {
+
+  topicMetadata.viewPortHeight = height;
 
   const ref = useRef<any>(null);
-  const styles = useStyles(props);
+  const styles = useStyles(topicMetadata);
 
   useEffect(() => {
-    props.topicRefs.push(ref);
+    topicRefs.push(ref);
   });
 
-  const button = (<>
-    {props.button && (
-      <Box pb={2} display='flex' justifyContent='center'>
-        <Button 
-          href={props.buttonLink}
-          size='large' 
-          variant={props.buttonBackgroundColor == props.textBlockBackgroundColor 
-            ? 'outlined': 'contained'}
-          className={styles.topicButton}
-        >
-          {props.button}
-        </Button>
-      </Box>
-    )}
-  </>);
+  const textBlock = (<>
+    <Paper 
+      elevation={topicMetadata.textBlockBorder == 'none' ? 0 : 4} 
+      className={styles.topicContentBody}>
+      
+      <div dangerouslySetInnerHTML={{ __html: content }} />
+
+      {topicMetadata.button && (
+        <Box pb={2} display='flex' justifyContent='center'>
+          <Button 
+            href={topicMetadata.buttonLink}
+            size='large' 
+            variant={topicMetadata.buttonBackgroundColor == topicMetadata.textBlockBackgroundColor 
+              ? 'outlined': 'contained'}
+            className={styles.topicButton}
+          >
+            {topicMetadata.button}
+          </Button>
+        </Box>
+      )}
+    </Paper>
+  </>)
 
   const scrollButton = (<>
-    {props.topicRefs.length >= (props.index + 1) || !props.useViewPortHeight || (
+    {lastTopic || !topicMetadata.fillViewPort || (
       <ScrollDownButton 
-        index={props.index + 1}
-        topicRefs={props.topicRefs}
-        scrollButtonTop={props.scrollButtonTop}
+        index={index + 1}
+        topicRefs={topicRefs}
+        scrollButtonTop={scrollButtonTop}
       />
     )}
   </>)
@@ -45,34 +62,27 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = (props) => {
         container
         direction='row'
       >
-        {(props.textBlockAlign == 'right') && (<>
+        {(topicMetadata.textBlockAlign == 'right') && (<>
           <Grid item xs={undefined} sm={2} md={4} lg={6}/>
           <Grid item xs={12} sm={10} md={8} lg={6}>
-            <Paper elevation={4} className={styles.topicContentBody}>
-              <div dangerouslySetInnerHTML={{ __html: props.content }} />
-              {button}
-            </Paper>
+            {textBlock}
           </Grid>
           {scrollButton}
         </>)}
-        {(props.textBlockAlign == 'center') && (<>
-          <Grid item xs={undefined} sm={1} md={2} lg={3}/>
-          <Grid item xs={12} sm={10} md={8} lg={6}>
-            <Paper elevation={props.backgroundColor ? 4 : 0} className={styles.topicContentBody}>
-              <div dangerouslySetInnerHTML={{ __html: props.content }} />
-              {button}
-            </Paper>
+        {(topicMetadata.textBlockAlign == 'center') && (<>
+          <Grid item xs={undefined} sm={1} md={2}/>
+          <Grid item xs={12} sm={10} md={8}>
+            {textBlock}
           </Grid>
-          <Grid item xs={undefined} sm={1} md={2} lg={3}/>
+          <Grid item xs={undefined} sm={1} md={2}/>
+          {scrollButton}
         </>)}
-        {(props.textBlockAlign == 'left') && (<>
+        {(topicMetadata.textBlockAlign == 'left') && (<>
           <Grid item xs={12} sm={10} md={8} lg={6}>
-            <Paper elevation={4} className={styles.topicContentBody}>
-              <div dangerouslySetInnerHTML={{ __html: props.content }} />
-              {button}
-            </Paper>
+            {textBlock}
           </Grid>
           <Grid item xs={undefined} sm={2} md={4} lg={6}/>
+          {scrollButton}
         </>)}
       </Grid>
     </div>
@@ -82,7 +92,7 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = (props) => {
 export default ContentTopic;
 
 const useStyles = makeStyles((theme) => ({
-  topicContent: (props: ContentTopicProps) => ({
+  topicContent: (props: TopicMetadata) => ({
     backgroundImage: `url(${
       props.image
         ? !!props.image.childImageSharp
@@ -92,54 +102,72 @@ const useStyles = makeStyles((theme) => ({
     })`,
     backgroundRepeat: 'no-repeat',
     backgroundPosition:
-      props.textBlockAlign == 'right' ? 'top left' : 'top right',
+      props.textBlockAlign == 'left' ? 'top right': 'top left',
     backgroundSize:
       props.textBlockAlign == 'center' ? 'cover': 'auto 100%',
     backgroundAttachment:
       props.textBlockAlign == 'center' ? 'fixed': 'local',
     backgroundColor:
       props.backgroundColor ? props.backgroundColor : props.textBlockBackgroundColor,
+    backgroundBlendMode: props.backgroundBlendMode || 'normal',
     position: 'relative',
     display: 'flex',
     alignItems: 'center',
     width: '100vw',
-    height: props.useViewPortHeight ? props.height : 'auto',
+    height: props.fillViewPort ? props.viewPortHeight : 'auto',
     padding: '32px',
     overflow: 'hidden'
   }),
-  topicContentBody: (props: ContentTopicProps) => ({
-    padding: '8px 32px 8px 32px',
-    margin: '0 16px 0 16px',
-    [theme.breakpoints.down('sm')]: {
-      // make padding smaller for mobile view in order
-      // to fit as much as possible in the text block
-      padding: '4px 8px 4px 8px',
-      margin: '0 0 0 0',
-    },
-    backgroundColor: props.textBlockBackgroundColor,
-    color: props.textBlockForegroundColor,
-    textAlign:
-      props.textBlockAlign == 'center' ? 'center' : 'left',
-    fontSize: '1rem',
-    [theme.breakpoints.up('sm')]: {
-      fontSize: '1.1rem',
-    },
-    [theme.breakpoints.up('md')]: {
-      fontSize: '1.2rem',
-    },
-    [theme.breakpoints.up('lg')]: {
-      fontSize: '1.3rem',
-    },
-    '& h1': {
-      fontSize: '4rem',
-      fontWeight: 'bold'
-    },
-    '& h2': {
-      fontSize: '2rem',
-      fontWeight: 'bold'
+  topicContentBody: (props: TopicMetadata) => {
+
+    const fontMultiplier = 
+      props.textFontSize == 'large' ? 2 :
+      props.textFontSize == 'medium' ? 1.5 : 1;
+    
+    return {
+      padding: '8px 32px 8px 32px',
+      marginLeft: props.textMarginLeft || '1rem',
+      marginRight: props.textMarginRight || '1rem',
+      [theme.breakpoints.down('sm')]: {
+        // make padding smaller for mobile view in order
+        // to fit as much as possible in the text block
+        padding: '4px 8px 4px 8px',
+        margin: '0 0 0 0',
+      },
+      backgroundColor: props.textBlockBackgroundColor,
+      color: props.textBlockForegroundColor,
+      textAlign: props.textAlign || 'left',
+      fontSize: `calc(1rem * ${fontMultiplier})`,
+      [theme.breakpoints.up('sm')]: {
+        fontSize: `calc(1.1rem * ${fontMultiplier})`,
+      },
+      [theme.breakpoints.up('md')]: {
+        fontSize: `calc(1.2rem * ${fontMultiplier})`,
+      },
+      [theme.breakpoints.up('lg')]: {
+        fontSize: `calc(1.3rem * ${fontMultiplier})`,
+      },
+      '& h1': {
+        fontSize: '4rem',
+        fontWeight: 'bold',
+        marginBottom: '0px'
+      },
+      '& h2': {
+        fontSize: '2rem',
+        fontWeight: 'bold'
+      },
+      '& p': 
+        props.textLineSpacing == 'compact' ? {
+          marginBlockStart: '0px',
+          marginBlockEnd: '20.8px'
+        } : 
+        props.textLineSpacing == 'extra-space' ? {
+          marginBlockStart: '40px',
+          marginBlockEnd: '20.8px'
+        } : {}
     }
-  }),
-  topicButton: (props: ContentTopicProps) => {
+  },
+  topicButton: (props: TopicMetadata) => {
 
     if (props.button) {
       const styles = {
@@ -168,21 +196,40 @@ const useStyles = makeStyles((theme) => ({
 
 type ContentTopicProps = {
   index: number
+  lastTopic?: boolean
   height: string
+  topicRefs: TopicRefType[] 
+  topicMetadata: TopicMetadata
   scrollButtonTop: string
-  useViewPortHeight: boolean
+  content: string
+}
+
+export type TopicMetadata = {
+
+  viewPortHeight: string
+
+  // GraphQL node frontmatter fields
+  fillViewPort: boolean
+
   image: any
   backgroundColor: string
+  backgroundBlendMode: string
+
+  textAlign: any
+  textFontSize: string
+  textLineSpacing: string
+  textMarginLeft: string
+  textMarginRight: string
   textBlockAlign: string
+  textBlockBorder: string
   textBlockForegroundColor: string
   textBlockBackgroundColor: string
+
   button: string
   buttonMargins: string
   buttonLink: string
   buttonForegroundColor: string
   buttonBackgroundColor: string
-  content: string
-  topicRefs: TopicRefType[] 
 }
 
 export type TopicRefType = MutableRefObject<any>;

@@ -1,10 +1,9 @@
 import React, { FunctionComponent } from 'react';
-import { Container, useMediaQuery, makeStyles } from '@material-ui/core';
+import { useMediaQuery, makeStyles } from '@material-ui/core';
 import { graphql } from 'gatsby';
 
 import Layout, { getLayoutViewPortHeight } from '../common/components/Layout';
-import ContentTopic, { TopicRefType } from './components/content-topic';
-import ScrollDownButton from './components/scroll-down-button';
+import ContentTopic, { TopicMetadata, TopicRefType } from './components/content-topic';
 import StatusbarFooter from './components/statusbar-footer';
 
 const LandingPage: FunctionComponent<LandingPageProps> = ({ 
@@ -34,7 +33,7 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({
   return (
     <>
       <Layout bottomGutterHeight={bottomGutterHeight}>
-        <div
+        {/* <div
           className={styles.mainContent}
           style={{
             backgroundImage: `url(${
@@ -52,19 +51,29 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({
               scrollButtonTop={scrollButtonTop}
             />
           )}
-        </div>
+        </div> */}
+
+        <ContentTopic
+          index={0}
+          height={viewPortHeight}          
+          topicRefs={topicRefs}
+          topicMetadata={data.markdownRemark.frontmatter}
+          content={data.markdownRemark.html}
+          scrollButtonTop={scrollButtonTop}
+        />
         
         {topics.map(({ node }, index) => {
 
           return (
             <ContentTopic
               key={index}
-              index={index}
-              topicRefs={topicRefs}
+              index={index + 1}
+              lastTopic={index == topics.length-1}
               height={viewPortHeight}
-              scrollButtonTop={scrollButtonTop}
+              topicRefs={topicRefs}
+              topicMetadata={node.frontmatter}
               content={node.html}
-              {...node.frontmatter}
+              scrollButtonTop={scrollButtonTop}
             />
           );
         })}
@@ -95,14 +104,7 @@ export const pageQuery = graphql`
     markdownRemark(id: { eq: $id }) {
       html
       frontmatter {        
-        title
-        image {
-          childImageSharp {
-            fluid(maxWidth: 2048, quality: 100) {
-              ...GatsbyImageSharpFluid
-            }
-          }
-        }
+        ...FrontMatterFields
       }
     }
     allMarkdownRemark(
@@ -117,23 +119,7 @@ export const pageQuery = graphql`
         node {
           html
           frontmatter {
-            useViewPortHeight
-            image {
-              childImageSharp {
-                fluid(maxWidth: 2048, quality: 100) {
-                  ...GatsbyImageSharpFluid
-                }
-              }
-            }
-            backgroundColor
-            textBlockAlign
-            textBlockForegroundColor
-            textBlockBackgroundColor
-            button
-            buttonMargins
-            buttonLink
-            buttonForegroundColor
-            buttonBackgroundColor
+            ...FrontMatterFields
           }     
         }
       }
@@ -157,6 +143,32 @@ export const pageQuery = graphql`
       }
     }
   }
+  fragment FrontMatterFields on MarkdownRemarkFrontmatter {
+    fillViewPort
+    image {
+      childImageSharp {
+        fluid(maxWidth: 2048, quality: 100) {
+          ...GatsbyImageSharpFluid
+        }
+      }
+    }
+    backgroundColor
+    backgroundBlendMode
+    textAlign
+    textFontSize
+    textLineSpacing
+    textMarginLeft
+    textMarginRight
+    textBlockAlign
+    textBlockBorder
+    textBlockForegroundColor
+    textBlockBackgroundColor
+    button
+    buttonMargins
+    buttonLink
+    buttonForegroundColor
+    buttonBackgroundColor
+  }
 `;
 
 const useStyles = makeStyles(() => ({
@@ -167,8 +179,8 @@ const useStyles = makeStyles(() => ({
     backgroundSize: 'cover',
     backgroundPosition: 'top left',
     backgroundAttachment: 'fixed',
-    // backgroundBlendMode: 'overlay',
-    // backgroundColor: '#4d4d4d',
+    backgroundBlendMode: 'overlay',
+    backgroundColor: '#4d4d4d',
     position: 'relative',
     display: 'flex',
     alignItems: 'center',
@@ -195,29 +207,13 @@ type LandingPageProps = {
   data: {
     markdownRemark: {
       html: string
-      frontmatter: {
-        title: string
-        image: any
-      }
+      frontmatter: TopicMetadata
     }
     allMarkdownRemark: {
       edges: {
         node: {
           html: string
-          frontmatter: {
-            topicOrder: number
-            useViewPortHeight: boolean
-            image: any
-            backgroundColor: string
-            textBlockAlign: string
-            textBlockForegroundColor: string
-            textBlockBackgroundColor: string
-            button: string
-            buttonMargins: string
-            buttonLink: string
-            buttonForegroundColor: string
-            buttonBackgroundColor: string
-          }
+          frontmatter: TopicMetadata
         }
       }[]
     }

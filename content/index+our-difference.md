@@ -2,9 +2,11 @@
 contentPage: 'index'
 topicOrder: 2
 
-useViewPortHeight: true
+fillViewPort: true
 
+textAlign: 'center'
 textBlockAlign: 'center'
+textBlockBorder: 'none'
 textBlockForegroundColor: '#ffffff'
 textBlockBackgroundColor: '#4d4d4d'
 
