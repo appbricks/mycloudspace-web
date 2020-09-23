@@ -40,7 +40,7 @@ export const getLayoutViewPortHeight = (bottomGutterHeight?: string) => (
     : `calc(100vh - ${headerHeight}px)`
 )
 
-const headerHeight = 64;
+export const headerHeight = 64;
 
 const useStyles = makeStyles(() => ({
   paper: {  
@@ -58,7 +58,7 @@ scheme.configureHeader(builder => {
   builder.registerConfig('xs', {
     position: 'fixed',
     clipped: true,
-    initialHeight: 64,
+    initialHeight: headerHeight,
   });
 });
 

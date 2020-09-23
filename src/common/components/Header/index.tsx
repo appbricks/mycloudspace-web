@@ -3,6 +3,7 @@ import { Container, Box, Toolbar, makeStyles } from '@material-ui/core';
 import { getHeader } from '@mui-treasury/layout';
 import styled from 'styled-components';
 
+import { headerHeight } from '../Layout';
 import { MainNav } from '../Nav/MainNav';
 import { LOGO } from '../../../config/assets';
 
@@ -40,7 +41,7 @@ const useStyles = makeStyles({
     cursor: 'pointer'
   },
   toolbar: {
-    minHeight: '64px !important',
+    minHeight: `${headerHeight}px !important`,
     boxShadow: 'inset 0 -1px 0 rgba(100,121,143,0.122)',
   }
 });
