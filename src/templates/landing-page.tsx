@@ -17,7 +17,8 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({
   // remove sticky footer for mobile devices
   bottomGutterHeight = useMediaQuery('(max-width:414px)') ? undefined : bottomGutterHeight;
 
-  const scrollButtonTop = bottomGutterHeight
+  const scrollButtonUpTop = '20px'
+  const scrollButtonDownTop = bottomGutterHeight
     ? `calc(100vh - ${bottomGutterHeight} - 140px)` 
     : `calc(100vh - 180px)`;
 
@@ -40,7 +41,7 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({
           topicRefs={topicRefs}
           topicMetadata={data.markdownRemark.frontmatter}
           content={data.markdownRemark.html}
-          scrollButtonTop={scrollButtonTop}
+          scrollButtonDownTop={scrollButtonDownTop}
         />
         
         {topics.map(({ node }, index) => {
@@ -54,7 +55,8 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({
               topicRefs={topicRefs}
               topicMetadata={node.frontmatter}
               content={node.html}
-              scrollButtonTop={scrollButtonTop}
+              scrollButtonUpTop={scrollButtonUpTop}
+              scrollButtonDownTop={scrollButtonDownTop}
             />
           );
         })}

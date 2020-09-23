@@ -1,11 +1,12 @@
 import React, { FunctionComponent } from 'react';
 import { Box, Fab, makeStyles } from '@material-ui/core';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 
 import { TopicRefType } from './content-topic';
 
-const ScrollDownButton: FunctionComponent<ScrollDownButtonType> = (props) => {
+const ScrollButton: FunctionComponent<ScrollButtonType> = (props) => {
   const styles = useStyles(props);
 
   const scrollToTopic = (index: number) => {
@@ -20,18 +21,24 @@ const ScrollDownButton: FunctionComponent<ScrollDownButtonType> = (props) => {
   return (
     <Box component='span' className={styles.root}>
       <Fab className={styles.button} onClick={() => scrollToTopic(props.index)}>
-        <KeyboardArrowDownIcon />
+        {(() => {
+          if (props.direction == ScrollDirection.UP) {
+            return <KeyboardArrowUpIcon />;
+          } else {
+            return <KeyboardArrowDownIcon />;
+          }
+        })()}
       </Fab>
     </Box>
   );
 }
 
-export default ScrollDownButton;
+export default ScrollButton;
 
 const useStyles = makeStyles(() => ({
-  root: (props: ScrollDownButtonType) => ({
+  root: (props: ScrollButtonType) => ({
     position: 'absolute',
-    top: props.scrollButtonTop,
+    top: props.topOffset,
     left: `calc(100vw - 70px)`,
   }),
   button: {
@@ -44,8 +51,14 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-type ScrollDownButtonType = {  
+type ScrollButtonType = {  
   index: number
   topicRefs: TopicRefType[]
-  scrollButtonTop: string
+  topOffset: string
+  direction: ScrollDirection
+}
+
+export enum ScrollDirection {
+  UP,
+  DOWN
 }

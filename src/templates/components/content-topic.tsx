@@ -1,8 +1,10 @@
-import React, { FunctionComponent, MutableRefObject, useRef, useEffect } from 'react';
+import React, { FunctionComponent, MutableRefObject, useRef, useState, useEffect } from 'react';
 import { Grid, Paper, Box, Button, makeStyles } from '@material-ui/core';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
-import ScrollDownButton from './scroll-down-button';
+import { headerHeight } from '../../common/components/Layout';
+import { handleParentScroll, Position } from '../../common/utils/scroll'
+import ScrollButton, { ScrollDirection } from './scroll-button';
 
 const ContentTopic: FunctionComponent<ContentTopicProps> = ({
   index,
@@ -10,18 +12,34 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
   height,
   topicRefs,
   topicMetadata,
-  scrollButtonTop,
-  content
+  content,
+  scrollButtonDownTop = undefined,
+  scrollButtonUpTop = undefined
 }) => {
 
   topicMetadata.viewPortHeight = height;
 
-  const ref = useRef<any>(null);
+  const [ hideScrollButton, setHideScrollButton ] = useState(!topicMetadata.fillViewPort);
+  const ref = useRef<HTMLDivElement>(null);
+
   const styles = useStyles(topicMetadata);
 
   useEffect(() => {
     topicRefs.push(ref);
+    
+    const cleanup = handleParentScroll(onScroll, ref);
+    return () => cleanup();
   });
+
+  const onScroll = (pos: Position) => {
+    if (topicMetadata.fillViewPort) {
+      if (hideScrollButton && pos.y == headerHeight) {
+        setHideScrollButton(false);
+      } else if (!hideScrollButton && pos.y != headerHeight) {
+        setHideScrollButton(true);
+      }
+    } 
+  }
 
   const textBlock = (<>
     <Paper 
@@ -46,14 +64,32 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
     </Paper>
   </>)
 
-  const scrollButton = (<>
-    {lastTopic || !topicMetadata.fillViewPort || (
-      <ScrollDownButton 
-        index={index + 1}
-        topicRefs={topicRefs}
-        scrollButtonTop={scrollButtonTop}
-      />
-    )}
+  const scrollUpButton = (<>
+    {hideScrollButton
+      || index == 0
+      || !scrollButtonUpTop 
+      || (
+        <ScrollButton 
+          index={index - 1}
+          topicRefs={topicRefs}
+          topOffset={scrollButtonUpTop!}
+          direction={ScrollDirection.UP}
+        />
+      )}
+  </>)
+
+  const scrollDownButton = (<>
+    {hideScrollButton
+      || lastTopic
+      || !scrollButtonDownTop 
+      || (
+        <ScrollButton 
+          index={index + 1}
+          topicRefs={topicRefs}
+          topOffset={scrollButtonDownTop!}
+          direction={ScrollDirection.DOWN}
+        />
+      )}
   </>)
 
   return (
@@ -63,26 +99,29 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
         direction='row'
       >
         {(topicMetadata.textBlockAlign == 'right') && (<>
+          {scrollUpButton}
           <Grid item xs={undefined} sm={2} md={4} lg={6}/>
           <Grid item xs={12} sm={10} md={8} lg={6}>
             {textBlock}
           </Grid>
-          {scrollButton}
+          {scrollDownButton}
         </>)}
         {(topicMetadata.textBlockAlign == 'center') && (<>
+          {scrollUpButton}
           <Grid item xs={undefined} sm={1} md={2}/>
           <Grid item xs={12} sm={10} md={8}>
             {textBlock}
           </Grid>
           <Grid item xs={undefined} sm={1} md={2}/>
-          {scrollButton}
+          {scrollDownButton}
         </>)}
         {(topicMetadata.textBlockAlign == 'left') && (<>
+          {scrollUpButton}
           <Grid item xs={12} sm={10} md={8} lg={6}>
             {textBlock}
           </Grid>
           <Grid item xs={undefined} sm={2} md={4} lg={6}/>
-          {scrollButton}
+          {scrollDownButton}
         </>)}
       </Grid>
     </div>
@@ -200,8 +239,9 @@ type ContentTopicProps = {
   height: string
   topicRefs: TopicRefType[] 
   topicMetadata: TopicMetadata
-  scrollButtonTop: string
   content: string
+  scrollButtonDownTop?: string
+  scrollButtonUpTop?: string
 }
 
 export type TopicMetadata = {
