@@ -73,8 +73,7 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
   </>)
 
   const scrollUpButton = (<>
-    {hideScrollButton
-      || index == 0
+    {index == 0
       || !scrollButtonUpTop 
       || (
         <ScrollButton 
@@ -82,13 +81,13 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
           topicRefs={topicRefs}
           topOffset={scrollButtonUpTop!}
           direction={ScrollDirection.UP}
+          disabled={hideScrollButton}
         />
       )}
   </>)
 
   const scrollDownButton = (<>
-    {hideScrollButton
-      || lastTopic
+    {lastTopic
       || !scrollButtonDownTop 
       || (
         <ScrollButton 
@@ -96,6 +95,7 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
           topicRefs={topicRefs}
           topOffset={scrollButtonDownTop!}
           direction={ScrollDirection.DOWN}
+          disabled={hideScrollButton}
         />
       )}
   </>)

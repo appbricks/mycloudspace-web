@@ -3,6 +3,7 @@ import { Box, Fab, makeStyles } from '@material-ui/core';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import cx from 'clsx';
 
 import { TopicRefType } from './content-topic';
 
@@ -20,7 +21,7 @@ const ScrollButton: FunctionComponent<ScrollButtonType> = (props) => {
 
   return (
     <Box component='span' className={styles.root}>
-      <Fab className={styles.button} onClick={() => scrollToTopic(props.index)}>
+      <Fab className={cx(styles.button, props.disabled && styles.buttonFadeOut)} onClick={() => scrollToTopic(props.index)}>
         {(() => {
           if (props.direction == ScrollDirection.UP) {
             return <KeyboardArrowUpIcon />;
@@ -35,7 +36,7 @@ const ScrollButton: FunctionComponent<ScrollButtonType> = (props) => {
 
 export default ScrollButton;
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: (props: ScrollButtonType) => ({
     position: 'absolute',
     top: props.topOffset,
@@ -48,7 +49,20 @@ const useStyles = makeStyles(() => ({
     "&:hover": {
       backgroundColor: emphasize('#0050ff', 0.2)
     }
-  }
+  },
+  buttonFadeOut: {
+    pointerEvents: 'none',
+    animation: `$buttonFadeOut 500ms ${theme.transitions.easing.easeOut}`,
+    opacity: 0
+  },
+  '@keyframes buttonFadeOut': {
+    '0%': {
+      opacity: 0.8
+    },
+    '100%': {
+      opacity: 0
+    }
+  },
 }));
 
 type ScrollButtonType = {  
@@ -56,6 +70,8 @@ type ScrollButtonType = {
   topicRefs: TopicRefType[]
   topOffset: string
   direction: ScrollDirection
+
+  disabled?: boolean
 }
 
 export enum ScrollDirection {
