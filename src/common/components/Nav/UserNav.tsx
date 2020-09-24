@@ -1,10 +1,16 @@
 import React, { FunctionComponent } from 'react';
+import { makeStyles } from '@material-ui/core';
 
-type UserNavProps = {
-}
+const UserNav: FunctionComponent<UserNavProps> = (props) => {
+  const styles = useStyles(props);
 
-const UserNav: FunctionComponent<UserNavProps> = () => {
   return (<></>);
 }
 
 export default UserNav;
+
+const useStyles = makeStyles((theme) => ({
+}));
+
+type UserNavProps = {
+}

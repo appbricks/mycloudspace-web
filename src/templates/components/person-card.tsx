@@ -1,16 +1,16 @@
 import React, { FunctionComponent } from 'react';
 import { makeStyles } from '@material-ui/core';
 
-const Sidebar: FunctionComponent<SidebarProps> = (props) => {
+const PersonCard: FunctionComponent<PersonCardProps> = (props) => {
   const styles = useStyles(props);
 
   return (<></>);
 }
 
-export default Sidebar;
+export default PersonCard;
 
 const useStyles = makeStyles((theme) => ({
 }));
 
-type SidebarProps = {
+type PersonCardProps = {
 }
