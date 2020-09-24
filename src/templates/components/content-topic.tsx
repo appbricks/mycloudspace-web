@@ -51,7 +51,22 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
 
   const textBlock = (<>
     <Paper 
-      elevation={topicMetadata.textBlockBorder == 'none' ? 0 : 4} 
+      elevation={
+        topicMetadata.textBlockBorder && 
+        topicMetadata.textBlockBorder == 'none' ? 0 : 4
+      } 
+      variant={
+        topicMetadata.textBlockBorder && 
+        (topicMetadata.textBlockBorder == 'outlined'
+          || topicMetadata.textBlockBorder.startsWith('outlined-'))
+        ? 'outlined' : 'elevation'
+      }
+      square={
+        topicMetadata.textBlockBorder &&
+        (topicMetadata.textBlockBorder == 'square' || 
+          topicMetadata.textBlockBorder.endsWith('-square'))
+        ? true : false
+      }
       className={styles.topicContentBody}>
       
       <div dangerouslySetInnerHTML={{ __html: content }} />
@@ -282,6 +297,11 @@ export type TopicMetadata = {
   buttonLink: string
   buttonForegroundColor: string
   buttonBackgroundColor: string
+
+  data: {
+    absolutePath: string
+  }
+  uiComponent: string
 }
 
 export type TopicRefType = MutableRefObject<any>;
