@@ -30,4 +30,7 @@ buttonMargins: ''
 buttonLink: ''
 buttonForegroundColor: ''
 buttonBackgroundColor: ''
+
+data: ../data/site-config.json
+uiComponent: ''
 ---

@@ -151,6 +151,10 @@ export const pageQuery = graphql`
     buttonLink
     buttonForegroundColor
     buttonBackgroundColor
+    data {
+      absolutePath
+    }
+    uiComponent
   }
 `;
 
