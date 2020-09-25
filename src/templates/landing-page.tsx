@@ -25,9 +25,9 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({
   const viewPortHeight = getLayoutViewPortHeight(bottomGutterHeight);
   const styles = useStyles({ viewPortHeight });
 
-  const { image } = data.markdownRemark.frontmatter;
-  const { organization, social, contact } = data.allDataJson.edges[0].node;
-  const topics = data.allMarkdownRemark.edges;
+  const { image } = data.mdx.frontmatter;
+  const { organization, social, contact } = data.configJson;
+  const topics = data.allMdx.edges;
 
   const topicRefs: TopicRefType[] = [];
 
@@ -39,8 +39,8 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({
           index={0}
           height={viewPortHeight}          
           topicRefs={topicRefs}
-          topicMetadata={data.markdownRemark.frontmatter}
-          content={data.markdownRemark.html}
+          topicMetadata={data.mdx.frontmatter}
+          content={data.mdx.body}
           scrollButtonDownTop={scrollButtonDownTop}
         />
         
@@ -54,7 +54,7 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({
               height={viewPortHeight}
               topicRefs={topicRefs}
               topicMetadata={node.frontmatter}
-              content={node.html}
+              content={node.body}
               scrollButtonUpTop={scrollButtonUpTop}
               scrollButtonDownTop={scrollButtonDownTop}
             />
@@ -84,13 +84,13 @@ export default LandingPage;
 
 export const pageQuery = graphql`
   query PageTopicsQuery($id: String!, $name: String!) {
-    markdownRemark(id: { eq: $id }) {
-      html
+    mdx(id: { eq: $id }) {
+      body
       frontmatter {        
         ...FrontMatterFields
       }
     }
-    allMarkdownRemark(
+    allMdx(
       filter: {
         frontmatter: {contentPage: {eq: $name}}
       }, 
@@ -100,33 +100,29 @@ export const pageQuery = graphql`
     ) {
       edges {
         node {
-          html
+          body
           frontmatter {
             ...FrontMatterFields
           }     
         }
       }
     }
-    allDataJson {
-      edges {
-        node {
-          organization {
-            copyright
-          }
-          social {
-            github
-            linkedin
-            twitter
-          }
-          contact {
-            email
-            phone
-          }
-        }
+    configJson {
+      organization {
+        copyright
+      }
+      social {
+        github
+        linkedin
+        twitter
+      }
+      contact {
+        email
+        phone
       }
     }
   }
-  fragment FrontMatterFields on MarkdownRemarkFrontmatter {
+  fragment FrontMatterFields on MdxFrontmatter {
     fillViewPort
     image {
       childImageSharp {
@@ -151,10 +147,6 @@ export const pageQuery = graphql`
     buttonLink
     buttonForegroundColor
     buttonBackgroundColor
-    data {
-      absolutePath
-    }
-    uiComponent
   }
 `;
 
@@ -192,35 +184,31 @@ const useStyles = makeStyles(() => ({
 
 type LandingPageProps = {
   data: {
-    markdownRemark: {
-      html: string
+    mdx: {
+      body: string
       frontmatter: TopicMetadata
     }
-    allMarkdownRemark: {
+    allMdx: {
       edges: {
         node: {
-          html: string
+          body: string
           frontmatter: TopicMetadata
         }
       }[]
     }
-    allDataJson: {
-      edges: {
-        node: {
-          organization: {
-            copyright: string
-          }
-          social: {
-            github: string
-            linkedin: string
-            twitter: string
-          }
-          contact: {
-            email: string
-            phone: string
-          }
-        }
-      }[]
+    configJson: {
+      organization: {
+        copyright: string
+      }
+      social: {
+        github: string
+        linkedin: string
+        twitter: string
+      }
+      contact: {
+        email: string
+        phone: string
+      }
     }
   }
   pageContext: any

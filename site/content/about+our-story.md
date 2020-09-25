@@ -3,7 +3,12 @@ contentPage: about
 topicOrder: 2
 
 image: ../assets/images/backgrounds/our-story.jpg
-textBlockAlign: right
+
+textBlockAlign: 'right'
+textBlockBorder: 'none'
+textBlockForegroundColor: '#ffffff'
+textBlockBackgroundColor: 'rgba(0, 0, 0, 0.5)'
+
 ---
 
 ## Our Story

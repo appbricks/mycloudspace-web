@@ -6,16 +6,17 @@
 const path = require('path');
 
 const { createFilePath } = require('gatsby-source-filesystem');
-const { fmImagesToRelative } = require('gatsby-remark-relative-images');
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
   const { createNodeField } = actions;
 
-  if (node.internal.type === `MarkdownRemark`) {
+  if (node.internal.type === 'Mdx') {
+    const baseName = path.basename(node.fileAbsolutePath);    
+
     createNodeField({
       node,
       name: 'name',
-      value: path.basename(node.fileAbsolutePath, '.md')
+      value: baseName.substr(0, baseName.indexOf('.'))
     });
     createNodeField({
       node,
@@ -28,9 +29,9 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
 
-  const markdownQueryResult = await graphql(`
+  const mdxQueryResult = await graphql(`
     {
-      allMarkdownRemark(
+      allMdx(
         filter: {
           frontmatter: {
             pageTemplate: {ne: null}
@@ -54,7 +55,7 @@ exports.createPages = async ({ graphql, actions }) => {
   `
   );
 
-  const contentEdges = markdownQueryResult.data.allMarkdownRemark.edges;
+  const contentEdges = mdxQueryResult.data.allMdx.edges;
   contentEdges.forEach((edge, index) => {
     createPage({
       path: edge.node.fields.slug,

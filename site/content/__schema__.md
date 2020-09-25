@@ -31,6 +31,6 @@ buttonLink: ''
 buttonForegroundColor: ''
 buttonBackgroundColor: ''
 
-data: ../data/site-config.json
-uiComponent: ''
+snippetPathGlob: /team/*
+snippetComponent: person-cards
 ---

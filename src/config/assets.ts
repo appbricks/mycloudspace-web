@@ -1,5 +1,5 @@
 // Application Logos
 
-export const LOGO = require('../../assets/images/appbricks-logo-name.png');
+export const LOGO = require('../../site/assets/images/appbricks-logo-name.png');
 
 // Backgrounds

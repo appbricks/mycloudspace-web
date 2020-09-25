@@ -7,21 +7,28 @@ module.exports = {
     {
       resolve: 'gatsby-source-filesystem',
       options: {
-        path: `${__dirname}/assets/images`,
+        path: `${__dirname}/site/assets/images`,
         name: 'images',
       },
     },
     {
       resolve: 'gatsby-source-filesystem',
       options: {
-        path: `${__dirname}/content/`,
+        path: `${__dirname}/site/content/`,
         name: '/',
       },
     },
     {
       resolve: 'gatsby-source-filesystem',
       options: {
-        path: `${__dirname}/data/`,
+        path: `${__dirname}/site/data/`,
+        name: '/',
+      },
+    },
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        path: `${__dirname}/site/config/`,
         name: '/',
       },
     },
@@ -42,7 +49,7 @@ module.exports = {
         background_color: '#663399',
         theme_color: '#663399',
         display: 'minimal-ui',
-        icon: 'assets/images/mycloudspace-icon.png',
+        icon: 'site/assets/images/mycloudspace-icon-square.png',
       },
     },
     'gatsby-plugin-react-helmet',
@@ -52,33 +59,11 @@ module.exports = {
     'gatsby-transformer-sharp',
     'gatsby-transformer-json',
     {
-      resolve: 'gatsby-transformer-remark',
+      resolve: 'gatsby-plugin-mdx',
       options: {
-        plugins: [
-          {
-            resolve: 'gatsby-remark-relative-images',
-            options: {
-              staticFolderName: 'images'
-            }
-          },
-          {
-            resolve: 'gatsby-remark-images',
-            options: {
-              // It's important to specify the maxWidth (in pixels) of
-              // the content container as this plugin uses this as the
-              // base for generating different widths of each image.
-              maxWidth: 2048
-            }
-          },
-          {
-            resolve: 'gatsby-remark-copy-linked-files',
-            options: {
-              destinationDir: 'static'
-            }
-          }
-        ]
-      }
-    },    
+        extensions: ['.mdx', '.md'],
+      },
+    }, 
     {
       resolve: 'gatsby-plugin-google-analytics',
       options: {

@@ -1,6 +1,7 @@
 import React, { FunctionComponent, MutableRefObject, useRef, useState, useEffect } from 'react';
 import { Grid, Paper, Box, Button, makeStyles } from '@material-ui/core';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
+import { MDXRenderer } from "gatsby-plugin-mdx";
 
 import { headerHeight } from '../../common/components/Layout';
 import { handleParentScroll, Position } from '../../common/utils/scroll'
@@ -69,7 +70,7 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
       }
       className={styles.topicContentBody}>
       
-      <div dangerouslySetInnerHTML={{ __html: content }} />
+      <MDXRenderer>{content}</MDXRenderer>
 
       {topicMetadata.button && (
         <Box pb={2} display='flex' justifyContent='center'>
@@ -297,11 +298,6 @@ export type TopicMetadata = {
   buttonLink: string
   buttonForegroundColor: string
   buttonBackgroundColor: string
-
-  data: {
-    absolutePath: string
-  }
-  uiComponent: string
 }
 
 export type TopicRefType = MutableRefObject<any>;
