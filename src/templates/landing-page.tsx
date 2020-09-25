@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { useMediaQuery, makeStyles } from '@material-ui/core';
 import { graphql } from 'gatsby';
 
+import CustomTagProvider from './markdown';
 import Layout, { getLayoutViewPortHeight } from '../common/components/Layout';
 import ContentTopic, { TopicMetadata, TopicRefType } from './components/content-topic';
 import StatusbarFooter from './components/statusbar-footer';
@@ -23,16 +24,14 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({
     : `calc(100vh - 180px)`;
 
   const viewPortHeight = getLayoutViewPortHeight(bottomGutterHeight);
-  const styles = useStyles({ viewPortHeight });
 
-  const { image } = data.mdx.frontmatter;
   const { organization, social, contact } = data.configJson;
   const topics = data.allMdx.edges;
 
   const topicRefs: TopicRefType[] = [];
 
   return (
-    <>
+    <CustomTagProvider>
       <Layout bottomGutterHeight={bottomGutterHeight}>
 
         <ContentTopic
@@ -76,7 +75,7 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({
           contact={contact}
           sticky />
       }
-    </>
+    </CustomTagProvider>
   )
 }
 
@@ -149,38 +148,6 @@ export const pageQuery = graphql`
     buttonBackgroundColor
   }
 `;
-
-const useStyles = makeStyles(() => ({
-  root: {
-    flexGrow: 1,
-  },
-  mainContent: (props: StyleProps) => ({
-    backgroundSize: 'cover',
-    backgroundPosition: 'top left',
-    backgroundAttachment: 'fixed',
-    backgroundBlendMode: 'overlay',
-    backgroundColor: '#4d4d4d',
-    position: 'relative',
-    display: 'flex',
-    alignItems: 'center',
-    width: '100vw',
-    height: props.viewPortHeight
-  }),
-  mainContentBody: {
-    margin: '0 16px 0 16px',
-    color: '#ffffff',
-    fontSize: '2rem',
-    fontWeight: 'lighter',
-    '& h1': {
-      fontSize: '4rem',
-      fontWeight: 'bold'
-    },
-    '& h2': {
-      fontSize: '2rem',
-      fontWeight: 'bold'
-    }
-  }
-}));
 
 type LandingPageProps = {
   data: {

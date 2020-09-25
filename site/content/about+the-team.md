@@ -21,4 +21,4 @@ buttonBackgroundColor:
 
 ## The Team
 
-<content-cards cardcontentglob='/team/*'></content-cards>
+<ContentCards cardContentGlob='/team/*'></ContentCards>

@@ -1,7 +1,7 @@
 import React, { FunctionComponent, MutableRefObject, useRef, useState, useEffect } from 'react';
 import { Grid, Paper, Box, Button, makeStyles } from '@material-ui/core';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
-import { MDXRenderer } from "gatsby-plugin-mdx";
+import { MDXRenderer } from 'gatsby-plugin-mdx';
 
 import { headerHeight } from '../../common/components/Layout';
 import { handleParentScroll, Position } from '../../common/utils/scroll'
