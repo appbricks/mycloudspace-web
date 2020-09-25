@@ -18,7 +18,7 @@
     "dashboard"
   ],
   "scripts": {
-    "clean": "rm -fr .cache/ node_modules/ public/ package-lock.json && npm install",
+    "clean": "gatsby clean && rm -fr node_modules/ package-lock.json && npm install",
     "type-check": "tsc --noEmit",
     "lint": "eslint . --ignore-path .gitignore --ext .ts,.tsx,.js",
     "format": "prettier --write src/**/*.{js,jsx,ts,tsx}",
