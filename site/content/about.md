@@ -1,5 +1,5 @@
 ---
-pageTemplate: landing-page
+pageTemplate: content-page
 title: About Us
 
 contentPage:
