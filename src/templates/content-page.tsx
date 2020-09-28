@@ -40,7 +40,8 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({
           topicRefs={topicRefs}
           topicMetadata={data.mdx.frontmatter}
           content={data.mdx.body}
-          scrollButtonDownTop={scrollButtonDownTop}
+          scrollButtonDownTop={topics.length > 0 
+            ? scrollButtonDownTop : undefined}
         />
         
         {topics.map(({ node }, index) => {
