@@ -12,7 +12,7 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({
   pageContext 
 }) => {
 
-  var bottomGutterHeight: string | undefined = '49px';
+  var bottomGutterHeight: string | undefined = '48px';
   bottomGutterHeight = useMediaQuery('(max-width:797px)') ? '77px' : bottomGutterHeight;
   bottomGutterHeight = useMediaQuery('(max-width:599px)') ? '105px' : bottomGutterHeight;
   // remove sticky footer for mobile devices
