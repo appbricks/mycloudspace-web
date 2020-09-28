@@ -3,36 +3,13 @@ import { Grid, Box, Paper, Avatar, makeStyles } from '@material-ui/core';
 import { StaticQuery, graphql } from "gatsby"
 import { MDXRenderer } from 'gatsby-plugin-mdx';
 
-import { Icon, IconifyIcon } from '@iconify/react';
-import linkedinIcon from '@iconify/icons-mdi/linkedin';
-import twitterIcon from '@iconify/icons-mdi/twitter';
-import githubIcon from '@iconify/icons-mdi/github';
+import { Icon } from '@iconify/react';
 
 import { TopicMetadata } from '../components/content-topic';
+import { socialIcons } from '../../config/assets';
 
 const ContentCards: FunctionComponent<ContentCardsProps> = (props) => {
   const styles = useStyles(props);
-
-  const socialIcons: {
-    [key: string]: 
-    {
-      icon: any
-      color: string
-    }
-  } = {
-    linkedin: {
-      icon: linkedinIcon,
-      color: '#0477b5'
-    },
-    twitter: {
-      icon: twitterIcon,
-      color: '#1ca2f1'
-    },
-    github: {
-      icon: githubIcon,
-      color: '24292f'
-    }
-  }
 
   return (
     <StaticQuery
