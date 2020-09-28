@@ -1,6 +1,6 @@
 ---
 contentPage: 'index'
-topicOrder: 2
+order: 2
 
 fillViewPort: true
 
@@ -17,7 +17,7 @@ buttonForegroundColor: '#ffffff'
 buttonBackgroundColor: '#4d4d4d'
 ---
 
-# Our Difference
+## Our Difference
 
 At AppBricks we make your privacy and security the number one priority when creating our products. We would like our customers to have the same class of security and privacy that enterprises put in place to secure their data and activity from external threats. This means providing enterprise grade automation, encryption and protection without compromising your freedom to conduct your business on the internet. 
 

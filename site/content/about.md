@@ -3,7 +3,7 @@ pageTemplate: landing-page
 title: About Us
 
 contentPage:
-topicOrder:
+order:
 
 fillViewPort: true
 

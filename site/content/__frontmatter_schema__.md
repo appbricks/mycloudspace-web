@@ -7,7 +7,7 @@ title: ''
 subTitle: ''
 
 contentPage: ''
-topicOrder: -1
+order: -1
 
 fillViewPort: false
 
@@ -18,8 +18,11 @@ backgroundBlendMode: ''
 textAlign: ''
 textFontSize: ''
 textLineSpacing: ''
+textMarginTop: ''
 textMarginLeft: ''
+textMarginBottom: ''
 textMarginRight: ''
+textBlockPadding: ''
 textBlockAlign: ''
 textBlockBorder: ''
 textBlockForegroundColor: ''
@@ -33,4 +36,8 @@ buttonBackgroundColor: ''
 
 snippetPathGlob: /team/*
 snippetComponent: person-cards
+
+socialLinks:
+- site: 'linkedin'
+  url: 'https://www.linkedin.com/in/mevan-samaratunga-2685b91/'
 ---

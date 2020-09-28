@@ -121,6 +121,7 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
       <Grid
         container
         direction='row'
+        className={styles.root}
       >
         {(topicMetadata.textBlockAlign == 'right') && (<>
           {scrollUpButton}
@@ -159,6 +160,9 @@ export default ContentTopic;
 const scrollButtonShowDelta = 20;
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
   topicContent: (props: TopicMetadata) => ({
     backgroundImage: `url(${
       props.image
@@ -192,8 +196,10 @@ const useStyles = makeStyles((theme) => ({
       props.textFontSize == 'medium' ? 1.5 : 1;
     
     return {
-      padding: '8px 32px 8px 32px',
+      padding: props.textBlockPadding || '8px 32px 8px 32px',
+      marginTop: props.textMarginTop,
       marginLeft: props.textMarginLeft || '1rem',
+      marginBottom: props.textMarginBottom,
       marginRight: props.textMarginRight || '1rem',
       [theme.breakpoints.down('sm')]: {
         // make padding smaller for mobile view in order
@@ -286,8 +292,11 @@ export type TopicMetadata = {
   textAlign: any
   textFontSize: string
   textLineSpacing: string
+  textMarginTop: string
   textMarginLeft: string
+  textMarginBottom: string
   textMarginRight: string
+  textBlockPadding: string
   textBlockAlign: string
   textBlockBorder: string
   textBlockForegroundColor: string
@@ -298,6 +307,11 @@ export type TopicMetadata = {
   buttonLink: string
   buttonForegroundColor: string
   buttonBackgroundColor: string
+
+  socialLinks: {
+    site: string
+    url: string
+  }[]
 }
 
 export type TopicRefType = MutableRefObject<any>;

@@ -3,7 +3,7 @@ pageTemplate: landing-page
 title: AppBricks
 
 contentPage:
-topicOrder:
+order:
 
 fillViewPort: true
 

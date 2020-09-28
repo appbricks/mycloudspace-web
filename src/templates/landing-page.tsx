@@ -94,7 +94,7 @@ export const pageQuery = graphql`
         frontmatter: {contentPage: {eq: $name}}
       }, 
       sort: {
-        fields: frontmatter___topicOrder
+        fields: frontmatter___order
       }
     ) {
       edges {
@@ -135,8 +135,11 @@ export const pageQuery = graphql`
     textAlign
     textFontSize
     textLineSpacing
+    textMarginTop
     textMarginLeft
+    textMarginBottom
     textMarginRight
+    textBlockPadding
     textBlockAlign
     textBlockBorder
     textBlockForegroundColor
@@ -146,6 +149,10 @@ export const pageQuery = graphql`
     buttonLink
     buttonForegroundColor
     buttonBackgroundColor
+    socialLinks {
+      site
+      url
+    }
   }
 `;
 

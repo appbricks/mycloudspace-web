@@ -1,6 +1,6 @@
 ---
 contentPage: 'index'
-topicOrder: 1
+order: 1
 
 fillViewPort: true
 

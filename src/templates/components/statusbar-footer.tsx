@@ -56,7 +56,10 @@ export default StatusbarFooter;
 const useStyles = makeStyles(() => ({
   socialLink: {
     textDecoration: 'none',
-    color: '#fff'
+    color: '#fff',
+    '&:focus': {
+      outline: '0!important'
+    }
   },
   footerIcon: {
     marginTop: '6px',
