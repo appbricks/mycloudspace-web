@@ -68,7 +68,9 @@ const ContentCards: FunctionComponent<ContentCardsProps> = (props) => {
             spacing={5}
             className={styles.root}
           >
-            {data.allMdx.edges.map((edge, index) => {
+            {data.allMdx.edges
+              .filter(edge => !props.cardSlugRegex || edge.node.fields.slug.match(props.cardSlugRegex))
+              .map((edge, index) => {
 
               const { image, socialLinks } = edge.node.frontmatter;
 
@@ -89,7 +91,7 @@ const ContentCards: FunctionComponent<ContentCardsProps> = (props) => {
                       <MDXRenderer>{edge.node.body}</MDXRenderer>
                     </Box>
                     <Box className={styles.socialBar}>
-                      {socialLinks.map((link, index) => (
+                      {!socialLinks || socialLinks.map((link, index) => (
                         <a key={index} 
                           href={link.url} 
                           tabIndex={-1} 
@@ -171,7 +173,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type ContentCardsProps = {
-  cardContentGlob: string
+  cardSlugRegex?: string
 }
 
 type SnippetQuery = {
@@ -179,6 +181,9 @@ type SnippetQuery = {
     edges: {
       node: {
         body: string
+        fields: {
+          slug: string
+        }
         frontmatter: TopicMetadata
       }
     }[]

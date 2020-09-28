@@ -23,4 +23,4 @@ buttonBackgroundColor:
 
 ## The Team
 
-<ContentCards cardContentGlob='/team/*'></ContentCards>
+<ContentCards cardSlugRegex='.*/team/.*'></ContentCards>
