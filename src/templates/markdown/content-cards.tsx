@@ -69,7 +69,8 @@ const ContentCards: FunctionComponent<ContentCardsProps> = (props) => {
             className={styles.root}
           >
             {data.allMdx.edges
-              .filter(edge => !props.cardSlugRegex || edge.node.fields.slug.match(props.cardSlugRegex))
+              .filter(edge => !props.cardSlugRegex 
+                || edge.node.fields.slug.match(props.cardSlugRegex))
               .map((edge, index) => {
 
               const { image, socialLinks } = edge.node.frontmatter;
