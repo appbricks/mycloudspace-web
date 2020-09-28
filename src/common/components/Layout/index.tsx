@@ -65,7 +65,7 @@ scheme.configureHeader(builder => {
 const theme = createMuiTheme({
   palette: {
     background: {
-      default: '#fff',
+      default: '#efefef',
     },
   },
 });
