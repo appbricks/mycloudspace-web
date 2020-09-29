@@ -2,9 +2,6 @@
 pageTemplate: content-page
 title: AppBricks
 
-contentPage:
-order:
-
 fillViewPort: true
 
 image: ../assets/images/backgrounds/appbricks.jpg

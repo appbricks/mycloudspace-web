@@ -2,9 +2,6 @@
 pageTemplate: content-page
 title: About Us
 
-contentPage:
-order:
-
 fillViewPort: true
 
 image: ../assets/images/backgrounds/about-us.jpg
