@@ -34,7 +34,8 @@ export default Header;
 
 const useStyles = makeStyles({
   root: {
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff',
+    boxShadow: '0px 0px 10px #4d4d4d',
   },
   logo: {
     height: 40,
