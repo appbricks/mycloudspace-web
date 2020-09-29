@@ -5,8 +5,6 @@ name: Build Site
 
 on:
   workflow_dispatch:
-    inputs:
-      description: 'Run Reason'
   push:
     branches: [ master ]
     paths:
