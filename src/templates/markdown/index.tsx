@@ -6,8 +6,9 @@ const MDXProvider = require('@mdx-js/react').MDXProvider;
 
 // custom markdown components
 import ContentCards from './content-cards';
+import SiteContact from './site-contact';
 
-const shortcodes = { ContentCards }
+const shortcodes = { ContentCards, SiteContact }
 
 const CustomTagProvider: FunctionComponent = ({ children }) => {
 

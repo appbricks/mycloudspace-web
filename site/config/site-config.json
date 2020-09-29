@@ -9,9 +9,9 @@
     "linkedin": "https://www.linkedin.com/company/appbricks"
   },
   "contact": {
+    "phone": "+1-716-575-5305",
     "email": "marketing@appbricks.io",
-    "support_email": "support@appbricks.io",
-    "support_channel": "https://appbricks.slack.io",
-    "phone": "+1-716-575-5305"   
+    "supportEmail": "support@appbricks.io",
+    "supportChannel": "https://appbricks.slack.io"
   }
 }
