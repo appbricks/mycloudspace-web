@@ -5,7 +5,6 @@ order: 1
 fillViewPort: false
 
 textAlign: 'center'
-# textMarginTop: '-2.5rem'
 textMarginLeft: '-6rem'
 textMarginRight: '-6rem'
 textBlockPadding: '8px 32px 16px 32px'
