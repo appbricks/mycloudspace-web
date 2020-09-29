@@ -35,15 +35,14 @@ export default Header;
 const useStyles = makeStyles({
   root: {
     backgroundColor: '#ffffff',
-    boxShadow: '0px 0px 10px #4d4d4d',
+    boxShadow: '0 1px 15px rgba(50, 50, 93,.2)'
   },
   logo: {
     height: 40,
     cursor: 'pointer'
   },
   toolbar: {
-    minHeight: `${headerHeight}px !important`,
-    boxShadow: 'inset 0 -1px 0 rgba(100,121,143,0.122)',
+    minHeight: `${headerHeight}px !important`
   }
 });
 
