@@ -6,8 +6,24 @@ name: Build Site
 on:
   push:
     branches: [ master ]
+    paths:
+    - 'site/**'
+    - 'src/**'
+    - 'gatsby-browser.js'
+    - 'gatsby-config.js'
+    - 'gatsby-node.js'
+    - 'gatsby-ssr.js'
+    - 'package.json'
   pull_request:
     branches: [ master ]
+    paths:
+    - 'site/**'
+    - 'src/**'
+    - 'gatsby-browser.js'
+    - 'gatsby-config.js'
+    - 'gatsby-node.js'
+    - 'gatsby-ssr.js'
+    - 'package.json'
 
 jobs:
   build:
@@ -26,4 +42,5 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm install -g gatsby-cli
     - run: npm install
+    - run: echo -e "${{ secrets.AWS_AMPLIFY_EXPORTS }}" > src/aws-exports.ts
     - run: gatsby build
