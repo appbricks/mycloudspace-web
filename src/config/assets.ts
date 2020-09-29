@@ -1,6 +1,7 @@
 import linkedinIcon from '@iconify/icons-mdi/linkedin';
 import twitterIcon from '@iconify/icons-mdi/twitter';
 import githubIcon from '@iconify/icons-mdi/github';
+import downloadIcon from '@iconify/icons-mdi/download-circle';
 
 // Application Logos
 
@@ -25,6 +26,10 @@ export const linkIcons: {
   },
   github: {
     icon: githubIcon,
-    color: '24292f'
+    color: '#24292f'
+  },
+  download: {
+    icon: downloadIcon,
+    color: '#008500'
   }
 }

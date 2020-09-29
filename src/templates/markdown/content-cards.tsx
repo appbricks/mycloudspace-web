@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { Grid, Box, Paper, Avatar, makeStyles } from '@material-ui/core';
+import { Grid, Box, Paper, Avatar, Divider, makeStyles } from '@material-ui/core';
 import { StaticQuery, graphql } from "gatsby"
 import { MDXRenderer } from 'gatsby-plugin-mdx';
 
@@ -58,8 +58,8 @@ const ContentCards: FunctionComponent<ContentCardsProps> = (props) => {
 
               const styleProps: StyleProps = {
                 cardWidth: props.cardWidth || '22rem',
-                cardHeight: props.cardHeight || '30.5rem',
-                mdxTextHeight: props.textHeight || '20rem',
+                cardHeight: props.cardHeight || '30.8rem',
+                mdxTextHeight: props.textHeight || '20.3rem',
                 mdxParagraphAlign: textAlign
               };
 
@@ -94,6 +94,7 @@ const ContentCards: FunctionComponent<ContentCardsProps> = (props) => {
                     <Box className={styles.mdxText}>
                       <MDXRenderer>{edge.node.body}</MDXRenderer>
                     </Box>
+                    {!links || <Divider />}
                     <Box className={styles.socialBar}>
                       {!links || links.map((link, index) => (
                         <a key={index} 
