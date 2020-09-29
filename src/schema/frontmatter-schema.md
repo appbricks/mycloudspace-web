@@ -11,7 +11,9 @@ order: -1
 
 fillViewPort: false
 
-image: ../assets/images/backgrounds/appbricks.jpg
+image: ''                       # relative path from markdown file to image
+imageStyle: ''                  # values: 'background', 'avatar' - latter two applies only to content cards
+imageLink: ''                   # make image clickable - applies only to non-background images
 backgroundColor: ''
 backgroundBlendMode: ''
 
@@ -34,10 +36,7 @@ buttonLink: ''
 buttonForegroundColor: ''
 buttonBackgroundColor: ''
 
-snippetPathGlob: /team/*
-snippetComponent: person-cards
-
-socialLinks:
-- site: 'linkedin'
-  url: 'https://www.linkedin.com/in/mevan-samaratunga-2685b91/'
+socialLinks:                    # list of social links to show in content footer
+- site: ''                      # values: 'linkedin', 'twitter', 'github'
+  url: ''                       # social app/site url
 ---

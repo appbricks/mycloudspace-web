@@ -286,6 +286,8 @@ export type TopicMetadata = {
   fillViewPort: boolean
 
   image: any
+  imageStyle: string
+  imageLink: string
   backgroundColor: string
   backgroundBlendMode: string
 

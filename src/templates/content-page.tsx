@@ -124,6 +124,7 @@ export const pageQuery = graphql`
   }
   fragment FrontMatterFields on MdxFrontmatter {
     fillViewPort
+
     image {
       childImageSharp {
         fluid(maxWidth: 2048, quality: 100) {
@@ -131,8 +132,11 @@ export const pageQuery = graphql`
         }
       }
     }
+    imageStyle
+    imageLink
     backgroundColor
     backgroundBlendMode
+
     textAlign
     textFontSize
     textLineSpacing
@@ -145,11 +149,13 @@ export const pageQuery = graphql`
     textBlockBorder
     textBlockForegroundColor
     textBlockBackgroundColor
+
     button
     buttonMargins
     buttonLink
     buttonForegroundColor
     buttonBackgroundColor
+    
     socialLinks {
       site
       url

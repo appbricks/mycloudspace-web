@@ -9,7 +9,6 @@ import { TopicMetadata } from '../components/content-topic';
 import { socialIcons } from '../../config/assets';
 
 const ContentCards: FunctionComponent<ContentCardsProps> = (props) => {
-  const styles = useStyles(props);
 
   return (
     <StaticQuery
@@ -43,29 +42,56 @@ const ContentCards: FunctionComponent<ContentCardsProps> = (props) => {
             direction='row'
             justify='center'
             spacing={5}
-            className={styles.root}
           >
             {data.allMdx.edges
               .filter(edge => !props.cardSlugRegex 
                 || edge.node.fields.slug.match(props.cardSlugRegex))
               .map((edge, index) => {
 
-              const { image, socialLinks } = edge.node.frontmatter;
+              const { 
+                image, 
+                imageStyle, 
+                imageLink, 
+                textAlign,
+                socialLinks 
+              } = edge.node.frontmatter;
+
+              const styleProps: StyleProps = {
+                cardWidth: props.cardWidth || '22rem',
+                cardHeight: props.cardHeight || '30.5rem',
+                mdxTextHeight: props.textHeight || '20rem',
+                mdxParagraphAlign: textAlign
+              };
+
+              const styles = useStyles(styleProps);
+
+              const imageElement = 
+                imageStyle == 'avatar' ? (
+                  <Avatar 
+                    src={image
+                      ? !!image.childImageSharp
+                        ? image.childImageSharp.fluid.src
+                        : image
+                      : ''}
+                    className={styles.avatar}
+                  />
+                ) : (
+                  <img src={image
+                    ? !!image.childImageSharp
+                      ? image.childImageSharp.fluid.src
+                      : image
+                    : ''}
+                    className={styles.image}
+                  />
+                );
 
               return (
                 <Grid item key={index}>
                   <Paper elevation={4} className={styles.paper}>
                     <Box>
-                      <Avatar 
-                        src={image
-                          ? !!image.childImageSharp
-                            ? image.childImageSharp.fluid.src
-                            : image
-                          : ''}
-                        className={styles.avatar}
-                      />
+                      {imageElement}
                     </Box>
-                    <Box style={{height: '20rem'}}>
+                    <Box className={styles.mdxText}>
                       <MDXRenderer>{edge.node.body}</MDXRenderer>
                     </Box>
                     <Box className={styles.socialBar}>
@@ -100,10 +126,10 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1
   },
-  paper: {
+  paper: (props: StyleProps) => ({
     padding: '0.5rem',
-    width: '22rem',
-    height: '30.5rem',
+    width: props.cardWidth,
+    height: props.cardHeight,
     overflow: 'hidden',
     '& h1': {
       fontSize: '1.25rem!important',
@@ -120,8 +146,14 @@ const useStyles = makeStyles((theme) => ({
     '& p': {
       marginLeft: '0.5rem',
       marginRight: '0.5rem',
-      fontSize: '1rem!important'
+      fontSize: '1rem!important',
+      textAlign: props.mdxParagraphAlign
     }
+  }),
+  image: {
+    width: '95%',
+    marginTop: '0.8rem',
+    borderRadius: '16px'
   },
   avatar: {
     width: '5rem',
@@ -131,8 +163,12 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '0.5rem',
     marginRight: 'auto'
   },
+  mdxText: (props: StyleProps) => ({
+    height: props.mdxTextHeight,
+    overflow: 'hidden'
+  }),
   socialBar: {
-    padding: '0.5rem 2rem 0.5rem 2rem',
+    padding: '1rem 2rem 0.5rem 2rem',
     width: '100%',
     display: 'table',
     tableLayout: 'fixed'
@@ -152,6 +188,16 @@ const useStyles = makeStyles((theme) => ({
 
 type ContentCardsProps = {
   cardSlugRegex?: string
+  cardWidth?: string
+  cardHeight?: string
+  textHeight?: string
+}
+
+type StyleProps = {
+  cardWidth: string
+  cardHeight: string
+  mdxTextHeight?: string
+  mdxParagraphAlign: any
 }
 
 type SnippetQuery = {

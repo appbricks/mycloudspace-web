@@ -1,6 +1,7 @@
 ---
 order: 1
 image: '../../../assets/images/team/mevan.jpg'
+imageStyle: 'avatar'
 
 socialLinks:
 - site: 'linkedin'
