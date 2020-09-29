@@ -193,7 +193,8 @@ const useStyles = makeStyles((theme) => ({
 
     const fontMultiplier = 
       props.textFontSize == 'large' ? 2 :
-      props.textFontSize == 'medium' ? 1.5 : 1;
+      props.textFontSize == 'medium' ? 1.5 :
+      props.textFontSize == 'extra-small' ? 0.8 : 1;
     
     return {
       padding: props.textBlockPadding || '8px 32px 8px 32px',
