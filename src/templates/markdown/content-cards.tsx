@@ -6,7 +6,7 @@ import { MDXRenderer } from 'gatsby-plugin-mdx';
 import { Icon } from '@iconify/react';
 
 import { TopicMetadata } from '../components/content-topic';
-import { socialIcons } from '../../config/assets';
+import { linkIcons } from '../../config/assets';
 
 const ContentCards: FunctionComponent<ContentCardsProps> = (props) => {
 
@@ -53,7 +53,7 @@ const ContentCards: FunctionComponent<ContentCardsProps> = (props) => {
                 imageStyle, 
                 imageLink, 
                 textAlign,
-                socialLinks 
+                links 
               } = edge.node.frontmatter;
 
               const styleProps: StyleProps = {
@@ -95,7 +95,7 @@ const ContentCards: FunctionComponent<ContentCardsProps> = (props) => {
                       <MDXRenderer>{edge.node.body}</MDXRenderer>
                     </Box>
                     <Box className={styles.socialBar}>
-                      {!socialLinks || socialLinks.map((link, index) => (
+                      {!links || links.map((link, index) => (
                         <a key={index} 
                           href={link.url} 
                           tabIndex={-1} 
@@ -103,8 +103,8 @@ const ContentCards: FunctionComponent<ContentCardsProps> = (props) => {
                           className={styles.socialLink}
                         >
                           <Icon width={30} 
-                            icon={socialIcons[link.site].icon} 
-                            style={{color: socialIcons[link.site].color}}
+                            icon={linkIcons[link.name].icon} 
+                            style={{color: linkIcons[link.name].color}}
                             className={styles.socialIcon} />
                         </a>
                       ))}

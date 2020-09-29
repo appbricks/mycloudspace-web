@@ -310,8 +310,8 @@ export type TopicMetadata = {
   buttonForegroundColor: string
   buttonBackgroundColor: string
 
-  socialLinks: {
-    site: string
+  links: {
+    name: string
     url: string
   }[]
 }

@@ -8,7 +8,7 @@ export const LOGO = require('../../site/assets/images/appbricks-logo-name.png');
 
 // Social Icons
 
-export const socialIcons: {
+export const linkIcons: {
   [key: string]: 
   {
     icon: any

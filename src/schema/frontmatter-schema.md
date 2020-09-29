@@ -36,7 +36,7 @@ buttonLink: ''
 buttonForegroundColor: ''
 buttonBackgroundColor: ''
 
-socialLinks:                    # list of social links to show in content footer
-- site: ''                      # values: 'linkedin', 'twitter', 'github'
-  url: ''                       # social app/site url
+links:                    # list of links to show in content footer
+- name: ''                # values: 'linkedin', 'twitter', 'github'
+  url: ''                 # social app/site url
 ---

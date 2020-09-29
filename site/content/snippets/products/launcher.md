@@ -5,8 +5,8 @@ imageStyle: 'card'
 
 textAlign: 'left'
 
-socialLinks:
-- site: 'github'
+links:
+- name: 'github'
   url: 'https://github.com/appbricks/cloud-builder-cli'
 ---
 

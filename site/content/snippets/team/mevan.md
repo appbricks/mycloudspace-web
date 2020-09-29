@@ -3,12 +3,12 @@ order: 1
 image: '../../../assets/images/team/mevan.jpg'
 imageStyle: 'avatar'
 
-socialLinks:
-- site: 'linkedin'
+links:
+- name: 'linkedin'
   url: 'https://www.linkedin.com/in/mevan-samaratunga-2685b91/'
-- site: 'twitter'
+- name: 'twitter'
   url: 'https://twitter.com/mksam73'
-- site: 'github'
+- name: 'github'
   url: 'https://github.com/mevansam'
 ---
 

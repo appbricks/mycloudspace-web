@@ -156,8 +156,8 @@ export const pageQuery = graphql`
     buttonForegroundColor
     buttonBackgroundColor
     
-    socialLinks {
-      site
+    links {
+      name
       url
     }
   }
