@@ -115,7 +115,7 @@ const ContentCards: FunctionComponent<ContentCardsProps> = (props) => {
               )
             })}
           </Grid>
-        )
+        );
       }}
     />
   );
