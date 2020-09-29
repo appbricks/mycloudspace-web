@@ -16,7 +16,7 @@ const ContentCards: FunctionComponent<ContentCardsProps> = (props) => {
         query {
           allMdx(
             filter: {
-              fields: {slug: {glob: "/snippets/**"}}
+              fields: {slug: {glob: "/cards/**"}}
             }
             sort: {
               fields: frontmatter___order
