@@ -34,25 +34,25 @@ export const mainMenu: MenuDataItem[] = [
   },
     link: '/contact' 
   }),
-  MenuDataItem
-    .newItem({
-      title: 'My Cloud Space', 
-      icon: { 
-        element: <Icon width={24} icon={loginIcon} />, 
-        showInMain: true,
-        anchorRightInMain: true,
-        anchorRightInSideBar: true
-      },
-      link: '/mcs/logout',
-    })
-    .addItem('loggedin', {
-      title: 'My Cloud Space',     
-      icon: { 
-        element: <Icon width={24} icon={logoutIcon} />, 
-        showInMain: true,
-        anchorRightInMain: true,
-        anchorRightInSideBar: true
-      },
-      link: '/mcs/logout',
-    })
+  // MenuDataItem
+  //   .newItem({
+  //     title: 'My Cloud Space', 
+  //     icon: { 
+  //       element: <Icon width={24} icon={loginIcon} />, 
+  //       showInMain: true,
+  //       anchorRightInMain: true,
+  //       anchorRightInSideBar: true
+  //     },
+  //     link: '/mcs/logout',
+  //   })
+  //   .addItem('loggedin', {
+  //     title: 'My Cloud Space',     
+  //     icon: { 
+  //       element: <Icon width={24} icon={logoutIcon} />, 
+  //       showInMain: true,
+  //       anchorRightInMain: true,
+  //       anchorRightInSideBar: true
+  //     },
+  //     link: '/mcs/logout',
+  //   })
 ];
