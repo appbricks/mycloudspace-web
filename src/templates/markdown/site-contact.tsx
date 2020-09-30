@@ -1,11 +1,11 @@
 import React, { FunctionComponent } from 'react';
-import { StaticQuery, graphql } from "gatsby"
+import { StaticQuery, graphql } from 'gatsby'
 
 const SiteContact: FunctionComponent<SiteContactProps> = (props) => {
 
-  const emailMatchRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+  const emailMatchRegex = /^(([^<>()\[\]\.,;:\s@\']+(\.[^<>()\[\]\.,;:\s@\']+)*)|(\'.+\'))@(([^<>()[\]\.,;:\s@\']+\.)+[^<>()[\]\.,;:\s@\']{2,})$/i;
   const httpMatchRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
-  const telMatchRegex = /^\+?([0-9]+-?)+$/;
+  const phoneMatchRegex = /^\+?([0-9]+-?)+$/;
   
   return (
     <StaticQuery
@@ -27,7 +27,7 @@ const SiteContact: FunctionComponent<SiteContactProps> = (props) => {
           return (<a href={`mailto:${value}`}>{value}</a>);
         } if (httpMatchRegex.test(value)) {
           return (<a href={`${value}`}>{value}</a>);
-        } if (telMatchRegex.test(value)) {
+        } if (phoneMatchRegex.test(value)) {
           return (<a href={`tel:${value}`}>{value}</a>);
         } else {
           return (<>{value}</>);
