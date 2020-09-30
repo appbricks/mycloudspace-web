@@ -4,7 +4,7 @@ title: Products
 
 fillViewPort: true
 
-image: ../assets/images/backgrounds/products.jpg
+image: ../images/backgrounds/products.jpg
 backgroundColor: '#4d4d4d'
 backgroundBlendMode: 'overlay'
 

@@ -5,7 +5,7 @@ import downloadIcon from '@iconify/icons-mdi/download-circle';
 
 // Application Logos
 
-export const LOGO = require('../../site/assets/images/appbricks-logo-name.png');
+export const LOGO = require('../../site/images/appbricks-logo-name.png');
 
 // Social Icons
 

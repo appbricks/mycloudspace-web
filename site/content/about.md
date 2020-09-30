@@ -4,7 +4,7 @@ title: About Us
 
 fillViewPort: true
 
-image: ../assets/images/backgrounds/about-us.jpg
+image: ../images/backgrounds/about-us.jpg
 backgroundColor: '#4d4d4d'
 backgroundBlendMode: 'overlay'
 

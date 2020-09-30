@@ -2,7 +2,7 @@
 contentPage: about
 order: 2
 
-image: ../assets/images/backgrounds/our-story.jpg
+image: ../images/backgrounds/our-story.jpg
 
 textBlockAlign: 'right'
 textBlockBorder: 'none'

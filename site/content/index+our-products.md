@@ -4,7 +4,7 @@ order: 1
 
 fillViewPort: true
 
-image: '../assets/images/backgrounds//digital-experience.jpg'
+image: '../images/backgrounds//digital-experience.jpg'
 backgroundColor: '#4d4d4d'
 
 textBlockAlign: 'right'

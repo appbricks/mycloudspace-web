@@ -1,6 +1,6 @@
 ---
 order: 1
-image: '../../../assets/images/products/cloud-sandbox.jpg'
+image: '../../../images/products/cloud-sandbox.jpg'
 imageStyle: 'card'
 
 textAlign: 'left'

@@ -4,7 +4,7 @@ title: AppBricks
 
 fillViewPort: true
 
-image: ../assets/images/backgrounds/appbricks.jpg
+image: ../images/backgrounds/appbricks.jpg
 backgroundColor: '#4d4d4d'
 backgroundBlendMode: 'overlay'
 
