@@ -37,7 +37,7 @@ resource "aws_lambda_function" "url-rewrite" {
   filename         = "${local.url_rewrite_fn_source}"
   source_code_hash = "${filebase64sha256(local.url_rewrite_fn_source)}"
   handler          = "index.handler"
-  runtime          = "nodejs8.10"
+  runtime          = "nodejs12.x"
 
   role    = "${aws_iam_role.url-rewrite.arn}"
   publish = true
