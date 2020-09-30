@@ -1,7 +1,8 @@
 module.exports = {
   siteMetadata: {
     title: 'My Cloud Space Account and Space Manager',
-    author: '@appbricks',
+    description: 'AppBricks account and cloud space management dashboard',
+    author: '@appbricks.io',
   },
   plugins: [
     {
@@ -88,6 +89,7 @@ module.exports = {
         cookieDomain: 'https://mycloudspace.io/',
       },
     },
+    'gatsby-plugin-offline',
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-netlify',
     'gatsby-plugin-sass',
