@@ -1,5 +1,5 @@
 import React, { Component, FunctionComponent, ReactElement, useEffect } from 'react';
-import { navigate } from "gatsby";
+import { navigate } from 'gatsby';
 import { Box, List, Hidden } from '@material-ui/core';
 import styled from 'styled-components';
 

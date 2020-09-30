@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { Grid, Box, Paper, Avatar, Divider, makeStyles } from '@material-ui/core';
-import { StaticQuery, graphql } from "gatsby"
+import { StaticQuery, graphql } from 'gatsby'
 import { MDXRenderer } from 'gatsby-plugin-mdx';
 
 import { Icon } from '@iconify/react';

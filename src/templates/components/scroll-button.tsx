@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#0050ff',
     opacity: '0.8',
     color: '#ffffff',
-    "&:hover": {
+    '&:hover': {
       backgroundColor: emphasize('#0050ff', 0.2)
     }
   },

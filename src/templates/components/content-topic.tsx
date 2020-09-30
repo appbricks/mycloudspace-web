@@ -249,7 +249,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: props.buttonBackgroundColor,
         color: props.buttonForegroundColor,
         margin: props.buttonMargins,
-        "&:hover": {
+        '&:hover': {
           backgroundColor: emphasize(props.buttonBackgroundColor, 0.1)
         }
       };

@@ -1,6 +1,6 @@
-import React, { FunctionComponent } from "react"
-import { StaticQuery, graphql } from "gatsby"
-import { Helmet } from "react-helmet";
+import React, { FunctionComponent } from 'react'
+import { StaticQuery, graphql } from 'gatsby'
+import { Helmet } from 'react-helmet';
 
 type Props = {
   title?: string

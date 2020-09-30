@@ -57,13 +57,13 @@ export const ToolBarMenuItem: FunctionComponent<ToolBarMenuItemProps> = ({
       if (item.icon.anchorRightInMain) {
         return <>
           <Typography variant='subtitle1'>{item.title}</Typography>
-          <Box component="span" ml={1} mb={-0.3}>
+          <Box component='span' ml={1} mb={-0.3}>
             {item.icon.element}
           </Box>
         </>;
       } else {
         return <>
-          <Box component="span" ml={1} mb={-0.3}>
+          <Box component='span' ml={1} mb={-0.3}>
             {item.icon.element}
           </Box>
           <Typography variant='subtitle1'>{item.title}</Typography>
@@ -86,7 +86,7 @@ export const ToolBarMenuItem: FunctionComponent<ToolBarMenuItemProps> = ({
 export const SideBarMenuItem: FunctionComponent<SideBarMenuItemProps> = ({ 
   item, 
   active, 
-  accentColor = "#000000", 
+  accentColor = '#000000', 
   rightSideBar = false,
   ...other 
 }) => {
