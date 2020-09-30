@@ -142,7 +142,7 @@ class NavStateDelegate {
   constructor(menuItems: MenuDataItem[]) {
     this.menuItems = menuItems;
     
-    const pathName = window.location.pathname.replace(/\/$/, "");
+    const pathName = typeof window !== 'undefined' ? window.location.pathname.replace(/\/$/, '') : '';
     this.active = menuItems.findIndex(item => (item.getItem().link == pathName));
   }
 

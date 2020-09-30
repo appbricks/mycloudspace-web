@@ -3,7 +3,8 @@ import { Grid, Paper, Box, Button, makeStyles } from '@material-ui/core';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
 
-import { headerHeight } from '../../common/components/Layout';
+import { headerHeight } from '../../config/layout';
+
 import { handleParentScroll, Position } from '../../common/utils/scroll'
 import ScrollButton, { ScrollDirection } from './scroll-button';
 

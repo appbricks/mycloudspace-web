@@ -4,10 +4,10 @@ import MuiLayout, { Root, getContent } from '@mui-treasury/layout';
 import styled from 'styled-components';
 
 import Header from '../Header';
-
 import { MetaTitle } from '../Title';
 import { getMainNav } from '../Nav';
 
+import { headerHeight } from '../../../config/layout';
 import { mainMenu } from '../../../config/menus';
 
 const Layout: FunctionComponent<LayoutProps> = ({ bottomGutterHeight, children }) => {
@@ -39,8 +39,6 @@ export const getLayoutViewPortHeight = (bottomGutterHeight?: string) => (
     ? `calc(100vh - (${headerHeight}px + ${bottomGutterHeight}))`
     : `calc(100vh - ${headerHeight}px)`
 )
-
-export const headerHeight = 64;
 
 const useStyles = makeStyles(() => ({
   paper: {  

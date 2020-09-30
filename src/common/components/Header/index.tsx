@@ -3,8 +3,9 @@ import { Container, Box, Toolbar, makeStyles } from '@material-ui/core';
 import { getHeader } from '@mui-treasury/layout';
 import styled from 'styled-components';
 
-import { headerHeight } from '../Layout';
 import { MainNav } from '../Nav/MainNav';
+
+import { headerHeight } from '../../../config/layout';
 import { LOGO } from '../../../config/assets';
 
 const Header: FunctionComponent<HeaderProps> = ({ mainNav }) => {
