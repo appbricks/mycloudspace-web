@@ -7,7 +7,7 @@ module.exports = {
     {
       resolve: 'gatsby-source-filesystem',
       options: {
-        path: `${__dirname}/site/assets/images`,
+        path: `${__dirname}/site/images`,
         name: 'images',
       },
     },
@@ -40,14 +40,6 @@ module.exports = {
       },
     },
     {
-      resolve: 'gatsby-plugin-react-svg',
-      options: {
-        rule: {
-          include: /vectors/,
-        },
-      },
-    },
-    {
       resolve: 'gatsby-plugin-manifest',
       options: {
         name: 'appbricks-mycloudspace',
@@ -56,16 +48,17 @@ module.exports = {
         background_color: '#663399',
         theme_color: '#663399',
         display: 'minimal-ui',
-        icon: 'site/assets/images/mycloudspace-icon-square.png',
+        icon: 'site/images/mycloudspace-icon-square.png',
       },
     },
-    'gatsby-plugin-react-helmet',
-    'gatsby-plugin-netlify',
-    'gatsby-plugin-sass',
-    'gatsby-plugin-sharp',
-    'gatsby-transformer-sharp',
-    'gatsby-transformer-json',
-    'gatsby-remark-images',
+    {
+      resolve: `gatsby-plugin-material-ui`,
+      options: {
+        stylesProvider: {
+          injectFirst: true,
+        },
+      },
+    },
     {
       resolve: 'gatsby-plugin-mdx',
       options: {
@@ -95,5 +88,13 @@ module.exports = {
         cookieDomain: 'https://mycloudspace.io/',
       },
     },
+    'gatsby-plugin-react-helmet',
+    'gatsby-plugin-netlify',
+    'gatsby-plugin-sass',
+    'gatsby-plugin-sharp',
+    'gatsby-transformer-sharp',
+    'gatsby-transformer-json',
+    'gatsby-plugin-styled-components',
+    'gatsby-remark-images',
   ],
 }
