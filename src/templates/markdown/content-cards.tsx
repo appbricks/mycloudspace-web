@@ -131,6 +131,10 @@ const useStyles = makeStyles((theme) => ({
     padding: '0.5rem',
     width: props.cardWidth,
     height: props.cardHeight,
+    [theme.breakpoints.down('sm')]: {
+      width: '21rem',
+      height: 'auto'
+    },
     overflow: 'hidden',
     '& h1': {
       fontSize: '1.25rem!important',
@@ -166,6 +170,9 @@ const useStyles = makeStyles((theme) => ({
   },
   mdxText: (props: StyleProps) => ({
     height: props.mdxTextHeight,
+    [theme.breakpoints.down('sm')]: {
+      height: 'auto'
+    },
     overflow: 'hidden'
   }),
   socialBar: {

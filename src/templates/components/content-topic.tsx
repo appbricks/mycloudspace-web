@@ -19,7 +19,13 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
   scrollButtonUpTop = undefined
 }) => {
 
-  topicMetadata.viewPortHeight = height;
+  if (height) {
+    topicMetadata.viewPortHeight = height;
+  } else {
+    // override fill view port and default 
+    // to false as no height was passed in
+    topicMetadata.fillViewPort = false;
+  }
 
   const [ hideScrollButton, setHideScrollButton ] = useState(!topicMetadata.fillViewPort);
   const ref = useRef<HTMLDivElement>(null);
@@ -29,8 +35,10 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
   useEffect(() => {
     topicRefs.push(ref);
     
-    const cleanup = handleParentScroll(onScroll, ref);
-    return () => cleanup();
+    if (topicMetadata.fillViewPort) {
+      const cleanup = handleParentScroll(onScroll, ref);
+      return () => cleanup();  
+    }
   });
 
   // content view scroll bounds for hiding scroll button
@@ -272,17 +280,21 @@ const useStyles = makeStyles((theme) => ({
 type ContentTopicProps = {
   index: number
   lastTopic?: boolean
-  height: string
+
+  height?: string
+
   topicRefs: TopicRefType[] 
   topicMetadata: TopicMetadata
+  
   content: string
+
   scrollButtonDownTop?: string
   scrollButtonUpTop?: string
 }
 
 export type TopicMetadata = {
 
-  viewPortHeight: string
+  viewPortHeight?: string
 
   // GraphQL node frontmatter fields
   fillViewPort: boolean
