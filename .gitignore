@@ -1,5 +1,7 @@
 # Project dependencies
+.envrc
 .cache
+pkg/
 node_modules
 yarn-error.log
 
@@ -14,5 +16,5 @@ src/aws-exports.js
 amplify/\#current-cloud-backend
 amplify/.config/local-*
 amplify/backend/amplify-meta.json
-aws-exports.js
 awsconfiguration.json
+aws-exports.*
