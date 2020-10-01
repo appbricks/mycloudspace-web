@@ -32,7 +32,8 @@ jobs:
       TF_VAR_publish_path: ${{ github.workspace }}/public
 
     steps:
-    - name: Check Branch
+    
+    - name: Check branch
       if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
       run: |
         echo 'This action cannot be run on main/master branches.'
@@ -55,6 +56,7 @@ jobs:
     # remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
+        export TF_VAR_env=${GITHUB_REF##*/}
         env
         #terraform init \
         #  -backend-config="key=website/appbricks-io_${TF_VAR_env}" \
