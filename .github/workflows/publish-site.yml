@@ -43,6 +43,7 @@ jobs:
         TF_VAR_domain: appbricks.io
         TF_VAR_publish_path: $(pwd)/public
       run: |
+        aws --version
         echo $TF_VAR_publish_path
         terraform init \
           -backend-config="key=website/appbricks-io_${{ github.event.inputs.env }}" \
