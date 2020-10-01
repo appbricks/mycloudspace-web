@@ -7,7 +7,7 @@ import Layout, { getLayoutViewPortHeight } from '../common/components/Layout';
 import ContentTopic, { TopicMetadata, TopicRefType } from './components/content-topic';
 import StatusbarFooter from './components/statusbar-footer';
 
-const LandingPage: FunctionComponent<LandingPageProps> = ({ 
+const ContentPage: FunctionComponent<ContentPageProps> = ({ 
   data, 
   pageContext 
 }) => {
@@ -15,15 +15,18 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({
   var bottomGutterHeight: string | undefined = '48px';
   bottomGutterHeight = useMediaQuery('(max-width:797px)') ? '77px' : bottomGutterHeight;
   bottomGutterHeight = useMediaQuery('(max-width:599px)') ? '105px' : bottomGutterHeight;
-  // remove sticky footer for mobile devices
+  // removes fixed viewport and sticky footer for mobile devices
   bottomGutterHeight = useMediaQuery('(max-width:414px)') ? undefined : bottomGutterHeight;
 
-  const scrollButtonUpTop = '20px'
-  const scrollButtonDownTop = bottomGutterHeight
-    ? `calc(100vh - ${bottomGutterHeight} - 140px)` 
-    : `calc(100vh - 180px)`;
+  var viewPortHeight: string | undefined = undefined;
+  var scrollButtonUpTop: string | undefined = undefined;
+  var scrollButtonDownTop: string | undefined = undefined;
 
-  const viewPortHeight = getLayoutViewPortHeight(bottomGutterHeight);
+  if (bottomGutterHeight) {
+    viewPortHeight = getLayoutViewPortHeight(bottomGutterHeight);
+    scrollButtonUpTop = '20px';
+    scrollButtonDownTop = `calc(100vh - ${bottomGutterHeight} - 140px)`;
+  }
 
   const { organization, social, contact } = data.configJson;
   const topics = data.allMdx.edges;
@@ -80,7 +83,7 @@ const LandingPage: FunctionComponent<LandingPageProps> = ({
   )
 }
 
-export default LandingPage;
+export default ContentPage;
 
 export const pageQuery = graphql`
   query PageTopicsQuery($id: String!, $name: String!) {
@@ -163,7 +166,7 @@ export const pageQuery = graphql`
   }
 `;
 
-type LandingPageProps = {
+type ContentPageProps = {
   data: {
     mdx: {
       body: string

@@ -3,8 +3,6 @@
 #
 
 terraform {
-  backend "s3" {
-    key = "website/appbricks-io"
-    bucket = "appbricks-tfstate-useast1"
+  backend "s3" {    
   }
 }

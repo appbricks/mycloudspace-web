@@ -2,12 +2,12 @@
 # S3 bucket for website content
 # 
 resource "aws_s3_bucket" "appbricks-io" {
-  bucket = "${var.domain}"
+  bucket = local.env_domain
   acl    = "public-read"
 }
 
 resource "aws_s3_bucket_policy" "appbricks-io" {
-  bucket = "${aws_s3_bucket.appbricks-io.id}"
+  bucket = aws_s3_bucket.appbricks-io.id
   policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -17,7 +17,7 @@ resource "aws_s3_bucket_policy" "appbricks-io" {
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::${var.domain}/*"
+      "Resource": "arn:aws:s3:::${local.env_domain}/*"
     }
   ]
 }
@@ -43,10 +43,10 @@ SCRIPT
 }
 
 locals {
-  publish_path_prefix_len = "${length(var.publish_path) + 1}"
-  publish_file_list   = "${split(",", data.external.publish.result.files)}"
+  publish_path_prefix_len = length(var.publish_path) + 1
+  publish_file_list = split(",", data.external.publish.result.files)
 
-  publish_file_list_ext  = [ for file in local.publish_file_list 
+  publish_file_list_ext = [ for file in local.publish_file_list 
     : reverse(split(".", basename(file)))[0] ]
   publish_file_list_mime = [ for ext in local.publish_file_list_ext 
     : (ext == "gif" || ext == "png" || ext == "jpg" || ext == "jpeg" 
@@ -58,17 +58,17 @@ locals {
 # Upload website content to s3 bucket
 #
 resource "aws_s3_bucket_object" "content" {
-  count  = "${length(local.publish_file_list)}"
-  bucket = "${aws_s3_bucket.appbricks-io.bucket}"
+  count  = length(local.publish_file_list)
+  bucket = aws_s3_bucket.appbricks-io.bucket
 
-  key = "${substr(
+  key = substr(
     local.publish_file_list[count.index], 
     local.publish_path_prefix_len, 
-    length(local.publish_file_list[count.index]) - local.publish_path_prefix_len)}"
+    length(local.publish_file_list[count.index]) - local.publish_path_prefix_len)
 
-  source       = "${local.publish_file_list[count.index]}"
-  content_type = "${local.publish_file_list_mime[count.index]}"
-  etag         = "${filemd5(local.publish_file_list[count.index])}"
+  source       = local.publish_file_list[count.index]
+  content_type = local.publish_file_list_mime[count.index]
+  etag         = filemd5(local.publish_file_list[count.index])
 
-  depends_on = ["aws_s3_bucket.appbricks-io"]
+  depends_on = [aws_s3_bucket.appbricks-io]
 }

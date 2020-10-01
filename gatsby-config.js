@@ -22,13 +22,6 @@ module.exports = {
     {
       resolve: 'gatsby-source-filesystem',
       options: {
-        path: `${__dirname}/site/data/`,
-        name: '/',
-      },
-    },
-    {
-      resolve: 'gatsby-source-filesystem',
-      options: {
         path: `${__dirname}/site/config/`,
         name: '/',
       },
@@ -55,9 +48,9 @@ module.exports = {
     {
       resolve: `gatsby-plugin-material-ui`,
       options: {
-        stylesProvider: {
-          injectFirst: true,
-        },
+        // stylesProvider: {
+        //   injectFirst: true,
+        // },
       },
     },
     {

@@ -3,6 +3,10 @@
 #
 
 variable "aws_cli_path" {
+  default = "aws"
+}
+
+variable "env" {
   type = string
 }
 
@@ -12,4 +16,10 @@ variable "domain" {
 
 variable "publish_path" {
   type = string
+}
+
+locals {
+  env_domain = (length(var.env) == 0
+    ? var.domain 
+    : join(".", list(var.env, var.domain)))
 }
