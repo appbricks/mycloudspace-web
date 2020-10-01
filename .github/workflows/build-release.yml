@@ -1,0 +1,64 @@
+name: Creates a production build release
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+    paths:
+    - 'site/**'
+    - 'src/**'
+    - 'gatsby-browser.js'
+    - 'gatsby-config.js'
+    - 'gatsby-node.js'
+    - 'gatsby-ssr.js'
+    - 'package.json'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    env:
+      VERSION: 0.0
+
+    steps:
+
+    # Ensure this action is not on master/main branches
+    - name: Check branch is in master/main
+      if: github.ref != 'refs/heads/master' && github.ref != 'refs/heads/main'
+      run: exit 1
+
+    # Install NodeJS
+    - name: Use Node.js ${{ github.event.inputs.logLevel }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ github.event.inputs.logLevel }}
+
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    #
+    # Configure and run site content build
+    #
+
+    - name: Create AWS Amplify configuration file
+      run: echo -e "${{ secrets.AWS_AMPLIFY_EXPORTS }}" > src/aws-exports.ts
+
+    - name: Build site content
+      run: |
+        npm install
+        npm install gatsby-cli
+        node_modules/.bin/gatsby build
+
+    #
+    # Create and upload the release
+    #
+
+    - name: Generate build number
+      uses: einaregilsson/build-number@v2 
+      with:
+        token: ${{secrets.github_token}}

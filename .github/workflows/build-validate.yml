@@ -1,19 +1,9 @@
-name: Build Site
+name: Validate build passes on pull request
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ master ]
-    paths:
-    - 'site/**'
-    - 'src/**'
-    - 'gatsby-browser.js'
-    - 'gatsby-config.js'
-    - 'gatsby-node.js'
-    - 'gatsby-ssr.js'
-    - 'package.json'
   pull_request:
-    branches: [ master ]
+    branches: [ master, main, dev ]
     paths:
     - 'site/**'
     - 'src/**'
@@ -27,16 +17,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        shell: bash
+
     strategy:
       matrix:
         node-version: [12.x, 14.x]
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+
     - run: npm install -g gatsby-cli
     - run: npm install
     - run: echo -e "${{ secrets.AWS_AMPLIFY_EXPORTS }}" > src/aws-exports.ts

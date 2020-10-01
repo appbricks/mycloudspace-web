@@ -1,4 +1,4 @@
-name: Build and Publish Dev Site
+name: Build and publish dev site
 
 on:
   workflow_dispatch:
@@ -25,9 +25,9 @@ jobs:
     defaults:
       run:
         shell: bash
-    
+
     steps:
-        
+
     # Ensure this action is not on master/main branches
     - name: Check branch is not master/main
       if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
@@ -61,7 +61,7 @@ jobs:
       with:
         name: site-content
         path: ${{ github.workspace }}/public
-        
+
   publish:
     needs: build
     runs-on: ubuntu-latest
@@ -69,7 +69,7 @@ jobs:
     defaults:
       run:
         shell: bash
-    
+
     # Setup default environment for running Terraform
     env:
       AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
@@ -79,7 +79,7 @@ jobs:
       TF_VAR_publish_path: ${{ github.workspace }}/public
 
     steps:
-    
+
     # Ensure this action is not on master/main branches
     - name: Check branch is not master/main
       if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
@@ -96,7 +96,7 @@ jobs:
     # Install the latest version of AWS CLI
     - name: Install AWS CLI
       uses: chrislennon/action-aws-cli@v1.1
-    
+
     # Retrieve built content from previous job
     - name: Download site content
       uses: actions/download-artifact@master
@@ -104,8 +104,8 @@ jobs:
         name: site-content
         path: ${{ github.workspace }}/public
 
-    # Initialize a new or existing Terraform working 
-    # directory by creating initial files, loading any 
+    # Initialize a new or existing Terraform working
+    # directory by creating initial files, loading any
     # remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
@@ -125,4 +125,3 @@ jobs:
       run: |
         TF_VAR_env=${GITHUB_REF##*/} terraform apply -auto-approve \
           build/publish
-  
