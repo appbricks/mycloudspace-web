@@ -27,7 +27,6 @@ jobs:
       AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
       AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
       AWS_DEFAULT_REGION: us-east-1
-      TF_VAR_env: ${{ github.ref }}
       TF_VAR_domain: appbricks.io
       TF_VAR_publish_path: ${{ github.workspace }}/public
 
