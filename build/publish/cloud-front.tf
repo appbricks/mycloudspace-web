@@ -21,11 +21,6 @@ resource "aws_cloudfront_distribution" "appbricks-io" {
   comment             = local.env_domain
   default_root_object = "index.html"
 
-  aliases = [
-    local.env_domain,
-    "www.${local.env_domain}"
-  ]
-
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
@@ -57,6 +52,10 @@ resource "aws_cloudfront_distribution" "appbricks-io" {
       restriction_type = "none"
     }
   }
+
+  aliases = (length(var.env) == 0
+    ? list(local.env_domain, "www.${local.env_domain}")
+    : [])
 
   dynamic "viewer_certificate" {
     # production
@@ -93,4 +92,10 @@ SCRIPT
   }
 
   depends_on = [aws_cloudfront_distribution.appbricks-io]
+}
+
+output "appbricks_site_url" {
+  value = (length(var.env) == 0 
+    ? "https://appbricks.io" 
+    : "https://${aws_cloudfront_distribution.appbricks-io.domain_name}")
 }

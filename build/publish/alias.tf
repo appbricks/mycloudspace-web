@@ -6,16 +6,14 @@
 # that contain valid hosted zones and certificates.
 
 data "aws_route53_zone" "appbricks-io" {
-  count = length(var.env) == 0 ? 0 : 1
-
   name = var.domain
 }
 
 resource "aws_route53_record" "appbricks-io" {
-    count = length(var.env) == 0 ? 0 : 1
+    count = length(var.env) == 0 ? 1 : 0
 
-    zone_id = data.aws_route53_zone.appbricks-io[0].zone_id
-    name    = local.env_domain
+    zone_id = data.aws_route53_zone.appbricks-io.zone_id
+    name    = var.domain
     type    = "A"
 
     alias {
@@ -27,10 +25,10 @@ resource "aws_route53_record" "appbricks-io" {
 }
 
 resource "aws_route53_record" "www-appbricks-io" {
-    count = length(var.env) == 0 ? 0 : 1
+    count = length(var.env) == 0 ? 1 : 0
 
-    zone_id = data.aws_route53_zone.appbricks-io[0].zone_id
-    name    = "www.${local.env_domain}"
+    zone_id = data.aws_route53_zone.appbricks-io.zone_id
+    name    = "www.${var.domain}"
     type    = "A"
 
     alias {

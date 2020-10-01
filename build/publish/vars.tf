@@ -3,7 +3,7 @@
 #
 
 variable "aws_cli_path" {
-  type = string
+  default = "aws"
 }
 
 variable "env" {
