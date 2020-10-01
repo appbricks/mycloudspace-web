@@ -23,23 +23,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+
     - name: Use Node.js ${{ github.event.inputs.logLevel }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ github.event.inputs.logLevel }}
-    - run: |
-        echo -e "${{ secrets.AWS_AMPLIFY_EXPORTS }}" > src/aws-exports.ts
-        npm install -g gatsby-cli
-        npm install
-        gatsby build
 
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Install Gatsby CLI
+      run: npm install -g gatsby-cli
+
+    - name: Create AWS Amplify configuration file
+      run: echo -e "${{ secrets.AWS_AMPLIFY_EXPORTS }}" > src/aws-exports.ts
+
+    - name: Build site content
+      run: npm install && gatsby build
+
+    - name: Upload site content
     - uses: actions/upload-artifact@master
       with:
         name: site-content
         path: ${{ github.workspace }}/public
         
   publish:
+    needs: build
     runs-on: ubuntu-latest
 
     # Use the Bash shell regardless whether the GitHub Actions
@@ -74,7 +83,8 @@ jobs:
       uses: chrislennon/action-aws-cli@v1.1
     
     # Retrieve built content from previous job
-    - uses: actions/download-artifact@master
+    - name: Download site content
+      uses: actions/download-artifact@master
       with:
         name: site-content
         path: ${{ github.workspace }}/public
