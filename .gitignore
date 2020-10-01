@@ -20,4 +20,4 @@ awsconfiguration.json
 aws-exports.*
 
 # terraform
-.terraform/
+.terraform*/
