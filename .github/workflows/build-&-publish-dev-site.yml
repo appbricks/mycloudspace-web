@@ -115,13 +115,13 @@ jobs:
           build/publish
 
     # Generates an execution plan for Terraform
-    - name: Terraform Plan
+    - name: Site update plan (Terraform Plan)
       run: |
         TF_VAR_env=${GITHUB_REF##*/} terraform plan \
           build/publish
 
     # Apply Terraform plan and deploy site to a dev url
-    - name: Terraform Plan
+    - name: Publish Site (Terraform Apply)
       run: |
         TF_VAR_env=${GITHUB_REF##*/} terraform apply -auto-approve \
           build/publish
