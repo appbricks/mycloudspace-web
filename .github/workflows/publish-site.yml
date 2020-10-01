@@ -9,8 +9,7 @@ on:
         default: 'dev'
 
 jobs:
-  terraform:
-    name: 'Terraform'
+  publish:
     runs-on: ubuntu-latest
 
     # Use the Bash shell regardless whether the GitHub Actions
@@ -18,6 +17,14 @@ jobs:
     defaults:
       run:
         shell: bash
+    
+    env:
+      AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+      AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      AWS_DEFAULT_REGION: us-east-1
+      TF_VAR_env: ${{ github.event.inputs.env }}
+      TF_VAR_domain: appbricks.io
+      TF_VAR_publish_path: ${{ github.workspace }}/public
 
     steps:
     # Checkout the repository to the GitHub Actions runner
@@ -36,19 +43,12 @@ jobs:
     # directory by creating initial files, loading any 
     # remote state, downloading modules, etc.
     - name: Terraform Init
-      env:
-        AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
-        AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
-        AWS_DEFAULT_REGION: us-east-1
-        TF_VAR_domain: appbricks.io
-        TF_VAR_publish_path: $(pwd)/public
       run: |
-        aws --version
-        echo $TF_VAR_publish_path
-        terraform init \
-          -backend-config="key=website/appbricks-io_${{ github.event.inputs.env }}" \
-          -backend-config="bucket=appbricks-tfstate-useast1" \
-          build/publish
+        env
+        #terraform init \
+        #  -backend-config="key=website/appbricks-io_${{ github.event.inputs.env }}" \
+        #  -backend-config="bucket=appbricks-tfstate-useast1" \
+        #  build/publish
 
     # Checks that all Terraform configuration files adhere to a canonical format
 #     - name: Terraform Format
