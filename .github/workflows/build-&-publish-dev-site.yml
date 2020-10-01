@@ -28,19 +28,18 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ github.event.inputs.logLevel }}
-      run: npm install gatsby-cli
 
     - name: Checkout
       uses: actions/checkout@v2
-
-    # - name: Install Gatsby CLI
-    #   run: npm install gatsby-cli
 
     - name: Create AWS Amplify configuration file
       run: echo -e "${{ secrets.AWS_AMPLIFY_EXPORTS }}" > src/aws-exports.ts
 
     - name: Build site content
-      run: npm install && gatsby build
+      run: |
+        npm install
+        npm install gatsby-cli
+        node_modules/.bin/gatsby build
 
     - name: Upload site content
       uses: actions/upload-artifact@master
