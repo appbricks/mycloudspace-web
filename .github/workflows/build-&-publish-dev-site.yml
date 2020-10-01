@@ -33,11 +33,9 @@ jobs:
 
     steps:
     
-    - name: Check branch
+    - name: Check branch is not master/main
       if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
-      run: |
-        echo 'This action cannot be run on main/master branches.'
-        exit 1
+      run: exit 1
 
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
