@@ -1,4 +1,4 @@
-name: Creates a production build release
+name: Build and create production build release
 
 on:
   workflow_dispatch:
