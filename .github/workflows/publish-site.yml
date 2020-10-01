@@ -50,8 +50,8 @@ jobs:
           build/publish
 
     # Checks that all Terraform configuration files adhere to a canonical format
-    - name: Terraform Format
-      run: terraform fmt -check build/publish
+    #- name: Terraform Format
+    #  run: terraform fmt -check build/publish
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
