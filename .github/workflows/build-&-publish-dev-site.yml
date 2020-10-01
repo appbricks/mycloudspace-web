@@ -32,6 +32,12 @@ jobs:
       TF_VAR_publish_path: ${{ github.workspace }}/public
 
     steps:
+    - name: Check Branch
+      if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+      run: |
+        echo 'This action cannot be run on main/master branches.'
+        exit 1
+
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v2
