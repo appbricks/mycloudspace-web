@@ -44,11 +44,10 @@ jobs:
     # remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
-        env
-        #terraform init \
-        #  -backend-config="key=website/appbricks-io_${{ github.event.inputs.env }}" \
-        #  -backend-config="bucket=appbricks-tfstate-useast1" \
-        #  build/publish
+        terraform init \
+          -backend-config="key=website/appbricks-io_${TF_VAR_env}" \
+          -backend-config="bucket=appbricks-tfstate-useast1" \
+          build/publish
 
     # Checks that all Terraform configuration files adhere to a canonical format
 #     - name: Terraform Format
