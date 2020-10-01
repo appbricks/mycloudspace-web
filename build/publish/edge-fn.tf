@@ -6,11 +6,11 @@
 #
 
 locals {
-  url_rewrite_fn_source = "${path.module}/../redirect-fn/standard-redirects-for-cloudfront.zip"
+  cloudfront_edge_fn_source = "${path.module}/../redirect-fn/standard-redirects-for-cloudfront.zip"
 }
 
-resource "aws_iam_role" "url-rewrite" {
-  name = "appbricks.io-url-rewrite-fn"
+resource "aws_iam_role" "edge-fn" {
+  name = "appbricks-io_edge-fn-${var.env}"
 
   assume_role_policy = <<EOF
 {
@@ -31,14 +31,14 @@ resource "aws_iam_role" "url-rewrite" {
 EOF
 }
 
-resource "aws_lambda_function" "url-rewrite" {
-  function_name = "appbricks-io_url-rewrite-fn"
+resource "aws_lambda_function" "edge-fn" {
+  function_name = "appbricks-io_edge-fn-${var.env}"
 
-  filename         = "${local.url_rewrite_fn_source}"
-  source_code_hash = "${filebase64sha256(local.url_rewrite_fn_source)}"
+  filename         = local.cloudfront_edge_fn_source
+  source_code_hash = filebase64sha256(local.cloudfront_edge_fn_source)
   handler          = "index.handler"
   runtime          = "nodejs12.x"
 
-  role    = "${aws_iam_role.url-rewrite.arn}"
+  role    = aws_iam_role.edge-fn.arn
   publish = true
 }

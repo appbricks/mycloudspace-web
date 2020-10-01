@@ -21,3 +21,4 @@ aws-exports.*
 
 # terraform
 .terraform*/
+errored.tfstate
