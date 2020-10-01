@@ -22,15 +22,30 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        shell: bash
+    
     steps:
+        
+    # Ensure this action is not on master/main branches
+    - name: Check branch is not master/main
+      if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+      run: exit 1
 
+    # Install NodeJS
     - name: Use Node.js ${{ github.event.inputs.logLevel }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ github.event.inputs.logLevel }}
 
+    # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v2
+
+    #
+    # Configure and run site content build
+    #
 
     - name: Create AWS Amplify configuration file
       run: echo -e "${{ secrets.AWS_AMPLIFY_EXPORTS }}" > src/aws-exports.ts
@@ -51,12 +66,11 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
 
-    # Use the Bash shell regardless whether the GitHub Actions
-    # runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
         shell: bash
     
+    # Setup default environment for running Terraform
     env:
       AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
       AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
@@ -66,6 +80,7 @@ jobs:
 
     steps:
     
+    # Ensure this action is not on master/main branches
     - name: Check branch is not master/main
       if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
       run: exit 1
@@ -94,24 +109,13 @@ jobs:
     # remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
-        export TF_VAR_env=${GITHUB_REF##*/}
-        env
-        ls -al
-        #terraform init \
-        #  -backend-config="key=website/appbricks-io_${TF_VAR_env}" \
-        #  -backend-config="bucket=appbricks-tfstate-useast1" \
-        #  build/publish
-
-    # Checks that all Terraform configuration files adhere to a canonical format
-    #- name: Terraform Format
-    #  run: terraform fmt -check build/publish
+        TF_VAR_env=${GITHUB_REF##*/} terraform init \
+          -backend-config="key=website/appbricks-io_${TF_VAR_env}" \
+          -backend-config="bucket=appbricks-tfstate-useast1" \
+          build/publish
 
     # Generates an execution plan for Terraform
-    # - name: Terraform Plan
-    #   run: terraform plan build/publish
-
-      # On push to master, build or change infrastructure according to Terraform configuration files
-      # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
-#     - name: Terraform Apply
-#       if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-#       run: terraform apply -auto-approve
+    - name: Terraform Plan
+      run: |
+        TF_VAR_env=${GITHUB_REF##*/} terraform plan \
+          build/publish
