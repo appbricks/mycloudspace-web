@@ -37,12 +37,13 @@ jobs:
     # remote state, downloading modules, etc.
     - name: Terraform Init
       env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+        AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
         AWS_DEFAULT_REGION: us-east-1
         TF_VAR_domain: appbricks.io
         TF_VAR_publish_path: $(pwd)/public
       run: |
+        echo $TF_VAR_publish_path
         terraform init \
           -backend-config="key=website/appbricks-io_${{ github.event.inputs.env }}" \
           -backend-config="bucket=appbricks-tfstate-useast1" \
