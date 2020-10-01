@@ -119,3 +119,10 @@ jobs:
       run: |
         TF_VAR_env=${GITHUB_REF##*/} terraform plan \
           build/publish
+
+    # Apply Terraform plan and deploy site to a dev url
+    - name: Terraform Plan
+      run: |
+        TF_VAR_env=${GITHUB_REF##*/} terraform apply -auto-approve \
+          build/publish
+  
