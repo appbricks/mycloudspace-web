@@ -42,7 +42,7 @@ jobs:
       run: npm install && gatsby build
 
     - name: Upload site content
-    - uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@master
       with:
         name: site-content
         path: ${{ github.workspace }}/public
