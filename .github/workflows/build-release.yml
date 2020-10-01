@@ -45,14 +45,14 @@ jobs:
     # Configure and run site content build
     #
 
-    - name: Create AWS Amplify configuration file
-      run: echo -e "${{ secrets.AWS_AMPLIFY_EXPORTS }}" > src/aws-exports.ts
+    # - name: Create AWS Amplify configuration file
+    #   run: echo -e "${{ secrets.AWS_AMPLIFY_EXPORTS }}" > src/aws-exports.ts
 
-    - name: Build site content
-      run: |
-        npm install
-        npm install gatsby-cli
-        node_modules/.bin/gatsby build
+    # - name: Build site content
+    #   run: |
+    #     npm install
+    #     npm install gatsby-cli
+    #     node_modules/.bin/gatsby build
 
     #
     # Create and upload the release
@@ -62,3 +62,6 @@ jobs:
       uses: einaregilsson/build-number@v2 
       with:
         token: ${{secrets.github_token}}
+
+    - name: Print new build number
+      run: echo "Build number is $BUILD_NUMBER"
