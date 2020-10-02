@@ -46,18 +46,20 @@ jobs:
     #
     - name: Create release tag
       run: |
-        set -x
+        set -x +e
         last_tag=$(git for-each-ref \
           --sort=-creatordate \
           --format '%(refname)' refs/tags \
-          | grep refs/tags/$ver \
+          | grep "refs/tags/${VERSION}" \
           | head -1)
+        set -e
         build_number=$(basename "$last_tag" | cut -d '.' -f3)
         [[ -n $build_number ]] || build_number=-1
         release_tag=${VERSION}.$((build_number+1))
         last_commit_msg=$(git log -1 --pretty=%B)
-        git tag -a $TAG -m $last_commit_msg
+        git tag -a ${TAG} -m $last_commit_msg
         git push --follow-tags
+        echo "::set-output name=release-tag::$(echo ${TAG})"
 
     #
     # Configure and run site content build
