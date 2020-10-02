@@ -76,11 +76,11 @@ jobs:
     # Configure and run site content build
     #
 
-    # - name: Create AWS Amplify configuration file
-    #   run: echo -e "${{ secrets.AWS_AMPLIFY_EXPORTS }}" > src/aws-exports.ts
+    - name: Create AWS Amplify configuration file
+      run: echo -e "${{ secrets.AWS_AMPLIFY_PROD_CONFIG }}" > src/aws-exports.ts
 
-    # - name: Build site content
-    #   run: |
-    #     npm install
-    #     npm install gatsby-cli
-    #     node_modules/.bin/gatsby build
+    - name: Build site content
+      run: |
+        npm install
+        npm install gatsby-cli
+        node_modules/.bin/gatsby build
