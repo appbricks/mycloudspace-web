@@ -47,16 +47,9 @@ jobs:
     - name: Create release tag
       id: release_tag
       run: |
-        set -x
-        git remote -v
-        git fetch --tags origin
-        git tag -l
-
-        echo '--->'
-
         git config user.email "$(git log -1 --pretty=format:'%an')"
         git config user.name "$(git log -1 --pretty=format:'%ae')"
-        git log
+        git fetch --tags origin
 
         set +e
         last_tag=$(git for-each-ref \
