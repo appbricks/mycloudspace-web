@@ -1,4 +1,4 @@
-name: Build and create production build release
+name: Build and create production release
 
 on:
   workflow_dispatch:
@@ -22,7 +22,7 @@ jobs:
         shell: bash
 
     env:
-      VERSION: 0.0
+      VERSION: '0.0'
 
     steps:
 
@@ -46,6 +46,7 @@ jobs:
     #
     - name: Create release tag
       run: |
+        set -x
         last_tag=$(git for-each-ref \
           --sort=-creatordate \
           --format '%(refname)' refs/tags \
@@ -57,7 +58,7 @@ jobs:
         last_commit_msg=$(git log -1 --pretty=%B)
         git tag -a $TAG -m $last_commit_msg
         git push --follow-tags
-        
+
     #
     # Configure and run site content build
     #
