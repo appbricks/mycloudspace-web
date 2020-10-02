@@ -48,6 +48,9 @@ jobs:
       id: release_tag
       run: |
         set -x
+        git remote -v
+        git tag -l
+
         git config user.email "$(git log -1 --pretty=format:'%an')"
         git config user.name "$(git log -1 --pretty=format:'%ae')"
 
