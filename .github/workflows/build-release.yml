@@ -48,6 +48,7 @@ jobs:
       id: release_tag
       run: |
         set -x
+        git fetch --all
         git remote -v
         git tag -l
 
