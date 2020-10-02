@@ -53,6 +53,7 @@ jobs:
 
         git config user.email "$(git log -1 --pretty=format:'%an')"
         git config user.name "$(git log -1 --pretty=format:'%ae')"
+        git log
 
         set +e
         last_tag=$(git for-each-ref \
