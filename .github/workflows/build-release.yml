@@ -46,20 +46,26 @@ jobs:
     #
     - name: Create release tag
       run: |
-        set -x +e
-        which git
+        set -x
+        git config user.email "$(git log -1 --pretty=format:'%an')"
+        git config user.name "$(git log -1 --pretty=format:'%ae')"
+
+        set +e
         last_tag=$(git for-each-ref \
           --sort=-creatordate \
           --format '%(refname)' refs/tags \
           | grep "refs/tags/${VERSION}" \
           | head -1)
         set -e
+
         build_number=$(basename "$last_tag" | cut -d '.' -f3)
         [[ -n $build_number ]] || build_number=-1
         release_tag=${VERSION}.$((build_number+1))
+
         last_commit_msg=$(git log -1 --pretty=%B)
         git tag -a ${release_tag} -m "$last_commit_msg"
         git push --follow-tags
+        
         echo "::set-output name=release-tag::$(echo ${release_tag})"
 
     #
