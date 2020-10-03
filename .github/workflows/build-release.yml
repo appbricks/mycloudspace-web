@@ -88,8 +88,8 @@ jobs:
       id: release_asset
       run: |
         zip -r ./site-content.zip public/
-        cat ./docs/release-notes.md
-        echo "::set-output name=notes::$(cat ./docs/release-notes.md)"
+        release_notes=$(cat ./docs/release-notes.md | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/\\n/g')
+        echo "::set-output name=notes::${release_notes}"
 
     - name: Create release
       uses: actions/create-release@v1
