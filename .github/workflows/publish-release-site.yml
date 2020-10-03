@@ -23,7 +23,7 @@ jobs:
 
     steps:
     
-    # Ensure this action is not on master/main branches
+    # Ensure this action is on master/main branches
     - name: Check branch is in master/main
       if: github.ref != 'refs/heads/master' && github.ref != 'refs/heads/main'
       run: echo ${{ github.ref }} && exit 1
