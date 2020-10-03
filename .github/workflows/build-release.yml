@@ -62,8 +62,9 @@ jobs:
         build_number=$(basename "$last_tag" | cut -d '.' -f3)
         [[ -n $build_number ]] || build_number=-1
         release_tag=${VERSION}.$((build_number+1))
-
         last_commit_msg=$(git log -1 --pretty=%B)
+
+        echo "Creating release tag ${release_tag}..."
         git tag -a ${release_tag} -m "$last_commit_msg"
         git push --follow-tags
 
@@ -87,6 +88,7 @@ jobs:
 
     - name: Create release
       uses: actions/create-release@v1
+      id: create_release  
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
