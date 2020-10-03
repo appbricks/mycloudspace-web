@@ -63,7 +63,7 @@ jobs:
           build/publish
 
     # Apply Terraform plan and deploy site to a dev url
-    # - name: Publish Site (Terraform Apply)
-    #   run: |
-    #     terraform apply -auto-approve \
-    #       build/publish
+    - name: Publish Site (Terraform Apply)
+      run: |
+        terraform apply -auto-approve \
+          build/publish
