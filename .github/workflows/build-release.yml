@@ -94,10 +94,10 @@ jobs:
       with:
         tag_name: ${{ steps.release_tag.outputs.value }}
         release_name: AppBricks MyCloudSpace Release ${{ steps.release_tag.outputs.value }}
-        body: |
-          Changes in this Release
-          - First Change
-          - Second Change
+        # body: |
+        #   Changes in this Release
+        #   - First Change
+        #   - Second Change
         draft: false
         prerelease: false
     
