@@ -37,7 +37,7 @@ jobs:
       uses: fabriciobastian/download-release-asset-action@v1.0.6
       with:
         version: latest
-        repository: JsonRpcNet/JsonRpcNet.Docs.Ui
+        repository: ${{ github.repository }}
         file: site-content.zip
         out: ./
 
