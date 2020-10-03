@@ -85,11 +85,8 @@ jobs:
         node_modules/.bin/gatsby build
 
     - name: Create release asset
-      id: release_asset
       run: |
         zip -r ./site-content.zip public/
-        release_notes=$(cat ./docs/release-notes.md | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/\\n/g')
-        echo "::set-output name=notes::${release_notes}"
 
     - name: Create release
       uses: actions/create-release@v1
@@ -99,7 +96,7 @@ jobs:
       with:
         tag_name: ${{ steps.release_tag.outputs.value }}
         release_name: AppBricks MyCloudSpace Release ${{ steps.release_tag.outputs.value }}
-        body: '${{ steps.release_asset.outputs.notes }}'
+        body_path: ./docs/release-notes.md
         draft: false
         prerelease: false
     
