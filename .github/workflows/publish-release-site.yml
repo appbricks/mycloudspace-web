@@ -23,7 +23,7 @@ jobs:
 
     steps:
 
-    - run: echo ${{ github.ref }}
+    - run: echo "${{ github.ref }}"
 
     # Ensure this action is not on master/main branches
     - name: Check branch is in master/main
