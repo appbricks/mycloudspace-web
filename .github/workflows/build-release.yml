@@ -87,7 +87,7 @@ jobs:
       id: release_asset
       run: |
         zip -r ./site-content.zip public/
-        echo "::set-output name=notes::$(cat docs/release-notes.md)"
+        echo "::set-output name=notes::$(cat ./docs/release-notes.md)"
 
     - name: Create release
       uses: actions/create-release@v1
