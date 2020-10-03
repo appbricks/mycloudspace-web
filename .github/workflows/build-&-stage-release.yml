@@ -1,4 +1,4 @@
-name: Build and create production release
+name: Build, create and stage production release
 
 on:
   workflow_dispatch:
@@ -27,8 +27,8 @@ jobs:
 
     steps:
 
-    # Ensure this action is not on master/main branches
-    - name: Check branch is in master/main
+    # Ensure this action is master/main branches
+    - name: Check branch is master/main
       if: github.ref != 'refs/heads/master' && github.ref != 'refs/heads/main'
       run: exit 1
 
@@ -98,7 +98,7 @@ jobs:
         release_name: AppBricks MyCloudSpace Release ${{ steps.release_tag.outputs.value }}
         body_path: ./docs/release-notes.md
         draft: false
-        prerelease: false
+        prerelease: true
     
     - name: Upload release archive
       id: upload-release-asset 
@@ -110,3 +110,67 @@ jobs:
         asset_path: ./site-content.zip
         asset_name: site-content.zip
         asset_content_type: application/zip
+
+  stage:
+    needs: build
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    # Setup default environment for running Terraform
+    env:
+      AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+      AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      AWS_DEFAULT_REGION: us-east-1
+      TF_VAR_env: stage
+      TF_VAR_domain: appbricks.io
+      TF_VAR_publish_path: ${{ github.workspace }}/public
+
+    steps:
+
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    # Install the latest version of Terraform CLI
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+
+    # Install the latest version of AWS CLI
+    - name: Install AWS CLI
+      uses: chrislennon/action-aws-cli@v1.1
+
+    # Download published release
+    - name: Download site content
+      uses: fabriciobastian/download-release-asset-action@v1.0.6
+      with:
+        version: ${{ steps.release_tag.outputs.value }}
+        repository: ${{ github.repository }}
+        file: site-content.zip
+        out: ./
+
+    - run: unzip site-content.zip
+
+    # Initialize a new or existing Terraform working
+    # directory by creating initial files, loading any
+    # remote state, downloading modules, etc.
+    - name: Terraform Init
+      run: |
+        terraform init \
+          -backend-config="key=website/appbricks-io_${TF_VAR_env}" \
+          -backend-config="bucket=appbricks-tfstate-useast1" \
+          build/publish
+
+    # Generates an execution plan for Terraform
+    - name: Site update plan (Terraform Plan)
+      run: |
+        terraform plan \
+          build/publish
+
+    # Apply Terraform plan and deploy site to a dev url
+    - name: Publish Site (Terraform Apply)
+      run: |
+        terraform apply -auto-approve \
+          build/publish
