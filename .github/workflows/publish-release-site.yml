@@ -23,11 +23,6 @@ jobs:
 
     steps:
     
-    # Ensure this action is on master/main branches
-    - name: Check branch is in master/main
-      if: github.ref != 'refs/heads/master' && github.ref != 'refs/heads/main'
-      run: echo ${{ github.ref }} && exit 1
-
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v2
