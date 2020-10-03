@@ -69,9 +69,6 @@ jobs:
 
         echo "::set-output name=value::$(echo ${release_tag})"
 
-    - name: Echo release tag
-      run: 'echo "Release tag: ${{steps.release_tag.outputs.value}}"'
-
     #
     # Configure and run site content build
     #
@@ -84,3 +81,31 @@ jobs:
         npm install
         npm install gatsby-cli
         node_modules/.bin/gatsby build
+
+    - name: Archive content
+      run: zip -r ./site-content.zip public/
+
+    - name: Create release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.release_tag.outputs.value }}
+        release_name: AppBricks MyCloudSpace Release ${{ steps.release_tag.outputs.value }}
+        body: |
+          Changes in this Release
+          - First Change
+          - Second Change
+        draft: false
+        prerelease: false
+    
+    - name: Upload release archive
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./site-content.zip
+        asset_name: site-content.zip
+        asset_content_type: application/zip
