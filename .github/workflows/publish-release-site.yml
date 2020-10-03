@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   release:
     branches: [ master ]
-    types: [published, released]
+    types: [created, published, released]
 
 jobs:
   publish:
