@@ -98,7 +98,7 @@ jobs:
       with:
         tag_name: ${{ steps.release_tag.outputs.value }}
         release_name: AppBricks MyCloudSpace Release ${{ steps.release_tag.outputs.value }}
-        body: ${{ steps.release_asset.outputs.notes }}
+        body: '${{ steps.release_asset.outputs.notes }}'
         draft: false
         prerelease: false
     
