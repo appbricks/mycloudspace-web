@@ -50,6 +50,8 @@ jobs:
         file: site-content.zip
         out: ./
 
+    - run: unzip site-content.zip
+
     # Initialize a new or existing Terraform working
     # directory by creating initial files, loading any
     # remote state, downloading modules, etc.
