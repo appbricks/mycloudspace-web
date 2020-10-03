@@ -1,3 +1,3 @@
 ## Release Notes
 
-Initial release
+Initial static web-site release
