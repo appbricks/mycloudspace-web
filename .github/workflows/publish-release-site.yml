@@ -1,7 +1,6 @@
 name: Publish production release site
 
 on:
-  workflow_dispatch:
   release:
     branches: [ master ]
     types: [created, published, released]
