@@ -64,21 +64,20 @@ const ContentPage: FunctionComponent<ContentPageProps> = ({
           );
         })}
 
-        {!bottomGutterHeight &&
+        {!bottomGutterHeight && // footer attached to the bottom of document
           <StatusbarFooter 
             organization={organization}
             social={social}
             contact={contact} />            
         }
+        {!!bottomGutterHeight && // footer fixed to the bottom of window
+          <StatusbarFooter 
+            organization={organization}
+            social={social}
+            contact={contact}
+            sticky />
+        }
       </Layout>
-
-      {!!bottomGutterHeight &&
-        <StatusbarFooter 
-          organization={organization}
-          social={social}
-          contact={contact}
-          sticky />
-      }
     </CustomTagProvider>
   )
 }
