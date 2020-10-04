@@ -27,32 +27,32 @@ export const mainMenu: MenuDataItem[] = [
     link: '/products' 
   }),
   MenuDataItem.newItem({
-    title: 'Contact', 
-    icon: { 
-      element: <Icon width={24} icon={contactIcon} />, 
-      anchorRightInSideBar: true
-  },
+      title: 'Contact', 
+      icon: { 
+        element: <Icon width={24} icon={contactIcon} />, 
+        anchorRightInSideBar: true
+    },
     link: '/contact' 
   }),
-  // MenuDataItem
-  //   .newItem({
-  //     title: 'My Cloud Space', 
-  //     icon: { 
-  //       element: <Icon width={24} icon={loginIcon} />, 
-  //       showInMain: true,
-  //       anchorRightInMain: true,
-  //       anchorRightInSideBar: true
-  //     },
-  //     link: '/mcs/logout',
-  //   })
-  //   .addItem('loggedin', {
-  //     title: 'My Cloud Space',     
-  //     icon: { 
-  //       element: <Icon width={24} icon={logoutIcon} />, 
-  //       showInMain: true,
-  //       anchorRightInMain: true,
-  //       anchorRightInSideBar: true
-  //     },
-  //     link: '/mcs/logout',
-  //   })
+  MenuDataItem
+    .newItem({
+      title: 'My Cloud Space', 
+      icon: { 
+        element: <Icon width={24} icon={loginIcon} />, 
+        showInMain: true,
+        anchorRightInMain: true,
+        anchorRightInSideBar: true
+      },
+      link: '/mycs/login',
+    })
+    .addItem('loggedin', {
+      title: 'My Cloud Space',     
+      icon: { 
+        element: <Icon width={24} icon={logoutIcon} />, 
+        showInMain: true,
+        anchorRightInMain: true,
+        anchorRightInSideBar: true
+      },
+      link: '/mycs/logout',
+    })
 ];
