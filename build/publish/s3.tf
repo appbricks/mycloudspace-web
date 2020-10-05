@@ -51,7 +51,8 @@ locals {
   publish_file_list_mime = [ for ext in local.publish_file_list_ext 
     : (ext == "gif" || ext == "png" || ext == "jpg" || ext == "jpeg" 
       ? format("image/%s", ext) 
-      : format("text/%s", ext) ) ]
+      : (ext == "js" ? "text/javascript" 
+          : format("text/%s", ext)) ) ]
 }
 
 #
