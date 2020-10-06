@@ -11,6 +11,8 @@ import { getMainNav } from '../Nav';
 import { headerHeight } from '../../../config/layout';
 import { mainMenu } from '../../../config/menus';
 
+import { getLayoutViewPortHeight } from './layoutCalc';
+
 const Layout: FunctionComponent<LayoutProps> = ({ bottomGutterHeight, children }) => {
   const styles = useStyles({ bottomGutterHeight });
 
@@ -34,12 +36,6 @@ const Layout: FunctionComponent<LayoutProps> = ({ bottomGutterHeight, children }
 }
 
 export default Layout;
-
-export const getLayoutViewPortHeight = (bottomGutterHeight?: string) => (
-  bottomGutterHeight 
-    ? `calc(100vh - (${headerHeight}px + ${bottomGutterHeight}))`
-    : `calc(100vh - ${headerHeight}px)`
-)
 
 const useStyles = makeStyles(() => ({
   paper: {  

@@ -1,9 +1,8 @@
 import React, { FunctionComponent } from 'react';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { graphql } from 'gatsby';
 
 import CustomTagProvider from './markdown';
-import Layout, { getLayoutViewPortHeight } from '../common/components/Layout';
+import Layout, { calcViewPortDimensions } from '../common/components/Layout';
 import ContentTopic, { TopicMetadata, TopicRefType } from './components/content-topic';
 import { StaticFooter } from '../common/components/Footer';
 
@@ -12,21 +11,12 @@ const ContentPage: FunctionComponent<ContentPageProps> = ({
   pageContext 
 }) => {
 
-  var bottomGutterHeight: string | undefined = '48px';
-  bottomGutterHeight = useMediaQuery('(max-width:797px)') ? '77px' : bottomGutterHeight;
-  bottomGutterHeight = useMediaQuery('(max-width:599px)') ? '105px' : bottomGutterHeight;
-  // removes fixed viewport and sticky footer for mobile devices
-  bottomGutterHeight = useMediaQuery('(max-width:414px)') ? undefined : bottomGutterHeight;
-
-  var viewPortHeight: string | undefined = undefined;
-  var scrollButtonUpTop: string | undefined = undefined;
-  var scrollButtonDownTop: string | undefined = undefined;
-
-  if (bottomGutterHeight) {
-    viewPortHeight = getLayoutViewPortHeight(bottomGutterHeight);
-    scrollButtonUpTop = '20px';
-    scrollButtonDownTop = `calc(100vh - ${bottomGutterHeight} - 140px)`;
-  }
+  const {
+    viewPortHeight,
+    bottomGutterHeight,
+    scrollButtonUpTop,
+    scrollButtonDownTop,
+  } = calcViewPortDimensions();
 
   const { organization, social, contact } = data.configJson;
   const topics = data.allMdx.edges;
