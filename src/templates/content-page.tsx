@@ -5,7 +5,7 @@ import { graphql } from 'gatsby';
 import CustomTagProvider from './markdown';
 import Layout, { getLayoutViewPortHeight } from '../common/components/Layout';
 import ContentTopic, { TopicMetadata, TopicRefType } from './components/content-topic';
-import StatusbarFooter from './components/statusbar-footer';
+import { StaticFooter } from '../common/components/Footer';
 
 const ContentPage: FunctionComponent<ContentPageProps> = ({ 
   data, 
@@ -65,13 +65,13 @@ const ContentPage: FunctionComponent<ContentPageProps> = ({
         })}
 
         {!bottomGutterHeight && // footer attached to the bottom of document
-          <StatusbarFooter 
+          <StaticFooter 
             organization={organization}
             social={social}
             contact={contact} />            
         }
         {!!bottomGutterHeight && // footer fixed to the bottom of window
-          <StatusbarFooter 
+          <StaticFooter 
             organization={organization}
             social={social}
             contact={contact}
