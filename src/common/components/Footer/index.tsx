@@ -8,9 +8,7 @@ const Footer: FunctionComponent<FooterProps> = ({ sticky, children }) => {
   return (
     <Typography variant='subtitle1'>
       <Box pt={0.5} pb={0.5} className={classes.root}>
-        <Container maxWidth='lg' disableGutters>
-          <>{children}</>
-        </Container>
+        {children}
       </Box>
     </Typography>
   );
