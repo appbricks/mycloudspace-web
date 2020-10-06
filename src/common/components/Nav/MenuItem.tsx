@@ -1,5 +1,9 @@
 import React, { FunctionComponent, ReactElement } from 'react';
-import { Box, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { NavItem } from '@mui-treasury/components/menu/navigation';
 import cx from 'clsx';

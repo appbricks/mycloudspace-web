@@ -1,5 +1,7 @@
 import React, { FunctionComponent } from 'react';
-import { Container, Box, Toolbar, makeStyles } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import Toolbar from '@material-ui/core/Toolbar';
+import { makeStyles } from '@material-ui/core/styles';
 import { getHeader } from '@mui-treasury/layout';
 import styled from 'styled-components';
 

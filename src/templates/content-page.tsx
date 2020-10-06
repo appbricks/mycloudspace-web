@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { useMediaQuery, makeStyles } from '@material-ui/core';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { graphql } from 'gatsby';
 
 import CustomTagProvider from './markdown';

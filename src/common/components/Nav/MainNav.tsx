@@ -1,6 +1,8 @@
 import React, { Component, FunctionComponent, ReactElement, useEffect } from 'react';
 import { navigate } from 'gatsby';
-import { Box, List, Hidden } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import List from '@material-ui/core/List';
+import Hidden from '@material-ui/core/Hidden';
 import styled from 'styled-components';
 
 import { ILayoutBuilder } from '@mui-treasury/layout/builders/LayoutBuilder';

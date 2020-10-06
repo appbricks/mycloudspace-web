@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from 'react';
-import { Container, Box, Typography } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
 const Footer: FunctionComponent<FooterProps> = ({ sticky, children }) => {

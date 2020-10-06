@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 const Sidebar: FunctionComponent<SidebarProps> = (props) => {
   const styles = useStyles(props);

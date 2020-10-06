@@ -1,5 +1,7 @@
 import React, { FunctionComponent } from 'react';
-import { Box, Fab, makeStyles } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import Fab from '@material-ui/core/Fab';
+import { makeStyles } from '@material-ui/core/styles';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
