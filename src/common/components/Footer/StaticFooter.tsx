@@ -29,13 +29,28 @@ const StaticFooter: FunctionComponent<StaticFooterProps> = ({
         alignItems='center'
       >
         <Box className={styles.footerTextBlock}>
-          <a href={social.linkedin} className={styles.socialLink} tabIndex={-1} target='_blank'>
+          <a href={social.linkedin} 
+            tabIndex={-1} 
+            target='_blank'
+            rel='noopener'
+            className={styles.socialLink} 
+          >
             <Icon width={30} icon={linkedinIcon} className={styles.footerIcon} />
           </a>
-          <a href={social.twitter} className={styles.socialLink} tabIndex={-1} target='_blank'>
+          <a href={social.twitter} 
+            tabIndex={-1} 
+            target='_blank'
+            rel='noopener'
+            className={styles.socialLink} 
+          >
             <Icon width={30} icon={twitterIcon} className={cx(styles.footerIcon, styles.footerInsideIcon)} />
           </a>
-          <a href={social.github} className={styles.socialLink} tabIndex={-1} target='_blank'>
+          <a href={social.github} 
+            tabIndex={-1} 
+            target='_blank'
+            rel='noopener'
+            className={styles.socialLink} 
+          >
             <Icon width={30} icon={githubIcon} className={cx(styles.footerIcon, styles.footerInsideIcon)} />
           </a>
         </Box>

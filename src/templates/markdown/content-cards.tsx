@@ -106,6 +106,7 @@ const ContentCards: FunctionComponent<ContentCardsProps> = (props) => {
                           href={link.url} 
                           tabIndex={-1} 
                           target='_blank' 
+                          rel='noopener'
                           className={styles.socialLink}
                         >
                           <Icon width={30} 

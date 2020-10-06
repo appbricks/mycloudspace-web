@@ -24,11 +24,29 @@ const SiteContact: FunctionComponent<SiteContactProps> = (props) => {
       render={(data: SiteContextData) => {
         const value = data.configJson.contact[props.field];
         if (emailMatchRegex.test(value)) {
-          return (<a href={`mailto:${value}`}>{value}</a>);
+          return (
+            <a href={`mailto:${value}`}>
+              {value}
+            </a>
+          );
+
         } if (httpMatchRegex.test(value)) {
-          return (<a href={`${value}`}>{value}</a>);
+          return (
+            <a href={`${value}`} 
+              target='_blank'
+              rel='noopener'
+            >
+              {value}
+            </a>
+          );
+
         } if (phoneMatchRegex.test(value)) {
-          return (<a href={`tel:${value}`}>{value}</a>);
+          return (
+            <a href={`tel:${value}`}>
+              {value}
+            </a>
+          );
+
         } else {
           return (<>{value}</>);
         }        
