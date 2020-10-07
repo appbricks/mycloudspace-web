@@ -1,6 +1,6 @@
 import { RefObject } from 'react';
 
-const isBrowser = typeof window !== `undefined`;
+import { isBrowser } from './'
 
 function getScrollPosition(element: RefObject<Element>): Position {
 

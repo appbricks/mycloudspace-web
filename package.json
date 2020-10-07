@@ -29,6 +29,7 @@
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\""
   },
   "dependencies": {
+    "@appbricks/identity": "0.0.4",
     "@iconify/icons-mdi": "^1.0.134",
     "@iconify/react": "^1.1.3",
     "@material-ui/core": "^4.11.0",
@@ -37,6 +38,7 @@
     "@mdx-js/mdx": "^1.6.18",
     "@mdx-js/react": "^1.6.18",
     "@mui-treasury/layout": "^4.5.0",
+    "@reduxjs/toolkit": "^1.4.0",
     "aws-amplify": "^3.0.24",
     "aws-amplify-react": "^4.1.23",
     "gatsby": "^2.24.47",
@@ -60,6 +62,7 @@
     "react-dom": "^16.13.1",
     "react-helmet": "^6.1.0",
     "react-number-format": "^4.4.1",
+    "react-redux": "^7.2.1",
     "react-typography": "^0.16.19",
     "styled-components": "^5.1.1"
   },
@@ -70,6 +73,7 @@
     "@types/react": "^16.9.46",
     "@types/react-dom": "^16.9.8",
     "@types/react-helmet": "^6.1.0",
+    "@types/react-redux": "^7.1.9",
     "@types/styled-components": "^5.1.3",
     "@typescript-eslint/eslint-plugin": "^3.9.1",
     "@typescript-eslint/parser": "^3.9.1",
@@ -81,6 +85,7 @@
     "modern-normalize": "^1.0.0",
     "node-sass": "^4.14.1",
     "prettier": "^1.19.1",
+    "redux-devtools": "^3.7.0",
     "typescript": "^4.0.2"
   }
 }
