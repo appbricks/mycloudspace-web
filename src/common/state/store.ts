@@ -23,17 +23,21 @@ const {
   authService
 } = initServices();
 
+// store state reducers
 const rootReducer = combineReducers({
   auth: authService.reducer(),
 
   /** TEST */
   counter: counterReducer
 });
+// rxjs service action handlers
+const rootEpic = combineEpicsWithGlobalErrorHandler([
+  ...authService.epics()
+]);
 
 export default function configureAppStore(preloadedState?: RootState): Store {
 
   let epicMiddleware = createEpicMiddleware();
-  let rootEpic = combineEpicsWithGlobalErrorHandler(authService.epics());
 
   const store = configureStore({
     reducer: rootReducer,
