@@ -18,7 +18,7 @@ const ContentPage: FunctionComponent<ContentPageProps> = ({
     scrollButtonDownTop,
   } = calcViewPortDimensions();
 
-  const { organization, social, contact } = data.configJson;
+  const { organization } = data.configJson;
   const topics = data.allMdx.edges;
 
   const topicRefs: TopicRefType[] = [];
@@ -57,14 +57,14 @@ const ContentPage: FunctionComponent<ContentPageProps> = ({
         {!bottomGutterHeight && // footer attached to the bottom of document
           <StaticFooter 
             organization={organization}
-            social={social}
-            contact={contact} />            
+            social={organization.social}
+            contact={organization.contact} />            
         }
         {!!bottomGutterHeight && // footer fixed to the bottom of window
           <StaticFooter 
             organization={organization}
-            social={social}
-            contact={contact}
+            social={organization.social}
+            contact={organization.contact}
             sticky />
         }
       </Layout>
@@ -102,15 +102,15 @@ export const pageQuery = graphql`
     configJson {
       organization {
         copyright
-      }
-      social {
-        github
-        linkedin
-        twitter
-      }
-      contact {
-        email
-        phone
+        social {
+          github
+          linkedin
+          twitter
+        }
+        contact {
+          email
+          phone
+        }
       }
     }
   }
@@ -172,15 +172,15 @@ type ContentPageProps = {
     configJson: {
       organization: {
         copyright: string
-      }
-      social: {
-        github: string
-        linkedin: string
-        twitter: string
-      }
-      contact: {
-        email: string
-        phone: string
+        social: {
+          github: string
+          linkedin: string
+          twitter: string
+        }
+        contact: {
+          email: string
+          phone: string
+        }  
       }
     }
   }

@@ -12,17 +12,19 @@ const SiteContact: FunctionComponent<SiteContactProps> = (props) => {
       query={graphql`
         query {
           configJson {
-            contact {
-              email
-              phone
-              supportEmail
-              supportChannel
+            organization {
+              contact {
+                email
+                phone
+                supportEmail
+                supportChannel
+              }
             }
           }
         }
       `}
       render={(data: SiteContextData) => {
-        const value = data.configJson.contact[props.field];
+        const value = data.configJson.organization.contact[props.field];
         if (emailMatchRegex.test(value)) {
           return (
             <a href={`mailto:${value}`}>
@@ -63,6 +65,8 @@ type SiteContactProps = {
 
 type SiteContextData = {
   configJson: {
-    contact: { [field: string]: string}
+    organization: {
+      contact: { [field: string]: string}
+    }
   }
 }
