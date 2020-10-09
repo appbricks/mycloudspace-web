@@ -1,4 +1,11 @@
 {
+  "appConfig": {
+    "version": "0.0",
+    "layout": {
+      "backgroundImage": "backgrounds/appbricks.jpg",
+      "backgroundOverlay": "#4d4d4d"
+    }
+  },
   "organization": {
     "businessName": "AppBricks, Inc.",
     "copyright": "© 2020 AppBricks, Inc.",
