@@ -1,9 +1,9 @@
 import React, { 
   FunctionComponent, 
   ReactElement,
-  MouseEvent
+  MouseEvent,
+  useRef
 } from 'react';
-import Zoom from '@material-ui/core/Zoom';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
@@ -29,6 +29,8 @@ const DialogBox: FunctionComponent<DialogBoxProps> = ({
     opacity
   });
 
+  const ref = useRef<HTMLDivElement>(null);
+
   const animationStyles = makeStyles((theme) => ({
     dialog: {
       animation: `$dialog 500ms ${theme.transitions.easing.easeInOut}`,
@@ -47,10 +49,12 @@ const DialogBox: FunctionComponent<DialogBoxProps> = ({
 
   return (
     <Paper 
+      ref={ref}
       variant='outlined' 
       elevation={4} 
-      className={cx(styles.dialog, animationStyles.dialog)} 
-    >      
+      // skip animation if paper div has bin loaded
+      className={cx(styles.dialog, ref.current || animationStyles.dialog)}
+    >
       <h1 className={styles.heading}>Sign In</h1>
       <Divider />
       
