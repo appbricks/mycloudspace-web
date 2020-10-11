@@ -13,11 +13,12 @@ import cx from 'clsx';
 
 const DialogBox: FunctionComponent<DialogBoxProps> = ({
   height,
-  width = 350,
+  width,
   fromHeight = 0,
   fromWidth = 0,
   backgroundColor = '#ffffff',
   opacity = '0.9',
+  title,
   buttons,
   children
 }) => {
@@ -46,6 +47,7 @@ const DialogBox: FunctionComponent<DialogBoxProps> = ({
   }))();
 
   const lastButtonIndex = buttons.length - 1;
+  const gridColumns: any = 12 / buttons.length;
 
   return (
     <Paper 
@@ -55,7 +57,7 @@ const DialogBox: FunctionComponent<DialogBoxProps> = ({
       // skip animation if paper div has bin loaded
       className={cx(styles.dialog, ref.current || animationStyles.dialog)}
     >
-      <h1 className={styles.heading}>Sign In</h1>
+      <h1 className={styles.heading}>{title}</h1>
       <Divider />
       
       {children}
@@ -72,7 +74,7 @@ const DialogBox: FunctionComponent<DialogBoxProps> = ({
             return (
               <Grid item 
                 key={index} 
-                xs={6} 
+                xs={gridColumns} 
                 className={styles.actionBarCell}
               >
                 <Button 
@@ -88,7 +90,7 @@ const DialogBox: FunctionComponent<DialogBoxProps> = ({
             return (
               <Grid item 
                 key={index} 
-                xs={6} 
+                xs={gridColumns} 
                 className={cx(styles.actionBarCell, styles.actionBarDivider)}
               >
                 <Button 
@@ -170,6 +172,7 @@ type DialogBoxProps = {
   backgroundColor?: string
   opacity?: string
 
+  title: string
   buttons: ButtonProp[]
 }
 
