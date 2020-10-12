@@ -19,7 +19,7 @@ const PhoneNumberInput: FunctionComponent<InputProps> = ({
   return (
     <Input
       id={id}
-      placeholderIndent='9rem'
+      placeholderIndent='8.5rem'
       inputComponent={PhoneInput as any} 
       inputProps={{
         country: 'us',

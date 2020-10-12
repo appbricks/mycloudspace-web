@@ -19,6 +19,7 @@ const Input: FunctionComponent<InputProps> = ({
   id,
   label,
   value,
+  required = false,
   type = 'text',
   placeholderIndent,
   iconElement,
@@ -72,7 +73,8 @@ const Input: FunctionComponent<InputProps> = ({
     >
       <InputLabel 
         ref={labelRef} 
-        htmlFor={id}         
+        htmlFor={id}     
+        required={required}    
         error={error}
         style={{
           marginLeft: 
