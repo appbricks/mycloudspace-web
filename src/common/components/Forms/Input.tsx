@@ -87,6 +87,7 @@ const Input: FunctionComponent<InputProps> = ({
         id={id}
         value={value}
         type={type}
+        error={error}
         onFocus={handleFocus()}
         onBlur={handleBlur()}
         onChange={handleInputChange(id)}
