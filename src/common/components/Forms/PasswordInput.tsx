@@ -7,9 +7,9 @@ import IconButton from '@material-ui/core/IconButton';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
-import TextInput, { TextInputProps } from './TextInput';
+import Input, { InputProps } from './Input';
 
-const PasswordInput: FunctionComponent<TextInputProps> = ({
+const PasswordInput: FunctionComponent<InputProps> = ({
   ...other
 }) => {
 
@@ -26,7 +26,7 @@ const PasswordInput: FunctionComponent<TextInputProps> = ({
   };
 
   return (
-    <TextInput 
+    <Input 
       type={values.showPassword ? 'text' : 'password'}
       iconElement={
         <IconButton

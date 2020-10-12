@@ -1,9 +1,11 @@
 import DialogBox from './DialogBox';
-import TextInput from './TextInput';
+import Input from './Input';
 import PasswordInput from './PasswordInput';
+import PhoneNumberInput from './PhoneNumberInput';
 
 export {
   DialogBox,
-  TextInput,
-  PasswordInput
+  Input,
+  PasswordInput,
+  PhoneNumberInput
 }

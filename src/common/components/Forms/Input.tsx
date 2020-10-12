@@ -9,23 +9,27 @@ import React, {
 } from 'react';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
+import OutlinedInput, { OutlinedInputProps } from '@material-ui/core/OutlinedInput';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { makeStyles } from '@material-ui/core/styles';
 import cx from 'clsx';
 
-const TextInput: FunctionComponent<TextInputProps> = ({
+const Input: FunctionComponent<InputProps> = ({
   id,
   label,
   value,
   type = 'text',
+  placeholderIndent,
   iconElement,
+  errorLabel,  
   handleChange,
   error,
   first,
   last,
+  enableAutofill = 'none',
   className,
+  inputProps,
   ...other
 }) => {
   const styles = useStyles();
@@ -40,6 +44,12 @@ const TextInput: FunctionComponent<TextInputProps> = ({
   useEffect(() => {
     setValues({ ...values, labelWidth: labelRef.current!.clientWidth });
   }, [setValues]);
+
+  const handleInputChange = (id: string) => (event: ChangeEvent<HTMLInputElement>) => {
+    if (handleChange) {
+      handleChange(id, event.target.value);
+    }
+  };
 
   const handleFocus = () => (event: FocusEvent<HTMLInputElement>) => {
     setValues({ ...values, hasFocus: true });    
@@ -59,18 +69,28 @@ const TextInput: FunctionComponent<TextInputProps> = ({
           className
         )
       }
-      {...other}
     >
-      <InputLabel ref={labelRef} htmlFor={id} error={!!error}>{label}</InputLabel>
+      <InputLabel 
+        ref={labelRef} 
+        htmlFor={id}         
+        error={error}
+        style={{
+          marginLeft: 
+            placeholderIndent && !value && !values.hasFocus
+              ? placeholderIndent
+              : undefined
+        }}
+      >
+        {label}
+      </InputLabel>
       <OutlinedInput 
         id={id}
         value={value}
         type={type}
         onFocus={handleFocus()}
         onBlur={handleBlur()}
-        onChange={handleChange(id)}
+        onChange={handleInputChange(id)}
         labelWidth={values.labelWidth}
-        error={!!error}
         className={styles.inputField}
         endAdornment={iconElement 
           ? (
@@ -90,15 +110,27 @@ const TextInput: FunctionComponent<TextInputProps> = ({
             </InputAdornment>
           )
           : undefined}
+        inputProps={{
+          ...inputProps,
+          // ignore last pass icons
+          'data-lpignore': 
+            enableAutofill == 'all' || enableAutofill == 'passwordManagersOnly'
+              ? 'false' : 'true'
+        }}
+        autoComplete={
+          enableAutofill == 'all' || enableAutofill == 'autoCompleteOnly'
+            ? 'on' : 'off'
+        }
+        {...other}
       />
       {error &&
-        (<FormHelperText error className={styles.errorText}>{error}</FormHelperText>)
+        (<FormHelperText error className={styles.errorText}>{errorLabel}</FormHelperText>)
       }
     </FormControl>
   );
 }
 
-export default TextInput;
+export default Input;
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -114,6 +146,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '1.5rem'
   },
   inputField: {
+    color: '#4d4d4d',
     backgroundColor: 'rgba(0, 0, 0, 0.09)',
   },
   inputFieldIconFocus: {
@@ -127,20 +160,22 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export type TextInputProps = {
+export interface InputProps extends OutlinedInputProps {
   id: string
   label: string
   value: string
   type?: string
 
+  placeholderIndent?: string
+  errorLabel?: string
   iconElement?: ReactElement
 
-  handleChange: (id: string) => (event: ChangeEvent<HTMLInputElement>) => void
-
-  error?: string
+  handleChange?: (id: string, value: string) => void
 
   first?: boolean
   last?: boolean
+
+  enableAutofill?: 'none' | 'all' | 'autoCompleteOnly' | 'passwordManagersOnly';
 
   className?: string
   style?: any
