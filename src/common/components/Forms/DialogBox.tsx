@@ -163,7 +163,7 @@ const useStyles = makeStyles((theme) => ({
   }  
 }));
 
-type DialogBoxProps = {
+interface DialogBoxProps {
   height: number
   width?: number
   fromHeight?: number
