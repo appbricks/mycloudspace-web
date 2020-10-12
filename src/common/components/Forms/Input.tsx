@@ -96,7 +96,7 @@ const Input: FunctionComponent<InputProps> = ({
         endAdornment={iconElement 
           ? (
             <InputAdornment 
-              position="end"
+              position='end'
               className={
                 cx(
                   values.hasFocus && (
