@@ -1,6 +1,6 @@
 ---
 order: 1
-image: '../../../images/team/mevan.jpg'
+image: '../../../../../images/team/mevan.jpg'
 imageStyle: 'avatar'
 
 links:
