@@ -26,6 +26,7 @@ const Input: FunctionComponent<InputProps> = ({
   errorLabel,  
   handleChange,
   error,
+  compact,
   first,
   last,
   enableAutofill = 'none',
@@ -62,6 +63,7 @@ const Input: FunctionComponent<InputProps> = ({
 
   return (
     <FormControl variant='outlined' 
+      margin={compact ? 'dense' : undefined}
       className={
         cx(
           error ? styles.formControlWithError : styles.formControl, 
@@ -175,6 +177,7 @@ export interface InputProps extends OutlinedInputProps {
 
   handleChange?: (id: string, value: string) => void
 
+  compact?: boolean
   first?: boolean
   last?: boolean
 

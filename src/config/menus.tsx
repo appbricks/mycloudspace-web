@@ -43,7 +43,7 @@ export const mainMenu: MenuDataItem[] = [
         anchorRightInMain: true,
         anchorRightInSideBar: true
       },
-      link: '/mycs/login',
+      link: '/mycs/signin',
     })
     .addItem('loggedin', {
       title: 'My Cloud Space',     
@@ -53,6 +53,6 @@ export const mainMenu: MenuDataItem[] = [
         anchorRightInMain: true,
         anchorRightInSideBar: true
       },
-      link: '/mycs/logout',
+      link: '/mycs/signout',
     })
 ];

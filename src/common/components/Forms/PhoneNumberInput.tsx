@@ -1,6 +1,5 @@
 import React, { 
   FunctionComponent,
-  ChangeEvent 
 } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -11,10 +10,11 @@ import Input, { InputProps } from './Input';
 
 const PhoneNumberInput: FunctionComponent<InputProps> = ({ 
   id,
+  compact,
   handleChange,
   ...other 
 }) => {
-  const styles = useStyles();
+  const styles = useStyles({ compact });
 
   return (
     <Input
@@ -30,6 +30,7 @@ const PhoneNumberInput: FunctionComponent<InputProps> = ({
         buttonClass: styles.button,
         inputClass: styles.input
       }}
+      compact
       {...other}/>
   );
 }
@@ -42,12 +43,18 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '2px 0 0 2px !important',
     margin: '2px 0 2px 2px !important'
   },
-  input: {
-    height: '3.5rem !important',
+  input: (props: StyleProps) => ({
+    height: props.compact 
+      ? '2.5rem !important' 
+      : '3.5rem !important',
     width: '100% !important',
     color: '#4d4d4d !important',
     font: 'inherit !important',
     backgroundColor: 'inherit !important',
     borderWidth: '0px !important'
-  }
+  })
 }));
+
+type StyleProps = {
+  compact?: boolean
+}
