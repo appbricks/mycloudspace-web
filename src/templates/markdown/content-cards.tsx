@@ -40,7 +40,7 @@ const ContentCards: FunctionComponent<ContentCardsProps> = (props) => {
           }
         }
       `}
-      render={(data: SnippetQuery) => {
+      render={(data: CardQuery) => {
         return (
           <Grid
             container
@@ -214,7 +214,7 @@ type StyleProps = {
   mdxParagraphAlign: any
 }
 
-type SnippetQuery = {
+type CardQuery = {
   allMdx: {
     edges: {
       node: {
