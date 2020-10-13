@@ -52,10 +52,6 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
     setValues({ ...values, [prop]: value });
   };
 
-  const preventDefault = (event: React.SyntheticEvent) => {
-    event.preventDefault();
-  };
-
   const handleButtonClick = (index: number) => (event: MouseEvent<HTMLButtonElement>) => {
     switch(index) {
       case 0: {
