@@ -20,6 +20,7 @@ const PrivateRoute: FunctionComponent<PrivateRouteProps> = ({
 export default PrivateRoute;
 
 type PrivateRouteProps = RouteComponentProps<{
-  background?: BackgroundType,
+  background?: BackgroundType
   component: ElementType
+  content?: {[key: string]: string}
 }>

@@ -20,6 +20,7 @@ const PublicRoute: FunctionComponent<PublicRouteProps> = ({
 export default PublicRoute;
 
 type PublicRouteProps = RouteComponentProps<{
-  background?: BackgroundType,
+  background?: BackgroundType
   component: ElementType
+  content?: {[key: string]: string}
 }>

@@ -20,6 +20,8 @@ import User from '@material-ui/icons/Person';
 import Email from '@material-ui/icons/Email';
 import Phone from '@material-ui/icons/Smartphone';
 
+import { StaticContent } from '../../../common/components/Content';
+
 import {
   DialogBox,
   Input,
@@ -157,15 +159,12 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           className={styles.input}
           compact
         />
-        <Typography 
-          variant='body2' 
-          align='justify'
+        <StaticContent 
+          body={props.content['accept-terms']}
           style={{
-            margin: '0rem 1rem 0.5rem 1rem'
+            margin: '-1rem 1rem -0.5rem 1rem'
           }}
-        >
-        To sign up for a <span style={{fontWeight: 'bold'}}>My Cloud Space</span> account you need to accept the AppBricks <Link href="/eula" target='_blank'>EULA</Link> and <Link href='/t&c' target='_blank'>T&C</Link> and agree to our <Link href='/pp' target='_blank'>Privacy Policy</Link>. Please check accept below if you would like to proceed.
-        </Typography>
+        />
         <FormControlLabel
           control={
             <Checkbox
@@ -193,6 +192,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type SignUpProps = {
+  
+  content: {[key: string]: string}
 
   // reach router state when
   // linking from another dialog

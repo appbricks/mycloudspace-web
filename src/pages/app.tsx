@@ -13,9 +13,9 @@ import {
   SignOut
 } from '../features/authentication/pages';
 
-const App: FunctionComponent<AppProps> = ({ 
-  data, 
-  pageContext 
+const App: FunctionComponent<AppProps> = ({
+  data,
+  pageContext
 }) => {
 
   var background: BackgroundType | undefined;
@@ -27,16 +27,65 @@ const App: FunctionComponent<AppProps> = ({
     };
   }
 
+  const contentMap: { 
+    [path: string]: { 
+      [key: string]: string
+    } 
+  } = {};
+
+  data.allMdx.edges
+    .map((edge) => {
+
+      const fullPath = edge.node.fields.slug
+        .replace('/library/app', '')
+        .replace(/\/$/, '');
+      const path = fullPath.replace(/\/[^\/]*$/, '');
+      const key = fullPath.replace(/.*\//, '');
+
+      const content = contentMap[path];
+      if (content) {
+        content[key] = edge.node.body;
+      } else {
+        contentMap[path] = { [key]: edge.node.body };
+      }
+    });
+
   return (
     <Router>
       {/* Sign In / Sign Up */}
-      <PublicRoute path="/mycs/signin" background={background} component={SignIn} />
-      <PublicRoute path="/mycs/signup" background={background} component={SignUp} />
-      <PublicRoute path="/mycs/verify" background={background} component={Verify} />
-      <PublicRoute path="/mycs/authcode" background={background} component={AuthCode} />
+      <PublicRoute 
+        path="/mycs/signin" 
+        background={background} 
+        component={SignIn} 
+        content={contentMap['/mycs/signin']} 
+      />
+      <PublicRoute 
+        path="/mycs/signup" 
+        background={background} 
+        component={SignUp} 
+        content={contentMap['/mycs/signup']} 
+      />
+      <PublicRoute 
+        path="/mycs/verify" 
+        background={background} 
+        component={Verify} 
+        content={contentMap['/mycs/verify']} 
+      />
+      <PublicRoute 
+        path="/mycs/authcode" 
+        background={background} 
+        component={AuthCode} 
+        content={contentMap['/mycs/authcode']} 
+      />
 
       {/* Home Dashboard */}
-      <PrivateRoute path="/mycs/home" background={background} component={SignOut} />
+      <PrivateRoute 
+        path="/mycs/home" 
+        background={background} 
+        component={SignOut} 
+        content={contentMap['/mycs/home']} 
+      />
+
     </Router>
   );
 }
@@ -55,7 +104,17 @@ export const pageQuery = graphql`
           }
         }
       }
-    }  
+    }
+    allMdx(filter: {fields: {slug: {glob: "/library/app/**"}}}, sort: {fields: frontmatter___order}) {
+      edges {
+        node {
+          body
+          fields {
+            slug
+          }          
+        }
+      }
+    }    
   }
 `
 
@@ -65,6 +124,16 @@ type AppProps = {
       edges: {
         node: {
           childImageSharp: any
+        }
+      }[]
+    }
+    allMdx: {
+      edges: {
+        node: {
+          body: string
+          fields: {
+            slug: string
+          }
         }
       }[]
     }
