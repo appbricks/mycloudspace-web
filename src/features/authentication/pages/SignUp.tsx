@@ -4,9 +4,7 @@ import React, {
   useState
 } from 'react';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Link from '@material-ui/core/Link';
 import Checkbox from '@material-ui/core/Checkbox';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -20,6 +18,7 @@ import User from '@material-ui/icons/Person';
 import Email from '@material-ui/icons/Email';
 import Phone from '@material-ui/icons/Smartphone';
 
+import { BaseAppProps, BaseContentProps } from '../../../common/config';
 import { StaticContent } from '../../../common/components/Content';
 
 import {
@@ -187,10 +186,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type SignUpProps = {
+type SignUpProps = BaseAppProps & BaseContentProps & {
   
-  content: {[key: string]: string}
-
   // reach router state when
   // linking from another dialog
   location: {

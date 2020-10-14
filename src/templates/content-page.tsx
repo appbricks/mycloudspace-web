@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { graphql } from 'gatsby';
 
+import { AppConfig } from '../common/config';
 import CustomTagProvider from './markdown';
 import Layout, { calcViewPortDimensions } from '../common/components/Layout';
 import ContentTopic, { TopicMetadata, TopicRefType } from './components/content-topic';
@@ -25,7 +26,11 @@ const ContentPage: FunctionComponent<ContentPageProps> = ({
 
   return (
     <CustomTagProvider>
-      <Layout bottomGutterHeight={bottomGutterHeight}>
+      <Layout 
+        appConfig={pageContext.appConfig} 
+        bottomGutterHeight={bottomGutterHeight}
+        noBackground
+      >
 
         <ContentTopic
           index={0}
@@ -184,7 +189,9 @@ type ContentPageProps = {
       }
     }
   }
-  pageContext: any
+  pageContext: {
+    appConfig: AppConfig
+  }
 }
 
 type StyleProps = {

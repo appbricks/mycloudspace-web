@@ -38,6 +38,11 @@ exports.createPages = async ({ graphql, actions }) => {
           node {
             appConfig {
               version
+              logos {
+                primaryLogo
+                secondaryLogo
+                logoBadgeColor
+              }
               layout {
                 backgroundImage
                 backgroundOverlay
@@ -84,7 +89,8 @@ exports.createPages = async ({ graphql, actions }) => {
       ),
       context: {
         id: edge.node.id,
-        name: edge.node.fields.name
+        name: edge.node.fields.name,
+        appConfig
       }
     });
   });
@@ -93,21 +99,21 @@ exports.createPages = async ({ graphql, actions }) => {
 exports.onCreatePage = async ({ page, actions }) => {
   const { createPage } = actions;
 
+  // add appConfig to context 
+  // of all pages created
+  page.context = { 
+    appConfig
+  };
+
   // page.matchPath is a special key that's used for matching pages
   // only on the client.
   if (page.path.match(/^\/app/)) {
     page.matchPath = '/mycs/*';
-
     console.log('Creating MyCS App pages with App Config => ', appConfig);
-    page.context = { 
-      appConfig, 
-      // variables for page graphql query
-      backgroundImage: appConfig.layout ? appConfig.layout.backgroundImage : undefined
-    };
-
-    // Update the page.
-    createPage(page);
   }
+
+  // Update the page.
+  createPage(page);
 }
 
 exports.onCreateWebpackConfig = ({ getConfig, stage }) => {

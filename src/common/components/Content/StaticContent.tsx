@@ -28,6 +28,6 @@ const StaticContent: FunctionComponent<StaticContentType> = ({
 
 export default StaticContent;
 
-interface StaticContentType extends BoxProps {
+type StaticContentType = BoxProps & {
   body: string
 }

@@ -3,10 +3,6 @@ import twitterIcon from '@iconify/icons-mdi/twitter';
 import githubIcon from '@iconify/icons-mdi/github';
 import downloadIcon from '@iconify/icons-mdi/download-circle';
 
-// Application Logos
-
-export const LOGO = require('../../site/images/appbricks-logo-name.png');
-
 // Social Icons
 
 export const linkIcons: {

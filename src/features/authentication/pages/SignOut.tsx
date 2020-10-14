@@ -1,6 +1,8 @@
 import React, { FunctionComponent } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { BaseAppProps, BaseContentProps } from '../../../common/config';
+
 const SignOut: FunctionComponent<SignOutProps> = (props) => {
   const styles = useStyles(props);
 
@@ -12,5 +14,5 @@ export default SignOut;
 const useStyles = makeStyles((theme) => ({
 }));
 
-type SignOutProps = {
+type SignOutProps = BaseAppProps & BaseContentProps & {
 }

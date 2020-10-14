@@ -44,10 +44,13 @@ class ToolbarNav extends Component<NavProps, NavState> {
   }
 
   render() {
-    const { menuItems, rightSideBar, delegate } = this.props;
 
-    // TBD: this should come from the state
-    const isLoggedin = false;
+    const { 
+      menuItems, 
+      rightSideBar, 
+      delegate, 
+      isLoggedIn 
+    } = this.props;
 
     return (
       <Box 
@@ -59,7 +62,7 @@ class ToolbarNav extends Component<NavProps, NavState> {
             {menuItems.map((item, index) => (
               <ToolBarMenuItem 
                 key={index}
-                item={item.getItem(isLoggedin ? 'loggedin' : MenuDataItem.DEFAULT)} 
+                item={item.getItem(isLoggedIn ? 'loggedin' : MenuDataItem.DEFAULT)} 
                 active={this.state.active == index}
                 onClick={() => delegate.setSelection(index)}
               />
@@ -103,10 +106,12 @@ class SidbarNav extends Component<NavProps, NavState> {
   }
   
   render() {
-    const { menuItems, rightSideBar, delegate } = this.props;
-
-    // TBD: this should come from the state
-    const isLoggedin = false;
+    const { 
+      menuItems, 
+      rightSideBar, 
+      delegate, 
+      isLoggedIn 
+    } = this.props;
 
     return (
       <>
@@ -116,7 +121,7 @@ class SidbarNav extends Component<NavProps, NavState> {
               {menuItems.map((item, index) => (
                 <SideBarMenuItem 
                   key={index}
-                  item={item.getItem(isLoggedin ? 'loggedin' : MenuDataItem.DEFAULT)} 
+                  item={item.getItem(isLoggedIn ? 'loggedin' : MenuDataItem.DEFAULT)} 
                   active={this.state.active == index}
                   onClick={() => delegate.setSelection(index)}
                   rightSideBar={rightSideBar}
@@ -134,18 +139,22 @@ class SidbarNav extends Component<NavProps, NavState> {
 class NavStateDelegate {
 
   menuItems: MenuDataItem[];
-  
+
   active: number;
   sideBarClosed: boolean = true;
  
   toolbarNavSelection?: (itemIndex: number) => void;
   sidebarNavSelection?: (itemIndex: number) => void;
 
-  constructor(menuItems: MenuDataItem[]) {
+  isLoggedIn: boolean
+  
+  constructor(menuItems: MenuDataItem[], isLoggedIn: boolean) {
     this.menuItems = menuItems;
     
     const pathName = typeof window !== 'undefined' ? window.location.pathname.replace(/\/$/, '') : '';
     this.active = menuItems.findIndex(item => (item.getItem().link == pathName));
+
+    this.isLoggedIn = isLoggedIn;
   }
 
   setSelection(itemIndex: number) {
@@ -157,7 +166,8 @@ class NavStateDelegate {
     }
 
     if (itemIndex >= 0 && itemIndex < this.menuItems.length) {
-      navigate(this.menuItems[itemIndex].getItem().link);
+      navigate(this.menuItems[itemIndex]
+        .getItem(this.isLoggedIn ? 'loggedin' : MenuDataItem.DEFAULT).link);
     } else {
       navigate('/');
     }
@@ -167,7 +177,8 @@ class NavStateDelegate {
 const getMainNav = (
   scheme: ILayoutBuilder, 
   menuItems: MenuDataItem[], 
-  rightSideBar = false
+  rightSideBar = false,
+  isLoggedIn = false
 ): MainNav => {
 
   scheme.configureEdgeSidebar((builder) => {
@@ -178,23 +189,43 @@ const getMainNav = (
       });
   });
 
-  const delegate = new NavStateDelegate(menuItems);
+  const delegate = new NavStateDelegate(menuItems, isLoggedIn);
 
   return {
     delegate: delegate,
-    toolBarNav: <ToolbarNav menuItems={menuItems} delegate={delegate} rightSideBar={rightSideBar}/>,
-    sideBarNav: <DrawerSidebar sidebarId='navSidebar'>
-      <SidebarContent>
-        <SidbarNav menuItems={menuItems} delegate={delegate} rightSideBar={rightSideBar}/>
-      </SidebarContent>
-    </DrawerSidebar>,
+
+    toolBarNav: (
+      <ToolbarNav 
+        menuItems={menuItems} 
+        rightSideBar={rightSideBar}        
+        isLoggedIn={isLoggedIn} 
+        delegate={delegate} 
+      />
+    ),
+
+    sideBarNav: (
+      <DrawerSidebar 
+        sidebarId='navSidebar'
+      >
+        <SidebarContent>
+          <SidbarNav 
+            menuItems={menuItems} 
+            rightSideBar={rightSideBar}            
+            isLoggedIn={isLoggedIn} 
+            delegate={delegate} 
+          />
+        </SidebarContent>
+      </DrawerSidebar>
+    )
   };
 }
 
 type NavProps = {
   menuItems: MenuDataItem[]
-  delegate: NavStateDelegate
   rightSideBar?: boolean
+
+  isLoggedIn: boolean
+  delegate: NavStateDelegate
 }
 
 type CloseSidebarProps = {

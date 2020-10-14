@@ -1,26 +1,33 @@
 import React, { ElementType, FunctionComponent } from 'react';
 import { RouteComponentProps } from '@reach/router';
 
-import Layout, { BackgroundType } from '../Layout/Layout';
+import { BaseAppProps, BaseContentProps } from '../../config';
+import Layout from '../Layout/Layout';
 
 const PublicRoute: FunctionComponent<PublicRouteProps> = ({ 
-  background, 
+  appConfig,
   component: Component, 
   ...other 
 }) => {
-  if (!Component) throw 'component prop cannot be undefined';
+  if (!appConfig || !Component) 
+    throw 'properties appConfig and Component are required for PublicRoute element';
 
   return (
-    <Layout background={background}>
-      <Component {...other}/>
+    <Layout 
+      appConfig={appConfig} 
+    >
+      <Component 
+        appConfig={appConfig} 
+        {...other}
+      />
     </Layout>
   );
 }
 
 export default PublicRoute;
 
-type PublicRouteProps = RouteComponentProps<{
-  background?: BackgroundType
+type PublicRouteProps = RouteComponentProps<
+  BaseAppProps & 
+  BaseContentProps & {
   component: ElementType
-  content?: {[key: string]: string}
 }>

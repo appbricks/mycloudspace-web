@@ -1,6 +1,11 @@
 {
   "appConfig": {
     "version": "0.0",
+    "logos": {
+      "primaryLogo": "appbricks-logo-name.png",
+      "secondaryLogo": "mycloudspace-logo-name.png",
+      "logoBadgeColor": "#3f51b5"
+    },
     "layout": {
       "backgroundImage": "backgrounds/appbricks.jpg",
       "backgroundOverlay": "#4d4d4d"

@@ -11,6 +11,8 @@ import { Icon } from '@iconify/react';
 import signinIcon from '@iconify/icons-mdi/login';
 import signupIcon from '@iconify/icons-mdi/account-edit';
 
+import { BaseAppProps, BaseContentProps } from '../../../common/config';
+
 import { 
   DialogBox, 
   Input, 
@@ -122,7 +124,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type SignInProps = {
+type SignInProps = BaseAppProps & BaseContentProps & {
 
   // reach router state when 
   // linking from another dialog

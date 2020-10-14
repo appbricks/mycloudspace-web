@@ -50,13 +50,11 @@ const CodeMask: FunctionComponent<CodeMaskProps> = ({
 
 export default CodeInput;
 
-interface CodeInputProps extends InputProps {
+type CodeInputProps = InputProps & {
   numDigits: number
 }
 
-interface CodeMaskProps {
+type CodeMaskProps = {
   inputRef: (ref: HTMLInputElement | null) => void;
   mask: (string | RegExp)[];
 }
-
-type InputRef = (ref: HTMLInputElement | null) => void;

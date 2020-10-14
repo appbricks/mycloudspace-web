@@ -165,7 +165,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export interface InputProps extends OutlinedInputProps {
+export type InputProps = OutlinedInputProps & {
   id: string
   label: string
   value: string

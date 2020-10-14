@@ -5,7 +5,7 @@ import aboutIcon from '@iconify/icons-mdi/information-outline';
 import productIcon from '@iconify/icons-mdi/package-variant-closed';
 import contactIcon from '@iconify/icons-mdi/contacts-outline';
 import loginIcon from '@iconify/icons-mdi/login';
-import logoutIcon from '@iconify/icons-mdi/logout';
+import homeIcon from '@iconify/icons-mdi/home-outline';
 
 import { MenuDataItem } from '../common/components/Nav/MenuItem';
 
@@ -48,11 +48,11 @@ export const mainMenu: MenuDataItem[] = [
     .addItem('loggedin', {
       title: 'My Cloud Space',     
       icon: { 
-        element: <Icon width={24} icon={logoutIcon} />, 
+        element: <Icon width={24} icon={homeIcon} />, 
         showInMain: true,
         anchorRightInMain: true,
         anchorRightInSideBar: true
       },
-      link: '/mycs/signout',
+      link: '/mycs/home',
     })
 ];

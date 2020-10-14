@@ -5,25 +5,45 @@ import { makeStyles } from '@material-ui/core/styles';
 import { getHeader } from '@mui-treasury/layout';
 import styled from 'styled-components';
 
+import { BaseAppProps } from '../../config/index';
 import { MainNav } from '../Nav/MainNav';
-
 import { headerHeight } from '../../../config/layout';
-import { LOGO } from '../../../config/assets';
 
-const Header: FunctionComponent<HeaderProps> = ({ mainNav }) => {
-  const styles = useStyles();
-  
+const Header: FunctionComponent<HeaderProps> = (props) => {
+
+  const { 
+    appConfig,
+    mainNav,
+    showUserNav = false
+  } = props;
+
+  const styles = useStyles(props);
+
   return (
     <HeaderMain className={styles.root}>
       <Toolbar className={styles.toolbar}>
+
         <Box display='flex' alignItems='center'>
           <img
-            className={styles.logo}
+            className={styles.logo1}
             alt='appbricks'
-            src={LOGO}
+            src={appConfig.logos.primaryLogoSrc}
             onClick={() => mainNav.delegate.setSelection(-1)}
           />
-        </Box>      
+        </Box>
+
+        {!appConfig.logos.secondaryLogoSrc || 
+          (!!showUserNav &&
+            <Box display='flex' alignItems='center' className={styles.logoBadge}>
+              <img
+                className={styles.logo2}
+                alt='appbricks'
+                src={appConfig.logos.secondaryLogoSrc}
+              />
+            </Box>
+          )
+        }
+
         {mainNav.toolBarNav}
       </Toolbar>
       {mainNav.sideBarNav}
@@ -38,10 +58,21 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#ffffff',
     boxShadow: '0 1px 15px rgba(50, 50, 93,.2)'
   },
-  logo: {
-    height: 40,
+  logo1: {
+    height: '40px',
     cursor: 'pointer'
   },
+  logo2: {
+    height: '20px'
+  },
+  logoBadge: (props: HeaderProps) => ({
+    height: '31px',
+    marginLeft: '5px',
+    marginBottom: '2px',
+    padding: '4px 10px 6px 10px',
+    borderRadius: '5px',
+    backgroundColor: props.appConfig.logos.logoBadgeColor,
+  }),
   toolbar: {
     minHeight: `${headerHeight}px !important`,
     padding: '0px 0px 0px 16px',
@@ -53,6 +84,7 @@ const useStyles = makeStyles((theme) => ({
 
 const HeaderMain = getHeader(styled);
 
-type HeaderProps = {
+type HeaderProps = BaseAppProps & {
   mainNav: MainNav
+  showUserNav?: boolean
 }
