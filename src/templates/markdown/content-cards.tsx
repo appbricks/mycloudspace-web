@@ -11,7 +11,7 @@ import { MDXRenderer } from 'gatsby-plugin-mdx';
 import { Icon } from '@iconify/react';
 
 import { TopicMetadata } from '../components/content-topic';
-import { linkIcons } from '../../config/assets';
+import { linkIcons } from '../../common/config/assets';
 
 const ContentCards: FunctionComponent<ContentCardsProps> = (props) => {
 

@@ -9,7 +9,7 @@ import { navigate } from '@reach/router';
 
 import { Icon } from '@iconify/react';
 import cancelIcon from '@iconify/icons-mdi/cancel';
-import signupIcon from '@iconify/icons-mdi/account-edit';
+import verifyIcon from '@iconify/icons-mdi/check-bold';
 
 import { BaseAppProps, BaseContentProps } from '../../../common/config';
 
@@ -77,8 +77,8 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
             onClick: handleButtonClick.bind(this)
           },
           {
-            text: 'Confirm',
-            icon: <Icon icon={signupIcon} />,
+            text: 'Verify',
+            icon: <Icon icon={verifyIcon} />,
             onClick: handleButtonClick.bind(this)
           }
         ]

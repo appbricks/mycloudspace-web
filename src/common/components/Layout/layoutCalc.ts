@@ -1,6 +1,6 @@
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-import { headerHeight } from '../../../config/layout';
+import { headerHeight } from '../../config/layout';
 
 export const getLayoutViewPortHeight = (bottomGutterHeight?: string) => (
   bottomGutterHeight 

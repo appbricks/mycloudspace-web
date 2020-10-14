@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
 
-import { headerHeight } from '../../config/layout';
+import { headerHeight } from '../../common/config/layout';
 
 import { handleParentScroll, Position } from '../../common/utils/scroll'
 import ScrollButton, { ScrollDirection } from './scroll-button';

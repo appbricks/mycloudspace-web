@@ -7,7 +7,7 @@ import styled from 'styled-components';
 
 import { BaseAppProps } from '../../config/index';
 import { MainNav } from '../Nav/MainNav';
-import { headerHeight } from '../../../config/layout';
+import { headerHeight } from '../../config/layout';
 
 const Header: FunctionComponent<HeaderProps> = (props) => {
 

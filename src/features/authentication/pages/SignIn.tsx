@@ -79,7 +79,7 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
             onClick: handleButtonClick.bind(this)
           },
           {
-            text: 'Confirm',
+            text: 'Sign In',
             icon: <Icon icon={signinIcon} />,
             onClick: handleButtonClick.bind(this)
           }

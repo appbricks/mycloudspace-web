@@ -91,7 +91,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
             onClick: handleButtonClick.bind(this)
           },
           {
-            text: 'Confirm',
+            text: 'Sign Up',
             icon: <Icon icon={signupIcon} />,
             onClick: handleButtonClick.bind(this)
           }

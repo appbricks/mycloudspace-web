@@ -7,7 +7,7 @@ import contactIcon from '@iconify/icons-mdi/contacts-outline';
 import loginIcon from '@iconify/icons-mdi/login';
 import homeIcon from '@iconify/icons-mdi/home-outline';
 
-import { MenuDataItem } from '../common/components/Nav/MenuItem';
+import { MenuDataItem } from '../components/Nav/MenuItem';
 
 export const mainMenu: MenuDataItem[] = [
   MenuDataItem.newItem({

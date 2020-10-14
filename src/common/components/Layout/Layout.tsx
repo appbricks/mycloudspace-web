@@ -11,8 +11,8 @@ import Header from '../Header';
 import { MetaTitle } from '../Title';
 import { getMainNav } from '../Nav';
 
-import { headerHeight } from '../../../config/layout';
-import { mainMenu } from '../../../config/menus';
+import { headerHeight } from '../../config/layout';
+import { mainMenu } from '../../config/menus';
 
 import { getLayoutViewPortHeight } from './layoutCalc';
 

@@ -33,6 +33,7 @@ const ContentPage: FunctionComponent<ContentPageProps> = ({
       >
 
         <ContentTopic
+          appConfig={pageContext.appConfig} 
           index={0}
           height={viewPortHeight}          
           topicRefs={topicRefs}
@@ -46,6 +47,7 @@ const ContentPage: FunctionComponent<ContentPageProps> = ({
 
           return (
             <ContentTopic
+              appConfig={pageContext.appConfig} 
               key={index}
               index={index + 1}
               lastTopic={index == topics.length-1}
