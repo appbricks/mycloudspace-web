@@ -44,7 +44,9 @@ export default function configureAppStore(preloadedState?: RootState): Store {
     middleware: [
       reduxLogger, 
       epicMiddleware, 
-      ...getDefaultMiddleware()
+      ...getDefaultMiddleware({
+        serializableCheck: false
+      })
     ],
     preloadedState
   })
@@ -58,4 +60,4 @@ export default function configureAppStore(preloadedState?: RootState): Store {
   return store as any as Store;
 }
 
-type RootState = ReturnType<typeof rootReducer>;
+export type RootState = ReturnType<typeof rootReducer>;
