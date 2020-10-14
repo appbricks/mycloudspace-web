@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from 'react';
+import { useSelector } from 'react-redux';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { StylesProvider, createMuiTheme, makeStyles } from '@material-ui/core/styles';
 import MuiLayout, { Root, getContent } from '@mui-treasury/layout';
@@ -16,6 +17,8 @@ import { mainMenu } from '../../config/menus';
 
 import { getLayoutViewPortHeight } from './layoutCalc';
 
+import * as Auth from '../../state/auth';
+
 const Layout: FunctionComponent<LayoutProps> = (props) => {
 
   const {
@@ -24,6 +27,8 @@ const Layout: FunctionComponent<LayoutProps> = (props) => {
     showUserNav = false,
     children
   } = props;
+
+  const isLoggedIn = useSelector(Auth.isLoggedIn);
 
   return (
     <StaticQuery
@@ -65,7 +70,7 @@ const Layout: FunctionComponent<LayoutProps> = (props) => {
         });
 
         const styles = useStyles(props);
-        const mainNav = getMainNav(scheme, mainMenu, true);
+        const mainNav = getMainNav(scheme, mainMenu, true, isLoggedIn);
 
         return (
           <StylesProvider injectFirst>
