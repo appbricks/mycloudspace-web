@@ -3,6 +3,7 @@ import React, {
   MouseEvent,
   useState
 } from 'react';
+import { useDispatch } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { navigate } from '@reach/router';
@@ -19,6 +20,8 @@ import {
 } from '../../../common/components/Forms';
 import { DialogState } from '.';
 
+import * as Auth from '../../../common/state/auth';
+
 const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
   const styles = useStyles(props);
 
@@ -32,6 +35,8 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
   const [values, setValues] = useState<State>({
     authCode: ''
   });
+  
+  const dispatch = useDispatch()
 
   const handleChange = (prop: string, value: string) =>  {
     setValues({ ...values, [prop]: value });
@@ -48,6 +53,7 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
         break;
       }
       case 1: {
+        dispatch(Auth.login());
         navigate('/mycs/home', {
           state: {
             fromDialog: dialogState

@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit'
 export const counterSlice = createSlice({
   name: 'counter',
   initialState: {
-    value: 0
+    value: 0,
+    loggedIn: false
   },
   reducers: {
     increment: state => {
@@ -18,10 +19,23 @@ export const counterSlice = createSlice({
     },
     incrementByAmount: (state, action) => {
       state.value += action.payload
+    },
+    login: state => {
+      console.log('--->login called')
+      state.loggedIn = true;
+    },
+    logout: state => {
+      state.loggedIn = false;
     }
   }
 })
 
-export const { increment, decrement, incrementByAmount } = counterSlice.actions
+export const { 
+  increment, 
+  decrement, 
+  incrementByAmount,
+  login,
+  logout
+} = counterSlice.actions
 
 export default counterSlice.reducer
