@@ -24,7 +24,6 @@ const CloseSidebar: FunctionComponent<CloseSidebarProps> = ({ delegate }) => {
   if (state.open) {
     useEffect(() => setOpen(id, false));
   }
-  delegate.sideBarClosed = true;
   return null;
 }
 
@@ -34,7 +33,16 @@ class ToolbarNav extends Component<NavProps, NavState> {
     super(props);
 
     this.state = { active: props.delegate.active };
-    props.delegate.toolbarNavSelection = this.setSelection.bind(this);
+  }
+
+  componentDidMount() {
+    const { delegate } = this.props;
+    delegate.toolbarNavSelection = this.setSelection.bind(this);
+  }
+
+  componentWillUnmount() {
+    const { delegate } = this.props;
+    delegate.toolbarNavSelection = undefined;
   }
   
   setSelection(itemIndex: number) {
@@ -87,14 +95,18 @@ class SidbarNav extends Component<NavProps, NavState> {
 
     this.state = { active: props.delegate.active };
     this._closeSidebar = false;
-
-    props.delegate.sidebarNavSelection = this.setSelection.bind(this);
   }
 
   componentDidMount() {
-    this.props.delegate.sideBarClosed = false;
+    const { delegate } = this.props;
+    delegate.sidebarNavSelection = this.setSelection.bind(this);
   }
 
+  componentWillUnmount() {
+    const { delegate } = this.props;
+    delegate.sidebarNavSelection = undefined;
+  }
+  
   setSelection(itemIndex: number) {
     if (itemIndex != this.state.active) {
       this.setState({ active: itemIndex });  
@@ -141,7 +153,6 @@ class NavStateDelegate {
   menuItems: MenuDataItem[];
 
   active: number;
-  sideBarClosed: boolean = true;
  
   toolbarNavSelection?: (itemIndex: number) => void;
   sidebarNavSelection?: (itemIndex: number) => void;
@@ -160,8 +171,10 @@ class NavStateDelegate {
   setSelection(itemIndex: number) {
     this.active = itemIndex;
 
-    this.toolbarNavSelection!(itemIndex);
-    if (!this.sideBarClosed) {
+    if (this.toolbarNavSelection) {
+      this.toolbarNavSelection!(itemIndex);
+    }
+    if (this.sidebarNavSelection) {
       this.sidebarNavSelection!(itemIndex);
     }
 
