@@ -21,7 +21,6 @@ export const counterSlice = createSlice({
       state.value += action.payload
     },
     login: state => {
-      console.log('--->login called')
       state.loggedIn = true;
     },
     logout: state => {
