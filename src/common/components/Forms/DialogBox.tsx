@@ -11,6 +11,8 @@ import Divider from '@material-ui/core/Divider';
 import { makeStyles } from '@material-ui/core/styles';
 import cx from 'clsx';
 
+import { headerHeight } from '../../config/layout';
+
 const DialogBox: FunctionComponent<DialogBoxProps> = ({
   height,
   width,
@@ -24,8 +26,8 @@ const DialogBox: FunctionComponent<DialogBoxProps> = ({
 }) => {
 
   const styles = useStyles({ 
-    height: `${height}px`, 
-    width: `${width}px`,
+    height: `${height+20}px`, 
+    width: `${width+20}px`,
     backgroundColor,
     opacity
   });
@@ -117,15 +119,17 @@ const useStyles = makeStyles((theme) => ({
     opacity: props.opacity,
     
     // center in the view
-    position: 'absolute',
-    top: '0', 
-    right: '0',
-    bottom: '0',
-    left: '0',
+    position: 'relative',
+    top: `max(0px, calc((100vh - ${props.height})/2) - ${headerHeight}px)`, 
+    left: `calc((100vw - ${props.width})/2)`,
     margin: 'auto',
 
     height: props.height,
     width: props.width,
+    marginTop: '10px',
+    marginRight: '10px',
+    marginBottom: '10px',
+    marginLeft: '10px',
 
     alignItems: 'center'
   }),
@@ -165,7 +169,7 @@ const useStyles = makeStyles((theme) => ({
 
 type DialogBoxProps = {
   height: number
-  width?: number
+  width: number
   fromHeight?: number
   fromWidth?: number
 
