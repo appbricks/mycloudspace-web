@@ -19,8 +19,8 @@ const SidebarContent = getSidebarContent(styled)
 
 // noop element with hook that forces the
 // sidebar navigation pane to close if open
-const CloseSidebar: FunctionComponent<CloseSidebarProps> = ({ delegate }) => {
-  const { id, state, setOpen } = useSidebarTrigger('navSidebar', 'SidebarTrigger');  
+const CloseSidebar: FunctionComponent<CloseSidebarProps> = ({ sidebarId }) => {
+  const { id, state, setOpen } = useSidebarTrigger(sidebarId, 'SidebarTrigger');  
   if (state.open) {
     useEffect(() => setOpen(id, false));
   }
@@ -56,6 +56,7 @@ class ToolbarNav extends Component<NavProps, NavState> {
     const { 
       menuItems, 
       rightSideBar, 
+      sidebarId,
       delegate, 
       isLoggedIn 
     } = this.props;
@@ -76,10 +77,10 @@ class ToolbarNav extends Component<NavProps, NavState> {
               />
             ))}
           </NavMenu>
-          <CloseSidebar delegate={delegate}/>
+          <CloseSidebar sidebarId={sidebarId}/>
         </Hidden>
         <Hidden mdUp>
-          <SidebarTrigger sidebarId='navSidebar' />
+          <SidebarTrigger sidebarId={sidebarId} />
         </Hidden>
       </Box>
     );
@@ -120,7 +121,8 @@ class SidbarNav extends Component<NavProps, NavState> {
   render() {
     const { 
       menuItems, 
-      rightSideBar, 
+      rightSideBar,
+      sidebarId,
       delegate, 
       isLoggedIn 
     } = this.props;
@@ -128,7 +130,7 @@ class SidbarNav extends Component<NavProps, NavState> {
     return (
       <>
         {this._closeSidebar
-          ? <CloseSidebar delegate={delegate}/>
+          ? <CloseSidebar sidebarId={sidebarId}/>
           : <List>
               {menuItems.map((item, index) => (
                 <SideBarMenuItem 
@@ -194,9 +196,11 @@ const getMainNav = (
   isLoggedIn = false
 ): MainNav => {
 
+  const sidebarId = 'navSidebar';
+
   scheme.configureEdgeSidebar((builder) => {
     builder
-      .create('navSidebar', { anchor: rightSideBar ? 'right' : 'left' })
+      .create(sidebarId, { anchor: rightSideBar ? 'right' : 'left' })
       .registerTemporaryConfig('xs', {
         width: 'auto'
       });
@@ -210,7 +214,8 @@ const getMainNav = (
     toolBarNav: (
       <ToolbarNav 
         menuItems={menuItems} 
-        rightSideBar={rightSideBar}        
+        rightSideBar={rightSideBar}   
+        sidebarId={sidebarId}     
         isLoggedIn={isLoggedIn} 
         delegate={delegate} 
       />
@@ -218,12 +223,13 @@ const getMainNav = (
 
     sideBarNav: (
       <DrawerSidebar 
-        sidebarId='navSidebar'
+        sidebarId={sidebarId}
       >
         <SidebarContent>
           <SidbarNav 
             menuItems={menuItems} 
-            rightSideBar={rightSideBar}            
+            rightSideBar={rightSideBar}  
+            sidebarId={sidebarId}          
             isLoggedIn={isLoggedIn} 
             delegate={delegate} 
           />
@@ -235,14 +241,16 @@ const getMainNav = (
 
 type NavProps = {
   menuItems: MenuDataItem[]
-  rightSideBar?: boolean
+  rightSideBar: boolean
+
+  sidebarId: string
 
   isLoggedIn: boolean
   delegate: NavStateDelegate
 }
 
 type CloseSidebarProps = {
-  delegate: NavStateDelegate
+  sidebarId: string
 }
 
 type NavState = {
