@@ -54,7 +54,7 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
       }
       case 1: {
         dispatch(Auth.login());
-        navigate('/mycs/home', {
+        navigate('/mycs', {
           state: {
             fromDialog: dialogState
           }

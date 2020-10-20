@@ -44,9 +44,15 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
           )
         }
 
-        {!!showUserNav || mainNav.toolBarNav}
+        {!!showUserNav
+          ? <></>
+          : mainNav.toolBarNav
+        }
       </Toolbar>
-      {!!showUserNav || mainNav.sideBarNav}
+      {!!showUserNav
+        ? <></>
+        : mainNav.sideBarNav
+      }
     </HeaderMain>
   );
 };

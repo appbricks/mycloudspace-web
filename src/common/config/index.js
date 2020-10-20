@@ -27,5 +27,7 @@ export type BaseAppProps = {
 
 // Base property type for application components requiring static content
 export type BaseContentProps = {
-  content: {[key: string]: string}
+  content: contentKeyMap | { [path: string]: contentKeyMap }
 }
+
+type contentKeyMap = {[key: string]: string}

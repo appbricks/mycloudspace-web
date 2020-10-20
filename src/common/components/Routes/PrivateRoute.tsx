@@ -7,6 +7,7 @@ import Layout from '../Layout/Layout';
 const PrivateRoute: FunctionComponent<PrivateRouteProps> = ({ 
   appConfig,
   component: Component, 
+  componentProps,
   ...other 
 }) => {
   if (!appConfig || !Component) 
@@ -19,6 +20,7 @@ const PrivateRoute: FunctionComponent<PrivateRouteProps> = ({
     >
       <Component 
         appConfig={appConfig} 
+        {...componentProps}
         {...other}
       />
     </Layout>
@@ -31,4 +33,5 @@ type PrivateRouteProps = RouteComponentProps<
   BaseAppProps & 
   BaseContentProps & {
   component: ElementType
+  componentProps?: { [props: string]: any } 
 }>

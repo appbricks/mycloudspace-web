@@ -13,8 +13,10 @@ import {
   SignOut
 } from '../features/authentication/pages';
 import {
-  Home
-} from '../features/dashboard/pages';
+  UserNav
+} from '../common/components/Nav';
+
+import { userMenu } from '../common/config/menus';
 
 const App: FunctionComponent<AppProps> = ({
   data,
@@ -72,12 +74,12 @@ const App: FunctionComponent<AppProps> = ({
         content={contentMap['/mycs/authcode']}
       />
 
-      {/* Home Dashboard */}
       <PrivateRoute
-        path="/mycs/home"
-        component={Home}
+        path="/mycs"
+        component={UserNav}
+        componentProps={{ menuItems: userMenu }}
         appConfig={pageContext.appConfig}
-        content={contentMap['/mycs/home']}
+        content={contentMap}
       />
 
     </Router>

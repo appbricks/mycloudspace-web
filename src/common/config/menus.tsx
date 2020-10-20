@@ -6,8 +6,17 @@ import productIcon from '@iconify/icons-mdi/package-variant-closed';
 import contactIcon from '@iconify/icons-mdi/contacts-outline';
 import loginIcon from '@iconify/icons-mdi/login';
 import homeIcon from '@iconify/icons-mdi/home-outline';
+import accountIcon from '@iconify/icons-mdi/account-details-outline';
+import appsIcon from '@iconify/icons-mdi/apps';
+import helpIcon from '@iconify/icons-mdi/help';
 
 import { MenuDataItem } from '../components/Nav/MenuItem';
+import { UserMenuDataItem } from '../components/Nav/UserNav';
+
+import SpacesHome from '../../features/spaces/pages/home';
+import AppsHome from '../../features/apps/pages/home';
+import AccountHome from '../../features/account/pages/home';
+import HelpHome from '../../features/help/pages/home';
 
 export const mainMenu: MenuDataItem[] = [
   MenuDataItem.newItem({
@@ -53,6 +62,29 @@ export const mainMenu: MenuDataItem[] = [
         anchorRightInMain: true,
         anchorRightInSideBar: true
       },
-      link: '/mycs/home',
+      link: '/mycs',
     })
 ];
+
+export const userMenu: UserMenuDataItem[] = [
+  {
+    icon: <Icon width={32} icon={homeIcon} />,
+    label: 'Spaces',
+    component: SpacesHome
+  },
+  { 
+    icon: <Icon width={32} icon={appsIcon} />,
+    label: 'Apps',
+    component: AppsHome
+  },
+  {
+    icon: <Icon width={32} icon={accountIcon} />,
+    label: 'Account',
+    component: AccountHome
+  },
+  {
+    icon: <Icon width={32} icon={helpIcon} />,
+    label: 'Help',
+    component: HelpHome
+  },
+]
