@@ -66,7 +66,11 @@ const useStyles = makeStyles((theme) => ({
   },
   logo1: {
     height: '40px',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    [theme.breakpoints.down('xs')]: {
+      marginRight: '-121px',
+      overflow: 'hidden'
+    }
   },
   logo2: {
     height: '20px'
