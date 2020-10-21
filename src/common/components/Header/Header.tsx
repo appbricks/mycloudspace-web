@@ -14,7 +14,7 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
   const { 
     appConfig,
     mainNav,
-    showUserNav = false
+    hideNav = false
   } = props;
 
   const styles = useStyles(props);
@@ -33,7 +33,7 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
         </Box>
 
         {!appConfig.logos.secondaryLogoSrc || 
-          (!!showUserNav &&
+          (hideNav &&
             <Box display='flex' alignItems='center' className={styles.logoBadge}>
               <img
                 className={styles.logo2}
@@ -44,12 +44,12 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
           )
         }
 
-        {!!showUserNav
+        {hideNav
           ? <></>
           : mainNav.toolBarNav
         }
       </Toolbar>
-      {!!showUserNav
+      {hideNav
         ? <></>
         : mainNav.sideBarNav
       }
@@ -92,5 +92,5 @@ const HeaderMain = getHeader(styled);
 
 type HeaderProps = BaseAppProps & {
   mainNav: MainNav
-  showUserNav?: boolean
+  hideNav?: boolean
 }

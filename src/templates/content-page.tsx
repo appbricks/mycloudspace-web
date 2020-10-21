@@ -1,11 +1,14 @@
 import React, { FunctionComponent } from 'react';
 import { graphql } from 'gatsby';
 
-import { AppConfig } from '../common/config';
-import CustomTagProvider from './markdown';
 import Layout, { calcViewPortDimensions } from '../common/components/Layout';
-import ContentTopic, { TopicMetadata, TopicRefType } from './components/content-topic';
 import { StaticFooter } from '../common/components/Footer';
+
+import { AppConfig } from '../common/config';
+import { mainMenu } from '../common/config/menus';
+
+import ContentTopic, { TopicMetadata, TopicRefType } from './components/content-topic';
+import CustomTagProvider from './markdown';
 
 const ContentPage: FunctionComponent<ContentPageProps> = ({ 
   data, 
@@ -28,6 +31,7 @@ const ContentPage: FunctionComponent<ContentPageProps> = ({
     <CustomTagProvider>
       <Layout 
         appConfig={pageContext.appConfig} 
+        mainMenu={mainMenu}
         bottomGutterHeight={bottomGutterHeight}
         noBackground
       >

@@ -1,16 +1,22 @@
 import React, { FunctionComponent, ElementType, ReactElement, ChangeEvent, useState } from 'react';
-import { withStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { withStyles, makeStyles, useTheme, Theme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
 const UserNav: FunctionComponent<UserNavProps> = (props) => {
-  const styles = useStyles(props);
-  const [value, setValue] = useState(0);
 
-  const { 
-    menuItems, 
-    ...other 
+  const {
+    menuItems,
+    ...other
   } = props;
+
+  const theme = useTheme();
+  const bottomBar = useMediaQuery(theme.breakpoints.down('xs'));
+
+  const styles = useStyles();
+  const [value, setValue] = useState(0);
 
   // user menu selection
   const handleChange = (event: ChangeEvent<{}>, newValue: number) => {
@@ -21,48 +27,50 @@ const UserNav: FunctionComponent<UserNavProps> = (props) => {
     id: `tab-${index}`,
     'aria-controls': `tabpanel-${index}`,
   });
-  
-  return (   
+
+  return (
     <div className={styles.root}>
-      <UserNavTabs        
-        value={value}
-        onChange={handleChange}        
-      >
-        {menuItems.map((item, index) => (
-          <UserNavTab 
-            icon={item.icon} 
-            label={item.label}
-            {...a11yProps(index)}
-          />        
-        ))}
-      </UserNavTabs>
+      {!bottomBar &&
+        <UserNavTabs
+          value={value}
+          onChange={handleChange}
+          orientation='vertical'
+        >
+          {menuItems.map((item, index) => (
+            <UserNavTab
+              key={index}
+              icon={item.icon}
+              label={item.label}
+              {...a11yProps(index)}
+            />
+          ))}
+        </UserNavTabs>
+      }
       {menuItems.map((item, index) => (
-        <TabPanel 
-          value={value} 
+        <TabPanel
+          key={index}
+          value={value}
           index={index}
           component={item.component}
           {...other}
         />
       ))}
-    </div>
-  );
-}
-
-const TabPanel: FunctionComponent<TabPanelProps> = ({ 
-  component: Component, 
-  index, 
-  value, 
-  ...other 
-}) => {
-
-  return (
-    <div
-      role='tabpanel'
-      hidden={value !== index}
-      id={`tabpanel-${index}`}
-      aria-labelledby={`tab-${index}`} 
-    >
-      <Component {...other} />
+      {bottomBar && 
+        <UserNavTabs
+          value={value}
+          onChange={handleChange}
+          orientation='horizontal'
+        >
+          {menuItems.map((item, index) => (
+            <UserNavTab
+              key={index}
+              icon={item.icon}
+              label={item.label}
+              {...a11yProps(index)}
+            />
+          ))}
+        </UserNavTabs>
+      }
     </div>
   );
 }
@@ -73,24 +81,41 @@ const UserNavTabs = withStyles((theme: Theme) => ({
   root: {
     color: '#ffffff',
     backgroundColor: '#2b2d32',
+    minHeight: '75px',
+    minWidth: '75px'
   },
   indicator: {
     display: 'flex',
     backgroundColor: '#3f51b5',
+
+    top: undefined,
+    height: undefined,
     width: '5px',
-  },
-}))((props: UserNavTabsProps) => 
-  <Tabs 
-    orientation='vertical'
+    [theme.breakpoints.down('xs')]: {
+      top: 0,
+      height: '5px',
+      width: undefined
+    }
+  }
+}))(({
+  orientation,
+  ...other
+}: UserNavTabsProps) =>
+  <Tabs
+    orientation={orientation}
     variant='scrollable'
-    {...props} 
+    {...other}
   />);
 
 const UserNavTab = withStyles((theme: Theme) => ({
   root: {
-    minWidth: '0px',
+    flexGrow: 100,
+    minHeight: '75px',
+    minWidth: '75px',
     padding: '15px 15px 10px 15px',
-    color: '#ffffff',
+    [theme.breakpoints.down('xs')]: {
+      padding: '10px 5px 5px 5px',
+    },
     textTransform: 'none',
     fontWeight: theme.typography.fontWeightRegular,
     fontSize: '0.75rem',
@@ -103,33 +128,77 @@ const UserNavTab = withStyles((theme: Theme) => ({
       opacity: 1,
       '&:after': {
         content: '" "',
+        backgroundColor: '#3f51b5',
+        opacity: 0.5,
+
         display: 'block',
+        position: 'absolute',
+ 
+        top: undefined,
         right: 0,
         width: '5px',
-        height: '103%',
-        position: 'absolute',
-        backgroundColor: '#3f51b5',
-        opacity: 0.5
+        height: '105%',
+        [theme.breakpoints.down('xs')]: {
+          top: 0,
+          right: undefined,
+          width: '100%',
+          height: '5px',
+        }
       }
     },
   },
-}))((props: UserNavTabProps) => 
-  <Tab 
-    disableRipple {...props} 
+}))((props: UserNavTabProps) =>
+  <Tab
+    disableRipple {...props}
   />);
+
+const TabPanel: FunctionComponent<TabPanelProps> = ({
+  component: Component,
+  index,
+  value,
+  ...other
+}) => {
+
+  const styles = useStyles();
+
+  return (
+    <div
+      role='tabpanel'
+      hidden={value !== index}
+      id={`tabpanel-${index}`}
+      aria-labelledby={`tab-${index}`}
+      className={styles.tabPanel}
+    >
+      <Component {...other} />
+    </div>
+  );
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
-    display: 'flex',
     height: '100%',
-    minWidth: '100px',
+    width: '100%',
+    display: 'flex',
+    flexGrow: 1,
+    flexDirection: 'row',
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'column'
+    }
+  },
+  tabPanel: {
+    flexGrow: 100, 
+    overflowY: 'scroll'
   }
 }));
 
+type UserNavProps = {
+  menuItems: UserMenuDataItem[]
+}
+
 type UserNavTabsProps = {
-  value: number;
-  onChange: (event: ChangeEvent<{}>, newValue: number) => void;
+  value: number
+  orientation: 'horizontal' | 'vertical' | undefined
+  onChange: (event: ChangeEvent<{}>, newValue: number) => void
 }
 
 type UserNavTabProps = {
@@ -141,10 +210,6 @@ type TabPanelProps = {
   index: number
   value: number
   component: ElementType
-}
-
-type UserNavProps = {
-  menuItems: UserMenuDataItem[]
 }
 
 export type UserMenuDataItem = UserNavTabProps & {

@@ -13,9 +13,9 @@ import { MetaTitle } from '../Title';
 import { getMainNav } from '../Nav';
 
 import { headerHeight } from '../../config/layout';
-import { mainMenu } from '../../config/menus';
-
 import { getLayoutViewPortHeight } from './layoutCalc';
+
+import { MenuDataItem } from '../Nav/MenuItem';
 
 import * as Auth from '../../state/auth';
 
@@ -23,8 +23,9 @@ const Layout: FunctionComponent<LayoutProps> = (props) => {
 
   const {
     appConfig,
+    mainMenu = [],
+    hideNav = false,
     noBackground = false,
-    showUserNav = false,
     children
   } = props;
 
@@ -84,10 +85,10 @@ const Layout: FunctionComponent<LayoutProps> = (props) => {
               <Header
                 appConfig={appConfig}
                 mainNav={mainNav}
-                showUserNav={showUserNav}
+                hideNav={hideNav}
               />
 
-              <Content className={styles.scrollView}>
+              <Content className={styles.content}>
                 {children}
               </Content>
             </Root>
@@ -101,11 +102,7 @@ const Layout: FunctionComponent<LayoutProps> = (props) => {
 export default Layout;
 
 const useStyles = makeStyles(() => ({
-  paper: {
-    border: 'none',
-    overflow: 'visible',
-  },
-  scrollView: (props: LayoutProps) => {
+  content: (props: LayoutProps) => {
     if (props.noBackground) {
       return {
         height: getLayoutViewPortHeight(props.bottomGutterHeight),
@@ -121,7 +118,7 @@ const useStyles = makeStyles(() => ({
         backgroundColor: props.appConfig.layout.backgroundOverlay,
         backgroundBlendMode: 'overlay',
         height: getLayoutViewPortHeight(props.bottomGutterHeight),
-        overflowY: 'scroll'
+        overflowY: props.hideNav ? 'hidden' : 'scroll'
       }
     }
   }
@@ -147,10 +144,11 @@ const theme = createMuiTheme({
 const Content = getContent(styled);
 
 type LayoutProps = BaseAppProps & {
-  bottomGutterHeight?: string
+  mainMenu?: MenuDataItem[]
+  hideNav?: boolean
 
+  bottomGutterHeight?: string
   noBackground?: boolean
-  showUserNav?: boolean
 }
 
 type ImageQuery = {
