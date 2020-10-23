@@ -1,4 +1,4 @@
 import getMainNav from './MainNav';
-import UserNav from './UserNav';
+import AppNav from './AppNav';
 
-export { getMainNav, UserNav };
+export { getMainNav, AppNav };

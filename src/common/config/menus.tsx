@@ -11,7 +11,7 @@ import appsIcon from '@iconify/icons-mdi/apps';
 import helpIcon from '@iconify/icons-mdi/help';
 
 import { MenuDataItem } from '../components/Nav/MenuItem';
-import { UserMenuDataItem } from '../components/Nav/UserNav';
+import { AppMenuDataItem } from '../components/Nav/AppNav';
 
 import SpacesHome from '../../features/spaces/pages/home';
 import AppsHome from '../../features/apps/pages/home';
@@ -66,7 +66,7 @@ export const mainMenu: MenuDataItem[] = [
     })
 ];
 
-export const userMenu: UserMenuDataItem[] = [
+export const userMenu: AppMenuDataItem[] = [
   {
     icon: <Icon width={32} icon={homeIcon} />,
     label: 'Spaces',

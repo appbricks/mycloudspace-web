@@ -15,7 +15,7 @@ import {
   SignOut
 } from '../features/authentication/pages';
 import {
-  UserNav
+  AppNav
 } from '../common/components/Nav';
 
 const App: FunctionComponent<AppProps> = ({
@@ -80,7 +80,7 @@ const App: FunctionComponent<AppProps> = ({
 
       <PrivateRoute
         path="/mycs"
-        component={UserNav}
+        component={AppNav}
         componentProps={{ menuItems: userMenu }}
         appConfig={pageContext.appConfig}
         content={contentMap}

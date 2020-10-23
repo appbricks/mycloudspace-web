@@ -5,7 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
-const UserNav: FunctionComponent<UserNavProps> = (props) => {
+const AppNav: FunctionComponent<AppNavProps> = (props) => {
 
   const {
     menuItems,
@@ -31,20 +31,20 @@ const UserNav: FunctionComponent<UserNavProps> = (props) => {
   return (
     <div className={styles.root}>
       {!bottomBar &&
-        <UserNavTabs
+        <AppNavTabs
           value={value}
           onChange={handleChange}
           orientation='vertical'
         >
           {menuItems.map((item, index) => (
-            <UserNavTab
+            <AppNavTab
               key={index}
               icon={item.icon}
               label={item.label}
               {...a11yProps(index)}
             />
           ))}
-        </UserNavTabs>
+        </AppNavTabs>
       }
       {menuItems.map((item, index) => (
         <TabPanel
@@ -56,28 +56,28 @@ const UserNav: FunctionComponent<UserNavProps> = (props) => {
         />
       ))}
       {bottomBar && 
-        <UserNavTabs
+        <AppNavTabs
           value={value}
           onChange={handleChange}
           orientation='horizontal'
         >
           {menuItems.map((item, index) => (
-            <UserNavTab
+            <AppNavTab
               key={index}
               icon={item.icon}
               label={item.label}
               {...a11yProps(index)}
             />
           ))}
-        </UserNavTabs>
+        </AppNavTabs>
       }
     </div>
   );
 }
 
-export default UserNav;
+export default AppNav;
 
-const UserNavTabs = withStyles((theme: Theme) => ({
+const AppNavTabs = withStyles((theme: Theme) => ({
   root: {
     color: '#ffffff',
     backgroundColor: '#2b2d32',
@@ -100,14 +100,14 @@ const UserNavTabs = withStyles((theme: Theme) => ({
 }))(({
   orientation,
   ...other
-}: UserNavTabsProps) =>
+}: AppNavTabsProps) =>
   <Tabs
     orientation={orientation}
     variant='scrollable'
     {...other}
   />);
 
-const UserNavTab = withStyles((theme: Theme) => ({
+const AppNavTab = withStyles((theme: Theme) => ({
   root: {
     flexGrow: 100,
     minHeight: '75px',
@@ -147,7 +147,7 @@ const UserNavTab = withStyles((theme: Theme) => ({
       }
     },
   },
-}))((props: UserNavTabProps) =>
+}))((props: AppNavTabProps) =>
   <Tab
     disableRipple {...props}
   />);
@@ -191,17 +191,17 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type UserNavProps = {
-  menuItems: UserMenuDataItem[]
+type AppNavProps = {
+  menuItems: AppMenuDataItem[]
 }
 
-type UserNavTabsProps = {
+type AppNavTabsProps = {
   value: number
   orientation: 'horizontal' | 'vertical' | undefined
   onChange: (event: ChangeEvent<{}>, newValue: number) => void
 }
 
-type UserNavTabProps = {
+type AppNavTabProps = {
   icon: ReactElement
   label: string
 }
@@ -212,6 +212,6 @@ type TabPanelProps = {
   component: ElementType
 }
 
-export type UserMenuDataItem = UserNavTabProps & {
+export type AppMenuDataItem = AppNavTabProps & {
   component: ElementType
 }
