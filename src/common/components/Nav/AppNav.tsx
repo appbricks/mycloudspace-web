@@ -1,7 +1,6 @@
 import React, { FunctionComponent, ElementType, ReactElement, ChangeEvent, useState } from 'react';
 import { withStyles, makeStyles, useTheme, Theme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
@@ -105,7 +104,8 @@ const AppNavTabs = withStyles((theme: Theme) => ({
     orientation={orientation}
     variant='scrollable'
     {...other}
-  />);
+  />
+);
 
 const AppNavTab = withStyles((theme: Theme) => ({
   root: {
@@ -150,7 +150,8 @@ const AppNavTab = withStyles((theme: Theme) => ({
 }))((props: AppNavTabProps) =>
   <Tab
     disableRipple {...props}
-  />);
+  />
+);
 
 const TabPanel: FunctionComponent<TabPanelProps> = ({
   component: Component,
