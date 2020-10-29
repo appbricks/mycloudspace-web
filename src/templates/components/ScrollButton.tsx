@@ -7,7 +7,7 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import cx from 'clsx';
 
-import { TopicRefType } from './content-topic';
+import { TopicRefType } from './ContentTopic';
 
 const ScrollButton: FunctionComponent<ScrollButtonType> = (props) => {
   const styles = useStyles(props);

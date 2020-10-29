@@ -19,14 +19,14 @@ import Email from '@material-ui/icons/Email';
 import Phone from '@material-ui/icons/Smartphone';
 
 import { BaseAppProps, BaseContentProps } from '../../../common/config';
-import { StaticContent } from '../../../common/components/Content';
+import { StaticContent } from '../../../common/components/content';
 
 import {
   DialogBox,
   Input,
   PasswordInput,
   PhoneNumberInput
-} from '../../../common/components/Forms';
+} from '../../../common/components/forms';
 import { DialogState } from './';
 
 const SignUp: FunctionComponent<SignUpProps> = (props) => {

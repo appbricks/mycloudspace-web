@@ -8,14 +8,14 @@ import { StaticQuery, graphql } from 'gatsby'
 
 import { BaseAppProps } from '../../config/index';
 
-import Header from '../Header';
-import { MetaTitle } from '../Title';
-import { getMainNav } from '../Nav';
+import Header from '../header';
+import MetaTitle from './MetaTitle';
+import { getMainNav } from '../nav';
 
 import { headerHeight } from '../../config/layout';
-import { getLayoutViewPortHeight } from './layoutCalc';
+import { getLayoutViewPortHeight } from './utils';
 
-import { MenuDataItem } from '../Nav/MenuItem';
+import MainMenuItem from '../nav/main/MainMenuItem';
 
 import * as Auth from '../../state/auth';
 
@@ -30,6 +30,7 @@ const Layout: FunctionComponent<LayoutProps> = (props) => {
   } = props;
 
   const isLoggedIn = useSelector(Auth.isLoggedIn);
+  const user = useSelector(Auth.user);
 
   return (
     <StaticQuery
@@ -144,7 +145,7 @@ const theme = createMuiTheme({
 const Content = getContent(styled);
 
 type LayoutProps = BaseAppProps & {
-  mainMenu?: MenuDataItem[]
+  mainMenu?: MainMenuItem[]
   hideNav?: boolean
 
   bottomGutterHeight?: string

@@ -5,7 +5,7 @@ import { Router } from "@reach/router"
 import { AppConfig } from '../common/config';
 import { mainMenu, userMenu } from '../common/config/menus';
 
-import { PublicRoute, PrivateRoute } from '../common/components/Routes';
+import { PublicRoute, PrivateRoute } from '../common/components/routes';
 
 import {
   SignIn,
@@ -16,7 +16,7 @@ import {
 } from '../features/authentication/pages';
 import {
   AppNav
-} from '../common/components/Nav';
+} from '../common/components/nav';
 
 const App: FunctionComponent<AppProps> = ({
   data,

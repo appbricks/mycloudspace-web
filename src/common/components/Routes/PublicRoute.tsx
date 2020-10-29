@@ -2,9 +2,9 @@ import React, { ElementType, FunctionComponent } from 'react';
 import { RouteComponentProps } from '@reach/router';
 
 import { BaseAppProps, BaseContentProps } from '../../config';
-import Layout from '../Layout/Layout';
+import Layout from '../layout/Layout';
 
-import { MenuDataItem } from '../Nav/MenuItem';
+import MainMenuItem from '../nav/main/MainMenuItem';
 
 const PublicRoute: FunctionComponent<PublicRouteProps> = ({
   appConfig,
@@ -36,7 +36,7 @@ type PublicRouteProps = RouteComponentProps<
   BaseAppProps &
   BaseContentProps & {
 
-  mainMenu: MenuDataItem[]
+  mainMenu: MainMenuItem[]
 
   component: ElementType
   componentProps?: { [props: string]: any }

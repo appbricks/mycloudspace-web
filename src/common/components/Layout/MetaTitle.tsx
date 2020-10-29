@@ -6,7 +6,7 @@ type Props = {
   title?: string
 }
 
-export const MetaTitle: FunctionComponent<Props> = ({title = undefined}) =>
+const MetaTitle: FunctionComponent<Props> = ({title = undefined}) =>
   <StaticQuery
     query={graphql`
       query {
@@ -21,3 +21,5 @@ export const MetaTitle: FunctionComponent<Props> = ({title = undefined}) =>
       <Helmet title={title ? title : data.site.siteMetadata.title} defer={false} />
     )}
   />
+
+export default MetaTitle;

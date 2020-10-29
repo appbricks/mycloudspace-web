@@ -10,7 +10,7 @@ import { MDXRenderer } from 'gatsby-plugin-mdx';
 import { headerHeight } from '../../common/config/layout';
 
 import { handleParentScroll, Position } from '../../common/utils/scroll'
-import ScrollButton, { ScrollDirection } from './scroll-button';
+import ScrollButton, { ScrollDirection } from './ScrollButton';
 
 const ContentTopic: FunctionComponent<ContentTopicProps> = ({
   index,

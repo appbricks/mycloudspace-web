@@ -16,7 +16,7 @@ import { BaseAppProps, BaseContentProps } from '../../../common/config';
 import {
   DialogBox,
   CodeInput,
-} from '../../../common/components/Forms';
+} from '../../../common/components/forms';
 import { DialogState } from '.';
 
 const VerifyAccount: FunctionComponent<VerifyAccountProps> = (props) => {

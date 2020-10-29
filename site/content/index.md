@@ -1,5 +1,5 @@
 ---
-pageTemplate: content-page
+pageTemplate: ContentPage
 title: AppBricks
 
 fillViewPort: true

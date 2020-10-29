@@ -1,12 +1,13 @@
 import React, { FunctionComponent } from 'react';
 import Box from '@material-ui/core/Box';
 import Toolbar from '@material-ui/core/Toolbar';
+import Avatar from '@material-ui/core/Avatar';
 import { makeStyles } from '@material-ui/core/styles';
 import { getHeader } from '@mui-treasury/layout';
 import styled from 'styled-components';
 
 import { BaseAppProps } from '../../config/index';
-import { MainNav } from '../Nav/MainNav';
+import { MainNav } from '../nav/main/getMainNav';
 import { headerHeight } from '../../config/layout';
 
 const Header: FunctionComponent<HeaderProps> = (props) => {
@@ -45,13 +46,13 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
         }
 
         {hideNav
-          ? <></>
-          : mainNav.toolBarNav
+          ? mainNav.userNav
+          : mainNav.toolbarNav
         }
       </Toolbar>
       {hideNav
         ? <></>
-        : mainNav.sideBarNav
+        : mainNav.sidbarNav
       }
     </HeaderMain>
   );
@@ -59,7 +60,7 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
 
 export default Header;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: '#ffffff',
     boxShadow: '0 1px 15px rgba(50, 50, 93,.2)'

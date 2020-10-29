@@ -1,7 +1,7 @@
 import React, { FunctionComponent }  from 'react'
 
 import { AppConfig } from '../common/config';
-import Layout from '../common/components/Layout';
+import Layout from '../common/components/layout';
 
 const NotFoundPage: FunctionComponent<NotFoundPageProps> = ({
   pageContext

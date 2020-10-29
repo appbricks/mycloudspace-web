@@ -8,45 +8,31 @@ import { makeStyles } from '@material-ui/core/styles';
 import { NavItem } from '@mui-treasury/components/menu/navigation';
 import cx from 'clsx';
 
-export type MenuItem = {
-  title: string
-  subTitle?: string
-
-  icon?: {
-    element: ReactElement
-    showInMain?: boolean
-    anchorRightInMain?: boolean
-    anchorRightInSideBar?: boolean
-  }
-
-  link: string
-}
-
-export class MenuDataItem {
+export default class MainMenuItem {
 
   static DEFAULT = '__default__';
 
-  private items: { [key: string]: MenuItem };
+  private items: { [key: string]: MenuItemData };
 
-  private constructor(item: MenuItem) {
+  private constructor(item: MenuItemData) {
     this.items = { '__default__': item };
   }
 
-  static newItem(item: MenuItem): MenuDataItem {
-    return new MenuDataItem(item);
+  static newItem(item: MenuItemData): MainMenuItem {
+    return new MainMenuItem(item);
   }
 
-  addItem(key: string, item: MenuItem): MenuDataItem {
+  addItem(key: string, item: MenuItemData): MainMenuItem {
     this.items[key] = item;
     return this;
   }
 
-  getItem(key?: string): MenuItem {
+  getItem(key?: string): MenuItemData {
     if (key) {
       const item = this.items[key];
-      return item ? item : this.items[MenuDataItem.DEFAULT];
+      return item ? item : this.items[MainMenuItem.DEFAULT];
     }
-    return this.items[MenuDataItem.DEFAULT];
+    return this.items[MainMenuItem.DEFAULT];
   }
 }
 
@@ -121,7 +107,7 @@ export const SideBarMenuItem: FunctionComponent<SideBarMenuItemProps> = ({
   );
 }
 
-const useStyles = makeStyles((props: StyleProps) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     paddingLeft: 24,
     paddingTop: 16,
@@ -162,14 +148,28 @@ const useStyles = makeStyles((props: StyleProps) => ({
   },
 }));
 
+type MenuItemData = {
+  title: string
+  subTitle?: string
+
+  icon?: {
+    element: ReactElement
+    showInMain?: boolean
+    anchorRightInMain?: boolean
+    anchorRightInSideBar?: boolean
+  }
+
+  link: string
+}
+
 type ToolBarMenuItemProps = {
-  item: MenuItem,
+  item: MenuItemData,
   active?: boolean,
   onClick: () => void
 }
 
 type SideBarMenuItemProps = {
-  item: MenuItem,
+  item: MenuItemData,
   active?: boolean,
   onClick: () => void
 

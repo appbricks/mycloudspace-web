@@ -17,7 +17,7 @@ import {
   DialogBox, 
   Input, 
   PasswordInput 
-} from '../../../common/components/Forms';
+} from '../../../common/components/forms';
 import { DialogState } from './';
 
 const SignIn: FunctionComponent<SignInProps> = (props) => {

@@ -10,16 +10,16 @@ import accountIcon from '@iconify/icons-mdi/account-details-outline';
 import appsIcon from '@iconify/icons-mdi/apps';
 import helpIcon from '@iconify/icons-mdi/help';
 
-import { MenuDataItem } from '../components/Nav/MenuItem';
-import { AppMenuDataItem } from '../components/Nav/AppNav';
+import MainMenuItem from '../components/nav/main/MainMenuItem';
+import { AppMenuDataItem } from '../components/nav/app/AppNav';
 
 import SpacesHome from '../../features/spaces/pages/home';
 import AppsHome from '../../features/apps/pages/home';
 import AccountHome from '../../features/account/pages/home';
 import HelpHome from '../../features/help/pages/home';
 
-export const mainMenu: MenuDataItem[] = [
-  MenuDataItem.newItem({
+export const mainMenu: MainMenuItem[] = [
+  MainMenuItem.newItem({
     title: 'About', 
     icon: { 
       element: <Icon width={24} icon={aboutIcon} />, 
@@ -27,7 +27,7 @@ export const mainMenu: MenuDataItem[] = [
     },
     link: '/about' 
   }),
-  MenuDataItem.newItem({
+  MainMenuItem.newItem({
     title: 'Products', 
     icon: { 
       element: <Icon width={24} icon={productIcon} />, 
@@ -35,7 +35,7 @@ export const mainMenu: MenuDataItem[] = [
     },
     link: '/products' 
   }),
-  MenuDataItem.newItem({
+  MainMenuItem.newItem({
       title: 'Contact', 
       icon: { 
         element: <Icon width={24} icon={contactIcon} />, 
@@ -43,7 +43,7 @@ export const mainMenu: MenuDataItem[] = [
     },
     link: '/contact' 
   }),
-  MenuDataItem
+  MainMenuItem
     .newItem({
       title: 'My Cloud Space', 
       icon: { 

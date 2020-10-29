@@ -2,7 +2,7 @@ import React, { ElementType, FunctionComponent } from 'react';
 import { RouteComponentProps } from '@reach/router';
 
 import { BaseAppProps, BaseContentProps } from '../../config';
-import Layout from '../Layout/Layout';
+import Layout from '../layout/Layout';
 
 const PrivateRoute: FunctionComponent<PrivateRouteProps> = ({ 
   appConfig,
