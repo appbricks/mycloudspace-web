@@ -5,6 +5,7 @@ import { ILayoutBuilder } from '@mui-treasury/layout/builders/LayoutBuilder';
 import { getDrawerSidebar, getSidebarContent } from '@mui-treasury/layout';
 
 import MainMenuItem from './MainMenuItem';
+import { ProfileMenuDataItem } from '../user/getProfileMenu';
 import NavDelegate from './NavDelegate';
 import { ToolbarNav, SidbarNav } from './navbars';
 import UserNav from '../user/UserNav';
@@ -14,7 +15,8 @@ const SidebarContent = getSidebarContent(styled)
 
 const getMainNav = (
   scheme: ILayoutBuilder, 
-  menuItems: MainMenuItem[], 
+  mainMenuItems: MainMenuItem[], 
+  profileMenuItems: ProfileMenuDataItem[],
   rightSideBar = false,
   isLoggedIn = false
 ): MainNav => {
@@ -29,14 +31,14 @@ const getMainNav = (
       });
   });
 
-  const delegate = new NavDelegate(menuItems, isLoggedIn);
+  const delegate = new NavDelegate(mainMenuItems, isLoggedIn);
 
   return {
     delegate: delegate,
 
     toolbarNav: (
       <ToolbarNav 
-        menuItems={menuItems} 
+        menuItems={mainMenuItems} 
         rightSideBar={rightSideBar}   
         sidebarId={sidebarId}     
         isLoggedIn={isLoggedIn} 
@@ -50,7 +52,7 @@ const getMainNav = (
       >
         <SidebarContent>
           <SidbarNav 
-            menuItems={menuItems} 
+            menuItems={mainMenuItems} 
             rightSideBar={rightSideBar}  
             sidebarId={sidebarId}          
             isLoggedIn={isLoggedIn} 
@@ -61,7 +63,9 @@ const getMainNav = (
     ),
 
     userNav: (
-      <UserNav />
+      <UserNav 
+        menuItems={profileMenuItems}
+      />
     )
   };
 };

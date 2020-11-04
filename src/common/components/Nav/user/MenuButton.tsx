@@ -5,6 +5,7 @@ import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import cx from 'clsx';
 
 const MenuButton: FunctionComponent<MenuButtonProps> = ({ 
+  menuAnchor,
   active = false,
   clicked = false,
   children 
@@ -14,6 +15,7 @@ const MenuButton: FunctionComponent<MenuButtonProps> = ({
 
   return (
     <Badge
+      ref={menuAnchor}
       anchorOrigin={{
         vertical: 'bottom',
         horizontal: 'right',
@@ -38,11 +40,11 @@ const MenuButton: FunctionComponent<MenuButtonProps> = ({
 export default MenuButton;
 
 const useStyles = makeStyles(theme => ({
-  dropDownIconInactive: {
+  dropDownIconActive: {
     color: '#4d4d4d',
     transform: 'rotate(0deg)',
   },
-  dropDownIconInactiveAnimate: {
+  dropDownIconActiveAnimate: {
     animation: '$rotateUp 500ms ease-in'
   },
   '@keyframes rotateDown': {
@@ -53,11 +55,11 @@ const useStyles = makeStyles(theme => ({
       transform: 'rotate(180deg)',
     }
   },
-  dropDownIconActive: {
+  dropDownIconInactive: {
     color: '#3f51b5',
     transform: 'rotate(180deg)',
   },
-  dropDownIconActiveAnimate: {
+  dropDownIconInactiveAnimate: {
     animation: '$rotateDown 500ms ease-in'
   },
   '@keyframes rotateUp': {
@@ -71,6 +73,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 type MenuButtonProps = {
+  
+  menuAnchor: React.RefObject<HTMLDivElement>
+
   active?: boolean
   clicked?: boolean
 }

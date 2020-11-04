@@ -6,7 +6,7 @@ import MuiLayout, { Root, getContent } from '@mui-treasury/layout';
 import styled from 'styled-components';
 import { StaticQuery, graphql } from 'gatsby'
 
-import { BaseAppProps } from '../../config/index';
+import { BaseAppProps, BaseContentProps } from '../../config/index';
 
 import Header from '../header';
 import MetaTitle from './MetaTitle';
@@ -15,7 +15,7 @@ import { getMainNav } from '../nav';
 import { headerHeight } from '../../config/layout';
 import { getLayoutViewPortHeight } from './utils';
 
-import MainMenuItem from '../nav/main/MainMenuItem';
+import { getMainMenu, getProfileMenu } from '../nav';
 
 import * as Auth from '../../state/auth';
 
@@ -23,7 +23,7 @@ const Layout: FunctionComponent<LayoutProps> = (props) => {
 
   const {
     appConfig,
-    mainMenu = [],
+    content,
     hideNav = false,
     noBackground = false,
     children
@@ -31,7 +31,10 @@ const Layout: FunctionComponent<LayoutProps> = (props) => {
 
   const isLoggedIn = useSelector(Auth.isLoggedIn);
   const user = useSelector(Auth.user);
-
+  
+  const mainMenu = getMainMenu(appConfig);
+  const profileMenu = getProfileMenu(appConfig, content);
+  
   return (
     <StaticQuery
       query={graphql`
@@ -72,7 +75,7 @@ const Layout: FunctionComponent<LayoutProps> = (props) => {
         });
 
         const styles = useStyles(props);
-        const mainNav = getMainNav(scheme, mainMenu, true, isLoggedIn);
+        const mainNav = getMainNav(scheme, mainMenu, profileMenu, true, isLoggedIn);
 
         return (
           <StylesProvider injectFirst>
@@ -144,8 +147,7 @@ const theme = createMuiTheme({
 
 const Content = getContent(styled);
 
-type LayoutProps = BaseAppProps & {
-  mainMenu?: MainMenuItem[]
+type LayoutProps = BaseAppProps & BaseContentProps & {
   hideNav?: boolean
 
   bottomGutterHeight?: string

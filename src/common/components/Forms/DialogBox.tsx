@@ -56,7 +56,7 @@ const DialogBox: FunctionComponent<DialogBoxProps> = ({
       ref={ref}
       variant='outlined' 
       elevation={4} 
-      // skip animation if paper div has bin loaded
+      // skip animation if paper div has been loaded
       className={cx(styles.dialog, ref.current || animationStyles.dialog)}
     >
       <h1 className={styles.heading}>{title}</h1>

@@ -5,8 +5,11 @@ import { makeStyles  } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 
 import ProfileMenu from './ProfileMenu';
+import { ProfileMenuDataItem } from './getProfileMenu';
 
-const UserNav: FunctionComponent<UserNavProps> = (props) => {
+const UserNav: FunctionComponent<UserNavProps> = ({
+  menuItems
+}) => {
 
   const styles = useStyles();
 
@@ -15,6 +18,7 @@ const UserNav: FunctionComponent<UserNavProps> = (props) => {
       <ProfileMenu
         avatarName='Mevan'
         avatarUrl='/static/35edb927db324db56e94b270710fe900/4fe8c/mevan.jpg'
+        menuItems={menuItems}
       />
     </Box>
   );
@@ -35,4 +39,5 @@ const useStyles = makeStyles(theme => ({
 }));
 
 type UserNavProps = {
+  menuItems: ProfileMenuDataItem[]
 }

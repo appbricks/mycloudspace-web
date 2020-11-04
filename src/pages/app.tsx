@@ -3,8 +3,6 @@ import { graphql } from 'gatsby';
 import { Router } from "@reach/router"
 
 import { AppConfig } from '../common/config';
-import { mainMenu, userMenu } from '../common/config/menus';
-
 import { PublicRoute, PrivateRoute } from '../common/components/routes';
 
 import {
@@ -53,35 +51,30 @@ const App: FunctionComponent<AppProps> = ({
         path="/mycs/signin"
         component={SignIn}
         appConfig={pageContext.appConfig}
-        mainMenu={mainMenu}
         content={contentMap['/mycs/signin']}
       />
       <PublicRoute
         path="/mycs/signup"
         component={SignUp}
         appConfig={pageContext.appConfig}
-        mainMenu={mainMenu}
         content={contentMap['/mycs/signup']}
       />
       <PublicRoute
         path="/mycs/verify"
         component={Verify}
         appConfig={pageContext.appConfig}
-        mainMenu={mainMenu}
         content={contentMap['/mycs/verify']}
       />
       <PublicRoute
         path="/mycs/authcode"
         component={AuthCode}
         appConfig={pageContext.appConfig}
-        mainMenu={mainMenu}
         content={contentMap['/mycs/authcode']}
       />
 
       <PrivateRoute
         path="/mycs"
         component={AppNav}
-        componentProps={{ menuItems: userMenu }}
         appConfig={pageContext.appConfig}
         content={contentMap}
       />

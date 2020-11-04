@@ -4,12 +4,17 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
+import { BaseAppProps } from '../../../config';
+import getAppMenu, { AppMenuDataItem } from './getAppMenu';
+
 const AppNav: FunctionComponent<AppNavProps> = (props) => {
 
   const {
-    menuItems,
+    appConfig,
     ...other
   } = props;
+
+  const menuItems = getAppMenu(appConfig);
 
   const theme = useTheme();
   const bottomBar = useMediaQuery(theme.breakpoints.down('xs'));
@@ -39,7 +44,7 @@ const AppNav: FunctionComponent<AppNavProps> = (props) => {
             <AppNavTab
               key={index}
               icon={item.icon}
-              label={item.label}
+              label={item.title}
               {...a11yProps(index)}
             />
           ))}
@@ -50,7 +55,7 @@ const AppNav: FunctionComponent<AppNavProps> = (props) => {
           key={index}
           value={value}
           index={index}
-          component={item.component}
+          component={item.feature}
           {...other}
         />
       ))}
@@ -64,7 +69,7 @@ const AppNav: FunctionComponent<AppNavProps> = (props) => {
             <AppNavTab
               key={index}
               icon={item.icon}
-              label={item.label}
+              label={item.title}
               {...a11yProps(index)}
             />
           ))}
@@ -192,8 +197,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type AppNavProps = {
-  menuItems: AppMenuDataItem[]
+type AppNavProps = BaseAppProps & {
 }
 
 type AppNavTabsProps = {
@@ -210,9 +214,5 @@ type AppNavTabProps = {
 type TabPanelProps = {
   index: number
   value: number
-  component: ElementType
-}
-
-export type AppMenuDataItem = AppNavTabProps & {
   component: ElementType
 }

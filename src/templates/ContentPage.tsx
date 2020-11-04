@@ -5,7 +5,6 @@ import Layout, { calcViewPortDimensions } from '../common/components/layout';
 import { StaticFooter } from '../common/components/footer';
 
 import { AppConfig } from '../common/config';
-import { mainMenu } from '../common/config/menus';
 
 import ContentTopic, { TopicMetadata, TopicRefType } from './components/ContentTopic';
 import CustomTagProvider from './markdown';
@@ -31,7 +30,6 @@ const ContentPage: FunctionComponent<ContentPageProps> = ({
     <CustomTagProvider>
       <Layout 
         appConfig={pageContext.appConfig} 
-        mainMenu={mainMenu}
         bottomGutterHeight={bottomGutterHeight}
         noBackground
       >

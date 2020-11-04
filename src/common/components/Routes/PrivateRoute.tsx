@@ -15,8 +15,9 @@ const PrivateRoute: FunctionComponent<PrivateRouteProps> = ({
 
   return (
     <Layout 
-      appConfig={appConfig} 
       hideNav
+      appConfig={appConfig} 
+      {...other}
     >
       <Component 
         appConfig={appConfig} 

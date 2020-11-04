@@ -4,11 +4,8 @@ import { RouteComponentProps } from '@reach/router';
 import { BaseAppProps, BaseContentProps } from '../../config';
 import Layout from '../layout/Layout';
 
-import MainMenuItem from '../nav/main/MainMenuItem';
-
 const PublicRoute: FunctionComponent<PublicRouteProps> = ({
   appConfig,
-  mainMenu,
   component: Component,
   componentProps,
   ...other
@@ -19,7 +16,7 @@ const PublicRoute: FunctionComponent<PublicRouteProps> = ({
   return (
     <Layout
       appConfig={appConfig}
-      mainMenu={mainMenu}
+      {...other}
     >
       <Component
         appConfig={appConfig}
@@ -35,8 +32,6 @@ export default PublicRoute;
 type PublicRouteProps = RouteComponentProps<
   BaseAppProps &
   BaseContentProps & {
-
-  mainMenu: MainMenuItem[]
 
   component: ElementType
   componentProps?: { [props: string]: any }

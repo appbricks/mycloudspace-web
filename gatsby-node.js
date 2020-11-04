@@ -6,6 +6,7 @@
 const path = require('path');
 
 const { createFilePath } = require('gatsby-source-filesystem');
+const { appConfigQuery } = require('./src/common/config/appConfig');
 
 var appConfig = {};
 
@@ -31,28 +32,7 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
 
-  const appConfigQueryResult = await graphql(`
-    {
-      allConfigJson {
-        edges {
-          node {
-            appConfig {
-              version
-              logos {
-                primaryLogo
-                secondaryLogo
-                logoBadgeColor
-              }
-              layout {
-                backgroundImage
-                backgroundOverlay
-              }
-            }
-          }
-        }
-      }
-    }
-  `);
+  const appConfigQueryResult = await graphql(`${appConfigQuery}`);
   appConfig = appConfigQueryResult.data.allConfigJson.edges[0].node.appConfig;
 
   const mdxQueryResult = await graphql(`
