@@ -13,7 +13,7 @@ import cx from 'clsx';
 
 import { headerHeight } from '../../config/layout';
 
-const DialogBox: FunctionComponent<DialogBoxProps> = ({
+const FormBox: FunctionComponent<FormBoxProps> = ({
   height,
   width,
   fromHeight = 0,
@@ -111,7 +111,7 @@ const DialogBox: FunctionComponent<DialogBoxProps> = ({
   );
 }
 
-export default DialogBox;
+export default FormBox;
 
 const useStyles = makeStyles((theme) => ({
   dialog: (props: StyleProps) => ({
@@ -167,7 +167,7 @@ const useStyles = makeStyles((theme) => ({
   }  
 }));
 
-type DialogBoxProps = {
+type FormBoxProps = {
   height: number
   width: number
   fromHeight?: number

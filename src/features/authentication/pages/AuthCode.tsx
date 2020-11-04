@@ -15,7 +15,7 @@ import verifyIcon from '@iconify/icons-mdi/check-bold';
 import { BaseAppProps, BaseContentProps } from '../../../common/config';
 
 import {
-  DialogBox,
+  FormBox,
   CodeInput,
 } from '../../../common/components/forms';
 import { DialogState } from '.';
@@ -65,7 +65,7 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
   };
 
   return (
-    <DialogBox
+    <FormBox
       height={dialogState.size.height}
       width={dialogState.size.width}
       fromHeight={props.location.state.fromDialog
@@ -107,7 +107,7 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
         />
       </Grid>
 
-    </DialogBox>
+    </FormBox>
   );
 }
 
