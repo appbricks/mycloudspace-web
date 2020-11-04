@@ -22,7 +22,7 @@ import { BaseAppProps, BaseContentProps } from '../../../common/config';
 import { StaticContent } from '../../../common/components/content';
 
 import {
-  DialogBox,
+  FormBox,
   Input,
   PasswordInput,
   PhoneNumberInput
@@ -73,7 +73,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
   };
 
   return (
-    <DialogBox
+    <FormBox
       height={dialogState.size.height}
       width={dialogState.size.width}
       fromHeight={props.location.state.fromDialog
@@ -155,7 +155,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           compact
         />
         <StaticContent 
-          body={props.content['accept-terms'] as string}
+          body={props.content!['accept-terms'] as string}
           style={{
             margin: '-1rem 1rem -0.5rem 1rem'
           }}
@@ -174,7 +174,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
         />        
       </Grid>
 
-    </DialogBox>
+    </FormBox>
   );
 }
 

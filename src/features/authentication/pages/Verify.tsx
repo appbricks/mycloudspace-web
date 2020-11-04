@@ -14,7 +14,7 @@ import verifyIcon from '@iconify/icons-mdi/check-bold';
 import { BaseAppProps, BaseContentProps } from '../../../common/config';
 
 import {
-  DialogBox,
+  FormBox,
   CodeInput,
 } from '../../../common/components/forms';
 import { DialogState } from '.';
@@ -59,7 +59,7 @@ const VerifyAccount: FunctionComponent<VerifyAccountProps> = (props) => {
   };
 
   return (
-    <DialogBox
+    <FormBox
       height={dialogState.size.height}
       width={dialogState.size.width}
       fromHeight={props.location.state.fromDialog
@@ -101,7 +101,7 @@ const VerifyAccount: FunctionComponent<VerifyAccountProps> = (props) => {
         />
       </Grid>
 
-    </DialogBox>
+    </FormBox>
   );
 }
 

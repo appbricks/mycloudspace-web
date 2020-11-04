@@ -14,7 +14,7 @@ import signupIcon from '@iconify/icons-mdi/account-edit';
 import { BaseAppProps, BaseContentProps } from '../../../common/config';
 
 import { 
-  DialogBox, 
+  FormBox, 
   Input, 
   PasswordInput 
 } from '../../../common/components/forms';
@@ -61,7 +61,7 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
   };
 
   return (
-    <DialogBox
+    <FormBox
       height={dialogState.size.height}
       width={dialogState.size.width}
       fromHeight={props.location.state.fromDialog
@@ -112,7 +112,7 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
         />
       </Grid>
 
-    </DialogBox>
+    </FormBox>
   );
 }
 
