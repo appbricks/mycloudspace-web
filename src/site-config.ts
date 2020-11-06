@@ -28,6 +28,7 @@ export const icons = {
 // features referenced by metadata
 import { ElementType } from 'react';
 import Profile from './features/profile/pages/Profile';
+import Security from './features/profile/pages/Security';
 import SpacesHome from './features/spaces/pages/home';
 import AppsHome from './features/apps/pages/home';
 import AccountHome from './features/account/pages/home';
@@ -35,6 +36,7 @@ import HelpHome from './features/help/pages/home';
 
 export const features = {
   Profile,
+  Security,
   SpacesHome,
   AppsHome,
   AccountHome,

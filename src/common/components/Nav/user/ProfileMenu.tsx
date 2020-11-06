@@ -84,6 +84,14 @@ const ProfileMenu: FunctionComponent<ProfileMenuProps> = ({
       popupAnchor: null
     });
   };
+  const handleMenuOptionClose = () => {
+    setState({      
+      active: false, 
+      clicked: false,
+      selected: -1,
+      popupAnchor: null
+    });
+  }
 
   const Feature: FunctionComponent<{
     component: ElementType,
@@ -151,12 +159,20 @@ const ProfileMenu: FunctionComponent<ProfileMenuProps> = ({
           </Grow>
         )}
       </Popper>
-      {state.selected == -1 || (
-        <Feature 
-          component={menuItems[state.selected].feature} 
-          componentProps={menuItems[state.selected].featureProps} 
-        />
-      )}
+      {menuItems.map((item, index) => {
+        if (item.feature) {
+          return (
+            <Feature 
+              component={item.feature} 
+              componentProps={{
+                open: index == state.selected,
+                onClose: handleMenuOptionClose.bind(this),
+                ...item.featureProps
+              }} 
+            />
+          );
+        }
+      })}
     </>   
   );
 };
