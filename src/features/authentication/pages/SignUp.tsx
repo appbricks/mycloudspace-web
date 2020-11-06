@@ -34,7 +34,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
 
   const dialogState: DialogState = {
     size: {
-      height: 615,
+      height: 624,
       width: 350  
     }
   }
@@ -171,7 +171,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           style={{
             marginLeft: '0.2rem'
           }}
-        />        
+        />
       </Grid>
 
     </FormBox>
