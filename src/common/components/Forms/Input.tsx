@@ -66,10 +66,10 @@ const Input: FunctionComponent<InputProps> = ({
       margin={compact ? 'dense' : undefined}
       className={
         cx(
+          className,
           error ? styles.formControlWithError : styles.formControl, 
           first && styles.firstControl,
-          last && styles.lastControl,
-          className
+          last && styles.lastControl
         )
       }
     >
@@ -139,10 +139,10 @@ export default Input;
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
-    margin: '0rem 1rem 1.9rem 1rem'
+    marginBottom: '1.9rem'
   },
   formControlWithError: {
-    margin: '0rem 1rem 0.5rem 1rem'
+    marginBottom: '0.475rem'
   },
   firstControl: {
     marginTop: '1.5rem'
