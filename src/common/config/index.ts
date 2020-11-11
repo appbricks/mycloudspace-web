@@ -1,3 +1,5 @@
+import * as redux from 'redux';
+
 // Site application config binding - site/config/site-config.json
 export type AppConfig = {
   logos: {
@@ -48,6 +50,13 @@ export type AppConfig = {
           title: string
           icon: string
           feature: string
+          command: {
+            name: string
+            args: {
+              name: string
+              value: string
+            }[]
+          }
         }[]
       }
     },
@@ -85,5 +94,8 @@ export type BaseContentProps = {
 }
 
 export type Content = contentKeyMap | { [path: string]: contentKeyMap }
-
 type contentKeyMap = {[key: string]: string}
+
+// Command function signature
+export type CommandFn = (dispatch: redux.Dispatch<redux.Action>, prop: CommandProps) => void;
+export type CommandProps = { [name: string]: string };

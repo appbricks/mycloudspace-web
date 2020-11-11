@@ -1,8 +1,17 @@
 import React, { ReactElement, ElementType } from 'react';
 import { Icon } from '@iconify/react';
 
-import { AppConfig, Content } from '../../../config';
-import { icons, features } from '../../../../site-config';
+import { 
+  AppConfig, 
+  Content, 
+  CommandProps, 
+  CommandFn 
+} from '../../../config';
+import { 
+  icons, 
+  features, 
+  commands
+} from '../../../../site-config';
 
 const getProfileMenu = (appConfig: AppConfig, content?: Content): ProfileMenuDataItem[] => {
 
@@ -12,6 +21,18 @@ const getProfileMenu = (appConfig: AppConfig, content?: Content): ProfileMenuDat
     const { iconDisplay, profile } = appConfig.navigation.userNavMenu;
 
     profile.menuItems.forEach(item => {
+
+      let commandName: CommandFn | undefined;
+      let commandArgs: CommandProps | undefined;
+
+      if (item.command) {
+        commandName = commands[item.command.name];
+        commandArgs = {};
+        item.command.args.forEach(arg => {
+          commandArgs![arg.name] = arg.value
+        })  
+      }
+
       profileMenuItems.push({
         divider: item.divider,
         title: item.title,
@@ -20,7 +41,9 @@ const getProfileMenu = (appConfig: AppConfig, content?: Content): ProfileMenuDat
         featureProps: {
           appConfig,
           content
-        }
+        },
+        commandFn: commandName,
+        commandProps: commandArgs
       })
     });
   }
@@ -34,8 +57,13 @@ const profileMenuItems: ProfileMenuDataItem[] = [];
 
 export type ProfileMenuDataItem = {
   divider: boolean
+  
   title: string
   icon: ReactElement
-  feature: ElementType
+
+  feature?: ElementType
   featureProps?: { [props: string]: any }
+  
+  commandFn?: CommandFn
+  commandProps?: CommandProps
 }

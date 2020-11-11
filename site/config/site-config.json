@@ -93,7 +93,15 @@
               "divider": true,
               "title": "Sign Out",
               "icon": "logoutIcon",
-              "uri": "/mycs/signout"
+              "command": {
+                "name": "signout",
+                "args": [ 
+                  {
+                    "name": "uri",
+                    "value": "/mycs/signin"
+                  }
+                ]
+              }
             }
           ]
         }

@@ -1,5 +1,5 @@
 import { RootState } from './store';
-import { login, logout } from './counter';
+import { signin, signout } from './counter';
 
 // isLoggedIn check selector
 export const isLoggedIn = (state: RootState) => state.counter.loggedIn;
@@ -7,5 +7,5 @@ export const isLoggedIn = (state: RootState) => state.counter.loggedIn;
 // user selector
 export const user = (state: RootState) => state.counter.user;
 
-// login action
-export { login, logout };
+// signin/signout actions
+export { signin, signout };

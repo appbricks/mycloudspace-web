@@ -29,7 +29,7 @@ export const counterSlice = createSlice({
     incrementByAmount: (state, action) => {
       state.value += action.payload
     },
-    login: state => {
+    signin: state => {
       state.loggedIn = true;
 
       const user = new User();
@@ -40,7 +40,7 @@ export const counterSlice = createSlice({
       user.mobilePhone = '+19786526615';
       state.user = user;      
     },
-    logout: state => {
+    signout: state => {
       state.loggedIn = false;
       state.user = undefined;
     }
@@ -51,8 +51,8 @@ export const {
   increment, 
   decrement, 
   incrementByAmount,
-  login,
-  logout
+  signin,
+  signout
 } = counterSlice.actions
 
 export default counterSlice.reducer

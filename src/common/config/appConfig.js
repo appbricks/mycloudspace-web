@@ -53,7 +53,14 @@ exports.appConfigQuery = `{
                   divider
                   title
                   icon
-                  feature                
+                  feature
+                  command {
+                    name
+                    args {
+                      name
+                      value
+                    }
+                  }
                 }
               }
             }

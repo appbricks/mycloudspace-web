@@ -7,6 +7,7 @@ import React, {
   useState,
   useEffect
 } from 'react';
+import { useDispatch } from 'react-redux';
 import { makeStyles, withStyles  } from '@material-ui/core/styles';  
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
@@ -30,6 +31,7 @@ const ProfileMenu: FunctionComponent<ProfileMenuProps> = ({
 }) => {
 
   const styles = useStyles();
+  const dispatch = useDispatch();
 
   const menuAnchor = useRef<HTMLDivElement>(null);
 
@@ -77,6 +79,10 @@ const ProfileMenu: FunctionComponent<ProfileMenuProps> = ({
     }
   }
   const handleSelection = (index: number) => {
+    if (menuItems[index].commandFn) {
+      menuItems[index].commandFn!(dispatch, menuItems[index].commandProps!);
+    }
+
     setState({
       active: false, 
       clicked: true,
@@ -163,6 +169,7 @@ const ProfileMenu: FunctionComponent<ProfileMenuProps> = ({
         if (item.feature) {
           return (
             <Feature 
+              key={index}
               component={item.feature} 
               componentProps={{
                 open: index == state.selected,

@@ -3,10 +3,10 @@ import React, {
   MouseEvent,
   useState
 } from 'react';
+import { navigate } from '@reach/router';
 import { useDispatch } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import { navigate } from '@reach/router';
 
 import { Icon } from '@iconify/react';
 import cancelIcon from '@iconify/icons-mdi/cancel';
@@ -53,7 +53,7 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
         break;
       }
       case 1: {
-        dispatch(Auth.login());
+        dispatch(Auth.signin());
         navigate('/mycs', {
           state: {
             fromDialog: dialogState

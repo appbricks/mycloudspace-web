@@ -3,9 +3,9 @@ import React, {
   MouseEvent,
   useState
 } from 'react';
+import { navigate } from '@reach/router';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import { navigate } from '@reach/router';
 
 import { Icon } from '@iconify/react';
 import cancelIcon from '@iconify/icons-mdi/cancel';

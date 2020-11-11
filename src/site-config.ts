@@ -42,3 +42,11 @@ export const features = {
   AccountHome,
   HelpHome
 } as {[key: string]: ElementType};
+
+// action functions referenced by metadata
+import { CommandFn } from './common/config';
+import signout from './features/authentication/commands/signout';
+
+export const commands = {
+  signout
+} as {[key: string]: CommandFn};
