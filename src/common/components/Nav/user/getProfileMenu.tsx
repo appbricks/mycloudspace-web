@@ -1,6 +1,8 @@
 import React, { ReactElement, ElementType } from 'react';
 import { Icon } from '@iconify/react';
 
+import { Logger } from '@appbricks/utils';
+
 import { 
   AppConfig, 
   Content, 
@@ -23,17 +25,25 @@ const getProfileMenu = (appConfig: AppConfig, content?: Content): ProfileMenuDat
     profile.menuItems.forEach(item => {
 
       let commandName: CommandFn | undefined;
-      let commandArgs: CommandProps | undefined;
+      let commandProps: CommandProps | undefined;
 
       if (item.command) {
         commandName = commands[item.command.name];
-        commandArgs = {};
+        commandProps = {};
         item.command.args.forEach(arg => {
-          commandArgs![arg.name] = arg.value
-        })  
+          commandProps![arg.name] = arg.value
+        })
+        if (!commandName) {
+          Logger.error(
+            'getProfileMenu', 
+            `unable to find profile menu command '${item.command.name}' in`, 
+            commands
+          )
+          throw `unable to find profile menu command '${item.command.name}'`;
+        }
       }
 
-      profileMenuItems.push({
+      const menuItem: ProfileMenuDataItem = {
         divider: item.divider,
         title: item.title,
         icon: <Icon width={iconDisplay.width} icon={icons[item.icon]} />,
@@ -43,8 +53,19 @@ const getProfileMenu = (appConfig: AppConfig, content?: Content): ProfileMenuDat
           content
         },
         commandFn: commandName,
-        commandProps: commandArgs
-      })
+        commandProps: commandProps
+      };
+
+      if (!menuItem.feature && !menuItem.commandFn) {
+        Logger.error(
+          'getProfileMenu', 
+          `unable to find profile menu feature '${item.feature}' in`, 
+          features
+        )
+        throw `unable to find profile menu feature '${item.feature}'`;
+      }
+
+      profileMenuItems.push(menuItem)
     });
   }
 
