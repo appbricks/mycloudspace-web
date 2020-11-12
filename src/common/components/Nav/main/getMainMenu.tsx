@@ -1,6 +1,8 @@
 import React from 'react';
 import { Icon } from '@iconify/react';
 
+import { Logger } from '@appbricks/utils';
+
 import MainMenuItem from './MainMenuItem';
 
 import { AppConfig } from '../../../config';
@@ -43,6 +45,12 @@ const getMainMenu = (appConfig: AppConfig): MainMenuItem[] => {
 
       mainMenuItems.push(menuItem);
     });
+
+    Logger.trace(
+      'getMainMenu',
+      'main menu items initialized',
+      mainMenuItems
+    );
   }
   return mainMenuItems;
 }

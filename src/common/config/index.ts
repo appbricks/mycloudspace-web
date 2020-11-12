@@ -1,7 +1,9 @@
+import * as react from 'react';
 import * as redux from 'redux';
 
 // Site application config binding - site/config/site-config.json
 export type AppConfig = {
+  // raw config elements
   logos: {
     primaryLogo: string
     secondaryLogo: string
@@ -25,6 +27,18 @@ export type AppConfig = {
     lightModeName: string
     themes: {
       name: string
+    }[]
+  },
+  routes: {
+    public: {
+      name: string
+      uri: string
+      feature: string
+    }[],
+    private: {
+      name: string
+      uri: string
+      feature: string
     }[]
   }
   navigation: {
@@ -71,6 +85,9 @@ export type AppConfig = {
       }[]
     }
   }
+
+  // post processed config elements
+  routeMap: { [uri: string]: Route }
 }
 
 type MainMenuItem = {
@@ -81,6 +98,12 @@ type MainMenuItem = {
   showIconInMain: boolean
 
   uri: string
+}
+
+type Route = {
+  type: string
+  uri: string
+  feature: react.ElementType
 }
 
 // Base property type for application components

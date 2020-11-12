@@ -1,3 +1,5 @@
+import { Logger } from '@appbricks/utils';
+
 // icons referenced by metadata
 import aboutIcon from '@iconify/icons-mdi/information-outline';
 import productIcon from '@iconify/icons-mdi/package-variant-closed';
@@ -25,16 +27,36 @@ export const icons = {
   helpIcon
 } as {[key: string]: object};
 
+Logger.trace(
+  'site-config', 
+  'appconfig icon lookup map', 
+  icons
+);
+
 // features referenced by metadata
 import { ElementType } from 'react';
-import Profile from './features/profile/pages/Profile';
-import Security from './features/profile/pages/Security';
-import SpacesHome from './features/spaces/pages/home';
-import AppsHome from './features/apps/pages/home';
-import AccountHome from './features/account/pages/home';
-import HelpHome from './features/help/pages/home';
+import AppNav from './common/components/nav/app/AppNav';
+import {
+  SignIn,
+  SignUp,
+  Verify,
+  AuthCode
+} from './features/authentication/pages';
+import {
+  Profile,
+  Security
+} from './features/profile/pages';
+import { SpacesHome } from './features/spaces/pages';
+import { AppsHome } from './features/apps/pages';
+import { AccountHome } from './features/account/pages';
+import { HelpHome } from './features/help/pages';
 
 export const features = {
+  AppNav,
+  SignIn,
+  SignUp,
+  Verify,
+  AuthCode,
   Profile,
   Security,
   SpacesHome,
@@ -43,6 +65,12 @@ export const features = {
   HelpHome
 } as {[key: string]: ElementType};
 
+Logger.trace(
+  'site-config', 
+  'appconfig feature lookup map', 
+  features
+);
+
 // action functions referenced by metadata
 import { CommandFn } from './common/config';
 import signout from './features/authentication/commands/signout';
@@ -50,3 +78,9 @@ import signout from './features/authentication/commands/signout';
 export const commands = {
   signout
 } as {[key: string]: CommandFn};
+
+Logger.trace(
+  'site-config', 
+  'appconfig command lookup map', 
+  commands
+);

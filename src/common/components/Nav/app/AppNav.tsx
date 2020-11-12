@@ -5,7 +5,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
 import { BaseAppProps } from '../../../config';
-import getAppMenu, { AppMenuDataItem } from './getAppMenu';
+import getAppMenu from './getAppMenu';
 
 const AppNav: FunctionComponent<AppNavProps> = (props) => {
 

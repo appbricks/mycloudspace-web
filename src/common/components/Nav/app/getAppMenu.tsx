@@ -32,6 +32,12 @@ const getAppMenu = (appConfig: AppConfig): AppMenuDataItem[] => {
 
       appMenuItems.push(menuItem);
     });
+
+    Logger.trace(
+      'getAppMenu',
+      'app menu items initialized',
+      appMenuItems
+    );
   }
 
   return appMenuItems;

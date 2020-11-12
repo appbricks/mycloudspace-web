@@ -21,6 +21,18 @@ exports.appConfigQuery = `{
               name
             }
           }
+          routes {
+            public {
+              name
+              uri
+              feature
+            }
+            private {
+              name
+              uri
+              feature
+            }
+          }
           navigation {
             mainNavMenu {
               iconDisplay {

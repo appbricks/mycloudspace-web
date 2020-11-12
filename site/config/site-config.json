@@ -22,6 +22,37 @@
         }
       ]
     },
+    "routes": {
+      "public": [
+        { 
+          "name": "signin", 
+          "uri": "/mycs/signin",
+          "feature": "SignIn"
+        },
+        { 
+          "name": "signup", 
+          "uri": "/mycs/signup",
+          "feature": "SignUp"
+        },
+        { 
+          "name": "verify", 
+          "uri": "/mycs/verify",
+          "feature": "Verify"
+        },
+        { 
+          "name": "authcode", 
+          "uri": "/mycs/authcode",
+          "feature": "AuthCode"
+        }
+      ],
+      "private": [
+        { 
+          "name": "appHome", 
+          "uri": "/mycs",
+          "feature": "AppNav"
+        }
+      ]
+    },    
     "navigation": {
       "mainNavMenu": {
         "iconDisplay": {

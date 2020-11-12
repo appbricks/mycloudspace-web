@@ -67,6 +67,12 @@ const getProfileMenu = (appConfig: AppConfig, content?: Content): ProfileMenuDat
 
       profileMenuItems.push(menuItem)
     });
+
+    Logger.trace(
+      'getProfileMenu',
+      'user nav profile menu items initialized',
+      profileMenuItems
+    );
   }
 
   return profileMenuItems;
