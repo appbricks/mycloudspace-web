@@ -9,8 +9,7 @@ import {
   SignIn,
   SignUp,
   Verify,
-  AuthCode,
-  SignOut
+  AuthCode
 } from '../features/authentication/pages';
 import {
   AppNav
