@@ -1,8 +1,11 @@
 import React, { ElementType, FunctionComponent } from 'react';
-import { RouteComponentProps } from '@reach/router';
+import { useSelector } from 'react-redux';
+import { RouteComponentProps, Redirect } from '@reach/router';
 
 import { BaseAppProps, BaseContentProps } from '../../config';
 import Layout from '../layout/Layout';
+
+import * as Auth from '../../state/auth';
 
 const PrivateRoute: FunctionComponent<PrivateRouteProps> = ({ 
   appConfig,
@@ -12,6 +15,16 @@ const PrivateRoute: FunctionComponent<PrivateRouteProps> = ({
 }) => {
   if (!appConfig || !Component) 
     throw 'properties appConfig and Component are required for PrivateRoute element';
+
+  const isLoggedIn = useSelector(Auth.isLoggedIn);
+  if (!isLoggedIn) {
+    return (
+      <Redirect 
+        to={appConfig.routeMap['signin'].uri} 
+        noThrow 
+      />
+    );
+  }
 
   return (
     <Layout 
