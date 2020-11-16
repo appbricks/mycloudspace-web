@@ -106,7 +106,7 @@ const Profile: FunctionComponent<ProfileProps> = ({
               ? <Icon width={24} icon={emailConfirmed} style={{ color: '#31a07f' }}/>
               : <IconButton
                   edge='end'
-                  style={{ color: '#ff6700' }}
+                  style={{ color: '#ff9966' }}
                 >
                   <Icon width={24} icon={emailUnconfirmed} />
                 </IconButton>
@@ -125,7 +125,7 @@ const Profile: FunctionComponent<ProfileProps> = ({
               ? <Icon width={24} icon={phoneConfirmed} style={{ color: '#31a07f' }}/>
               : <IconButton
                   edge='end'
-                  style={{ color: '#ff6700' }}
+                  style={{ color: '#ff9966' }}
                 >
                   <Icon width={24} icon={phoneUnconfirmed} />
                 </IconButton>
