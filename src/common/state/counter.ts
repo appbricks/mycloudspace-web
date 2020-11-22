@@ -1,12 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { User } from '@appbricks/identity';
+import { persistReducer } from 'redux-persist'
+import sessionStorage from 'redux-persist/lib/storage/session'
 
-type CounterState = {
-  value: number
-  loggedIn: boolean
-  user?: User
-}
+import { User } from '@appbricks/identity';
 
 export const counterSlice = createSlice({
   name: 'counter',
@@ -53,6 +50,19 @@ export const {
   incrementByAmount,
   signin,
   signout
-} = counterSlice.actions
+} = counterSlice.actions;
 
-export default counterSlice.reducer
+export default persistReducer(
+  {
+    key: 'counter',
+    storage: sessionStorage,
+    blacklist: []
+  }, 
+  counterSlice.reducer
+);
+
+type CounterState = {
+  value: number
+  loggedIn: boolean
+  user?: User
+}
