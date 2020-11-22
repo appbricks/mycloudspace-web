@@ -14,17 +14,17 @@ import {
   combineEpicsWithGlobalErrorHandler
 } from '@appbricks/utils';
 
-import { initServices } from '../services';
+import app from './app';
+import { authService } from '../services';
 
 /** TEST */
 import counterReducer from './counter';
 
-const {
-  authService
-} = initServices();
-
 // store state reducers
 const rootReducer = combineReducers({
+  // application state reducer
+  app,
+  // authentication
   auth: authService.reducer(),
 
   /** TEST */

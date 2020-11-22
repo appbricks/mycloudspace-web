@@ -2,6 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { useSelector } from 'react-redux';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { StylesProvider, createMuiTheme, makeStyles } from '@material-ui/core/styles';
+import { SnackbarProvider } from 'notistack';
 import MuiLayout, { Root, getContent } from '@mui-treasury/layout';
 import styled from 'styled-components';
 import { StaticQuery, graphql } from 'gatsby'
@@ -10,6 +11,7 @@ import { BaseAppProps, BaseContentProps } from '../../config/index';
 
 import Header from '../header';
 import MetaTitle from './MetaTitle';
+import Notifier from './Notifier';
 import { getMainNav } from '../nav';
 
 import { headerHeight } from '../../config/layout';
@@ -92,9 +94,14 @@ const Layout: FunctionComponent<LayoutProps> = (props) => {
                 hideNav={hideNav}
               />
 
-              <Content className={styles.content}>
-                {children}
-              </Content>
+              <SnackbarProvider>
+                <Notifier />
+
+                <Content className={styles.content}>
+                  {children}
+                </Content>
+
+              </SnackbarProvider>
             </Root>
           </StylesProvider>
         )

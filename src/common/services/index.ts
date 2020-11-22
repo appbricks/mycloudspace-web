@@ -14,7 +14,7 @@ import {
 
 import { isBrowser } from '../utils';
 
-export const initServices = (): Services => {
+const initServices = (): Services => {
 
   // set log trace levels in dev environment
   if (!process.env.NODE_ENV || process.env.NODE_ENV == 'development') {
@@ -59,6 +59,10 @@ export const initServices = (): Services => {
     authService: new AuthService(new AwsProvider(Auth))
   };
 }
+
+export const {
+  authService
+} = initServices();
 
 type Services = {
   authService: AuthService
