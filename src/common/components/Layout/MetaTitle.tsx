@@ -2,11 +2,7 @@ import React, { FunctionComponent } from 'react'
 import { StaticQuery, graphql } from 'gatsby'
 import { Helmet } from 'react-helmet';
 
-type Props = {
-  title?: string
-}
-
-const MetaTitle: FunctionComponent<Props> = ({title = undefined}) =>
+const MetaTitle: FunctionComponent<MetaTitleProps> = ({title = undefined}) =>
   <StaticQuery
     query={graphql`
       query {
@@ -23,3 +19,7 @@ const MetaTitle: FunctionComponent<Props> = ({title = undefined}) =>
   />
 
 export default MetaTitle;
+
+type MetaTitleProps = {
+  title?: string
+}
