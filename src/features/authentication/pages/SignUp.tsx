@@ -3,6 +3,7 @@ import React, {
   MouseEvent,
   useState
 } from 'react';
+import { connect, useDispatch } from 'react-redux';
 import { navigate } from '@reach/router';
 import Grid from '@material-ui/core/Grid';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -13,9 +14,17 @@ import { Icon } from '@iconify/react';
 import cancelIcon from '@iconify/icons-mdi/cancel';
 import signupIcon from '@iconify/icons-mdi/account-edit';
 
-import User from '@material-ui/icons/Person';
-import Email from '@material-ui/icons/Email';
-import Phone from '@material-ui/icons/Smartphone';
+import UserIcon from '@material-ui/icons/Person';
+import EmailIcon from '@material-ui/icons/Email';
+import PhoneIcon from '@material-ui/icons/Smartphone';
+
+import { 
+  usernameValidator,
+  passwordValidator,
+  emailAddressValidator,
+  phoneNumberValidator,
+  inputValidator
+} from '@appbricks/data-validators';
 
 import { BaseAppProps, BaseContentProps } from '../../../common/config';
 import { StaticContent } from '../../../common/components/content';
@@ -28,8 +37,20 @@ import {
 } from '../../../common/components/forms';
 import { DialogState } from './';
 
+import {
+  notify
+} from '../../../common/state/app';
+
+import { 
+  User,
+  AuthService,
+  AuthActionProps,
+  AuthStateProps
+} from '@appbricks/identity';
+
 const SignUp: FunctionComponent<SignUpProps> = (props) => {
   const styles = useStyles(props);
+  const dispatch = useDispatch();
 
   const dialogState: DialogState = {
     size: {
@@ -38,17 +59,27 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
     }
   }
 
-  const [values, setValues] = useState<State>({
-    username: '',
-    password: '',
+  const { user } = props.auth;
+
+  const [state, setState] = useState<State>({
+    username: user ? user.username : '',
+    password: user ? user.password : '',
     passwordRepeat: '',
-    email: '',
-    phoneNumber: ''
+    emailAddress: user ? user.emailAddress : '',
+    mobilePhone: user ? user.mobilePhone : '',
+    validFields: {},
+
+    accept: false,
+    signUpInProgress: false
   });
 
-  const handleChange = (prop: string, value: string) =>  {
-    setValues({ ...values, [prop]: value });
+  const handleChange = (prop: string, value: any) =>  {
+    setState({ ...state, [prop]: value });
   };
+
+  const isValid = (prop: string, isValid: boolean) => {
+    state.validFields[prop] = isValid;
+  }
 
   const handleButtonClick = (index: number) => (event: MouseEvent<HTMLButtonElement>) => {
     switch(index) {
@@ -61,15 +92,30 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
         break;
       }
       case 1: {
-        navigate('/mycs/verify', {
-          state: {
-            fromDialog: dialogState
-          }
-        });
+        const user = new User();
+        user.username = state.username;
+        user.password = state.password;
+        user.emailAddress = state.emailAddress;
+        user.mobilePhone = state.mobilePhone;
+        
+        dispatch(notify('test message', 'error'));
+
+        setState({ ...state, signUpInProgress: true });
+
+        // navigate('/mycs/verify', {
+        //   state: {
+        //     fromDialog: dialogState
+        //   }
+        // });
         break;
       }
     }
   };
+
+  // all fields should be valid
+  const validFields = Object.values(state.validFields);
+  const inputOk = state.accept && validFields.length == 5 &&
+    validFields.reduce((isValid, fieldIsValid) => isValid && fieldIsValid);
 
   return (
     <FormBox
@@ -87,12 +133,15 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           {
             text: 'Cancel',
             icon: <Icon width={18} icon={cancelIcon} />,
-            onClick: handleButtonClick.bind(this)
+            onClick: handleButtonClick.bind(this),
+            disabled: state.signUpInProgress,
           },
           {
             text: 'Sign Up',
             icon: <Icon icon={signupIcon} />,
-            onClick: handleButtonClick.bind(this)
+            onClick: handleButtonClick.bind(this),
+            disabled: !inputOk,
+            working: state.signUpInProgress
           }
         ]
       }
@@ -106,10 +155,12 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
         <Input
           id='username'
           label='Username'
-          value={values.username}
+          value={state.username}
           handleChange={handleChange.bind(this)}
+          validator={usernameValidator}
+          isValid={isValid.bind(this)}
           required={true}
-          iconElement={<User />}
+          iconElement={<UserIcon />}
           className={styles.input}
           compact
           first
@@ -117,39 +168,51 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
         <PasswordInput
           id='password'
           label='Password'
-          value={values.password}
+          value={state.password}
           required={true}
           handleChange={handleChange.bind(this)}
+          validator={passwordValidator}
+          isValid={isValid.bind(this)}
           className={styles.input}
           compact
         />
         <PasswordInput
           id='passwordRepeat'
           label='Verify Password'
-          value={values.passwordRepeat}
+          value={state.passwordRepeat}
           required={true}
           handleChange={handleChange.bind(this)}
+          validator={inputValidator}
+          validatorOptions={{ 
+            verifyWith: state.password,
+            verifyWithName: 'password'
+          }}
+          isValid={isValid.bind(this)}
           className={styles.input}
           compact
         />
         <Input
-          id='email'
+          id='emailAddress'
           label='Email'
           type='email'
-          value={values.email}
+          value={state.emailAddress}
           required={true}
           handleChange={handleChange.bind(this)}
-          iconElement={<Email />}
+          validator={emailAddressValidator}
+          isValid={isValid.bind(this)}
+          iconElement={<EmailIcon />}
           className={styles.input}
           compact
         />
         <PhoneNumberInput
-          id='phoneNumber'
-          label='Phone Number'
-          value={values.phoneNumber}
+          id='mobilePhone'
+          label='Mobile Phone Number'
+          value={state.mobilePhone}
           handleChange={handleChange.bind(this)}
+          validator={phoneNumberValidator}
+          isValid={isValid.bind(this)}
           required={true}
-          iconElement={<Phone />}
+          iconElement={<PhoneIcon />}
           className={styles.input}
           compact
         />
@@ -162,8 +225,10 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
         <FormControlLabel
           control={
             <Checkbox
-              name='accept'  
-              color='primary'           
+              id='accept'
+              name='accept'
+              color='primary'
+              onChange={(event, checked) => handleChange(event.target.id, checked)}
             />
           }
           label='I accept and agree to the terms of use'
@@ -177,7 +242,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
   );
 }
 
-export default SignUp;
+export default connect(AuthService.stateProps, AuthService.dispatchProps)(SignUp);
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -185,7 +250,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type SignUpProps = BaseAppProps & BaseContentProps & {
+type SignUpProps = 
+  BaseAppProps & 
+  BaseContentProps & 
+  AuthStateProps & 
+  AuthActionProps & {
   
   // reach router state when
   // linking from another dialog
@@ -200,6 +269,15 @@ type State = {
   username: string
   password: string
   passwordRepeat: string
-  email: string
-  phoneNumber: string
+  emailAddress: string
+  mobilePhone: string
+
+  // count of invalid fields
+  validFields: { [prop: string]: boolean }
+
+  // agreement acceptance
+  accept: boolean
+
+  // signUp request in progress
+  signUpInProgress: boolean
 }

@@ -12,8 +12,16 @@ import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput, { OutlinedInputProps } from '@material-ui/core/OutlinedInput';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import Popover from '@material-ui/core/Popover';
+import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import cx from 'clsx';
+
+import { 
+  Validator, 
+  ValidationResult, 
+  ValidationOptions 
+} from '@appbricks/data-validators/lib/validator';
 
 const Input: FunctionComponent<InputProps> = ({
   id,
@@ -23,8 +31,11 @@ const Input: FunctionComponent<InputProps> = ({
   type = 'text',
   placeholderIndent,
   iconElement,
-  errorLabel,  
   handleChange,
+  validator,
+  validatorOptions,
+  validationResult,  
+  isValid,
   error,
   compact,
   first,
@@ -37,29 +48,79 @@ const Input: FunctionComponent<InputProps> = ({
   const styles = useStyles();
 
   const labelRef = useRef<HTMLLabelElement>(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
-  const [values, setValues] = useState<State>({    
+  const [state, setState] = useState<State>({    
     labelWidth: 0,
-    hasFocus: false
+    hasFocus: false,
+    validation: {
+      isValid: true
+    }
   });
+  const { labelWidth, hasFocus, validation } = state;
+  validationResult = validationResult || validation;
+  const isError = !validationResult.isValid;
 
   useEffect(() => {
-    setValues({ ...values, labelWidth: labelRef.current!.clientWidth });
-  }, [setValues]);
+    setState({ ...state, labelWidth: labelRef.current!.clientWidth });
+  }, [setState]);
 
-  const handleInputChange = (id: string) => (event: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (id: string) => (event: ChangeEvent<HTMLInputElement>) => {     
     if (handleChange) {
-      handleChange(id, event.target.value);
+      let validation = validator && event.target
+        ? validator(
+            event.target.value, 
+            label.toLocaleLowerCase(), 
+            { 
+              ...validatorOptions,
+              isRequired: required 
+            }
+          )
+        : state.validation;
+
+      if (isValid) {
+        isValid(id, validation.isValid);
+      }
+      setState({ ...state, validation });
+
+      handleChange(id, event.target && event.target.value);
     }
   };
 
   const handleFocus = () => (event: FocusEvent<HTMLInputElement>) => {
-    setValues({ ...values, hasFocus: true });    
+    setState({ ...state, hasFocus: true });    
   }
 
   const handleBlur = () => (event: FocusEvent<HTMLInputElement>) => {
-    setValues({ ...values, hasFocus: false });
+    let validation = validator && event.target
+      ? validator(
+          event.target.value, 
+          label.toLocaleLowerCase(), 
+          { 
+            ...validatorOptions,
+            isRequired: required 
+          }
+        )
+      : state.validation;
+
+    if (isValid) {
+      isValid(id, validation.isValid);
+    }
+    if (handleChange) {
+      handleChange(id, event.target && event.target.value);
+    }    
+    setState({ ...state, validation, hasFocus: false });
   }
+
+  const handlePopoverOpen = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
 
   return (
     <FormControl variant='outlined' 
@@ -67,7 +128,7 @@ const Input: FunctionComponent<InputProps> = ({
       className={
         cx(
           className,
-          error ? styles.formControlWithError : styles.formControl, 
+          isError ? styles.formControlWithError : styles.formControl, 
           first && styles.firstControl,
           last && styles.lastControl
         )
@@ -77,10 +138,10 @@ const Input: FunctionComponent<InputProps> = ({
         ref={labelRef} 
         htmlFor={id}     
         required={required}    
-        error={error}
+        error={isError}
         style={{
           marginLeft: 
-            placeholderIndent && !value && !values.hasFocus
+            placeholderIndent && !value && !hasFocus
               ? placeholderIndent
               : undefined
         }}
@@ -91,11 +152,11 @@ const Input: FunctionComponent<InputProps> = ({
         id={id}
         value={value}
         type={type}
-        error={error}
+        error={isError}
         onFocus={handleFocus()}
         onBlur={handleBlur()}
         onChange={handleInputChange(id)}
-        labelWidth={values.labelWidth}
+        labelWidth={labelWidth}
         className={styles.inputField}
         endAdornment={iconElement 
           ? (
@@ -103,8 +164,8 @@ const Input: FunctionComponent<InputProps> = ({
               position='end'
               className={
                 cx(
-                  values.hasFocus && (
-                    error 
+                  hasFocus && (
+                    isError 
                       ? styles.inputFieldErrorIconFocus 
                       : styles.inputFieldIconFocus
                   )
@@ -128,9 +189,42 @@ const Input: FunctionComponent<InputProps> = ({
         }
         {...other}
       />
-      {error &&
-        (<FormHelperText error className={styles.errorText}>{errorLabel}</FormHelperText>)
-      }
+      {isError && (
+        <div>
+          <FormHelperText 
+            error 
+            onMouseEnter={handlePopoverOpen}
+            onMouseLeave={handlePopoverClose}
+            className={styles.errorText}
+          >
+            {validationResult.shortMessage}
+          </FormHelperText>
+
+          {validationResult && validationResult.longMessage && (
+            <Popover
+              id="mouse-over-popover"
+              className={styles.errorPopover}
+              classes={{
+                paper: styles.errorPopoverContent,
+              }}
+              open={open}
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              onClose={handlePopoverClose}
+              disableRestoreFocus
+            >
+              <Typography variant='body2'>{validationResult.longMessage}</Typography>
+            </Popover>
+          )}
+        </div>
+      )}
     </FormControl>
   );
 }
@@ -142,7 +236,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '1.9rem'
   },
   formControlWithError: {
-    marginBottom: '0.475rem'
+    marginBottom: '0.46rem'
   },
   firstControl: {
     marginTop: '1.5rem'
@@ -162,6 +256,15 @@ const useStyles = makeStyles((theme) => ({
   },
   errorText: {
     textAlign: 'right'
+  },
+  errorPopover: {
+    pointerEvents: 'none',
+    marginLeft: '1.5rem'
+  },
+  errorPopoverContent: {
+    padding: theme.spacing(1),
+    backgroundColor: '#d32f2f !important',
+    color: '#ffffff'
   }
 }));
 
@@ -172,10 +275,14 @@ export type InputProps = OutlinedInputProps & {
   type?: string
 
   placeholderIndent?: string
-  errorLabel?: string
   iconElement?: ReactElement
 
   handleChange?: (id: string, value: string) => void
+
+  validator?: Validator<string>
+  validatorOptions?: ValidationOptions
+  validationResult?: ValidationResult
+  isValid?: (id: string, isValid: boolean) => void
 
   compact?: boolean
   first?: boolean
@@ -190,4 +297,6 @@ export type InputProps = OutlinedInputProps & {
 type State = {
   labelWidth: number
   hasFocus: boolean
+
+  validation: ValidationResult
 }

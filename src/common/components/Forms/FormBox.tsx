@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import cx from 'clsx';
 
@@ -70,42 +71,27 @@ const FormBox: FunctionComponent<FormBoxProps> = ({
         justify='space-around'
         className={styles.actionBar}
       >
-        {buttons.map((button, index) => {
-
-          if (index == lastButtonIndex) {
-            return (
-              <Grid item 
-                key={index} 
-                xs={gridColumns} 
-                className={styles.actionBarCell}
-              >
-                <Button 
-                  endIcon={button.icon ? button.icon : undefined}
-                  onClick={button.onClick(index)}
-                  className={styles.actionButton}
-                >
-                  {button.text}
-                </Button>
-              </Grid>
-            );
-          } else {
-            return (
-              <Grid item 
-                key={index} 
-                xs={gridColumns} 
-                className={cx(styles.actionBarCell, styles.actionBarDivider)}
-              >
-                <Button 
-                  endIcon={button.icon ? button.icon : undefined}
-                  onClick={button.onClick(index)}
-                  className={styles.actionButton}
-                >
-                  {button.text}
-                </Button>
-              </Grid>
-            );
-          }
-        })}
+        {buttons.map((button, index) => (
+          <Grid item 
+            key={index} 
+            xs={gridColumns} 
+            className={cx(
+              styles.actionBarCell, 
+              index != lastButtonIndex && styles.actionBarDivider
+            )}
+          >
+            <Button 
+              endIcon={button.icon ? button.icon : undefined}
+              onClick={button.onClick(index)}
+              disabled={button.disabled || button.working}
+              className={styles.actionButton}
+            >
+              {button.text}
+            </Button>
+            {button.working && 
+              <CircularProgress size={24} className={styles.buttonProgress} />}
+          </Grid>
+        ))}
       </Grid>
     </Paper>
   );
@@ -144,6 +130,7 @@ const useStyles = makeStyles((theme) => ({
     bottom: '0px'
   },
   actionBarCell: {
+    position: 'relative',
     width: '100%',
     borderColor: '#cdcdcd',
     borderTopStyle: 'solid', 
@@ -162,9 +149,13 @@ const useStyles = makeStyles((theme) => ({
       color: '#3f51b5',
     }
   },
-  inputFieldIconFocus: {
-    color: '#3f51b5',
-  }  
+  buttonProgress: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  }
 }));
 
 type FormBoxProps = {
@@ -183,6 +174,8 @@ type FormBoxProps = {
 export type ButtonProp = {
   text: string
   icon?: ReactElement
+  disabled?: boolean
+  working?: boolean
   onClick: (index: number) => (event: MouseEvent<HTMLButtonElement>) => void
 }
 
