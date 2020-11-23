@@ -5,7 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { dismissNotification } from '../../state/app';
 
-const CloseButton: FunctionComponent<CloseButtonProps> = ({ key }) => {
+const CloseButton: FunctionComponent<CloseButtonProps> = ({ nKey }) => {
   const styles = useStyles();
   const dispatch = useDispatch();
 
@@ -13,7 +13,7 @@ const CloseButton: FunctionComponent<CloseButtonProps> = ({ key }) => {
     <IconButton
       aria-label="close"
       color="inherit"
-      onClick={() => dispatch(dismissNotification(key))}
+      onClick={() => dispatch(dismissNotification(nKey))}
       className={styles.close}
     >
       <CloseIcon />
@@ -30,8 +30,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const closeButton = (key: string) =>
-  <CloseButton key={key}/>
+  <CloseButton nKey={key}/>
 
 type CloseButtonProps = {
-  key: string
+  nKey: string
 }
