@@ -54,9 +54,11 @@ const initServices = (): Services => {
 
   // Configure AWS Amplify services
   Amplify.configure(awsconfig);
+  const authService = new AuthService(new AwsProvider(Auth));
+  authService.init();
 
   return {
-    authService: new AuthService(new AwsProvider(Auth))
+    authService
   };
 }
 
