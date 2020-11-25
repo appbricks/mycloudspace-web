@@ -29,13 +29,15 @@ const Input: FunctionComponent<InputProps> = ({
   value,
   required = false,
   type = 'text',
-  placeholderIndent,
+  labelIndent,
+  labelShrink,
   iconElement,
   handleChange,
   validator,
   validatorOptions,
   validationResult,  
-  isValid,
+  handleValidationResult,
+  forceValidate,
   error,
   compact,
   first,
@@ -58,58 +60,74 @@ const Input: FunctionComponent<InputProps> = ({
     }
   });
   const { labelWidth, hasFocus, validation } = state;
-  validationResult = validationResult || validation;
-  const isError = !validationResult.isValid;
 
+  // calculate label width for creatig notch on 
+  // outlined input when label has ben shrunk
   useEffect(() => {
     setState({ ...state, labelWidth: labelRef.current!.clientWidth });
   }, [setState]);
 
-  const handleInputChange = (id: string) => (event: ChangeEvent<HTMLInputElement>) => {     
-    if (handleChange) {
-      let validation = validator && event.target
-        ? validator(
-            event.target.value, 
-            label.toLocaleLowerCase(), 
-            { 
-              ...validatorOptions,
-              isRequired: required 
-            }
-          )
-        : state.validation;
+  // input data validation result either the internal
+  // determined value or the external value and the 
+  // result that has determined an invalid result 
+  // takes precedence
+  if (!validationResult || (!validation.isValid && validationResult.isValid)) {
+    validationResult = validation;
+  }
+  const isError = !validationResult.isValid;
 
-      if (isValid) {
-        isValid(id, validation.isValid);
-      }
-      setState({ ...state, validation });
-
-      handleChange(id, event.target && event.target.value);
+  const validateValue = (value: string): ValidationResult => {
+    let result = validation;
+    if (validator && value !== undefined) {
+      result = validator(
+        value, 
+        label.toLocaleLowerCase(), 
+        { 
+          ...validatorOptions,
+          isRequired: required 
+        }
+      );
+      if (handleValidationResult) {
+        handleValidationResult(id, result.isValid);
+      }       
     }
+    return result;
+  }
+
+  useEffect(() => {
+    if (forceValidate) {
+      setState({ 
+        ...state, 
+        validation: validateValue(value)
+      });
+    }
+  }, [setState, forceValidate]);
+
+  const handleInputChange = (id: string) => (event: ChangeEvent<HTMLInputElement>) => {    
+    const value =  event.target && event.target.value;
+    if (handleChange) {      
+      handleChange(id, value);
+    }
+
+    setState({ 
+      ...state, 
+      validation: validateValue(value)
+    });
   };
 
   const handleFocus = () => (event: FocusEvent<HTMLInputElement>) => {
     setState({ ...state, hasFocus: true });    
   }
 
-  const handleBlur = () => (event: FocusEvent<HTMLInputElement>) => {
-    let validation = validator && event.target
-      ? validator(
-          event.target.value, 
-          label.toLocaleLowerCase(), 
-          { 
-            ...validatorOptions,
-            isRequired: required 
-          }
-        )
-      : state.validation;
+  const handleBlur = () => (event: FocusEvent<HTMLInputElement>) => {    
+    const value =  event.target && event.target.value;
+    validateValue(value);
 
-    if (isValid) {
-      isValid(id, validation.isValid);
-    }
-    if (handleChange) {
-      handleChange(id, event.target && event.target.value);
-    }    
-    setState({ ...state, validation, hasFocus: false });
+    setState({ 
+      ...state, 
+      hasFocus: false,
+      validation: validateValue(value) 
+    });
   }
 
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
@@ -119,6 +137,11 @@ const Input: FunctionComponent<InputProps> = ({
   const handlePopoverClose = () => {
     setAnchorEl(null);
   };
+
+  // explicitly control shrinking of label
+  const shrinkLabel = labelShrink 
+    ? hasFocus || (!!value && value.length > 0)
+    : undefined;
 
   const open = Boolean(anchorEl);
 
@@ -139,10 +162,11 @@ const Input: FunctionComponent<InputProps> = ({
         htmlFor={id}     
         required={required}    
         error={isError}
+        shrink={shrinkLabel}
         style={{
           marginLeft: 
-            placeholderIndent && !value && !hasFocus
-              ? placeholderIndent
+            labelIndent && !shrinkLabel
+              ? labelIndent
               : undefined
         }}
       >
@@ -157,6 +181,7 @@ const Input: FunctionComponent<InputProps> = ({
         onBlur={handleBlur()}
         onChange={handleInputChange(id)}
         labelWidth={labelWidth}
+        notched={shrinkLabel}
         className={styles.inputField}
         endAdornment={iconElement 
           ? (
@@ -274,7 +299,8 @@ export type InputProps = OutlinedInputProps & {
   value: string
   type?: string
 
-  placeholderIndent?: string
+  labelIndent?: string
+  labelShrink?: boolean
   iconElement?: ReactElement
 
   handleChange?: (id: string, value: string) => void
@@ -282,7 +308,8 @@ export type InputProps = OutlinedInputProps & {
   validator?: Validator<string>
   validatorOptions?: ValidationOptions
   validationResult?: ValidationResult
-  isValid?: (id: string, isValid: boolean) => void
+  forceValidate?: boolean
+  handleValidationResult?: (id: string, isValid: boolean) => void
 
   compact?: boolean
   first?: boolean

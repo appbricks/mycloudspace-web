@@ -20,7 +20,7 @@ const PhoneNumberInput: FunctionComponent<InputProps> = ({
   validator,
   validatorOptions,
   validationResult,
-  isValid,
+  handleValidationResult,
   ...other 
 }) => {
   const styles = useStyles({ compact });
@@ -32,28 +32,31 @@ const PhoneNumberInput: FunctionComponent<InputProps> = ({
 
   const handleInputChange = (value: any, country: any, e: any, formattedValue: any) => {
 
-    let result = validator 
-      ? validator(
-          value, 
-          label.toLocaleLowerCase(), 
-          { 
-            ...validatorOptions,
-            isRequired: required,
-            // ignore format validating countries with default mask
-            formatMask: country.format != '+... ... ... ... ... ..' && country.format,
-            formattedValue,
-            longMessage: `${formattedValue} is not a valid ${label.toLocaleLowerCase()} in ${country.name}.`
-          }
-        )
-      : validation;
+    if (validator) {
+      const result = validator 
+        ? validator(
+            value, 
+            label.toLocaleLowerCase(), 
+            { 
+              ...validatorOptions,
+              isRequired: required,
+              // ignore format validating countries with default mask
+              formatMask: country.format != '+... ... ... ... ... ..' && country.format,
+              formattedValue,
+              longMessage: `${formattedValue} is not a valid ${label.toLocaleLowerCase()} in ${country.name}.`
+            }
+          )
+        : validation;
 
-    if (isValid) {
-      isValid(id, result.isValid);
+      if (handleValidationResult) {
+        handleValidationResult(id, result.isValid);
+      }
+      setValidation(result);
     }
+
     if (handleChange) { 
       handleChange(id, value) 
-    }
-    setValidation(result);
+    }    
   }
   
   return (
@@ -61,11 +64,12 @@ const PhoneNumberInput: FunctionComponent<InputProps> = ({
       id={id}
       label={label}
       required={required}
-      placeholderIndent='4.7rem'
+      labelIndent='4.7rem'
+      labelShrink
       validationResult={validation}
       validator={validator}
       validatorOptions={validatorOptions}
-      isValid={isValid}
+      handleValidationResult={handleValidationResult}
       inputComponent={PhoneInput as any} 
       inputProps={{
         country: 'us',
