@@ -1,7 +1,9 @@
 import React, {
   FunctionComponent,
   MouseEvent,
-  useState
+  useState,
+  useRef,
+  useEffect
 } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { navigate } from '@reach/router';
@@ -17,6 +19,12 @@ import signupIcon from '@iconify/icons-mdi/account-edit';
 import UserIcon from '@material-ui/icons/Person';
 import EmailIcon from '@material-ui/icons/Email';
 import PhoneIcon from '@material-ui/icons/Smartphone';
+
+import { 
+  ErrorPayload, 
+  ActionResult, 
+  createResetStatusAction 
+} from '@appbricks/utils';
 
 import { 
   usernameValidator,
@@ -37,11 +45,10 @@ import {
 } from '../../../common/components/forms';
 import { DialogState } from './';
 
-import {
-  notify
-} from '../../../common/state/app';
+import { notify } from '../../../common/state/app';
 
 import { 
+  SIGN_UP_REQ,
   User,
   AuthService,
   AuthActionProps,
@@ -59,26 +66,38 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
     }
   }
 
-  const { user } = props.auth;
-
-  const [state, setState] = useState<State>({
+  // redux actionstatus and auth state user
+  const { actionStatus, user } = props.auth;
+  
+  const [formData, setFormData] = useState<FormData>({
     username: user ? user.username : '',
     password: user ? user.password : '',
     passwordRepeat: '',
     emailAddress: user ? user.emailAddress : '',
     mobilePhone: user ? user.mobilePhone : '',
-    validFields: {},
+  });
 
+  const [formIGO, setFormIGO] = useState<FormIGO>({
+    validFields: {},
     accept: false,
-    signUpInProgress: false
+    inputOk: false    
   });
 
   const handleChange = (prop: string, value: any) =>  {
-    setState({ ...state, [prop]: value });
+    setFormData({ ...formData, [prop]: value });
   };
 
-  const isValid = (prop: string, isValid: boolean) => {
-    state.validFields[prop] = isValid;
+  const handleValidationResult = (prop: string, isValid: boolean) => {
+    formIGO.validFields[prop] = isValid;
+    validateForm(formIGO.accept);
+  }
+
+  const validateForm = (accept: boolean) => {
+    const validFieldValues = Object.values(formIGO.validFields);
+    const inputOk = accept && validFieldValues.length == 5 &&
+      validFieldValues.reduce((isValid, fieldIsValid) => isValid && fieldIsValid);
+
+    setFormIGO({ ...formIGO, accept, inputOk });
   }
 
   const handleButtonClick = (index: number) => (event: MouseEvent<HTMLButtonElement>) => {
@@ -93,29 +112,45 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
       }
       case 1: {
         const user = new User();
-        user.username = state.username;
-        user.password = state.password;
-        user.emailAddress = state.emailAddress;
-        user.mobilePhone = state.mobilePhone;
+        user.username = formData.username;
+        user.password = formData.password;
+        user.emailAddress = formData.emailAddress;
+        user.mobilePhone = '+' + formData.mobilePhone;
         
-        dispatch(notify('test message', 'error'));
-
-        setState({ ...state, signUpInProgress: true });
-
-        // navigate('/mycs/verify', {
-        //   state: {
-        //     fromDialog: dialogState
-        //   }
-        // });
+        props.authService.signUp(user);
         break;
       }
     }
   };
 
-  // all fields should be valid
-  const validFields = Object.values(state.validFields);
-  const inputOk = state.accept && validFields.length == 5 &&
-    validFields.reduce((isValid, fieldIsValid) => isValid && fieldIsValid);
+  // Handle auth action status results
+  useEffect(() => {
+
+    switch (actionStatus.result) {
+
+      case ActionResult.error: 
+        const error = actionStatus.data['error'] as ErrorPayload;
+        const message = error ? error.message : 'ERROR! An unknown error occurred';
+        dispatch(notify(message, 'error'));
+        break;
+
+      case ActionResult.success:
+        if (actionStatus.actionType == SIGN_UP_REQ) {
+          navigate('/mycs/verify', {
+            state: {
+              fromDialog: dialogState
+            }
+          });
+        }
+        break;
+    }
+    
+    dispatch(createResetStatusAction(actionStatus));
+  });
+
+  // Check auth state is pending change 
+  // due to a backend call in progress 
+  const serviceCallInProgress = (actionStatus.result == ActionResult.pending);
 
   return (
     <FormBox
@@ -133,15 +168,15 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           {
             text: 'Cancel',
             icon: <Icon width={18} icon={cancelIcon} />,
-            onClick: handleButtonClick.bind(this),
-            disabled: state.signUpInProgress,
+            onClick: handleButtonClick,
+            disabled: serviceCallInProgress,
           },
           {
             text: 'Sign Up',
             icon: <Icon icon={signupIcon} />,
-            onClick: handleButtonClick.bind(this),
-            disabled: !inputOk,
-            working: state.signUpInProgress
+            onClick: handleButtonClick,
+            disabled: !formIGO.inputOk,
+            working: serviceCallInProgress
           }
         ]
       }
@@ -155,11 +190,12 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
         <Input
           id='username'
           label='Username'
-          value={state.username}
-          handleChange={handleChange.bind(this)}
-          validator={usernameValidator}
-          isValid={isValid.bind(this)}
+          value={formData.username}
           required={true}
+          handleChange={handleChange}
+          validator={usernameValidator}
+          handleValidationResult={handleValidationResult}
+          forceValidate={formIGO.accept}
           iconElement={<UserIcon />}
           className={styles.input}
           compact
@@ -168,26 +204,28 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
         <PasswordInput
           id='password'
           label='Password'
-          value={state.password}
+          value={formData.password}
           required={true}
-          handleChange={handleChange.bind(this)}
+          handleChange={handleChange}
           validator={passwordValidator}
-          isValid={isValid.bind(this)}
+          handleValidationResult={handleValidationResult}
+          forceValidate={formIGO.accept}
           className={styles.input}
           compact
         />
         <PasswordInput
           id='passwordRepeat'
           label='Verify Password'
-          value={state.passwordRepeat}
+          value={formData.passwordRepeat}
           required={true}
-          handleChange={handleChange.bind(this)}
+          handleChange={handleChange}
           validator={inputValidator}
           validatorOptions={{ 
-            verifyWith: state.password,
+            verifyWith: formData.password,
             verifyWithName: 'password'
           }}
-          isValid={isValid.bind(this)}
+          handleValidationResult={handleValidationResult}
+          forceValidate={formIGO.accept}
           className={styles.input}
           compact
         />
@@ -195,11 +233,12 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           id='emailAddress'
           label='Email'
           type='email'
-          value={state.emailAddress}
+          value={formData.emailAddress}
           required={true}
-          handleChange={handleChange.bind(this)}
+          handleChange={handleChange}
           validator={emailAddressValidator}
-          isValid={isValid.bind(this)}
+          handleValidationResult={handleValidationResult}
+          forceValidate={formIGO.accept}
           iconElement={<EmailIcon />}
           className={styles.input}
           compact
@@ -207,11 +246,12 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
         <PhoneNumberInput
           id='mobilePhone'
           label='Mobile Phone Number'
-          value={state.mobilePhone}
-          handleChange={handleChange.bind(this)}
-          validator={phoneNumberValidator}
-          isValid={isValid.bind(this)}
+          value={formData.mobilePhone}
           required={true}
+          handleChange={handleChange}
+          validator={phoneNumberValidator}
+          handleValidationResult={handleValidationResult}
+          forceValidate={formIGO.accept}
           iconElement={<PhoneIcon />}
           className={styles.input}
           compact
@@ -228,7 +268,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
               id='accept'
               name='accept'
               color='primary'
-              onChange={(event, checked) => handleChange(event.target.id, checked)}
+              onChange={(event, checked) => validateForm(checked)}
             />
           }
           label='I accept and agree to the terms of use'
@@ -265,19 +305,21 @@ type SignUpProps =
   }
 }
 
-type State = {
+type FormData = {
   username: string
   password: string
   passwordRepeat: string
   emailAddress: string
   mobilePhone: string
+}
 
-  // count of invalid fields
-  validFields: { [prop: string]: boolean }
+type FormIGO = {
+  // input field validation state
+  validFields: {[prop: string]: boolean }
 
   // agreement acceptance
   accept: boolean
 
-  // signUp request in progress
-  signUpInProgress: boolean
+  // flags all input fields are valid
+  inputOk: boolean
 }
