@@ -18,11 +18,7 @@ import UserIcon from '@material-ui/icons/Person';
 import EmailIcon from '@material-ui/icons/Email';
 import PhoneIcon from '@material-ui/icons/Smartphone';
 
-import { 
-  ErrorPayload, 
-  ActionResult, 
-  createResetStatusAction 
-} from '@appbricks/utils';
+import { ActionResult} from '@appbricks/utils';
 
 import { 
   usernameValidator,
@@ -41,7 +37,9 @@ import {
   PasswordInput,
   PhoneNumberInput
 } from '../../../common/components/forms';
-import { DialogState } from './';
+import useDialogNavState, { 
+  DialogNavProps 
+} from '../../../common/components/forms/useDialogNavState';
 
 import { useActionStatus } from '../../../common/state/status';
 
@@ -56,12 +54,7 @@ import {
 const SignUp: FunctionComponent<SignUpProps> = (props) => {
   const styles = useStyles(props);
 
-  const dialogState: DialogState = {
-    size: {
-      height: 624,
-      width: 350  
-    }
-  }
+  const [ thisDialog, fromDialog ] = useDialogNavState(624, 350, props);
 
   // redux actionstatus and auth state user
   const { actionStatus, user } = props.auth;
@@ -100,11 +93,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
   const handleButtonClick = (index: number) => (event: MouseEvent<HTMLButtonElement>) => {
     switch(index) {
       case 0: {
-        navigate('/mycs/signin', {
-          state: {
-            fromDialog: dialogState
-          }
-        });
+        navigate('/mycs/signin', thisDialog);
         break;
       }
       case 1: {
@@ -123,11 +112,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
   // Handle auth action status result
   useActionStatus(actionStatus, () => {
     if (actionStatus.actionType == SIGN_UP_REQ) {
-      navigate('/mycs/verify', {
-        state: {
-          fromDialog: dialogState
-        }
-      });
+      navigate('/mycs/verify', thisDialog);
     }
   });
 
@@ -137,14 +122,10 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
 
   return (
     <FormBox
-      height={dialogState.size.height}
-      width={dialogState.size.width}
-      fromHeight={props.location.state.fromDialog
-        ? props.location.state.fromDialog.size.height
-        : undefined}
-      fromWidth={props.location.state.fromDialog
-        ? props.location.state.fromDialog.size.width
-        : undefined}
+      height={thisDialog.state.height!}
+      width={thisDialog.state.width!}
+      fromHeight={fromDialog.state.height}
+      fromWidth={fromDialog.state.width}
       title='Sign Up'
       buttons={
         [
@@ -277,16 +258,8 @@ type SignUpProps =
   BaseAppProps & 
   BaseContentProps & 
   AuthStateProps & 
-  AuthActionProps & {
-  
-  // reach router state when
-  // linking from another dialog
-  location: {
-    state: {
-      fromDialog?: DialogState
-    }
-  }
-}
+  AuthActionProps & 
+  DialogNavProps
 
 type FormData = {
   username: string

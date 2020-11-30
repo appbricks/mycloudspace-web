@@ -3,6 +3,7 @@ import React, {
   MouseEvent,
   useState
 } from 'react';
+import { connect } from 'react-redux';
 import { navigate } from '@reach/router';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -17,17 +18,16 @@ import {
   FormBox,
   CodeInput,
 } from '../../../common/components/forms';
-import { DialogState } from '.';
+import useDialogNavState, { 
+  DialogNavProps 
+} from '../../../common/components/forms/useDialogNavState';
+
+import { AuthService } from '@appbricks/identity';
 
 const VerifyAccount: FunctionComponent<VerifyAccountProps> = (props) => {
   const styles = useStyles(props);
 
-  const dialogState: DialogState = {
-    size: {
-      height: 205,
-      width: 350  
-    }
-  }
+  const [ thisDialog, fromDialog ] = useDialogNavState(205, 350, props);
 
   const [values, setValues] = useState<State>({
     verificationCode: ''
@@ -40,19 +40,11 @@ const VerifyAccount: FunctionComponent<VerifyAccountProps> = (props) => {
   const handleButtonClick = (index: number) => (event: MouseEvent<HTMLButtonElement>) => {
     switch(index) {
       case 0: {
-        navigate('/mycs/signin', {
-          state: {
-            fromDialog: dialogState
-          }
-        });
+        navigate('/mycs/signin', thisDialog);
         break;
       }
       case 1: {
-        navigate('/mycs/signin', {
-          state: {
-            fromDialog: dialogState
-          }
-        });
+        navigate('/mycs/signin', thisDialog);
         break;
       }
     }
@@ -60,14 +52,10 @@ const VerifyAccount: FunctionComponent<VerifyAccountProps> = (props) => {
 
   return (
     <FormBox
-      height={dialogState.size.height}
-      width={dialogState.size.width}
-      fromHeight={props.location.state.fromDialog
-        ? props.location.state.fromDialog.size.height
-        : undefined}
-      fromWidth={props.location.state.fromDialog
-        ? props.location.state.fromDialog.size.width
-        : undefined}
+      height={thisDialog.state.height!}
+      width={thisDialog.state.width!}
+      fromHeight={fromDialog.state.height}
+      fromWidth={fromDialog.state.width}
       title='Verify Account'
       buttons={
         [
@@ -105,7 +93,8 @@ const VerifyAccount: FunctionComponent<VerifyAccountProps> = (props) => {
   );
 }
 
-export default VerifyAccount;
+
+export default connect(AuthService.stateProps, AuthService.dispatchProps)(VerifyAccount);
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -113,16 +102,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type VerifyAccountProps = BaseAppProps & BaseContentProps & {
-
-  // reach router state when
-  // linking from another dialog
-  location: {
-    state: {
-      fromDialog?: DialogState
-    }
-  }
-}
+type VerifyAccountProps = 
+  BaseAppProps & 
+  BaseContentProps & 
+  DialogNavProps
 
 type State = {
   verificationCode: string

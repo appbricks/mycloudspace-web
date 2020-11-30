@@ -18,19 +18,16 @@ import {
   FormBox,
   CodeInput,
 } from '../../../common/components/forms';
-import { DialogState } from '.';
+import useDialogNavState, { 
+  DialogNavProps 
+} from '../../../common/components/forms/useDialogNavState';
 
 import * as Auth from '../../../common/state/auth';
 
 const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
   const styles = useStyles(props);
 
-  const dialogState: DialogState = {
-    size: {
-      height: 205,
-      width: 350  
-    }
-  }
+  const [ thisDialog, fromDialog ] = useDialogNavState(205, 350, props);
 
   const [values, setValues] = useState<State>({
     authCode: ''
@@ -45,20 +42,12 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
   const handleButtonClick = (index: number) => (event: MouseEvent<HTMLButtonElement>) => {
     switch(index) {
       case 0: {
-        navigate('/mycs/signin', {
-          state: {
-            fromDialog: dialogState
-          }
-        });
+        navigate('/mycs/signin', thisDialog);
         break;
       }
       case 1: {
         dispatch(Auth.signin());
-        navigate('/mycs', {
-          state: {
-            fromDialog: dialogState
-          }
-        });
+        navigate('/mycs', thisDialog);
         break;
       }
     }
@@ -66,14 +55,10 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
 
   return (
     <FormBox
-      height={dialogState.size.height}
-      width={dialogState.size.width}
-      fromHeight={props.location.state.fromDialog
-        ? props.location.state.fromDialog.size.height
-        : undefined}
-      fromWidth={props.location.state.fromDialog
-        ? props.location.state.fromDialog.size.width
-        : undefined}
+      height={thisDialog.state.height!}
+      width={thisDialog.state.width!}
+      fromHeight={fromDialog.state.height}
+      fromWidth={fromDialog.state.width}
       title='Sign In Code'
       buttons={
         [
@@ -119,16 +104,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type AuthCodeProps = BaseAppProps & BaseContentProps & {
-
-  // reach router state when
-  // linking from another dialog
-  location: {
-    state: {
-      fromDialog?: DialogState
-    }
-  }
-}
+type AuthCodeProps = 
+  BaseAppProps & 
+  BaseContentProps & 
+  DialogNavProps
 
 type State = {
   authCode: string

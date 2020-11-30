@@ -9,10 +9,3 @@ export {
   Verify,
   AuthCode,
 }
-
-export type DialogState = {
-  size: {
-    height: number
-    width: number
-  }
-}

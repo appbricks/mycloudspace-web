@@ -18,17 +18,14 @@ import {
   Input, 
   PasswordInput 
 } from '../../../common/components/forms';
-import { DialogState } from './';
+import useDialogNavState, { 
+  DialogNavProps 
+} from '../../../common/components/forms/useDialogNavState';
 
 const SignIn: FunctionComponent<SignInProps> = (props) => {
   const styles = useStyles(props);
 
-  const dialogState: DialogState = {
-    size: {
-      height: 296,
-      width: 350  
-    }
-  }
+  const [ thisDialog, fromDialog ] = useDialogNavState(296, 350, props);
 
   const [values, setValues] = useState<State>({    
     username: '',
@@ -42,19 +39,11 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
   const handleButtonClick = (index: number) => (event: MouseEvent<HTMLButtonElement>) => {
     switch(index) {
       case 0: {
-        navigate('/mycs/signup', { 
-          state: {
-            fromDialog: dialogState
-          }
-        });
+        navigate('/mycs/signup', thisDialog);
         break;
       }
       case 1: {
-        navigate('/mycs/authcode', { 
-          state: {
-            fromDialog: dialogState
-          }
-        });
+        navigate('/mycs/authcode', thisDialog);
         break;
       }
     }
@@ -62,14 +51,10 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
 
   return (
     <FormBox
-      height={dialogState.size.height}
-      width={dialogState.size.width}
-      fromHeight={props.location.state.fromDialog
-        ? props.location.state.fromDialog.size.height
-        : undefined}
-      fromWidth={props.location.state.fromDialog
-        ? props.location.state.fromDialog.size.width
-        : undefined}
+      height={thisDialog.state.height!}
+      width={thisDialog.state.width!}
+      fromHeight={fromDialog.state.height}
+      fromWidth={fromDialog.state.width}
       title='Sign In'
       buttons={
         [
@@ -124,16 +109,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type SignInProps = BaseAppProps & BaseContentProps & {
-
-  // reach router state when 
-  // linking from another dialog
-  location: {
-    state: {
-      fromDialog?: DialogState
-    }
-  }
-}
+type SignInProps = 
+  BaseAppProps & 
+  BaseContentProps & 
+  DialogNavProps
 
 type State = {
   username: string
