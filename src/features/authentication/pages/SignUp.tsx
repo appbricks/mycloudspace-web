@@ -1,11 +1,9 @@
 import React, {
   FunctionComponent,
   MouseEvent,
-  useState,
-  useRef,
-  useEffect
+  useState
 } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { navigate } from '@reach/router';
 import Grid from '@material-ui/core/Grid';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -45,7 +43,7 @@ import {
 } from '../../../common/components/forms';
 import { DialogState } from './';
 
-import { notify } from '../../../common/state/app';
+import { useActionStatus } from '../../../common/state/status';
 
 import { 
   SIGN_UP_REQ,
@@ -57,7 +55,6 @@ import {
 
 const SignUp: FunctionComponent<SignUpProps> = (props) => {
   const styles = useStyles(props);
-  const dispatch = useDispatch();
 
   const dialogState: DialogState = {
     size: {
@@ -123,29 +120,15 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
     }
   };
 
-  // Handle auth action status results
-  useEffect(() => {
-
-    switch (actionStatus.result) {
-
-      case ActionResult.error: 
-        const error = actionStatus.data['error'] as ErrorPayload;
-        const message = error ? error.message : 'ERROR! An unknown error occurred';
-        dispatch(notify(message, 'error'));
-        break;
-
-      case ActionResult.success:
-        if (actionStatus.actionType == SIGN_UP_REQ) {
-          navigate('/mycs/verify', {
-            state: {
-              fromDialog: dialogState
-            }
-          });
+  // Handle auth action status result
+  useActionStatus(actionStatus, () => {
+    if (actionStatus.actionType == SIGN_UP_REQ) {
+      navigate('/mycs/verify', {
+        state: {
+          fromDialog: dialogState
         }
-        break;
+      });
     }
-    
-    dispatch(createResetStatusAction(actionStatus));
   });
 
   // Check auth state is pending change 
