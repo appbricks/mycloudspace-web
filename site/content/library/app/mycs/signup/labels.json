@@ -1,0 +1,24 @@
+{
+  "labels": [
+    {
+      "id": "username",
+      "name": "Username"
+    },
+    {
+      "id": "password",
+      "name": "Password"
+    },
+    {
+      "id": "passwordRepeat",
+      "name": "Verify Password"
+    },
+    {
+      "id": "emailAddress",
+      "name": "Email"
+    },
+    {
+      "id": "mobilePhone",
+      "name": "Mobile Phone Number"
+    }
+  ]
+}
