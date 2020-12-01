@@ -10,7 +10,9 @@ const MDXProvider = require('@mdx-js/react').MDXProvider;
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 
-const shortcodes = { Typography, Link }
+import StateValue from '../state/StateValue';
+
+const shortcodes = { Typography, Link, StateValue }
 
 const StaticContent: FunctionComponent<StaticContentType> = ({ 
   body,

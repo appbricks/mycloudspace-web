@@ -2,6 +2,8 @@ import React, { FunctionComponent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar, OptionsObject } from 'notistack';
 
+import { Logger } from '@appbricks/utils';
+
 import { RootState } from '../../state/store';
 import { Notification, removeNotification } from '../../state/app';
 
@@ -9,14 +11,6 @@ const Notifier: FunctionComponent<NotifierProps> = (props) => {
   const dispatch = useDispatch();
   const notifications = useSelector<RootState, Notification[]>(store => store.app.notifications);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
-  const storeDisplayed = (id: string) => {
-    displayed = [...displayed, id];
-  };
-
-  const removeDisplayed = (id: string) => {
-    displayed = [...displayed.filter((key) => id !== key)];
-  };
 
   React.useEffect(() => {
     notifications.forEach(
@@ -30,21 +24,35 @@ const Notifier: FunctionComponent<NotifierProps> = (props) => {
           return;
         }
 
-        // do nothing if snackbar is already displayed
-        if (displayed.includes(key)) return;
+        // do nothing if snackbar exists enqueue 
+        // request was made less than 500ms ago.
+        // this handles the condition when enqueue
+        // might not complete if a dom refresh
+        // happened around the same time.
+        const enqueuedTime = displayed[key];
+        if (enqueuedTime && 
+          (enqueuedTime == -1 || (Date.now() - enqueuedTime) < 50)) return;
 
         // display snackbar using notistack
         enqueueSnackbar(title, {
           ...options,
-          onExited: (event, key: string) => {
+          onEntered: (node: HTMLElement, isAppearing: boolean, key: string) => {
+            // reset timer of snackbars that 
+            // we've displayed and tracking
+            displayed[key] = -1;
+            Logger.trace('Notifier', 'Notification has been displayed', key, displayed);
+          },
+          onExited: (node: HTMLElement, key: string) => {
             // remove this snackbar from redux store
             dispatch(removeNotification(key));
-            removeDisplayed(key);
+            delete displayed[key];
+            Logger.trace('Notifier', 'Notification has been removed', key, displayed);
           }
         });
 
         // keep track of snackbars that we've displayed
-        storeDisplayed(key);
+        displayed[key] = Date.now();
+        Logger.trace('Notifier', 'Enqueued notification for display', key, displayed);
       }
     );
   }, [notifications, closeSnackbar, enqueueSnackbar]);
@@ -58,4 +66,4 @@ type NotifierProps = {
   title?: string
 }
 
-let displayed: string[] = [];
+let displayed: { [key: string]: number} = {};

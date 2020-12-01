@@ -9,11 +9,11 @@ const useDialogNavState = (
   DialogState 
 ]  => {
 
-  const thisDialog = <DialogState>{ state: { height, width } };
+  const thisDialog = <DialogState>{ state: { height, width, data: {} } };
   if (props.location.state) {
     return [ thisDialog, <DialogState>{ state: { ...props.location.state } } ];
   } else {
-    return [ thisDialog, <DialogState>{ state: { } } ];
+    return [ thisDialog, <DialogState>{ state: { data: {} } } ];
   }
 }
 
@@ -29,6 +29,7 @@ export type DialogNavProps = {
 type DialogState = {
   state: {
     height?: number
-    width?: number    
+    width?: number
+    data: { [ name: string ]: string }
   }
 }

@@ -18,7 +18,7 @@ import UserIcon from '@material-ui/icons/Person';
 import EmailIcon from '@material-ui/icons/Email';
 import PhoneIcon from '@material-ui/icons/Smartphone';
 
-import { ActionResult} from '@appbricks/utils';
+import { ActionResult } from '@appbricks/utils';
 
 import { 
   usernameValidator,
@@ -30,6 +30,14 @@ import {
 
 import { BaseAppProps, BaseContentProps } from '../../../common/config';
 import { StaticContent } from '../../../common/components/content';
+
+import { 
+  SIGN_UP_REQ,
+  User,
+  AuthService,
+  AuthActionProps,
+  AuthStateProps
+} from '@appbricks/identity';
 
 import {
   FormBox,
@@ -43,28 +51,22 @@ import useDialogNavState, {
 
 import { useActionStatus } from '../../../common/state/status';
 
-import { 
-  SIGN_UP_REQ,
-  User,
-  AuthService,
-  AuthActionProps,
-  AuthStateProps
-} from '@appbricks/identity';
-
 const SignUp: FunctionComponent<SignUpProps> = (props) => {
-  const styles = useStyles(props);
+  const { content, auth, authService } = props;
+  const styles = useStyles();
 
+  // current and previous dailog static states
   const [ thisDialog, fromDialog ] = useDialogNavState(624, 350, props);
 
-  // redux actionstatus and auth state user
-  const { actionStatus, user } = props.auth;
+  // redux auth state: action status and user
+  const { actionStatus } = auth;
   
   const [formData, setFormData] = useState<FormData>({
-    username: user ? user.username : '',
-    password: user ? user.password : '',
+    username: '',
+    password: '',
     passwordRepeat: '',
-    emailAddress: user ? user.emailAddress : '',
-    mobilePhone: user ? user.mobilePhone : '',
+    emailAddress: '',
+    mobilePhone: '',
   });
 
   const [formIGO, setFormIGO] = useState<FormIGO>({
@@ -103,20 +105,20 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
         user.emailAddress = formData.emailAddress;
         user.mobilePhone = '+' + formData.mobilePhone;
         
-        props.authService.signUp(user);
+        authService.signUp(user);
         break;
       }
     }
   };
 
-  // Handle auth action status result
+  // handle auth action status result
   useActionStatus(actionStatus, () => {
     if (actionStatus.actionType == SIGN_UP_REQ) {
       navigate('/mycs/verify', thisDialog);
     }
   });
 
-  // Check auth state is pending change 
+  // check auth state is pending change 
   // due to a backend call in progress 
   const serviceCallInProgress = (actionStatus.result == ActionResult.pending);
 
@@ -133,7 +135,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
             text: 'Cancel',
             icon: <Icon width={18} icon={cancelIcon} />,
             onClick: handleButtonClick,
-            disabled: serviceCallInProgress,
+            disabled: serviceCallInProgress
           },
           {
             text: 'Sign Up',
@@ -161,6 +163,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           handleValidationResult={handleValidationResult}
           forceValidate={formIGO.accept}
           iconElement={<UserIcon />}
+          disabled={serviceCallInProgress}
           className={styles.input}
           compact
           first
@@ -174,6 +177,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           validator={passwordValidator}
           handleValidationResult={handleValidationResult}
           forceValidate={formIGO.accept}
+          disabled={serviceCallInProgress}
           className={styles.input}
           compact
         />
@@ -190,6 +194,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           }}
           handleValidationResult={handleValidationResult}
           forceValidate={formIGO.accept}
+          disabled={serviceCallInProgress}
           className={styles.input}
           compact
         />
@@ -204,6 +209,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           handleValidationResult={handleValidationResult}
           forceValidate={formIGO.accept}
           iconElement={<EmailIcon />}
+          disabled={serviceCallInProgress}
           className={styles.input}
           compact
         />
@@ -217,11 +223,12 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           handleValidationResult={handleValidationResult}
           forceValidate={formIGO.accept}
           iconElement={<PhoneIcon />}
+          disabled={serviceCallInProgress}
           className={styles.input}
           compact
         />
         <StaticContent 
-          body={props.content!['accept-terms'] as string}
+          body={content!['accept-terms'] as string}
           style={{
             margin: '-1rem 1rem -0.5rem 1rem'
           }}
@@ -236,6 +243,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
             />
           }
           label='I accept and agree to the terms of use'
+          disabled={serviceCallInProgress}
           style={{
             marginLeft: '0.2rem'
           }}

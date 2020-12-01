@@ -3,6 +3,9 @@ import { OptionsObject } from 'notistack';
 
 import { closeButton } from '../components/notification';
 
+import { persistReducer } from 'redux-persist'
+import sessionStorage from 'redux-persist/lib/storage/session'
+
 export const app = createSlice({
   name: 'app',
 
@@ -34,8 +37,10 @@ export const app = createSlice({
         options?: OptionsObject,
       ) => {
 
-        const key = options && options.key;
-        const action = options && options.action;
+        const key = (options && options.key) || 
+          (Date.now() + Math.random());
+        const action = options && options.action || 
+          ((key: string) => closeButton(key));
 
         return { 
           payload: {
@@ -43,8 +48,8 @@ export const app = createSlice({
             message: typeof message == 'string' ? undefined : message.message,
             options: {
               ...options,
-              key: key || (new Date().getTime() + Math.random()),
-              action: action || ((key: string) => closeButton(key)),
+              key,
+              action,
               variant: type,
             }
           },
@@ -99,7 +104,14 @@ export const {
   removeNotification
 } = app.actions;
 
-export default app.reducer;
+export default persistReducer(
+  {
+    key: 'app',
+    storage: sessionStorage,
+    blacklist: []
+  }, 
+  app.reducer
+);
 
 type AppState = {
   notifications: Notification[]

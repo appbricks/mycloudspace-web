@@ -14,7 +14,8 @@ import { notify } from './app';
 // errors and success conditions
 export const useActionStatus = (
   actionStatus: ActionStatus, 
-  successCallback: () => void
+  successCallback: () => void,
+  errorCallback?: (error: ErrorPayload) => boolean
 ) => {
 
   const dispatch = useDispatch();
@@ -25,13 +26,22 @@ export const useActionStatus = (
 
       case ActionResult.error: 
         const error = actionStatus.data['error'] as ErrorPayload;
-        const message = error ? error.message : 'ERROR! An unknown error occurred';
-        dispatch(notify(message, 'error'));
+        let handled = false;
+        if (errorCallback) {
+          handled = errorCallback(error);
+        } 
+        if (!handled) {
+          const message = error ? error.message : 'ERROR! An unknown error occurred';
+          dispatch(notify(message, 'error'));  
+        }
         break;
       
       case ActionResult.success:
         successCallback();
         break;
+
+      default:
+        return;
     }
     
     dispatch(createResetStatusAction(actionStatus));

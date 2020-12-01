@@ -25,15 +25,16 @@ const initServices = (): Services => {
   // setup persistence service's backend
   setLocalStorageImpl({
     setItem: (key: string, value: string): Promise<void> => {
+      console.log('-->', isBrowser)
       if (isBrowser) {
         localStorage.setItem(key, value);
         return Promise.resolve();
       }
-      Logger.error('localStorage', 
-        'Unable to persist data to local storage',
+      Logger.warn('localStorage', 
+        'Local storage not available. Persistence of data for given key will be skipped:',
         key, value)
   
-      return Promise.reject('browser local storage not available')
+      return Promise.resolve();
     },
   
     getItem: (key: string): Promise<string | null | undefined> => {
@@ -44,12 +45,12 @@ const initServices = (): Services => {
         }
         return Promise.resolve(undefined);
       }
-      Logger.error('localStorage', 
-        'Unable to retrieve data from local storage',
+      Logger.warn('localStorage', 
+        'Local storage not available. Reading of data for given key will be skipped:',
         key)
   
-      return Promise.reject('browser local storage not available')
-    }
+        return Promise.resolve(undefined);
+      }
   });
 
   // Configure AWS Amplify services

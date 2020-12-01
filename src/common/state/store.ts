@@ -17,18 +17,12 @@ import {
 import app from './app';
 import { authService } from '../services';
 
-/** TEST */
-import counterReducer from './counter';
-
 // store state reducers
 const rootReducer = combineReducers({
-  // application state reducer
+  // application state
   app,
-  // authentication
-  auth: authService.reducer(),
-
-  /** TEST */
-  counter: counterReducer
+  // auth state
+  auth: authService.reducer()
 });
 // rxjs service action handlers
 const rootEpic = combineEpicsWithGlobalErrorHandler([

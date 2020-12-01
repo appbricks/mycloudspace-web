@@ -3,13 +3,25 @@ import React, {
   MouseEvent, 
   useState 
 } from 'react';
+import { connect, useDispatch } from 'react-redux';
 import { navigate } from "@reach/router";
 import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { Icon } from '@iconify/react';
 import signinIcon from '@iconify/icons-mdi/login';
 import signupIcon from '@iconify/icons-mdi/account-edit';
+
+import { ActionResult } from '@appbricks/utils';
+
+import { 
+  ERROR_NOT_CONFIRMED,
+  SIGN_IN_REQ,
+  AuthService,
+  AuthActionProps,
+  AuthStateProps
+} from '@appbricks/identity';
 
 import { BaseAppProps, BaseContentProps } from '../../../common/config';
 
@@ -22,13 +34,23 @@ import useDialogNavState, {
   DialogNavProps 
 } from '../../../common/components/forms/useDialogNavState';
 
+import { notify } from '../../../common/state/app';
+import { useActionStatus } from '../../../common/state/status';
+
 const SignIn: FunctionComponent<SignInProps> = (props) => {
+  const { auth, authService } = props;
   const styles = useStyles(props);
 
+  const dispatch = useDispatch();
+
+  // current and previous dailog static state
   const [ thisDialog, fromDialog ] = useDialogNavState(296, 350, props);
 
+  // redux auth state: action status and user
+  const { actionStatus, user } = auth;
+
   const [values, setValues] = useState<State>({    
-    username: '',
+    username: user ? user.username : '',
     password: '',
   });
 
@@ -43,11 +65,46 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
         break;
       }
       case 1: {
-        navigate('/mycs/authcode', thisDialog);
+        authService.signIn(values.username, values.password);
         break;
       }
     }
   };
+
+  // handle auth action status result
+  useActionStatus(actionStatus, 
+    () => {
+      if (actionStatus.actionType == SIGN_IN_REQ) {
+        navigate('/mycs/authcode', thisDialog);
+      }
+    },
+    (error) => {
+      if (error.err.name == ERROR_NOT_CONFIRMED) {
+        thisDialog.state.data['username'] = values.username;
+        
+        dispatch(
+          notify(
+            `User account for "${values.username}" has not been confirmed. Please confirm before signing in.`, 
+            'info'
+          )
+        );
+        navigate('/mycs/verify', thisDialog);
+        return true;
+      }
+      return false;
+    }
+  );
+
+  // check if all input is available 
+  // to proceed with signin
+  const disableSignIn = (
+    values.username.length == 0 || 
+    values.password.length == 0
+  );
+  
+  // check auth state is pending change 
+  // due to a backend call in progress 
+  const serviceCallInProgress = (actionStatus.result == ActionResult.pending);
 
   return (
     <FormBox
@@ -61,12 +118,15 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
           {
             text: 'Sign Up',
             icon: <Icon icon={signupIcon} />,
-            onClick: handleButtonClick.bind(this)
+            onClick: handleButtonClick.bind(this),
+            disabled: serviceCallInProgress
           },
           {
             text: 'Sign In',
             icon: <Icon icon={signinIcon} />,
-            onClick: handleButtonClick.bind(this)
+            onClick: handleButtonClick.bind(this),
+            disabled: disableSignIn,
+            working: serviceCallInProgress
           }
         ]
       }
@@ -95,23 +155,40 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
           className={styles.input}
           last
         />
+        <Link
+          component="button"
+          variant="body2"
+          onClick={() => {
+            console.info("reset password - to be implemented");
+          }}
+          className={styles.resetLink}
+        >
+          Reset Password
+        </Link>
       </Grid>
 
     </FormBox>
   );
 }
 
-export default SignIn;
+export default connect(AuthService.stateProps, AuthService.dispatchProps)(SignIn);
 
 const useStyles = makeStyles((theme) => ({
   input: {
     width: '90%'
+  },
+  resetLink: {
+    marginTop: '-1rem', 
+    marginLeft: 'auto', 
+    marginRight: '1.3rem'
   }
 }));
 
 type SignInProps = 
   BaseAppProps & 
   BaseContentProps & 
+  AuthStateProps & 
+  AuthActionProps & 
   DialogNavProps
 
 type State = {

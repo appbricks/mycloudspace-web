@@ -3,14 +3,23 @@ import React, {
   MouseEvent,
   useState
 } from 'react';
+import { connect } from 'react-redux';
 import { navigate } from '@reach/router';
-import { useDispatch } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { Icon } from '@iconify/react';
 import cancelIcon from '@iconify/icons-mdi/cancel';
 import verifyIcon from '@iconify/icons-mdi/check-bold';
+
+import { ActionResult } from '@appbricks/utils';
+
+import { 
+  VALIDATE_MFA_CODE_REQ,
+  AuthService,
+  AuthActionProps,
+  AuthStateProps
+} from '@appbricks/identity';
 
 import { BaseAppProps, BaseContentProps } from '../../../common/config';
 
@@ -22,18 +31,21 @@ import useDialogNavState, {
   DialogNavProps 
 } from '../../../common/components/forms/useDialogNavState';
 
-import * as Auth from '../../../common/state/auth';
+import { useActionStatus } from '../../../common/state/status';
 
 const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
+  const { auth, authService } = props;
   const styles = useStyles(props);
 
+  // current and previous dailog static state
   const [ thisDialog, fromDialog ] = useDialogNavState(205, 350, props);
+
+  // redux auth state: action status and user
+  const { actionStatus, user } = auth;
 
   const [values, setValues] = useState<State>({
     authCode: ''
-  });
-  
-  const dispatch = useDispatch()
+  }); 
 
   const handleChange = (prop: string, value: string) =>  {
     setValues({ ...values, [prop]: value });
@@ -46,12 +58,22 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
         break;
       }
       case 1: {
-        dispatch(Auth.signin());
-        navigate('/mycs', thisDialog);
+        authService.validateMFACode(values.authCode);
         break;
       }
     }
   };
+
+  // handle auth action status result
+  useActionStatus(actionStatus, () => {
+    if (actionStatus.actionType == VALIDATE_MFA_CODE_REQ) {
+      navigate('/mycs', thisDialog);
+    }
+  });
+
+  // check auth state is pending change 
+  // due to a backend call in progress 
+  const serviceCallInProgress = (actionStatus.result == ActionResult.pending);
 
   return (
     <FormBox
@@ -96,7 +118,7 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
   );
 }
 
-export default AuthCode;
+export default connect(AuthService.stateProps, AuthService.dispatchProps)(AuthCode);
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -107,6 +129,8 @@ const useStyles = makeStyles((theme) => ({
 type AuthCodeProps = 
   BaseAppProps & 
   BaseContentProps & 
+  AuthStateProps & 
+  AuthActionProps & 
   DialogNavProps
 
 type State = {

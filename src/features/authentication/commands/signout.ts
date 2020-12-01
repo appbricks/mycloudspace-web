@@ -3,12 +3,13 @@ import { navigate } from '@reach/router';
 import { Logger } from '@appbricks/utils';
 
 import { CommandFn } from '../../../common/config';
-import * as Auth from '../../../common/state/auth';
+import { AuthService } from '@appbricks/identity';
 
 const signout: CommandFn = (dispatch, props) => {
   Logger.trace('signout', 'initiating log out action');
 
-  dispatch(Auth.signout());
+  const api = AuthService.dispatchProps(dispatch);
+  api.authService.signOut();
   navigate(props['uri']);
 }
 
