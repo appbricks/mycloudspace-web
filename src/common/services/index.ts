@@ -25,7 +25,6 @@ const initServices = (): Services => {
   // setup persistence service's backend
   setLocalStorageImpl({
     setItem: (key: string, value: string): Promise<void> => {
-      console.log('-->', isBrowser)
       if (isBrowser) {
         localStorage.setItem(key, value);
         return Promise.resolve();
