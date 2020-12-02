@@ -1,16 +1,12 @@
 import React, { 
   ElementType, 
   FunctionComponent,
-  useState,
   useEffect
 } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from '@reach/router';
 
-import { ActionResult } from '@appbricks/utils';
-
 import { 
-  LOAD_AUTH_STATE_REQ,
   AuthService,
   AuthActionProps,
   AuthStateProps
@@ -42,6 +38,8 @@ const PublicRoute: FunctionComponent<PublicRouteProps> = ({
       {auth!.session.isValid() && (
         <Component
           appConfig={appConfig}
+          auth={auth}
+          authService={authService}
           {...componentProps}
           {...other}
         />
@@ -52,12 +50,12 @@ const PublicRoute: FunctionComponent<PublicRouteProps> = ({
 
 export default connect(AuthService.stateProps, AuthService.dispatchProps)(PublicRoute);
 
-type PublicRouteProps = RouteComponentProps<
+type PublicRouteProps = 
   BaseAppProps &
   BaseContentProps &
   AuthStateProps & 
-  AuthActionProps & {
-
-  component: ElementType
-  componentProps?: { [props: string]: any }
-}>
+  AuthActionProps & 
+  RouteComponentProps<{
+    component: ElementType
+    componentProps?: { [props: string]: any }
+  }>

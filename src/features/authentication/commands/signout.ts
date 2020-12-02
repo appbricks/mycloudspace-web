@@ -9,7 +9,7 @@ const signout: CommandFn = (dispatch, props) => {
   Logger.trace('signout', 'initiating log out action');
 
   const api = AuthService.dispatchProps(dispatch);
-  api.authService.signOut();
+  api.authService!.signOut();
   navigate(props['uri']);
 }
 

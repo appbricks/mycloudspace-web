@@ -3,7 +3,6 @@ import React, {
   MouseEvent,
   useState
 } from 'react';
-import { connect } from 'react-redux';
 import { navigate } from '@reach/router';
 import Grid from '@material-ui/core/Grid';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -34,7 +33,6 @@ import { StaticContent } from '../../../common/components/content';
 import { 
   SIGN_UP_REQ,
   User,
-  AuthService,
   AuthActionProps,
   AuthStateProps
 } from '@appbricks/identity';
@@ -52,14 +50,14 @@ import useDialogNavState, {
 import { useActionStatus } from '../../../common/state/status';
 
 const SignUp: FunctionComponent<SignUpProps> = (props) => {
-  const { content, auth, authService } = props;
+  const { appConfig, content, auth, authService } = props;
   const styles = useStyles();
 
   // current and previous dailog static states
   const [ thisDialog, fromDialog ] = useDialogNavState(624, 350, props);
 
   // redux auth state: action status and user
-  const { actionStatus } = auth;
+  const { actionStatus } = auth!;
   
   const [formData, setFormData] = useState<FormData>({
     username: '',
@@ -95,7 +93,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
   const handleButtonClick = (index: number) => (event: MouseEvent<HTMLButtonElement>) => {
     switch(index) {
       case 0: {
-        navigate('/mycs/signin', thisDialog);
+        navigate(appConfig.routeMap['signin'].uri, thisDialog);
         break;
       }
       case 1: {
@@ -105,7 +103,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
         user.emailAddress = formData.emailAddress;
         user.mobilePhone = '+' + formData.mobilePhone;
         
-        authService.signUp(user);
+        authService!.signUp(user);
         break;
       }
     }
@@ -114,7 +112,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
   // handle auth action status result
   useActionStatus(actionStatus, () => {
     if (actionStatus.actionType == SIGN_UP_REQ) {
-      navigate('/mycs/verify', thisDialog);
+      navigate(appConfig.routeMap['verify'].uri, thisDialog);
     }
   });
 
@@ -254,7 +252,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
   );
 }
 
-export default connect(AuthService.stateProps, AuthService.dispatchProps)(SignUp);
+export default SignUp;
 
 const useStyles = makeStyles((theme) => ({
   input: {

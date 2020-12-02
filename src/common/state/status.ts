@@ -35,6 +35,15 @@ export const useActionStatus = (
           dispatch(notify(message, 'error'));  
         }
         break;
+
+      case ActionResult.warn: 
+        break;
+
+      case ActionResult.info: 
+        break;
+
+      case ActionResult.error: 
+        break;
       
       case ActionResult.success:
         successCallback();

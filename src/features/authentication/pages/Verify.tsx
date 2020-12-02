@@ -3,7 +3,7 @@ import React, {
   MouseEvent,
   useState
 } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { navigate, Redirect } from '@reach/router';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -17,7 +17,6 @@ import { ActionResult } from '@appbricks/utils';
 
 import { 
   CONFIRM_SIGN_UP_CODE_REQ,
-  AuthService,
   AuthActionProps,
   AuthStateProps 
 } from '@appbricks/identity';
@@ -46,14 +45,14 @@ const VerifyAccount: FunctionComponent<VerifyAccountProps> = (props) => {
   const [ thisDialog, fromDialog ] = useDialogNavState(338, 350, props);
 
   // redux auth state: action status and user
-  const { actionStatus, user, awaitingUserConfirmation } = auth;
+  const { actionStatus, user, awaitingUserConfirmation } = auth!;
 
   // retrieve username of account to verify which
   // may be passed via the signed up user object
   // or a username that was detected as unconfirmed
   // by the signin dialog.
   const username = 
-    (user && user.username) || 
+    (user && !user.isConfirmed() && user.username) || 
     fromDialog.state.data['username'];
 
   const [values, setValues] = useState<State>({
@@ -65,17 +64,17 @@ const VerifyAccount: FunctionComponent<VerifyAccountProps> = (props) => {
   };
 
   const handleResendCode = (event: MouseEvent<HTMLButtonElement>) => {
-    authService.resendSignUpCode(username);
+    authService!.resendSignUpCode(username);
   }
 
   const handleButtonClick = (index: number) => (event: MouseEvent<HTMLButtonElement>) => {
     switch(index) {
       case 0: {
-        navigate('/mycs/signin', thisDialog);
+        navigate(appConfig.routeMap['signin'].uri, thisDialog);
         break;
       }
       case 1: {
-        authService.confirmSignUpCode(values.verificationCode, username);
+        authService!.confirmSignUpCode(values.verificationCode, username);
         break;
       }
     }
@@ -90,7 +89,7 @@ const VerifyAccount: FunctionComponent<VerifyAccountProps> = (props) => {
           'success'
         )
       );
-      navigate('/mycs/signin', thisDialog);
+      navigate(appConfig.routeMap['signin'].uri, thisDialog);
     }
   });
   
@@ -173,7 +172,7 @@ const VerifyAccount: FunctionComponent<VerifyAccountProps> = (props) => {
   );
 }
 
-export default connect(AuthService.stateProps, AuthService.dispatchProps)(VerifyAccount);
+export default VerifyAccount;
 
 const useStyles = makeStyles((theme) => ({
   content: {

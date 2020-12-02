@@ -1,23 +1,31 @@
-import React, { ElementType, FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
+import React, { 
+  ElementType, 
+  FunctionComponent 
+} from 'react';
+import { connect } from 'react-redux';
 import { RouteComponentProps, Redirect } from '@reach/router';
+
+import { 
+  AuthService,
+  AuthActionProps,
+  AuthStateProps
+} from '@appbricks/identity';
 
 import { BaseAppProps, BaseContentProps } from '../../config';
 import Layout from '../layout/Layout';
 
-import * as Auth from '../../state/auth';
-
 const PrivateRoute: FunctionComponent<PrivateRouteProps> = ({ 
   appConfig,
+  auth,
+  authService,
   component: Component, 
   componentProps,
   ...other 
 }) => {
   if (!appConfig || !Component) 
     throw 'properties appConfig and Component are required for PrivateRoute element';
-
-  const isLoggedIn = useSelector(Auth.isLoggedIn);
-  if (!isLoggedIn) {
+  
+  if (!auth!.isLoggedIn) {
     return (
       <Redirect 
         to={appConfig.routeMap['signin'].uri} 
@@ -33,7 +41,9 @@ const PrivateRoute: FunctionComponent<PrivateRouteProps> = ({
       {...other}
     >
       <Component 
-        appConfig={appConfig} 
+        appConfig={appConfig}
+        auth={auth}
+        authService={authService}
         {...componentProps}
         {...other}
       />
@@ -41,12 +51,14 @@ const PrivateRoute: FunctionComponent<PrivateRouteProps> = ({
   );
 }
 
-export default PrivateRoute;
+export default connect(AuthService.stateProps, AuthService.dispatchProps)(PrivateRoute);
 
-type PrivateRouteProps = RouteComponentProps<
+type PrivateRouteProps = 
   BaseAppProps & 
-  BaseContentProps & {
-
-  component: ElementType
-  componentProps?: { [props: string]: any } 
-}>
+  BaseContentProps &
+  AuthStateProps & 
+  AuthActionProps & 
+  RouteComponentProps<{
+    component: ElementType
+    componentProps?: { [props: string]: any } 
+  }>
