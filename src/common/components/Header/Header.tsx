@@ -81,7 +81,7 @@ const useStyles = makeStyles(theme => ({
     marginLeft: '5px',
     marginBottom: '2px',
     padding: '4px 10px 6px 10px',
-    borderRadius: '5px',
+    borderRadius: '2px',
     backgroundColor: props.appConfig.logos.logoBadgeColor,
   }),
   toolbar: {

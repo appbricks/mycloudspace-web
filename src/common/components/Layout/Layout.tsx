@@ -32,7 +32,6 @@ const Layout: FunctionComponent<LayoutProps> = (props) => {
   } = props;
 
   const isLoggedIn = useSelector(Auth.isLoggedIn);
-  const user = useSelector(Auth.user);
   
   const mainMenu = getMainMenu(appConfig);
   const profileMenu = getProfileMenu(appConfig, content);

@@ -1,25 +1,36 @@
 import React, { 
   FunctionComponent, 
 } from 'react';
-import { makeStyles  } from '@material-ui/core/styles';  
+import { useSelector } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';  
 import Box from '@material-ui/core/Box';
 
 import ProfileMenu from './ProfileMenu';
 import { ProfileMenuDataItem } from './getProfileMenu';
 
+import * as Auth from '../../../state/auth';
+
 const UserNav: FunctionComponent<UserNavProps> = ({
   menuItems
 }) => {
-
   const styles = useStyles();
+  const user = useSelector(Auth.user);
+
+  const name = user!.familyName && user!.firstName
+    ? `${user!.firstName} ${user!.familyName}` 
+    : user!.username;
+
+  const initials = (name.charAt(0).toUpperCase() + name.slice(1))
+    .replace(/[^A-Z ]/g, '');
 
   return (
     <Box className={styles.menu}>
       <ProfileMenu
-        avatarName='Mevan'
-        avatarUrl='/static/35edb927db324db56e94b270710fe900/4fe8c/mevan.jpg'
+        avatarName={name}
+        avatarUrl={user!.profilePictureUrl!}
+        avatarLetters={initials}
         menuItems={menuItems}
-      />
+      />      
     </Box>
   );
 };

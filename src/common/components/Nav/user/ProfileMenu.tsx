@@ -27,6 +27,7 @@ import { ProfileMenuDataItem } from './getProfileMenu';
 const ProfileMenu: FunctionComponent<ProfileMenuProps> = ({ 
   avatarName,
   avatarUrl,
+  avatarLetters,
   menuItems
 }) => {
 
@@ -124,7 +125,10 @@ const ProfileMenu: FunctionComponent<ProfileMenuProps> = ({
             styles.avatar, 
             state.active ? styles.avatarActive: styles.avatarInactive
           )}
-        />
+        >
+          {avatarLetters}
+        </Avatar>
+       
       </MenuButton>
       <Popper 
         open={state.active} 
@@ -241,7 +245,8 @@ const useStyles = makeStyles(theme => ({
 
 type ProfileMenuProps = {
   avatarName: string
-  avatarUrl: string
+  avatarUrl?: string
+  avatarLetters?: string
 
   menuItems: ProfileMenuDataItem[]
 }
