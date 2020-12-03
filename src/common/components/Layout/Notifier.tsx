@@ -36,6 +36,7 @@ const Notifier: FunctionComponent<NotifierProps> = (props) => {
         // display snackbar using notistack
         enqueueSnackbar(title, {
           ...options,
+          preventDuplicate: true,
           onEntered: (node: HTMLElement, isAppearing: boolean, key: string) => {
             // reset timer of snackbars that 
             // we've displayed and tracking
