@@ -40,7 +40,8 @@ import {
   SignIn,
   SignUp,
   Verify,
-  AuthCode
+  AuthCode,
+  Reset
 } from './features/authentication/pages';
 import {
   Profile,
@@ -57,6 +58,7 @@ export const features = {
   SignUp,
   Verify,
   AuthCode,
+  Reset,
   Profile,
   Security,
   SpacesHome,

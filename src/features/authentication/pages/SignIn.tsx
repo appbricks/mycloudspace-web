@@ -18,6 +18,7 @@ import { ActionResult } from '@appbricks/utils';
 import {
   ERROR_NOT_CONFIRMED,
   SIGN_IN_REQ,
+  RESET_PASSWORD_REQ,
   AUTH_NO_MFA,
   AuthActionProps,
   AuthStateProps
@@ -71,22 +72,45 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
     }
   };
 
+  const handleResetPassword = () => {
+    if (values.username.length == 0) {
+      dispatch(
+        notify(
+          'Please provide the username whose password needs to be reset.',
+          'error'
+        )
+      );
+    } else {
+      authService!.resetPassword(values.username);
+    }
+  }
+
   // handle auth action status result
   useActionStatus(actionStatus,
     () => {
-      if (actionStatus.actionType == SIGN_IN_REQ) {
-        if (awaitingMFAConfirmation == AUTH_NO_MFA) {
-          dispatch(
-            notify(
-              `Multi-factor authentication is not enabled for "${values.username}". You can configure it via the security option within the profile menu.`,
-              'info'
-            )
-          );
-          navigate(appConfig.routeMap['appHome'].uri);
+      switch (actionStatus.actionType) {
+        
+        case SIGN_IN_REQ: {
+          if (awaitingMFAConfirmation == AUTH_NO_MFA) {
+            dispatch(
+              notify(
+                `Multi-factor authentication is not enabled for "${values.username}". You can configure it via the security option within the profile menu.`,
+                'info'
+              )
+            );
+            navigate(appConfig.routeMap['appHome'].uri);
 
-        } else {
+          } else {
+            thisDialog.state.data['username'] = values.username;
+            navigate(appConfig.routeMap['authcode'].uri, thisDialog);
+          }
+          break;
+        }
+
+        case RESET_PASSWORD_REQ: {
           thisDialog.state.data['username'] = values.username;
-          navigate(appConfig.routeMap['authcode'].uri, thisDialog);
+          navigate(appConfig.routeMap['reset'].uri, thisDialog);    
+          break;  
         }
       }
     },
@@ -140,13 +164,13 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
           {
             text: 'Sign Up',
             icon: <Icon icon={signupIcon} />,
-            onClick: handleButtonClick.bind(this),
+            onClick: handleButtonClick,
             disabled: serviceCallInProgress
           },
           {
             text: 'Sign In',
             icon: <Icon icon={signinIcon} />,
-            onClick: handleButtonClick.bind(this),
+            onClick: handleButtonClick,
             disabled: disableSignIn,
             working: serviceCallInProgress
           }
@@ -163,7 +187,7 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
           id='username'
           label='Username'
           value={values.username}
-          handleChange={handleChange.bind(this)}
+          handleChange={handleChange}
           enableAutofill='passwordManagersOnly'
           disabled={serviceCallInProgress}
           className={styles.input}
@@ -173,7 +197,7 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
           id='password'
           label='Password'
           value={values.password}
-          handleChange={handleChange.bind(this)}
+          handleChange={handleChange}
           enableAutofill='passwordManagersOnly'
           disabled={serviceCallInProgress}
           className={styles.input}
@@ -182,9 +206,7 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
         <Link
           component="button"
           variant="body2"
-          onClick={() => {
-            console.info("reset password - to be implemented");
-          }}
+          onClick={handleResetPassword}
           disabled={serviceCallInProgress}
           className={styles.resetLink}
         >

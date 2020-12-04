@@ -193,7 +193,9 @@ const useStyles = makeStyles((theme) => ({
   },
   tabPanel: {
     flexGrow: 100, 
-    overflowY: 'scroll'
+    maxWidth: '100%',
+    overflowY: 'scroll',
+    overflowX: 'hidden'
   }
 }));
 

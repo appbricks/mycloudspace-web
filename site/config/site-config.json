@@ -43,6 +43,11 @@
           "name": "authcode", 
           "uri": "/mycs/authcode",
           "feature": "AuthCode"
+        },
+        { 
+          "name": "reset", 
+          "uri": "/mycs/reset",
+          "feature": "Reset"
         }
       ],
       "private": [
