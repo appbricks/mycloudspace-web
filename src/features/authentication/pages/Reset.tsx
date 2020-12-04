@@ -38,7 +38,7 @@ import useDialogNavState, {
   DialogNavProps 
 } from '../../../common/components/forms/useDialogNavState';
 
-import { notify } from '../../../common/state/app';
+import { notify } from '../../../common/state/notifications';
 import { useActionStatus } from '../../../common/state/status';
 
 const Reset: FunctionComponent<ResetProps> = (props) => {

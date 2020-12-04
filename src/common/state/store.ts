@@ -15,12 +15,15 @@ import {
 } from '@appbricks/utils';
 
 import app from './app';
+import notifications from './notifications';
 import { authService } from '../services';
 
 // store state reducers
 const rootReducer = combineReducers({
   // application state
   app,
+  // notifications state
+  notifications,
   // auth state
   auth: authService.reducer()
 });

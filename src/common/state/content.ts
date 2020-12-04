@@ -3,14 +3,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { persistReducer } from 'redux-persist'
 import sessionStorage from 'redux-persist/lib/storage/session'
 
-import { AppConfig } from '../config';
-
 export const app = createSlice({
-  name: 'app',
+  name: 'content',
 
   initialState: {
     initialized: false,
-  } as AppState,
+  } as ContentState,
 
   reducers: {
 
@@ -18,38 +16,41 @@ export const app = createSlice({
      * Configuration
      */
     initialize: {
-      reducer: (state, action: PayloadAction<AppConfig>) => {
-        return {
-          ...state,
-          initialized: true,
-          config: action.payload
-        };
+      reducer: (state, action: PayloadAction<StaticContent>) => {
+        return state;
       },
       prepare: ( 
-        config: AppConfig
       ) => {
         return {
-          payload: config
+          payload: {            
+          }
         }
       }
-    }
+    },
   }
 })
 
 export const { 
-  initialize,
+  initialize  
 } = app.actions;
 
 export default persistReducer(
   {
-    key: 'app',
+    key: 'content',
     storage: sessionStorage,
     blacklist: []
   }, 
   app.reducer
 );
 
-type AppState = {
+type ContentState = {
   initialized: boolean
-  config: AppConfig
+
+  content: Content
 }
+
+export type StaticContent = {
+}
+
+export type Content = contentKeyMap | { [path: string]: contentKeyMap }
+type contentKeyMap = {[key: string]: string}

@@ -5,12 +5,15 @@ import { useSnackbar, OptionsObject } from 'notistack';
 import { Logger } from '@appbricks/utils';
 
 import { RootState } from '../../state/store';
-import { Notification, removeNotification } from '../../state/app';
+import { Notification, removeNotification } from '../../state/notifications';
 
 const Notifier: FunctionComponent<NotifierProps> = (props) => {
   const dispatch = useDispatch();
-  const notifications = useSelector<RootState, Notification[]>(store => store.app.notifications);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+  const notifications = useSelector<RootState, Notification[]>(
+    store => store.notifications.notifications
+  );
 
   React.useEffect(() => {
     notifications.forEach(

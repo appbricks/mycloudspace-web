@@ -25,7 +25,9 @@ const PrivateRoute: FunctionComponent<PrivateRouteProps> = ({
   if (!appConfig || !Component) 
     throw 'properties appConfig and Component are required for PrivateRoute element';
   
-  if (!auth!.isLoggedIn) {
+  // private routes are allowed only if a valid auth 
+  // session exists and it has a logged in status
+  if (!auth!.session.isValid() || !auth!.isLoggedIn) {
     return (
       <Redirect 
         to={appConfig.routeMap['signin'].uri} 

@@ -8,7 +8,7 @@ import {
   createResetStatusAction 
 } from '@appbricks/utils';
 
-import { notify } from './app';
+import { notify } from './notifications';
 
 // Hook to handle action status 
 // errors and success conditions
