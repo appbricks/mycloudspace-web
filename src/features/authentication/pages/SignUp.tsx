@@ -27,15 +27,15 @@ import {
   inputValidator
 } from '@appbricks/data-validators';
 
-import { BaseAppProps, BaseContentProps } from '../../../common/config';
-import { StaticContent } from '../../../common/components/content';
-
 import { 
   SIGN_UP_REQ,
   User,
   AuthActionProps,
   AuthStateProps
 } from '@appbricks/identity';
+
+import { BaseAppProps, BaseContentProps } from '../../../common/config';
+import { StaticContent } from '../../../common/components/content';
 
 import {
   FormBox,

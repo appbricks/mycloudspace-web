@@ -35,7 +35,7 @@ import useDialogNavState, {
 import { notify } from '../../../common/state/app';
 import { useActionStatus } from '../../../common/state/status';
 
-const VerifyAccount: FunctionComponent<VerifyAccountProps> = (props) => {
+const Verify: FunctionComponent<VerifyProps> = (props) => {
   const { appConfig, content, auth, authService } = props;
   const styles = useStyles(props);
 
@@ -172,7 +172,7 @@ const VerifyAccount: FunctionComponent<VerifyAccountProps> = (props) => {
   );
 }
 
-export default VerifyAccount;
+export default Verify;
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -191,7 +191,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type VerifyAccountProps = 
+type VerifyProps = 
   BaseAppProps & 
   BaseContentProps & 
   AuthStateProps & 
