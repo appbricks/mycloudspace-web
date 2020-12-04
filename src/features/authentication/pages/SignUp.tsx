@@ -188,7 +188,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           validator={inputValidator}
           validatorOptions={{ 
             verifyWith: formData.password,
-            verifyWithName: 'password'
+            longMessage: 'The verification password does not match the password entered.'
           }}
           handleValidationResult={handleValidationResult}
           forceValidate={formIGO.accept}
