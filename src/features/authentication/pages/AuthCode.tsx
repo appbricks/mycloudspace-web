@@ -75,8 +75,7 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
     }
   });
 
-  // check if account confirmation is 
-  // in context and necessary
+  // check if username is in context
   if (!username) {    
     return (
       <Redirect 
