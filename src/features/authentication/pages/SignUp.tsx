@@ -138,6 +138,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           {
             text: 'Sign Up',
             icon: <Icon icon={signupIcon} />,
+            default: true,
             onClick: handleButtonClick,
             disabled: !formIGO.inputOk,
             working: serviceCallInProgress

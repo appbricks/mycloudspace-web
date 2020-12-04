@@ -170,6 +170,7 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
           {
             text: 'Sign In',
             icon: <Icon icon={signinIcon} />,
+            default: true,
             onClick: handleButtonClick,
             disabled: disableSignIn,
             working: serviceCallInProgress
@@ -205,6 +206,7 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
         />
         <Link
           component="button"
+          type="button"
           variant="body2"
           onClick={handleResetPassword}
           disabled={serviceCallInProgress}

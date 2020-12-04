@@ -111,6 +111,7 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
           {
             text: 'Verify',
             icon: <Icon icon={verifyIcon} />,
+            default: true,
             onClick: handleButtonClick,
             disabled: disableVerify,
             working: serviceCallInProgress

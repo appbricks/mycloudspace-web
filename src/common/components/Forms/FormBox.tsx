@@ -62,37 +62,40 @@ const FormBox: FunctionComponent<FormBoxProps> = ({
     >
       <h1 className={styles.heading}>{title}</h1>
       <Divider />
-      
-      {children}
 
-      <Grid
-        container
-        direction='row'
-        justify='space-around'
-        className={styles.actionBar}
-      >
-        {buttons.map((button, index) => (
-          <Grid item 
-            key={index} 
-            xs={gridColumns} 
-            className={cx(
-              styles.actionBarCell, 
-              index != lastButtonIndex && styles.actionBarDivider
-            )}
-          >
-            <Button 
-              endIcon={button.icon ? button.icon : undefined}
-              onClick={button.onClick(index)}
-              disabled={button.disabled || button.working}
-              className={styles.actionButton}
+      <form>
+        {children}
+        <Grid
+          container
+          direction='row'
+          justify='space-around'
+          className={styles.actionBar}
+        >
+          {buttons.map((button, index) => (
+            <Grid item 
+              key={index} 
+              xs={gridColumns} 
+              className={cx(
+                styles.actionBarCell, 
+                index != lastButtonIndex && styles.actionBarDivider
+              )}
             >
-              {button.text}
-            </Button>
-            {button.working && 
-              <CircularProgress size={24} className={styles.buttonProgress} />}
-          </Grid>
-        ))}
-      </Grid>
+              <Button 
+                type={button.default ? 'submit' : 'button'}
+                endIcon={button.icon ? button.icon : undefined}
+                onClick={button.onClick(index)}
+                disabled={button.disabled || button.working}
+                className={styles.actionButton}
+              >
+                {button.text}
+              </Button>
+              {button.working && 
+                <CircularProgress size={24} className={styles.buttonProgress} />}
+            </Grid>
+          ))}
+        </Grid>
+
+      </form>
     </Paper>
   );
 }
@@ -174,6 +177,7 @@ type FormBoxProps = {
 export type ButtonProp = {
   text: string
   icon?: ReactElement
+  default?: boolean
   disabled?: boolean
   working?: boolean
   onClick: (index: number) => (event: MouseEvent<HTMLButtonElement>) => void
