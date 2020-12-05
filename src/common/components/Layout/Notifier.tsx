@@ -44,11 +44,11 @@ const Notifier: FunctionComponent<NotifierProps> = (props) => {
             // reset timer of snackbars that 
             // we've displayed and tracking
             displayed[key] = -1;
+            dispatch(removeNotification(key));
             Logger.trace('Notifier', 'Notification has been displayed', key, displayed);
           },
           onExited: (node: HTMLElement, key: string) => {
             // remove this snackbar from redux store
-            dispatch(removeNotification(key));
             delete displayed[key];
             Logger.trace('Notifier', 'Notification has been removed', key, displayed);
           }
@@ -56,6 +56,23 @@ const Notifier: FunctionComponent<NotifierProps> = (props) => {
 
         // keep track of snackbars that we've displayed
         displayed[key] = Date.now();
+
+        // clean up any keys that have been displayed and 
+        // may not have been removed for example if onExited 
+        // was not called, due to a rerender while a 
+        // notification was displayed
+        for (const [key, value] of Object.entries(displayed)) {
+          if (value == -1) {
+            const found = notifications.find(({ options }) => {
+              const nkey = (options as OptionsObject).key as string;
+              return key == nkey;
+            });
+            if (!found) {
+              delete displayed[key];
+            }
+          }
+        }
+
         Logger.trace('Notifier', 'Enqueued notification for display', key, displayed);
       }
     );
