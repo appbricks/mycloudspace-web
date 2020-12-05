@@ -107,5 +107,10 @@ type Route = {
 }
 
 // Command function signature
-export type CommandFn = (dispatch: redux.Dispatch<redux.Action>, prop: CommandProps) => void;
+export type CommandFn = (
+  dispatch: redux.Dispatch<redux.Action>,
+  appConfig: AppConfig, 
+  prop: CommandProps
+) => void;
+
 export type CommandProps = { [name: string]: string };

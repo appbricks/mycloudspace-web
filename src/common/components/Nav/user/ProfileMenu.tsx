@@ -21,6 +21,8 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Avatar from '@material-ui/core/Avatar';
 import cx from 'clsx';
 
+import { useAppConfig } from '../../../state/app';
+
 import MenuButton from './MenuButton';
 import { ProfileMenuDataItem } from './getProfileMenu';
 
@@ -33,6 +35,7 @@ const ProfileMenu: FunctionComponent<ProfileMenuProps> = ({
 
   const styles = useStyles();
   const dispatch = useDispatch();
+  const appConfig = useAppConfig();
 
   const menuAnchor = useRef<HTMLDivElement>(null);
 
@@ -81,7 +84,11 @@ const ProfileMenu: FunctionComponent<ProfileMenuProps> = ({
   }
   const handleSelection = (index: number) => {
     if (menuItems[index].commandFn) {
-      menuItems[index].commandFn!(dispatch, menuItems[index].commandProps!);
+      menuItems[index].commandFn!(
+        dispatch, 
+        appConfig, 
+        menuItems[index].commandProps!
+      );
     }
 
     setState({
