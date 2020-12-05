@@ -22,7 +22,7 @@ const PrivateRoute: FunctionComponent<PrivateRouteProps> = ({
   ...other 
 }) => {
   if (!Component) 
-    throw 'properties appConfig and Component are required for PrivateRoute element';
+    throw 'property Component is required for PrivateRoute element';
   
   // private routes are allowed only if a valid auth 
   // session exists and it has a logged in status

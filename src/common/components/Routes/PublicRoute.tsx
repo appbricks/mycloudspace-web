@@ -22,7 +22,7 @@ const PublicRoute: FunctionComponent<PublicRouteProps> = ({
   ...other
 }) => {
   if (!Component)
-    throw 'properties appConfig and Component are required for PublicRoute element';
+    throw 'properties Component is required for PublicRoute element';
 
   useEffect(() => {
     authService!.loadAuthState();
