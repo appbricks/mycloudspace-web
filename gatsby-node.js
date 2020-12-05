@@ -6,9 +6,6 @@
 const path = require('path');
 
 const { createFilePath } = require('gatsby-source-filesystem');
-const { appConfigQuery } = require('./src/common/config/appConfig');
-
-var appConfig = {};
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
   const { createNodeField } = actions;
@@ -31,9 +28,6 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
-
-  const appConfigQueryResult = await graphql(`${appConfigQuery}`);
-  appConfig = appConfigQueryResult.data.allConfigJson.edges[0].node.appConfig;
 
   const mdxQueryResult = await graphql(`
     {
@@ -69,8 +63,7 @@ exports.createPages = async ({ graphql, actions }) => {
       ),
       context: {
         id: edge.node.id,
-        name: edge.node.fields.name,
-        appConfig
+        name: edge.node.fields.name
       }
     });
   });
@@ -79,17 +72,15 @@ exports.createPages = async ({ graphql, actions }) => {
 exports.onCreatePage = async ({ page, actions }) => {
   const { createPage } = actions;
 
-  // add appConfig to context 
-  // of all pages created
   page.context = { 
-    appConfig
+    // add additional static properties to
+    // pass with page context at build time
   };
 
   // page.matchPath is a special key that's used for matching pages
   // only on the client.
   if (page.path.match(/^\/app/)) {
     page.matchPath = '/mycs/*';
-    console.log('Creating MyCS App pages with App Config => ', appConfig);
   }
 
   // Update the page.

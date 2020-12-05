@@ -6,7 +6,6 @@ import React, {
 import { useDispatch } from 'react-redux';
 import { navigate, Redirect } from '@reach/router';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { Icon } from '@iconify/react';
@@ -26,9 +25,12 @@ import {
   AuthStateProps 
 } from '@appbricks/identity';
 
-import { BaseAppProps, BaseContentProps } from '../../../common/config';
-import { StaticContent } from '../../../common/components/content';
+import { useAppConfig } from '../../../common/state/app';
+import { useLocationContent } from '../../../common/state/content';
 
+import { 
+  StaticContent 
+} from '../../../common/components/content';
 import {
   FormBox,
   CodeInput,
@@ -42,10 +44,12 @@ import { notify } from '../../../common/state/notifications';
 import { useActionStatus } from '../../../common/state/status';
 
 const Reset: FunctionComponent<ResetProps> = (props) => {
-  const { appConfig, content, auth, authService } = props;
-  const styles = useStyles(props);
-
   const dispatch = useDispatch();
+  const styles = useStyles(props);
+  const appConfig = useAppConfig();
+  const content = useLocationContent();
+
+  const { auth, authService } = props;
 
   // current and previous dailog static states
   const [ thisDialog, fromDialog ] = useDialogNavState(485, 350, props);
@@ -241,8 +245,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type ResetProps = 
-  BaseAppProps & 
-  BaseContentProps & 
   AuthStateProps & 
   AuthActionProps &
   DialogNavProps

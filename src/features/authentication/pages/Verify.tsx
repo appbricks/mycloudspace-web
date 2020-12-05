@@ -21,9 +21,12 @@ import {
   AuthStateProps 
 } from '@appbricks/identity';
 
-import { BaseAppProps, BaseContentProps } from '../../../common/config';
-import { StaticContent } from '../../../common/components/content';
+import { useAppConfig } from '../../../common/state/app';
+import { useLocationContent } from '../../../common/state/content';
 
+import { 
+  StaticContent 
+} from '../../../common/components/content';
 import {
   FormBox,
   CodeInput,
@@ -36,10 +39,12 @@ import { notify } from '../../../common/state/notifications';
 import { useActionStatus } from '../../../common/state/status';
 
 const Verify: FunctionComponent<VerifyProps> = (props) => {
-  const { appConfig, content, auth, authService } = props;
-  const styles = useStyles(props);
-
   const dispatch = useDispatch();
+  const styles = useStyles(props);
+  const appConfig = useAppConfig();
+  const content = useLocationContent();
+
+  const { auth, authService } = props;
 
   // current and previous dailog static states
   const [ thisDialog, fromDialog ] = useDialogNavState(338, 350, props);
@@ -193,8 +198,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type VerifyProps = 
-  BaseAppProps & 
-  BaseContentProps & 
   AuthStateProps & 
   AuthActionProps &
   DialogNavProps

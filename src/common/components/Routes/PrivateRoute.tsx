@@ -11,22 +11,22 @@ import {
   AuthStateProps
 } from '@appbricks/identity';
 
-import { BaseAppProps, BaseContentProps } from '../../config';
+import { useAppConfig } from '../../state/app';
 import Layout from '../layout/Layout';
 
 const PrivateRoute: FunctionComponent<PrivateRouteProps> = ({ 
-  appConfig,
   auth,
   authService,
   component: Component, 
   componentProps,
   ...other 
 }) => {
-  if (!appConfig || !Component) 
+  if (!Component) 
     throw 'properties appConfig and Component are required for PrivateRoute element';
   
   // private routes are allowed only if a valid auth 
   // session exists and it has a logged in status
+  const appConfig = useAppConfig();
   if (!auth!.session.isValid() || !auth!.isLoggedIn) {
     return (
       <Redirect 
@@ -39,11 +39,9 @@ const PrivateRoute: FunctionComponent<PrivateRouteProps> = ({
   return (
     <Layout 
       hideNav
-      appConfig={appConfig} 
       {...other}
     >
       <Component 
-        appConfig={appConfig}
         auth={auth}
         authService={authService}
         {...componentProps}
@@ -56,8 +54,6 @@ const PrivateRoute: FunctionComponent<PrivateRouteProps> = ({
 export default connect(AuthService.stateProps, AuthService.dispatchProps)(PrivateRoute);
 
 type PrivateRouteProps = 
-  BaseAppProps & 
-  BaseContentProps &
   AuthStateProps & 
   AuthActionProps & 
   RouteComponentProps<{

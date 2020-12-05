@@ -12,18 +12,16 @@ import {
   AuthStateProps
 } from '@appbricks/identity';
 
-import { BaseAppProps, BaseContentProps } from '../../config';
 import Layout from '../layout/Layout';
 
 const PublicRoute: FunctionComponent<PublicRouteProps> = ({
-  appConfig,
   auth,
   authService,
   component: Component,
   componentProps,
   ...other
 }) => {
-  if (!appConfig || !Component)
+  if (!Component)
     throw 'properties appConfig and Component are required for PublicRoute element';
 
   useEffect(() => {
@@ -32,12 +30,10 @@ const PublicRoute: FunctionComponent<PublicRouteProps> = ({
 
   return (
     <Layout
-      appConfig={appConfig}
       {...other}
     >
       {auth!.session.isValid() && (
         <Component
-          appConfig={appConfig}
           auth={auth}
           authService={authService}
           {...componentProps}
@@ -51,8 +47,6 @@ const PublicRoute: FunctionComponent<PublicRouteProps> = ({
 export default connect(AuthService.stateProps, AuthService.dispatchProps)(PublicRoute);
 
 type PublicRouteProps = 
-  BaseAppProps &
-  BaseContentProps &
   AuthStateProps & 
   AuthActionProps & 
   RouteComponentProps<{

@@ -4,16 +4,12 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
-import { BaseAppProps } from '../../../config';
+import { useAppConfig } from '../../../state/app';
 import getAppMenu from './getAppMenu';
 
 const AppNav: FunctionComponent<AppNavProps> = (props) => {
 
-  const {
-    appConfig,
-    ...other
-  } = props;
-
+  const appConfig = useAppConfig();
   const menuItems = getAppMenu(appConfig);
 
   const theme = useTheme();
@@ -56,7 +52,7 @@ const AppNav: FunctionComponent<AppNavProps> = (props) => {
           value={value}
           index={index}
           component={item.feature}
-          {...other}
+          {...props}
         />
       ))}
       {bottomBar && 
@@ -199,7 +195,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type AppNavProps = BaseAppProps & {
+type AppNavProps =  {
 }
 
 type AppNavTabsProps = {

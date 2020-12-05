@@ -15,6 +15,7 @@ import {
 } from '@appbricks/utils';
 
 import app from './app';
+import content from './content';
 import notifications from './notifications';
 import { authService } from '../services';
 
@@ -22,6 +23,8 @@ import { authService } from '../services';
 const rootReducer = combineReducers({
   // application state
   app,
+  // application content
+  content,
   // notifications state
   notifications,
   // auth state

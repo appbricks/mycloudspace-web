@@ -4,8 +4,7 @@ import { Icon } from '@iconify/react';
 import { Logger } from '@appbricks/utils';
 
 import { 
-  AppConfig, 
-  Content, 
+  AppConfig,
   CommandProps, 
   CommandFn 
 } from '../../../config';
@@ -14,8 +13,9 @@ import {
   features, 
   commands
 } from '../../../../site-config';
+import { ContentMap } from '../../../state/content';
 
-const getProfileMenu = (appConfig: AppConfig, content?: Content): ProfileMenuDataItem[] => {
+const getProfileMenu = (appConfig: AppConfig, content?: ContentMap): ProfileMenuDataItem[] => {
 
   if (profileMenuItems.length == 0 && appConfig.navigation.userNavMenu.profile.menuItems.length != 0) {
     // initialize main menu items 

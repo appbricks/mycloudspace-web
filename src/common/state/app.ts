@@ -1,9 +1,16 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { 
+  createSlice, 
+  PayloadAction 
+} from '@reduxjs/toolkit';
+import { useSelector } from 'react-redux';
 
 import { persistReducer } from 'redux-persist'
 import sessionStorage from 'redux-persist/lib/storage/session'
 
+import { RootState } from './store';
 import { AppConfig } from '../config';
+
+import { features } from '../../site-config';
 
 export const app = createSlice({
   name: 'app',
@@ -17,19 +24,62 @@ export const app = createSlice({
     /**
      * Configuration
      */
-    initialize: {
-      reducer: (state, action: PayloadAction<AppConfig>) => {
+    initApp: {
+      reducer: (state, action: PayloadAction<InitializePayload>) => {
+        const appConfig = action.payload.configs[0].node.appConfig;
+
+        // build feature route map
+        appConfig.routeMap = {};
+        appConfig.routes.public.forEach(route => {
+          appConfig.routeMap[route.name] = {
+            type: 'public',
+            uri: route.uri,
+            feature: features[route.feature]
+          }
+        });
+        appConfig.routes.private.forEach(route => {
+          appConfig.routeMap[route.name] = {
+            type: 'private',
+            uri: route.uri,
+            feature: features[route.feature]
+          }
+        });
+
+        // retrieve application static images
+        action.payload.images.map(imageNode => {
+
+          const imageSrc = imageNode
+              ? !!imageNode.node.childImageSharp
+                ? imageNode.node.childImageSharp.fluid.src
+                : ''
+              : '';
+
+          if (imageNode.node.relativePath == appConfig.logos.primaryLogo) {
+            appConfig.logos.primaryLogoSrc = imageSrc;
+
+          } else if (imageNode.node.relativePath == appConfig.logos.secondaryLogo) {
+            appConfig.logos.secondaryLogoSrc = imageSrc;
+
+          } else if (imageNode.node.relativePath == appConfig.layout.backgroundImage) {
+            appConfig.layout.backgroundImageSrc = imageSrc;
+          }
+        });
+
         return {
           ...state,
           initialized: true,
-          config: action.payload
+          config: appConfig
         };
       },
       prepare: ( 
-        config: AppConfig
+        configs: ConfigNode[],
+        images: ImageNode[]
       ) => {
         return {
-          payload: config
+          payload: {
+            configs,
+            images,
+          }
         }
       }
     }
@@ -37,7 +87,7 @@ export const app = createSlice({
 })
 
 export const { 
-  initialize,
+  initApp,
 } = app.actions;
 
 export default persistReducer(
@@ -51,5 +101,35 @@ export default persistReducer(
 
 type AppState = {
   initialized: boolean
-  config: AppConfig
+  config?: AppConfig
+}
+
+// inialize action payload type
+type InitializePayload = {
+  configs: ConfigNode[],
+  images: ImageNode[]
+}
+
+export type ConfigNode = {
+  node: {
+    appConfig: AppConfig
+  }
+}
+
+export type ImageNode = {
+  node: {
+    relativePath: string
+    childImageSharp: any  
+  }
+}
+
+// app config hook
+export const useAppConfig = (): AppConfig => {
+  const appConfig = useSelector(
+    (state: RootState) => state.app.config
+  );
+  if (!appConfig) {
+    throw 'ERROR! The application configuration has not been loaded to the redux application state.'
+  }
+  return appConfig;
 }

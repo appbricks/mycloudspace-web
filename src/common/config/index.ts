@@ -106,19 +106,6 @@ type Route = {
   feature: react.ElementType
 }
 
-// Base property type for application components
-export type BaseAppProps = {
-  appConfig: AppConfig
-}
-
-// Base property type for application components requiring static content
-export type BaseContentProps = {
-  content?: Content
-}
-
-export type Content = contentKeyMap | { [path: string]: contentKeyMap }
-type contentKeyMap = {[key: string]: string}
-
 // Command function signature
 export type CommandFn = (dispatch: redux.Dispatch<redux.Action>, prop: CommandProps) => void;
 export type CommandProps = { [name: string]: string };

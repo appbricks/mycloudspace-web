@@ -19,7 +19,8 @@ import {
   AuthStateProps
 } from '@appbricks/identity';
 
-import { BaseAppProps, BaseContentProps } from '../../../common/config';
+import { useAppConfig } from '../../../common/state/app';
+import { useStaticContent } from '../../../common/state/content';
 
 import {
   FormBox,
@@ -32,8 +33,10 @@ import useDialogNavState, {
 import { useActionStatus } from '../../../common/state/status';
 
 const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
-  const { appConfig, auth, authService } = props;
   const styles = useStyles(props);
+  const appConfig = useAppConfig();
+
+  const { auth, authService } = props;
 
   // current and previous dailog static state
   const [ thisDialog, fromDialog ] = useDialogNavState(205, 350, props);
@@ -58,7 +61,7 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
   const handleButtonClick = (index: number) => (event: MouseEvent<HTMLButtonElement>) => {
     switch(index) {
       case 0: {
-        navigate('/mycs/signin', thisDialog);
+        navigate(appConfig.routeMap['signin'].uri, thisDialog);
         break;
       }
       case 1: {
@@ -150,8 +153,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type AuthCodeProps = 
-  BaseAppProps & 
-  BaseContentProps & 
   AuthStateProps & 
   AuthActionProps & 
   DialogNavProps

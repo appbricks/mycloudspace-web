@@ -16,8 +16,6 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import { BaseAppProps, BaseContentProps } from '../../../common/config';
-
 import {
   FormDialog,
   DialogTitle,
@@ -143,7 +141,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type SecurityProps = BaseAppProps & BaseContentProps & {
+type SecurityProps = {
 
   open: boolean
   onClose: () => void

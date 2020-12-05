@@ -1,7 +1,14 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { 
+  createSlice, 
+  PayloadAction 
+} from '@reduxjs/toolkit';
+import { useSelector } from 'react-redux';
+import { useLocation } from "@reach/router";
 
 import { persistReducer } from 'redux-persist'
 import sessionStorage from 'redux-persist/lib/storage/session'
+
+import { RootState } from './store';
 
 export const app = createSlice({
   name: 'content',
@@ -15,14 +22,40 @@ export const app = createSlice({
     /**
      * Configuration
      */
-    initialize: {
-      reducer: (state, action: PayloadAction<StaticContent>) => {
-        return state;
+    initContent: {
+      reducer: (state, action: PayloadAction<InitializePayload>) => {
+
+        const staticContent: ContentMap = {};
+
+        action.payload.content
+          .map(contentNode => {
+
+            const fullPath = contentNode.node.fields.slug
+              .replace('/library/app', '')
+              .replace(/\/$/, '');
+            const path = fullPath.replace(/\/[^\/]*$/, '');
+            const key = fullPath.replace(/.*\//, '');
+
+            const content = staticContent[path] as ContentKeyMap;
+            if (content) {
+              content[key] = contentNode.node.body;
+            } else {
+              staticContent[path] = { [key]: contentNode.node.body };
+            }
+          });
+
+        return {
+          ...state,
+          initialized: true,
+          staticContent
+        };
       },
       prepare: ( 
+        content: ContentNode[]
       ) => {
         return {
-          payload: {            
+          payload: {    
+            content
           }
         }
       }
@@ -31,7 +64,7 @@ export const app = createSlice({
 })
 
 export const { 
-  initialize  
+  initContent  
 } = app.actions;
 
 export default persistReducer(
@@ -45,12 +78,46 @@ export default persistReducer(
 
 type ContentState = {
   initialized: boolean
-
-  content: Content
+  staticContent?: ContentMap
 }
 
-export type StaticContent = {
+export type ContentMap = { [path: string]: ContentKeyMap }
+export type ContentKeyMap = {[key: string]: string}
+
+// inialize action payload type
+export type InitializePayload = {
+  content: ContentNode[]
 }
 
-export type Content = contentKeyMap | { [path: string]: contentKeyMap }
-type contentKeyMap = {[key: string]: string}
+export type ContentNode = {
+  node: {
+    body: string
+    fields: {
+      slug: string
+    }
+  }
+};
+
+// static content hook
+export const useStaticContent = (): ContentMap => {
+  const staticContent = useSelector(
+    (state: RootState) => state.content.staticContent
+  );
+  if (!staticContent) {
+    throw 'ERROR! The static content has not been loaded to the redux content state.'
+  }
+  return staticContent;
+}
+
+// content hook
+export const useLocationContent = (): ContentKeyMap => {
+  const staticContent = useSelector(
+    (state: RootState) => state.content.staticContent
+  );
+  if (!staticContent) {
+    throw 'ERROR! The static content has not been loaded to the redux content state.'
+  }
+
+  const location = useLocation();
+  return staticContent[location.pathname];
+}

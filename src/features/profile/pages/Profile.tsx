@@ -17,8 +17,6 @@ import phoneUnconfirmed from '@iconify/icons-mdi/phone-alert';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import { BaseAppProps, BaseContentProps } from '../../../common/config';
-
 import {
   FormDialog,
   DialogTitle,
@@ -157,7 +155,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type ProfileProps = BaseAppProps & BaseContentProps & {
+type ProfileProps = {
 
   open: boolean
   onClose: () => void

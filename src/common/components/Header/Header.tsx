@@ -1,24 +1,23 @@
 import React, { FunctionComponent } from 'react';
 import Box from '@material-ui/core/Box';
 import Toolbar from '@material-ui/core/Toolbar';
-import Avatar from '@material-ui/core/Avatar';
 import { makeStyles } from '@material-ui/core/styles';
 import { getHeader } from '@mui-treasury/layout';
 import styled from 'styled-components';
 
-import { BaseAppProps } from '../../config/index';
-import { MainNav } from '../nav/main/getMainNav';
+import { useAppConfig } from '../../state/app';
+import { AppConfig } from '../../config';
 import { headerHeight } from '../../config/layout';
+import { MainNav } from '../nav/main/getMainNav';
 
 const Header: FunctionComponent<HeaderProps> = (props) => {
+  const appConfig = useAppConfig();
+  const styles = useStyles({ appConfig });
 
   const { 
-    appConfig,
     mainNav,
     hideNav = false
   } = props;
-
-  const styles = useStyles(props);
 
   return (
     <HeaderMain className={styles.root}>
@@ -76,7 +75,7 @@ const useStyles = makeStyles(theme => ({
   logo2: {
     height: '20px'
   },
-  logoBadge: (props: HeaderProps) => ({
+  logoBadge: (props: StyleProps) => ({
     height: '31px',
     marginLeft: '5px',
     marginBottom: '2px',
@@ -95,7 +94,11 @@ const useStyles = makeStyles(theme => ({
 
 const HeaderMain = getHeader(styled);
 
-type HeaderProps = BaseAppProps & {
+type HeaderProps = {
   mainNav: MainNav
   hideNav?: boolean
+}
+
+type StyleProps = {
+  appConfig: AppConfig
 }

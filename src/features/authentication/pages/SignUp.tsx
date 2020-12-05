@@ -34,9 +34,12 @@ import {
   AuthStateProps
 } from '@appbricks/identity';
 
-import { BaseAppProps, BaseContentProps } from '../../../common/config';
-import { StaticContent } from '../../../common/components/content';
+import { useAppConfig } from '../../../common/state/app';
+import { useLocationContent } from '../../../common/state/content';
 
+import { 
+  StaticContent 
+} from '../../../common/components/content';
 import {
   FormBox,
   Input,
@@ -50,8 +53,11 @@ import useDialogNavState, {
 import { useActionStatus } from '../../../common/state/status';
 
 const SignUp: FunctionComponent<SignUpProps> = (props) => {
-  const { appConfig, content, auth, authService } = props;
   const styles = useStyles();
+  const appConfig = useAppConfig();
+  const content = useLocationContent();
+
+  const { auth, authService } = props;
 
   // current and previous dailog static states
   const [ thisDialog, fromDialog ] = useDialogNavState(624, 350, props);
@@ -262,8 +268,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type SignUpProps = 
-  BaseAppProps & 
-  BaseContentProps & 
   AuthStateProps & 
   AuthActionProps & 
   DialogNavProps

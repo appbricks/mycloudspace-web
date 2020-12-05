@@ -4,14 +4,11 @@ import { graphql } from 'gatsby';
 import Layout, { calcViewPortDimensions } from '../common/components/layout';
 import { StaticFooter } from '../common/components/footer';
 
-import { AppConfig } from '../common/config';
-
 import ContentTopic, { TopicMetadata, TopicRefType } from './components/ContentTopic';
 import CustomTagProvider from './markdown';
 
 const ContentPage: FunctionComponent<ContentPageProps> = ({ 
-  data, 
-  pageContext 
+  data
 }) => {
 
   const {
@@ -29,7 +26,6 @@ const ContentPage: FunctionComponent<ContentPageProps> = ({
   return (
     <CustomTagProvider>
       <Layout 
-        appConfig={pageContext.appConfig} 
         bottomGutterHeight={bottomGutterHeight}
         noBackground
       >
@@ -190,9 +186,6 @@ type ContentPageProps = {
         }  
       }
     }
-  }
-  pageContext: {
-    appConfig: AppConfig
   }
 }
 

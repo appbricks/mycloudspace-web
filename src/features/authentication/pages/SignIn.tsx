@@ -4,7 +4,7 @@ import React, {
   useState
 } from 'react';
 import { useDispatch } from 'react-redux';
-import { navigate, Redirect } from "@reach/router";
+import { navigate, Redirect } from '@reach/router';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
@@ -24,7 +24,8 @@ import {
   AuthStateProps
 } from '@appbricks/identity';
 
-import { BaseAppProps, BaseContentProps } from '../../../common/config';
+import { useAppConfig } from '../../../common/state/app';
+import { useStaticContent } from '../../../common/state/content';
 
 import {
   FormBox,
@@ -39,10 +40,11 @@ import { notify } from '../../../common/state/notifications';
 import { useActionStatus } from '../../../common/state/status';
 
 const SignIn: FunctionComponent<SignInProps> = (props) => {
-  const { appConfig, auth, authService } = props;
-  const styles = useStyles(props);
-
   const dispatch = useDispatch();
+  const styles = useStyles(props);
+  const appConfig = useAppConfig();
+
+  const { auth, authService } = props;
 
   // current and previous dailog static state
   const [ thisDialog, fromDialog ] = useDialogNavState(296, 350, props);
@@ -234,8 +236,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type SignInProps =
-  BaseAppProps &
-  BaseContentProps &
   AuthStateProps &
   AuthActionProps &
   DialogNavProps
