@@ -111,7 +111,7 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
       dispatch(
         notify(
           `Password for "${username}" has been updated.`,
-          'info'
+          'success'
         )
       );
       navigate(appConfig.routeMap['signin'].uri, thisDialog);
