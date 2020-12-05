@@ -90,7 +90,7 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
     if (actionStatus.actionType == CONFIRM_SIGN_UP_CODE_REQ) {
       dispatch(
         notify(
-          'My Cloud Space account created. Please sign in and complete your profile and plan setup.', 
+          `My Cloud Space account created for "${username}". Please sign in and complete your profile and plan setup.`, 
           'success'
         )
       );
