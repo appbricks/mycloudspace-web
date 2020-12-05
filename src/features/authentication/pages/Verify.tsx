@@ -169,6 +169,7 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
         <Button variant='contained' 
           className={styles.button}
           onClick={handleResendCode}
+          disabled={serviceCallInProgress}
         >
           Re-send Confirmation Code
         </Button>
