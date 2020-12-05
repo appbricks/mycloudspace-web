@@ -10,18 +10,18 @@ const App: FunctionComponent<AppProps> = () => {
 
   return (
     <Router>
-      {appConfig!.routes.public.map((route, index) => (
+      {appConfig.routes.public.map((route, index) => (
         <PublicRoute
           key={index}
           path={route.uri}
-          component={appConfig!.routeMap[route.name].feature}
+          component={appConfig.routeMap[route.name].feature}
         />
       ))}
-      {appConfig!.routes.private.map((route, index) => (
+      {appConfig.routes.private.map((route, index) => (
         <PrivateRoute
           key={index}
           path={route.uri}
-          component={appConfig!.routeMap[route.name].feature}
+          component={appConfig.routeMap[route.name].feature}
         />
       ))}
     </Router>
