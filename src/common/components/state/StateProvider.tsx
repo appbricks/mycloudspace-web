@@ -50,7 +50,9 @@ type StateProviderProps = {
   element: any
 }
 
-// Site application config query - site/config/site-config.json
+// Site application configuration (site/config/site-config.json)
+// and static content query required for application and content 
+// initialization.
 const appConfigQuery = graphql`
   query {
     configs: allConfigJson {
