@@ -28,18 +28,6 @@ export type AppConfig = {
     themes: {
       name: string
     }[]
-  },
-  routes: {
-    public: {
-      name: string
-      uri: string
-      feature: string
-    }[],
-    private: {
-      name: string
-      uri: string
-      feature: string
-    }[]
   }
   navigation: {
     mainNavMenu: {
@@ -84,6 +72,18 @@ export type AppConfig = {
         feature: string
       }[]
     }
+  }
+  routes: {
+    public: {
+      name: string
+      uri: string
+      feature: string
+    }[],
+    private: {
+      name: string
+      uri: string
+      feature: string
+    }[]
   }
 
   // post processed config elements

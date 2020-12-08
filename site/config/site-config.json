@@ -22,42 +22,6 @@
         }
       ]
     },
-    "routes": {
-      "public": [
-        { 
-          "name": "signin", 
-          "uri": "/mycs/signin",
-          "feature": "SignIn"
-        },
-        { 
-          "name": "signup", 
-          "uri": "/mycs/signup",
-          "feature": "SignUp"
-        },
-        { 
-          "name": "verify", 
-          "uri": "/mycs/verify",
-          "feature": "Verify"
-        },
-        { 
-          "name": "authcode", 
-          "uri": "/mycs/authcode",
-          "feature": "AuthCode"
-        },
-        { 
-          "name": "reset", 
-          "uri": "/mycs/reset",
-          "feature": "Reset"
-        }
-      ],
-      "private": [
-        { 
-          "name": "appHome", 
-          "uri": "/mycs",
-          "feature": "AppNav"
-        }
-      ]
-    },    
     "navigation": {
       "mainNavMenu": {
         "iconDisplay": {
@@ -96,7 +60,7 @@
 
             "contextItems": [
               {
-                "key": "loggedin",                
+                "key": "loggedin",
                 "title": "My Cloud Space",
                 "subTitle": "",
                 "icon": "homeIcon",
@@ -119,7 +83,7 @@
               "icon": "profileSetupIcon",
               "feature": "Profile"
             },
-            { 
+            {
               "divider": false,
               "title": "Security",
               "icon": "profileSecurityIcon",
@@ -131,7 +95,7 @@
               "icon": "logoutIcon",
               "command": {
                 "name": "signout",
-                "args": [ 
+                "args": [
                   {
                     "name": "route",
                     "value": "signin"
@@ -152,7 +116,7 @@
             "icon": "homeIcon",
             "feature": "SpacesHome"
           },
-          { 
+          {
             "title": "Apps",
             "icon": "appsIcon",
             "feature": "AppsHome"
@@ -169,6 +133,42 @@
           }
         ]
       }
+    },
+    "routes": {
+      "public": [
+        {
+          "name": "signin",
+          "uri": "/mycs/signin",
+          "feature": "SignIn"
+        },
+        {
+          "name": "signup",
+          "uri": "/mycs/signup",
+          "feature": "SignUp"
+        },
+        {
+          "name": "verify",
+          "uri": "/mycs/verify",
+          "feature": "Verify"
+        },
+        {
+          "name": "authcode",
+          "uri": "/mycs/authcode",
+          "feature": "AuthCode"
+        },
+        {
+          "name": "reset",
+          "uri": "/mycs/reset",
+          "feature": "Reset"
+        }
+      ],
+      "private": [
+        {
+          "name": "appHome",
+          "uri": "/mycs",
+          "feature": "AppNav"
+        }
+      ]
     }
   },
   "organization": {
