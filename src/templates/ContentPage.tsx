@@ -7,7 +7,7 @@ import { StaticFooter } from '../common/components/footer';
 import ContentTopic, { TopicMetadata, TopicRefType } from './components/ContentTopic';
 import CustomTagProvider from './markdown';
 
-const ContentPage: FunctionComponent<ContentPageProps> = ({ 
+const ContentPage: FunctionComponent<ContentPageProps> = ({
   data
 }) => {
 
@@ -25,21 +25,21 @@ const ContentPage: FunctionComponent<ContentPageProps> = ({
 
   return (
     <CustomTagProvider>
-      <Layout 
+      <Layout
         bottomGutterHeight={bottomGutterHeight}
         noBackground
       >
 
         <ContentTopic
           index={0}
-          height={viewPortHeight}          
+          height={viewPortHeight}
           topicRefs={topicRefs}
           topicMetadata={data.mdx.frontmatter}
           content={data.mdx.body}
-          scrollButtonDownTop={topics.length > 0 
+          scrollButtonDownTop={topics.length > 0
             ? scrollButtonDownTop : undefined}
         />
-        
+
         {topics.map(({ node }, index) => {
 
           return (
@@ -58,13 +58,13 @@ const ContentPage: FunctionComponent<ContentPageProps> = ({
         })}
 
         {!bottomGutterHeight && // footer attached to the bottom of document
-          <StaticFooter 
+          <StaticFooter
             organization={organization}
             social={organization.social}
-            contact={organization.contact} />            
+            contact={organization.contact} />
         }
         {!!bottomGutterHeight && // footer fixed to the bottom of window
-          <StaticFooter 
+          <StaticFooter
             organization={organization}
             social={organization.social}
             contact={organization.contact}
@@ -81,14 +81,14 @@ export const pageQuery = graphql`
   query PageTopicsQuery($id: String!, $name: String!) {
     mdx(id: { eq: $id }) {
       body
-      frontmatter {        
+      frontmatter {
         ...FrontMatterFields
       }
     }
     allMdx(
       filter: {
         frontmatter: {contentPage: {eq: $name}}
-      }, 
+      },
       sort: {
         fields: frontmatter___order
       }
@@ -98,7 +98,7 @@ export const pageQuery = graphql`
           body
           frontmatter {
             ...FrontMatterFields
-          }     
+          }
         }
       }
     }
@@ -150,7 +150,7 @@ export const pageQuery = graphql`
     buttonLink
     buttonForegroundColor
     buttonBackgroundColor
-    
+
     links {
       name
       url
@@ -183,12 +183,12 @@ type ContentPageProps = {
         contact: {
           email: string
           phone: string
-        }  
+        }
       }
     }
   }
 }
 
 type StyleProps = {
-  viewPortHeight: string 
+  viewPortHeight: string
 }
