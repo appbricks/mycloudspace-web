@@ -1,13 +1,24 @@
-import React, { FunctionComponent } from 'react';
+import React, { 
+  FunctionComponent,
+  ReactNode,
+  useEffect
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar, OptionsObject } from 'notistack';
+import { makeStyles } from '@material-ui/core/styles';
 
 import { Logger } from '@appbricks/utils';
 
 import { RootState } from '../../state/store';
-import { Notification, removeNotification } from '../../state/notifications';
+import { 
+  Notification, 
+  removeNotification 
+} from '../../state/notifications';
+
+import { StaticContent } from '../../../common/components/content';
 
 const Notifier: FunctionComponent<NotifierProps> = (props) => {
+  const styles = useStyles(props);
   const dispatch = useDispatch();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
@@ -15,15 +26,14 @@ const Notifier: FunctionComponent<NotifierProps> = (props) => {
     store => store.notifications.notifications
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     notifications.forEach(
-      ({ title, message, dismissed, options }) => {
-        const snackbarOptions = options as OptionsObject;
-        const key = snackbarOptions.key as string;
+      ({ message, dismissed, options }) => {
+        const key = options.key as string;
 
         if (dismissed) {
           // dismiss snackbar using notistack
-          closeSnackbar(snackbarOptions.key);
+          closeSnackbar(key);
           return;
         }
 
@@ -33,23 +43,49 @@ const Notifier: FunctionComponent<NotifierProps> = (props) => {
         // might not complete if a dom refresh
         // happened around the same time.
         const enqueuedTime = displayed[key];
-        if (enqueuedTime && 
-          (enqueuedTime == -1 || (Date.now() - enqueuedTime) < 50)) return;
+        if (enqueuedTime) {
+          if (enqueuedTime == -1) {
+            // once an notification has been displayed
+            // any dom updates should clear those 
+            // notifications from state
+            dispatch(removeNotification(key));
+            return
+          } else if ((Date.now() - enqueuedTime) < 50) {
+            return
+          }
+        }
 
         // display snackbar using notistack
-        enqueueSnackbar(title, {
+        let content: ReactNode;
+        if (typeof message == 'string') {
+          content = message;
+        } else {
+          content = (
+            <StaticContent 
+              body={message.content.body}
+              values={message.values}
+              className={styles.content}
+            />
+          );
+          options = {
+            ...options,
+            variant: message.content.props.notifyType as (typeof options.variant)
+          }
+        }
+
+        enqueueSnackbar(content, {
           ...options,
           preventDuplicate: true,
-          onEntered: (node: HTMLElement, isAppearing: boolean, key: string) => {
+          onEntered: (node, isAppearing, key) => {
             // reset timer of snackbars that 
             // we've displayed and tracking
             displayed[key] = -1;
-            dispatch(removeNotification(key));
             Logger.trace('Notifier', 'Notification has been displayed', key, displayed);
           },
-          onExited: (node: HTMLElement, key: string) => {
+          onExited: (node, key) => {
             // remove this snackbar from redux store
             delete displayed[key];
+            dispatch(removeNotification(key as string));
             Logger.trace('Notifier', 'Notification has been removed', key, displayed);
           }
         });
@@ -82,6 +118,27 @@ const Notifier: FunctionComponent<NotifierProps> = (props) => {
 };
 
 export default Notifier;
+
+const useStyles = makeStyles((theme) => ({
+  content: {
+    '& h1': {
+      marginBlockStart: '0',
+      marginBlockEnd: '0.2rem'
+    },
+    '& h2': {
+      marginBlockStart: '0',
+      marginBlockEnd: '0.2rem'
+    },
+    '& h3': {
+      marginBlockStart: '0',
+      marginBlockEnd: '0.2rem'
+    },
+    '& p': {
+      marginBlockStart: '0',
+      marginBlockEnd: '0'
+    }
+  }
+}));
 
 type NotifierProps = {
   title?: string

@@ -24,7 +24,7 @@ const StateProvider: FunctionComponent<StateProviderProps> = ({ element }) => {
   return (
     <StaticQuery
       query={appConfigQuery}
-      render={(data: AppConfigQueryResult) => {
+      render={(data: QueryResult) => {
 
         return (
           <Provider store={store}>
@@ -165,13 +165,17 @@ const appConfigQuery = graphql`
           fields {
             slug
           }
+          frontmatter {
+            contentType
+            notifyType
+          }
         }
       }
     }
   }
 `
 
-type AppConfigQueryResult = {
+type QueryResult = {
   configs: {
     edges: ConfigNode[]
   }

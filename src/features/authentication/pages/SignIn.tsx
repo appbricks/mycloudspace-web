@@ -25,7 +25,7 @@ import {
 } from '@appbricks/identity';
 
 import { useAppConfig } from '../../../common/state/app';
-import { useStaticContent } from '../../../common/state/content';
+import { useLocationContent } from '../../../common/state/content';
 
 import {
   FormBox,
@@ -43,6 +43,7 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
   const dispatch = useDispatch();
   const styles = useStyles(props);
   const appConfig = useAppConfig();
+  const content = useLocationContent();
 
   const { auth, authService } = props;
 
@@ -77,10 +78,7 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
   const handleResetPassword = () => {
     if (values.username.length == 0) {
       dispatch(
-        notify(
-          'Please provide the username whose password needs to be reset.',
-          'error'
-        )
+        notify({ content: content['notify-no-username-for-reset'] })
       );
     } else {
       authService!.resetPassword(values.username);
@@ -95,10 +93,10 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
         case SIGN_IN_REQ: {
           if (awaitingMFAConfirmation == AUTH_NO_MFA) {
             dispatch(
-              notify(
-                `Multi-factor authentication is not enabled for "${values.username}". You can configure it via the security option within the profile menu.`,
-                'info'
-              )
+              notify({
+                content: content['notify-mfa-not-enabled'],
+                values: { username: values.username }
+              })
             );
             navigate(appConfig.routeMap['appHome'].uri);
 
@@ -119,10 +117,10 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
     (error) => {
       if (error.err.name == ERROR_NOT_CONFIRMED) {
         dispatch(
-          notify(
-            `User account for "${values.username}" has not been confirmed. Please confirm before signing in.`,
-            'info'
-          )
+          notify({
+            content: content['notify-not-confirmed'],
+            values: { username: values.username }
+          })
         );
 
         thisDialog.state.data['username'] = values.username;

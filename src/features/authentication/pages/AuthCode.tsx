@@ -51,6 +51,7 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
   const username = fromDialog.state.data['username'];
 
   const [values, setValues] = useState<State>({
+    username,
     authCode: ''
   }); 
 
@@ -72,11 +73,19 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
   };
 
   // handle auth action status result
-  useActionStatus(actionStatus, () => {
-    if (actionStatus.actionType == VALIDATE_MFA_CODE_REQ) {
-      navigate(appConfig.routeMap['appHome'].uri, thisDialog);
+  useActionStatus(actionStatus, 
+    () => {
+      if (actionStatus.actionType == VALIDATE_MFA_CODE_REQ) {
+        navigate(appConfig.routeMap['appHome'].uri, thisDialog);
+      }
+    },
+    () => {
+      // if authcode validation fails navigate back to signin
+      // as user is automatically logged out of the provider
+      navigate(appConfig.routeMap['signin'].uri, thisDialog);
+      return false;
     }
-  });
+  );
 
   // check if username is in context
   if (!username) {    
@@ -158,5 +167,6 @@ type AuthCodeProps =
   DialogNavProps
 
 type State = {
+  username: string
   authCode: string
 }

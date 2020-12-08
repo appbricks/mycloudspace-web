@@ -233,7 +233,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           compact
         />
         <StaticContent 
-          body={content!['accept-terms'] as string}
+          body={content!['accept-terms'].body}
           style={{
             margin: '-1rem 1rem -0.5rem 1rem'
           }}

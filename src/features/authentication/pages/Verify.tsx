@@ -61,6 +61,7 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
     fromDialog.state.data['username'];
 
   const [values, setValues] = useState<State>({
+    username,
     verificationCode: ''
   });
 
@@ -89,10 +90,10 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
   useActionStatus(actionStatus, () => {
     if (actionStatus.actionType == CONFIRM_SIGN_UP_CODE_REQ) {
       dispatch(
-        notify(
-          `My Cloud Space account created for "${username}". Please sign in and complete your profile and plan setup.`, 
-          'success'
-        )
+        notify({ 
+          content: content['notify-account-created'] ,
+          values: { username: values.username }
+        })
       );
       navigate(appConfig.routeMap['signin'].uri, thisDialog);
     }
@@ -153,7 +154,7 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
         alignItems='center'
       >
         <StaticContent 
-          body={content![awaitingUserConfirmation ? 'verify-code' : 'verify-code-generic'] as string}
+          body={content![awaitingUserConfirmation ? 'verify-code' : 'verify-code-generic'].body}
           className={styles.content}
         />
         <CodeInput
@@ -204,5 +205,6 @@ type VerifyProps =
   DialogNavProps
 
 type State = {
+  username: string
   verificationCode: string
 }

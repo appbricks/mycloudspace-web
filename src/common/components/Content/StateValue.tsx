@@ -1,4 +1,6 @@
-import React, { FunctionComponent } from 'react'
+import React, { 
+  FunctionComponent 
+} from 'react'
 import { useSelector } from 'react-redux';
 import * as _ from 'lodash';
 

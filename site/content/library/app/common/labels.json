@@ -1,0 +1,34 @@
+{
+  "labels": [
+    {
+      "id": "username",
+      "text": "Username",
+      "shortErrorMsg": "",
+      "longErrorMsg": ""
+    },
+    {
+      "id": "password",
+      "text": "Password",
+      "shortErrorMsg": "",
+      "longErrorMsg": ""
+    },
+    {
+      "id": "passwordRepeat",
+      "text": "Verify Password",
+      "shortErrorMsg": "",
+      "longErrorMsg": ""
+    },
+    {
+      "id": "emailAddress",
+      "text": "Email",
+      "shortErrorMsg": "",
+      "longErrorMsg": ""
+    },
+    {
+      "id": "mobilePhone",
+      "text": "Mobile Phone Number",
+      "shortErrorMsg": "",
+      "longErrorMsg": ""
+    }
+  ]
+}

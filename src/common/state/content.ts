@@ -38,9 +38,17 @@ export const app = createSlice({
 
             const content = staticContent[path] as ContentKeyMap;
             if (content) {
-              content[key] = contentNode.node.body;
+              content[key] = {
+                body: contentNode.node.body,
+                props: contentNode.node.frontmatter
+              };
             } else {
-              staticContent[path] = { [key]: contentNode.node.body };
+              staticContent[path] = { 
+                [key]: {
+                  body: contentNode.node.body,
+                  props: contentNode.node.frontmatter
+                } 
+              };
             }
           });
 
@@ -82,7 +90,12 @@ type ContentState = {
 }
 
 export type ContentMap = { [path: string]: ContentKeyMap }
-export type ContentKeyMap = {[key: string]: string}
+export type ContentKeyMap = { [key: string]: Content }
+
+export type Content = {
+  body: string
+  props: ContentProps
+}
 
 // inialize action payload type
 export type InitializePayload = {
@@ -92,11 +105,19 @@ export type InitializePayload = {
 export type ContentNode = {
   node: {
     body: string
+    frontmatter: ContentProps
     fields: {
       slug: string
     }
   }
 };
+
+type ContentProps = {
+  contentType: 'normal' | 'notification'
+  // notificaiton properties
+  notifyType: string
+  notifyHideIcon: string
+}
 
 // static content hook
 export const useStaticContent = (): ContentMap => {

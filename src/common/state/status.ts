@@ -32,7 +32,7 @@ export const useActionStatus = (
         } 
         if (!handled) {
           const message = error ? error.message : 'ERROR! An unknown error occurred';
-          dispatch(notify(message, 'error'));  
+          dispatch(notify(message, { variant: 'error' }));  
         }
         break;
 

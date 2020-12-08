@@ -1,5 +1,10 @@
-import React, { FunctionComponent } from 'react';
-import Box, { BoxProps } from '@material-ui/core/Box';
+import React, { 
+  FunctionComponent,
+  createContext 
+} from 'react';
+import Box, { 
+  BoxProps 
+} from '@material-ui/core/Box';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
 
 // MDX Provider used to include the custom component shortcodes
@@ -10,19 +15,30 @@ const MDXProvider = require('@mdx-js/react').MDXProvider;
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 
-import StateValue from '../state/StateValue';
+import StateValue from './StateValue';
+import LookupValue from './LookupValue';
 
-const shortcodes = { Typography, Link, StateValue }
+const shortcodes = { 
+  Typography, 
+  Link, 
+  StateValue,
+  LookupValue
+}
+
+const Values = createContext<Values>({});
 
 const StaticContent: FunctionComponent<StaticContentType> = ({ 
   body,
+  values = {},
   ...other
 }) => {
 
   return (
-    <Box {...other}>
+    <Box {...other}>      
       <MDXProvider components={shortcodes}>
-        <MDXRenderer>{body}</MDXRenderer>
+        <Values.Provider value={values}>
+          <MDXRenderer>{body}</MDXRenderer>
+        </Values.Provider>
       </MDXProvider>
     </Box>
   );
@@ -30,6 +46,11 @@ const StaticContent: FunctionComponent<StaticContentType> = ({
 
 export default StaticContent;
 
+export const ValuesConsumer = Values.Consumer;
+
 type StaticContentType = BoxProps & {
-  body: string
+  body: string,
+  values?: Values
 }
+
+export type Values = { [name: string]: string};

@@ -6,6 +6,9 @@ import { closeButton } from '../components/notification';
 import { persistReducer } from 'redux-persist'
 import sessionStorage from 'redux-persist/lib/storage/session'
 
+import { Content } from '../state/content';
+import { Values } from '../components/content/StaticContent';
+
 const notifications = createSlice({
   name: 'notifications',
 
@@ -29,13 +32,15 @@ const notifications = createSlice({
         };
       },
       prepare: ( 
-        message: string | { 
-          title: string
-          message: string
+        message: Message,
+        options: OptionsObject = {
+          variant: 'default'
         },
-        type: 'default' | 'error' | 'success' | 'warning' | 'info' = 'default',
-        options?: OptionsObject,
       ) => {
+
+        if (typeof message != 'string' && message.content.props.contentType != 'notification') {
+          throw 'cannot dispatch content which is not a notification type';
+        }
 
         const key = (options && options.key) || 
           (Date.now() + Math.random());
@@ -44,13 +49,11 @@ const notifications = createSlice({
 
         return { 
           payload: {
-            title: typeof message == 'string' ? message : message.title,
-            message: typeof message == 'string' ? undefined : message.message,
+            message,
             options: {
               ...options,
               key,
-              action,
-              variant: type,
+              action
             }
           },
         };
@@ -118,10 +121,13 @@ type NotificationState = {
 }
 
 export type Notification  = {
-  title: string
-  message?: string
+  message: Message
+  options: OptionsObject
 
   dismissed?: boolean
+}
 
-  options?: any
+type Message = string | {
+  content: Content,
+  values?: Values
 }

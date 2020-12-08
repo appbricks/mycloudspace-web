@@ -109,10 +109,10 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
   useActionStatus(actionStatus, () => {
     if (actionStatus.actionType == UPDATE_PASSWORD_REQ) {      
       dispatch(
-        notify(
-          `Password for "${username}" has been updated.`,
-          'success'
-        )
+        notify({
+          content: content['notify-password-reset'],
+          values: { username }
+        })
       );
       navigate(appConfig.routeMap['signin'].uri, thisDialog);
     }
@@ -172,7 +172,7 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
         alignItems='center'
       >
         <StaticContent 
-          body={content!['reset-code'] as string}
+          body={content!['reset-code'].body}
           className={styles.content}
         />
         <CodeInput
