@@ -31,6 +31,9 @@ import {
   FormBox,
   CodeInput,
 } from '../../../common/components/forms';
+import { 
+  StaticLabel 
+} from '../../../common/components/content';
 import useDialogNavState, { 
   DialogNavProps 
 } from '../../../common/components/forms/useDialogNavState';
@@ -123,7 +126,7 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
   
   return (
     <FormBox
-      id='verifyForm'
+      id='verifyAccountForm'
       height={thisDialog.state.height!}
       width={thisDialog.state.width!}
       fromHeight={fromDialog.state.height}
@@ -131,7 +134,7 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
       buttons={
         [
           {
-            id: 'cancel',
+            id: 'cancelButton',
             icon: <Icon width={18} icon={cancelIcon} />,
             onClick: handleButtonClick,
             disabled: serviceCallInProgress
@@ -171,7 +174,7 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
           onClick={handleResendCode}
           disabled={serviceCallInProgress}
         >
-          Re-send Confirmation Code
+          <StaticLabel id='resendConfirmCode' />          
         </Button>
       </Grid>
 

@@ -115,7 +115,7 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
       buttons={
         [
           {
-            id: 'cancel',
+            id: 'cancelButton',
             icon: <Icon width={18} icon={cancelIcon} />,
             onClick: handleButtonClick,
             disabled: serviceCallInProgress

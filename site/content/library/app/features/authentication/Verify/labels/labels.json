@@ -11,6 +11,10 @@
     {
       "id": "verificationCode",
       "text": "Verification Code"
+    },
+    {
+      "id": "resendConfirmCode",
+      "text": "Re-send Confirmation Code"
     }
   ]
 }

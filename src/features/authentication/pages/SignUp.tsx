@@ -5,8 +5,6 @@ import React, {
 } from 'react';
 import { navigate } from '@reach/router';
 import Grid from '@material-ui/core/Grid';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { Icon } from '@iconify/react';
@@ -35,16 +33,14 @@ import {
 } from '@appbricks/identity';
 
 import { useAppConfig } from '../../../common/state/app';
-import { 
-  useStaticContent,
-  useLabelContent
-} from '../../../common/state/content';
+import { useStaticContent } from '../../../common/state/content';
 
 import {
   FormBox,
   Input,
   PasswordInput,
-  PhoneNumberInput
+  PhoneNumberInput,
+  CheckBox
 } from '../../../common/components/forms';
 import { 
   StaticContent 
@@ -59,7 +55,6 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
   const styles = useStyles();
   const appConfig = useAppConfig();
   const content = useStaticContent('authentication', SignUp.name);
-  const labelLookup = useLabelContent();
 
   const { auth, authService } = props;
 
@@ -236,17 +231,11 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
             margin: '-1rem 1rem -0.5rem 1rem'
           }}
         />
-        <FormControlLabel
-          control={
-            <Checkbox
-              id='accept'
-              name='accept'
-              color='primary'
-              onChange={(event, checked) => validateForm(checked)}
-            />
-          }
-          label={labelLookup('agreeToT&C').text()}
+        <CheckBox
+          id='accept'
+          onChange={(event, checked) => validateForm(checked)}
           disabled={serviceCallInProgress}
+          color='primary'
           style={{
             marginLeft: '0.2rem'
           }}
