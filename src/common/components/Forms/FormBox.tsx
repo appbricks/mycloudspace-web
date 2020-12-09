@@ -14,18 +14,20 @@ import cx from 'clsx';
 
 import { headerHeight } from '../../config/layout';
 
+import { useLabelContent } from '../../state/content';
+
 const FormBox: FunctionComponent<FormBoxProps> = ({
+  id,
+  title,
+  buttons,
   height,
   width,
   fromHeight = 0,
   fromWidth = 0,
   backgroundColor = '#ffffff',
   opacity = '0.9',
-  title,
-  buttons,
   children
 }) => {
-
   const styles = useStyles({ 
     height: `${height+20}px`, 
     width: `${width+20}px`,
@@ -33,6 +35,10 @@ const FormBox: FunctionComponent<FormBoxProps> = ({
     opacity
   });
 
+  const labelLookup = useLabelContent();
+  if (!title) {
+    title = labelLookup(id).text();
+  }
   const ref = useRef<HTMLDivElement>(null);
 
   const animationStyles = makeStyles((theme) => ({
@@ -87,7 +93,7 @@ const FormBox: FunctionComponent<FormBoxProps> = ({
                 disabled={button.disabled || button.working}
                 className={styles.actionButton}
               >
-                {button.text}
+                {button.text ? button.text : labelLookup(button.id).text()}
               </Button>
               {button.working && 
                 <CircularProgress size={24} className={styles.buttonProgress} />}
@@ -162,6 +168,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type FormBoxProps = {
+  id: string
+
+  title?: string
+  buttons: ButtonProp[]
+
   height: number
   width: number
   fromHeight?: number
@@ -169,17 +180,18 @@ type FormBoxProps = {
 
   backgroundColor?: string
   opacity?: string
-
-  title: string
-  buttons: ButtonProp[]
 }
 
 export type ButtonProp = {
-  text: string
+  id: string
+
+  text?: string
   icon?: ReactElement
+
   default?: boolean
   disabled?: boolean
   working?: boolean
+
   onClick: (index: number) => (event: MouseEvent<HTMLButtonElement>) => void
 }
 

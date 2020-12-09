@@ -1,10 +1,12 @@
 {
   "labels": [
     {
+      "id": "signUpForm",
+      "text": "Sign Up"
+    },
+    {
       "id": "agreeToT&C",
-      "text": "I accept and agree to the terms of use",
-      "shortErrorMsg": "",
-      "longErrorMsg": ""
+      "text": "I accept and agree to the terms of use"
     }
   ]
 }

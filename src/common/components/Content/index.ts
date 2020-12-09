@@ -1,3 +1,7 @@
-import StaticContent from './StaticContent'
+import StaticContent from './StaticContent';
+import StaticLabel from './StaticLabel';
 
-export { StaticContent }
+export { 
+  StaticContent,
+  StaticLabel
+}

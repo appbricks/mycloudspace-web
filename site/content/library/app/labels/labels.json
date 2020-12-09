@@ -1,34 +1,34 @@
 {
-  "labels": [
+  "labels": [    
+    {
+      "id": "cancelButton",
+      "text": "Cancel"
+    },
     {
       "id": "username",
-      "text": "Username",
-      "shortErrorMsg": "",
-      "longErrorMsg": ""
+      "text": "Username"
     },
     {
       "id": "password",
-      "text": "Password",
-      "shortErrorMsg": "",
-      "longErrorMsg": ""
+      "text": "Password"
     },
     {
       "id": "passwordRepeat",
       "text": "Verify Password",
-      "shortErrorMsg": "",
-      "longErrorMsg": ""
+      "error": {
+        "long": "The verification password does not match the password entered."
+      }
     },
     {
       "id": "emailAddress",
-      "text": "Email",
-      "shortErrorMsg": "",
-      "longErrorMsg": ""
+      "text": "Email"
     },
     {
       "id": "mobilePhone",
       "text": "Mobile Phone Number",
-      "shortErrorMsg": "",
-      "longErrorMsg": ""
+      "error": {
+        "long": "<%= value %> is not a valid <%= label %> in <%= country %>."
+      }
     }
   ]
 }

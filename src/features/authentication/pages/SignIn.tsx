@@ -32,6 +32,9 @@ import {
   Input,
   PasswordInput
 } from '../../../common/components/forms';
+import { 
+  StaticLabel 
+} from '../../../common/components/content';
 import useDialogNavState, {
   DialogNavProps
 } from '../../../common/components/forms/useDialogNavState';
@@ -154,21 +157,21 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
 
   return (
     <FormBox
+      id='signInForm'
       height={thisDialog.state.height!}
       width={thisDialog.state.width!}
       fromHeight={fromDialog.state.height}
       fromWidth={fromDialog.state.width}
-      title='Sign In'
       buttons={
         [
           {
-            text: 'Sign Up',
+            id: 'signUpButton',
             icon: <Icon icon={signupIcon} />,
             onClick: handleButtonClick,
             disabled: serviceCallInProgress
           },
           {
-            text: 'Sign In',
+            id: 'signInButton',
             icon: <Icon icon={signinIcon} />,
             default: true,
             onClick: handleButtonClick,
@@ -186,7 +189,6 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
       >
         <Input
           id='username'
-          label='Username'
           value={values.username}
           handleChange={handleChange}
           enableAutofill='passwordManagersOnly'
@@ -196,7 +198,6 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
         />
         <PasswordInput
           id='password'
-          label='Password'
           value={values.password}
           handleChange={handleChange}
           enableAutofill='passwordManagersOnly'
@@ -212,7 +213,7 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
           disabled={serviceCallInProgress}
           className={styles.resetLink}
         >
-          Reset Password
+          <StaticLabel id='resetPassword' />
         </Link>
       </Grid>
 

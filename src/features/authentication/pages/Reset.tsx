@@ -28,14 +28,14 @@ import {
 import { useAppConfig } from '../../../common/state/app';
 import { useStaticContent } from '../../../common/state/content';
 
-import { 
-  StaticContent 
-} from '../../../common/components/content';
 import {
   FormBox,
   CodeInput,
   PasswordInput
 } from '../../../common/components/forms';
+import { 
+  StaticContent 
+} from '../../../common/components/content';
 import useDialogNavState, { 
   DialogNavProps 
 } from '../../../common/components/forms/useDialogNavState';
@@ -141,21 +141,21 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
   
   return (
     <FormBox
+      id='resetForm'
       height={thisDialog.state.height!}
       width={thisDialog.state.width!}
       fromHeight={fromDialog.state.height}
       fromWidth={fromDialog.state.width}
-      title='Reset Password'
       buttons={
         [
           {
-            text: 'Cancel',
+            id: 'cancelButton',
             icon: <Icon width={18} icon={cancelIcon} />,
             onClick: handleButtonClick,
             disabled: serviceCallInProgress
           },
           {
-            text: 'Reset',
+            id: 'resetButton',
             icon: <Icon icon={verifyIcon} />,
             default: true,
             onClick: handleButtonClick,
@@ -172,20 +172,18 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
         alignItems='center'
       >
         <StaticContent 
-          body={content!['reset-code'].body}
+          body={content['reset-code'].body}
           className={styles.content}
         />
         <CodeInput
           id='resetCode'
-          label='Reset Code'
           value={values.resetCode}
           required={true}
           numDigits={6}
           handleChange={handleChange}
           validator={inputValidator}
           validatorOptions={{ 
-            verifyWithRegex: '\\d - \\d - \\d - \\d - \\d - \\d',
-            longMessage: 'The reset code should be 6 digits long.'
+            verifyWithRegex: '\\d - \\d - \\d - \\d - \\d - \\d'
           }}
           disabled={serviceCallInProgress}
           className={styles.input}
@@ -193,29 +191,24 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
         />
         <PasswordInput
           id='password'
-          label='Password'
           value={values.password}
           required={true}
           handleChange={handleChange}
           validator={passwordValidator}
           handleValidationResult={handleValidationResult}
-          // forceValidate={formIGO.accept}
           disabled={serviceCallInProgress}
           className={styles.input}
         />
         <PasswordInput
           id='passwordRepeat'
-          label='Verify Password'
           value={values.passwordRepeat}
           required={true}
           handleChange={handleChange}
           validator={inputValidator}
           validatorOptions={{ 
-            verifyWith: values.password,
-            longMessage: 'The verification password does not match the password entered.'
+            verifyWith: values.password
           }}
           handleValidationResult={handleValidationResult}
-          // forceValidate={formIGO.accept}
           disabled={serviceCallInProgress}
           className={styles.input}
         />        

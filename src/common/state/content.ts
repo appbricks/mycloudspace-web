@@ -8,6 +8,8 @@ import { useLocation } from "@reach/router";
 import { persistReducer } from 'redux-persist'
 import sessionStorage from 'redux-persist/lib/storage/session'
 
+import { template, TemplateExecutor } from 'lodash';
+
 import { RootState } from './store';
 
 export const app = createSlice({
@@ -25,6 +27,7 @@ export const app = createSlice({
     initContent: {
       reducer: (state, action: PayloadAction<InitializePayload>) => {
 
+        // retrieve static content to be saved to state
         const staticContent: ContentMap = {};
 
         action.payload.content
@@ -89,18 +92,38 @@ export const app = createSlice({
             }
           });
 
+        // retrieve label content to be saved to state
+        const labelContent: LabelMap = {};
+
+        action.payload.labels
+          .map(labelNode => {
+            labelNode.labels.map(label => {
+              const { id, text, error } = label;
+              labelContent[id] = { 
+                text: template(text),
+                error: error && {
+                  short: template(error.short),
+                  long: template(error.long)
+                }
+              };
+            });            
+          });
+
         return {
           ...state,
           initialized: true,
-          staticContent
+          staticContent,
+          labelContent
         };
       },
       prepare: ( 
-        content: ContentNode[]
+        content: ContentNode[],
+        labels: LabelNode[]
       ) => {
         return {
           payload: {    
-            content
+            content,
+            labels
           }
         }
       }
@@ -124,19 +147,31 @@ export default persistReducer(
 type ContentState = {
   initialized: boolean
   staticContent?: ContentMap
+  labelContent?: LabelMap
 }
 
-export type ContentMap = { [path: string]: ContentMap | ContentKeyMap }
-export type ContentKeyMap = { [key: string]: Content }
+type ContentMap = { [path: string]: ContentMap | ContentKeyMap }
+type ContentKeyMap = { [key: string]: Content }
 
 export type Content = {
   body: string
   props: ContentProps
 }
 
+type LabelMap = { [id: string]: Label }
+
+type Label = {
+  text: TemplateExecutor
+  error: {
+    short: TemplateExecutor
+    long: TemplateExecutor
+  }
+}
+
 // inialize action payload type
 export type InitializePayload = {
   content: ContentNode[]
+  labels: LabelNode[]
 }
 
 export type ContentNode = {
@@ -151,8 +186,10 @@ export type LabelNode = {
   labels: {
     id: string
     text: string
-    longErrorMsg: string
-    shortErrorMsg: string
+    error: {
+      short: string
+      long: string
+    }
   }[]
 };
 
@@ -174,7 +211,7 @@ export const useStaticContent = (domain: string, capability: string): ContentKey
   return staticContent[domain][capability] as ContentKeyMap;
 }
 
-// content hook
+// static content hook based on current browser document location
 export const useLocationContent = (): ContentKeyMap => {
   const staticContent = useSelector(
     (state: RootState) => state.content.staticContent
@@ -186,3 +223,22 @@ export const useLocationContent = (): ContentKeyMap => {
   const location = useLocation();
   return staticContent[location.pathname] as ContentKeyMap;
 }
+
+// label content hook
+export const useLabelContent = (): LabelLookup => {
+  const labelContent = useSelector(
+    (state: RootState) => state.content.labelContent
+  );
+  if (!labelContent) {
+    throw 'ERROR! The label content has not been loaded to the redux content state.'
+  }
+  return (id, values = {}) => {
+    let label = labelContent[id];
+    if (!label) {
+      throw `ERROR! The label for id "${id}" was not found.`
+    }
+    return label
+  };
+}
+
+export type LabelLookup = (id: string, values?: { [name: string] : string}) =>  Label;

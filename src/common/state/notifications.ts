@@ -6,8 +6,8 @@ import { closeButton } from '../components/notification';
 import { persistReducer } from 'redux-persist'
 import sessionStorage from 'redux-persist/lib/storage/session'
 
-import { Content } from '../state/content';
 import { Values } from '../components/content/StaticContent';
+import { Content } from './content';
 
 const notifications = createSlice({
   name: 'notifications',

@@ -1,0 +1,16 @@
+{
+  "labels": [
+    {
+      "id": "verifyAccountForm",
+      "text": "Verify Account"
+    },
+    {
+      "id": "verifyAccountButton",
+      "text": "Verify"
+    },
+    {
+      "id": "verificationCode",
+      "text": "Verification Code"
+    }
+  ]
+}

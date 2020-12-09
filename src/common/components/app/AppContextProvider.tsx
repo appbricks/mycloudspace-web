@@ -12,6 +12,7 @@ import {
 } from '../../state/app';
 import {
   ContentNode,
+  LabelNode,
   initContent
 } from '../../state/content';
 
@@ -19,6 +20,7 @@ const AppContextProvider: FunctionComponent<AppConfigProviderProps> = ({
   configs, 
   images, 
   content,
+  labels,
   children 
 }) => {
   const dispatch = useDispatch();
@@ -46,7 +48,7 @@ const AppContextProvider: FunctionComponent<AppConfigProviderProps> = ({
   );
   useEffect(() => {
     if (!contentInitialized) {
-      dispatch(initContent(content));
+      dispatch(initContent(content, labels));
     }
   }, [contentInitialized]);
 
@@ -62,7 +64,8 @@ const AppContextProvider: FunctionComponent<AppConfigProviderProps> = ({
 export default AppContextProvider;
 
 type AppConfigProviderProps = {
-  configs: ConfigNode[],
-  images: ImageNode[],
+  configs: ConfigNode[]
+  images: ImageNode[]
   content: ContentNode[]
+  labels: LabelNode[]
 }

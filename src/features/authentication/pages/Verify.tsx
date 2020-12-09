@@ -123,21 +123,21 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
   
   return (
     <FormBox
+      id='verifyForm'
       height={thisDialog.state.height!}
       width={thisDialog.state.width!}
       fromHeight={fromDialog.state.height}
       fromWidth={fromDialog.state.width}
-      title='Verify Account'
       buttons={
         [
           {
-            text: 'Cancel',
+            id: 'cancel',
             icon: <Icon width={18} icon={cancelIcon} />,
             onClick: handleButtonClick,
             disabled: serviceCallInProgress
           },
           {
-            text: 'Verify',
+            id: 'verifyAccountButton',
             icon: <Icon icon={verifyIcon} />,
             default: true,
             onClick: handleButtonClick,
@@ -154,12 +154,11 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
         alignItems='center'
       >
         <StaticContent 
-          body={content![awaitingUserConfirmation ? 'verify-code' : 'verify-code-generic'].body}
+          body={content[awaitingUserConfirmation ? 'verify-code' : 'verify-code-generic'].body}
           className={styles.content}
         />
         <CodeInput
           id='verificationCode'
-          label='Verification Code'
           value={values.verificationCode}
           numDigits={6}
           handleChange={handleChange}

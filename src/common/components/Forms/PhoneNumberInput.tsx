@@ -9,6 +9,7 @@ import 'react-phone-input-2/lib/style.css';
 
 import { ValidationResult } from '@appbricks/data-validators/lib/validator';
 
+import { useLabelContent } from '../../state/content';
 import Input, { InputProps } from './Input';
 
 const PhoneNumberInput: FunctionComponent<InputProps> = ({ 
@@ -25,6 +26,13 @@ const PhoneNumberInput: FunctionComponent<InputProps> = ({
 }) => {
   const styles = useStyles({ compact });
 
+  const labelContent = useLabelContent()(id);
+  if (!label) {
+    // retrieve input label and error content from 
+    // applications static content state store
+    label = labelContent.text();    
+  }
+
   const [validation, setValidation] = useState<ValidationResult>(
     validationResult || 
     { isValid: true }
@@ -36,14 +44,21 @@ const PhoneNumberInput: FunctionComponent<InputProps> = ({
       const result = validator 
         ? validator(
             value, 
-            label.toLocaleLowerCase(), 
+            label!.toLocaleLowerCase(), 
             { 
               ...validatorOptions,
               isRequired: required,
               // ignore format validating countries with default mask
               formatMask: country.format != '+... ... ... ... ... ..' && country.format,
               formattedValue,
-              longMessage: `${formattedValue} is not a valid ${label.toLocaleLowerCase()} in ${country.name}.`
+              shortMessage: labelContent.error && labelContent.error.short(),
+              longMessage: labelContent.error && labelContent.error.long
+                ? labelContent.error.long({
+                    label: label!.toLocaleLowerCase(),
+                    value: formattedValue, 
+                    country: country.name 
+                  })
+                : `${formattedValue} is not a valid ${label!.toLocaleLowerCase()} in ${country.name}.`
             }
           )
         : validation;

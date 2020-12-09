@@ -34,6 +34,7 @@ const StateProvider: FunctionComponent<StateProviderProps> = ({ element }) => {
                 configs={data.configs.nodes} 
                 images={data.images.nodes}
                 content={data.content.nodes}
+                labels={data.labels.nodes}
               >
                 {element}
               </AppContextProvider>
@@ -172,8 +173,10 @@ const appConfigQuery = graphql`
         labels {
           id
           text
-          longErrorMsg
-          shortErrorMsg
+          error {
+            long
+            short
+          }
         }
       }
     }

@@ -106,21 +106,22 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
 
   return (
     <FormBox
+      id='authCodeForm'
       height={thisDialog.state.height!}
       width={thisDialog.state.width!}
       fromHeight={fromDialog.state.height}
       fromWidth={fromDialog.state.width}
-      title='Sign In Code'
+      title=''
       buttons={
         [
           {
-            text: 'Cancel',
+            id: 'cancel',
             icon: <Icon width={18} icon={cancelIcon} />,
             onClick: handleButtonClick,
             disabled: serviceCallInProgress
           },
           {
-            text: 'Verify',
+            id: 'authCodeButton',
             icon: <Icon icon={verifyIcon} />,
             default: true,
             onClick: handleButtonClick,
@@ -138,7 +139,6 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
       >
         <CodeInput
           id='authCode'
-          label='Authentication Code'
           value={values.authCode}
           numDigits={6}
           handleChange={handleChange}

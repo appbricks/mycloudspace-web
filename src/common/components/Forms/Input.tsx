@@ -23,6 +23,8 @@ import {
   ValidationOptions 
 } from '@appbricks/data-validators/lib/validator';
 
+import { useLabelContent } from '../../state/content';
+
 const Input: FunctionComponent<InputProps> = ({
   id,
   label,
@@ -48,6 +50,20 @@ const Input: FunctionComponent<InputProps> = ({
   ...other
 }) => {
   const styles = useStyles();
+
+  const labelContent = useLabelContent()(id);
+  if (!label) {
+    // retrieve input label and error content from 
+    // applications static content state store
+    label = labelContent.text();
+    if (labelContent.error) {
+      validatorOptions = {
+        ...validatorOptions,
+        shortMessage: labelContent.error.short(),
+        longMessage: labelContent.error.long()
+      }  
+    }
+  }
 
   const labelRef = useRef<HTMLLabelElement>(null);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -81,7 +97,7 @@ const Input: FunctionComponent<InputProps> = ({
     if (validator && value !== undefined) {
       result = validator(
         value, 
-        label.toLocaleLowerCase(), 
+        label!.toLocaleLowerCase(), 
         { 
           ...validatorOptions,
           isRequired: required 
@@ -295,8 +311,8 @@ const useStyles = makeStyles((theme) => ({
 
 export type InputProps = OutlinedInputProps & {
   id: string
-  label: string
   value: string
+  label?: string
   type?: string
 
   labelIndent?: string

@@ -35,17 +35,20 @@ import {
 } from '@appbricks/identity';
 
 import { useAppConfig } from '../../../common/state/app';
-import { useStaticContent } from '../../../common/state/content';
-
 import { 
-  StaticContent 
-} from '../../../common/components/content';
+  useStaticContent,
+  useLabelContent
+} from '../../../common/state/content';
+
 import {
   FormBox,
   Input,
   PasswordInput,
   PhoneNumberInput
 } from '../../../common/components/forms';
+import { 
+  StaticContent 
+} from '../../../common/components/content';
 import useDialogNavState, { 
   DialogNavProps 
 } from '../../../common/components/forms/useDialogNavState';
@@ -56,6 +59,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
   const styles = useStyles();
   const appConfig = useAppConfig();
   const content = useStaticContent('authentication', SignUp.name);
+  const labelLookup = useLabelContent();
 
   const { auth, authService } = props;
 
@@ -128,21 +132,21 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
 
   return (
     <FormBox
+      id='signUpForm'
       height={thisDialog.state.height!}
       width={thisDialog.state.width!}
       fromHeight={fromDialog.state.height}
       fromWidth={fromDialog.state.width}
-      title='Sign Up'
       buttons={
         [
           {
-            text: 'Cancel',
+            id: 'cancelButton',
             icon: <Icon width={18} icon={cancelIcon} />,
             onClick: handleButtonClick,
             disabled: serviceCallInProgress
           },
           {
-            text: 'Sign Up',
+            id: 'signUpButton',
             icon: <Icon icon={signupIcon} />,
             default: true,
             onClick: handleButtonClick,
@@ -160,7 +164,6 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
       >
         <Input
           id='username'
-          label='Username'
           value={formData.username}
           required={true}
           handleChange={handleChange}
@@ -175,7 +178,6 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
         />
         <PasswordInput
           id='password'
-          label='Password'
           value={formData.password}
           required={true}
           handleChange={handleChange}
@@ -188,14 +190,12 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
         />
         <PasswordInput
           id='passwordRepeat'
-          label='Verify Password'
           value={formData.passwordRepeat}
           required={true}
           handleChange={handleChange}
           validator={inputValidator}
           validatorOptions={{ 
-            verifyWith: formData.password,
-            longMessage: 'The verification password does not match the password entered.'
+            verifyWith: formData.password
           }}
           handleValidationResult={handleValidationResult}
           forceValidate={formIGO.accept}
@@ -205,7 +205,6 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
         />
         <Input
           id='emailAddress'
-          label='Email'
           type='email'
           value={formData.emailAddress}
           required={true}
@@ -220,7 +219,6 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
         />
         <PhoneNumberInput
           id='mobilePhone'
-          label='Mobile Phone Number'
           value={formData.mobilePhone}
           required={true}
           handleChange={handleChange}
@@ -233,7 +231,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           compact
         />
         <StaticContent 
-          body={content!['accept-terms'].body}
+          body={content['accept-terms'].body}
           style={{
             margin: '-1rem 1rem -0.5rem 1rem'
           }}
@@ -247,7 +245,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
               onChange={(event, checked) => validateForm(checked)}
             />
           }
-          label='I accept and agree to the terms of use'
+          label={labelLookup('agreeToT&C').text()}
           disabled={serviceCallInProgress}
           style={{
             marginLeft: '0.2rem'
