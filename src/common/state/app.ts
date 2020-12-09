@@ -26,7 +26,7 @@ export const app = createSlice({
      */
     initApp: {
       reducer: (state, action: PayloadAction<InitializePayload>) => {
-        const appConfig = action.payload.configs[0].node.appConfig;
+        const appConfig = action.payload.configs[0].appConfig;
 
         // build feature route map
         appConfig.routeMap = {};
@@ -49,18 +49,18 @@ export const app = createSlice({
         action.payload.images.map(imageNode => {
 
           const imageSrc = imageNode
-              ? !!imageNode.node.childImageSharp
-                ? imageNode.node.childImageSharp.fluid.src
+              ? !!imageNode.childImageSharp
+                ? imageNode.childImageSharp.fluid.src
                 : ''
               : '';
 
-          if (imageNode.node.relativePath == appConfig.logos.primaryLogo) {
+          if (imageNode.relativePath == appConfig.logos.primaryLogo) {
             appConfig.logos.primaryLogoSrc = imageSrc;
 
-          } else if (imageNode.node.relativePath == appConfig.logos.secondaryLogo) {
+          } else if (imageNode.relativePath == appConfig.logos.secondaryLogo) {
             appConfig.logos.secondaryLogoSrc = imageSrc;
 
-          } else if (imageNode.node.relativePath == appConfig.layout.backgroundImage) {
+          } else if (imageNode.relativePath == appConfig.layout.backgroundImage) {
             appConfig.layout.backgroundImageSrc = imageSrc;
           }
         });
@@ -111,16 +111,12 @@ type InitializePayload = {
 }
 
 export type ConfigNode = {
-  node: {
-    appConfig: AppConfig
-  }
+  appConfig: AppConfig
 }
 
 export type ImageNode = {
-  node: {
-    relativePath: string
-    childImageSharp: any  
-  }
+  relativePath: string
+  childImageSharp: any  
 }
 
 // app config hook

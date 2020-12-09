@@ -12,7 +12,8 @@ import {
   ConfigNode 
 } from '../../state/app';
 import {
-  ContentNode
+  ContentNode,
+  LabelNode
 } from '../../state/content';
 
 import { AppContextProvider } from '../app';
@@ -30,9 +31,9 @@ const StateProvider: FunctionComponent<StateProviderProps> = ({ element }) => {
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
               <AppContextProvider 
-                configs={data.configs.edges} 
-                images={data.images.edges}
-                content={data.content.edges}
+                configs={data.configs.nodes} 
+                images={data.images.nodes}
+                content={data.content.nodes}
               >
                 {element}
               </AppContextProvider>
@@ -56,90 +57,88 @@ type StateProviderProps = {
 const appConfigQuery = graphql`
   query {
     configs: allConfigJson {
-      edges {
-        node {
-          appConfig {
-            version
-            logos {
-              primaryLogo
-              secondaryLogo
-              logoBadgeColor
+      nodes {
+        appConfig {
+          version
+          logos {
+            primaryLogo
+            secondaryLogo
+            logoBadgeColor
+          }
+          layout {
+            backgroundImage
+            backgroundOverlay
+          }
+          colors {
+            darkModeName
+            lightModeName
+            themes {
+              name
             }
-            layout {
-              backgroundImage
-              backgroundOverlay
+          }
+          routes {
+            public {
+              name
+              uri
+              feature
             }
-            colors {
-              darkModeName
-              lightModeName
-              themes {
-                name
+            private {
+              name
+              uri
+              feature
+            }
+          }
+          navigation {
+            mainNavMenu {
+              iconDisplay {
+                anchorRightInMain
+                anchorRightInSideBar
+                width
               }
-            }
-            routes {
-              public {
-                name
+              menuItems {
+                title
+                subTitle
+                icon
+                showIconInMain
                 uri
-                feature
-              }
-              private {
-                name
-                uri
-                feature
-              }
-            }
-            navigation {
-              mainNavMenu {
-                iconDisplay {
-                  anchorRightInMain
-                  anchorRightInSideBar
-                  width
-                }
-                menuItems {
+                contextItems {
+                  key
                   title
                   subTitle
                   icon
                   showIconInMain
                   uri
-                  contextItems {
-                    key
-                    title
-                    subTitle
-                    icon
-                    showIconInMain
-                    uri
-                  }
                 }
               }
-              userNavMenu {
-                iconDisplay {
-                  width
-                }
-                profile {
-                  menuItems {
-                    divider
-                    title
-                    icon
-                    feature
-                    command {
+            }
+            userNavMenu {
+              iconDisplay {
+                width
+              }
+              profile {
+                menuItems {
+                  divider
+                  title
+                  icon
+                  feature
+                  command {
+                    name
+                    args {
                       name
-                      args {
-                        name
-                        value
-                      }
+                      value
                     }
                   }
                 }
               }
-              appNavMenu {
-                iconDisplay {
-                  width
-                }
-                menuItems {
-                  title
-                  icon
-                  feature
-                }
+            }
+            appNavMenu {
+              iconDisplay {
+                width
+              }
+              menuItems {
+                title
+                icon
+                feature
               }
             }
           }
@@ -147,28 +146,34 @@ const appConfigQuery = graphql`
       }
     }
     images: allFile(filter: {dir: {regex: "/.*\\/images(\\/.*)?$/"}}) {
-      edges {
-        node {
-          relativePath
-          childImageSharp {
-            fluid(maxWidth: 2048, quality: 100) {
-              ...GatsbyImageSharpFluid
-            }
+      nodes {
+        relativePath
+        childImageSharp {
+          fluid(maxWidth: 2048, quality: 100) {
+            ...GatsbyImageSharpFluid
           }
         }
       }
     }
     content: allMdx(filter: {fields: {slug: {glob: "/library/app/**"}}}, sort: {fields: frontmatter___order}) {
-      edges {
-        node {
-          body
-          fields {
-            slug
-          }
-          frontmatter {
-            contentType
-            notifyType
-          }
+      nodes {
+        body
+        fields {
+          slug
+        }
+        frontmatter {
+          contentType
+          notifyType
+        }
+      }
+    }
+    labels: allLabelsJson {
+      nodes {
+        labels {
+          id
+          text
+          longErrorMsg
+          shortErrorMsg
         }
       }
     }
@@ -177,12 +182,15 @@ const appConfigQuery = graphql`
 
 type QueryResult = {
   configs: {
-    edges: ConfigNode[]
+    nodes: ConfigNode[]
   }
   images: {
-    edges: ImageNode[]
+    nodes: ImageNode[]
   }
   content: {
-    edges: ContentNode[]
+    nodes: ContentNode[]
+  },
+  labels: {
+    nodes: LabelNode[]
   }
 }

@@ -20,7 +20,6 @@ import {
 } from '@appbricks/identity';
 
 import { useAppConfig } from '../../../common/state/app';
-import { useStaticContent } from '../../../common/state/content';
 
 import {
   FormBox,

@@ -25,7 +25,7 @@ import {
 } from '@appbricks/identity';
 
 import { useAppConfig } from '../../../common/state/app';
-import { useLocationContent } from '../../../common/state/content';
+import { useStaticContent } from '../../../common/state/content';
 
 import {
   FormBox,
@@ -43,7 +43,7 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
   const dispatch = useDispatch();
   const styles = useStyles(props);
   const appConfig = useAppConfig();
-  const content = useLocationContent();
+  const content = useStaticContent('authentication', SignIn.name);
 
   const { auth, authService } = props;
 

@@ -35,7 +35,7 @@ import {
 } from '@appbricks/identity';
 
 import { useAppConfig } from '../../../common/state/app';
-import { useLocationContent } from '../../../common/state/content';
+import { useStaticContent } from '../../../common/state/content';
 
 import { 
   StaticContent 
@@ -55,7 +55,7 @@ import { useActionStatus } from '../../../common/state/status';
 const SignUp: FunctionComponent<SignUpProps> = (props) => {
   const styles = useStyles();
   const appConfig = useAppConfig();
-  const content = useLocationContent();
+  const content = useStaticContent('authentication', SignUp.name);
 
   const { auth, authService } = props;
 

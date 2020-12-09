@@ -30,25 +30,62 @@ export const app = createSlice({
         action.payload.content
           .map(contentNode => {
 
-            const fullPath = contentNode.node.fields.slug
+            const fullPath = contentNode.fields.slug
               .replace('/library/app', '')
               .replace(/\/$/, '');
             const path = fullPath.replace(/\/[^\/]*$/, '');
             const key = fullPath.replace(/.*\//, '');
 
-            const content = staticContent[path] as ContentKeyMap;
-            if (content) {
-              content[key] = {
-                body: contentNode.node.body,
-                props: contentNode.node.frontmatter
-              };
+            if (path.startsWith('/features')) {
+              // content mapped to feature components by domain/capability
+              const [ i1, i2, domain, capability ] = path.split('/');
+              if (!domain || !capability) {
+                throw `content feature path "${fullPath}" does not have the components /[domain]/[capability]/key`;
+              }
+
+              const domainContent = staticContent[domain];
+              if (domainContent) {
+                const capabiltyContent = domainContent[capability] as ContentKeyMap;
+                if (capabiltyContent) {
+                  capabiltyContent[key] = {
+                    body: contentNode.body,
+                    props: contentNode.frontmatter
+                  };  
+                } else {
+                  domainContent[capability] = {
+                    [key]: {
+                      body: contentNode.body,
+                      props: contentNode.frontmatter
+                    }
+                  }
+                }
+              } else {
+                staticContent[domain] = {
+                  [capability]: {
+                    [key]: {
+                      body: contentNode.body,
+                      props: contentNode.frontmatter
+                    }
+                  }
+                };
+              }
+
             } else {
-              staticContent[path] = { 
-                [key]: {
-                  body: contentNode.node.body,
-                  props: contentNode.node.frontmatter
-                } 
-              };
+              // content mapped to site location paths
+              const content = staticContent[path];
+              if (content) {
+                content[key] = {
+                  body: contentNode.body,
+                  props: contentNode.frontmatter
+                };
+              } else {
+                staticContent[path] = { 
+                  [key]: {
+                    body: contentNode.body,
+                    props: contentNode.frontmatter
+                  } 
+                };
+              }
             }
           });
 
@@ -89,7 +126,7 @@ type ContentState = {
   staticContent?: ContentMap
 }
 
-export type ContentMap = { [path: string]: ContentKeyMap }
+export type ContentMap = { [path: string]: ContentMap | ContentKeyMap }
 export type ContentKeyMap = { [key: string]: Content }
 
 export type Content = {
@@ -103,13 +140,20 @@ export type InitializePayload = {
 }
 
 export type ContentNode = {
-  node: {
-    body: string
-    frontmatter: ContentProps
-    fields: {
-      slug: string
-    }
+  body: string
+  frontmatter: ContentProps
+  fields: {
+    slug: string
   }
+};
+
+export type LabelNode = {
+  labels: {
+    id: string
+    text: string
+    longErrorMsg: string
+    shortErrorMsg: string
+  }[]
 };
 
 type ContentProps = {
@@ -120,14 +164,14 @@ type ContentProps = {
 }
 
 // static content hook
-export const useStaticContent = (): ContentMap => {
+export const useStaticContent = (domain: string, capability: string): ContentKeyMap => {
   const staticContent = useSelector(
     (state: RootState) => state.content.staticContent
   );
   if (!staticContent) {
     throw 'ERROR! The static content has not been loaded to the redux content state.'
-  }
-  return staticContent;
+  }  
+  return staticContent[domain][capability] as ContentKeyMap;
 }
 
 // content hook
@@ -140,5 +184,5 @@ export const useLocationContent = (): ContentKeyMap => {
   }
 
   const location = useLocation();
-  return staticContent[location.pathname];
+  return staticContent[location.pathname] as ContentKeyMap;
 }

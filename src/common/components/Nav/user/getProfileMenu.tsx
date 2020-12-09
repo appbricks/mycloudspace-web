@@ -13,11 +13,11 @@ import {
   features, 
   commands
 } from '../../../../site-config';
-import { ContentMap } from '../../../state/content';
 
-const getProfileMenu = (appConfig: AppConfig, content?: ContentMap): ProfileMenuDataItem[] => {
+const getProfileMenu = (appConfig: AppConfig): ProfileMenuDataItem[] => {
 
-  if (profileMenuItems.length == 0 && appConfig.navigation.userNavMenu.profile.menuItems.length != 0) {
+  if (profileMenuItems.length == 0 && 
+    appConfig.navigation.userNavMenu.profile.menuItems.length != 0) {
     // initialize main menu items 
     // from metadata in app config
     const { iconDisplay, profile } = appConfig.navigation.userNavMenu;
@@ -48,10 +48,7 @@ const getProfileMenu = (appConfig: AppConfig, content?: ContentMap): ProfileMenu
         title: item.title,
         icon: <Icon width={iconDisplay.width} icon={icons[item.icon]} />,
         feature: features[item.feature],
-        featureProps: {
-          appConfig,
-          content
-        },
+        featureProps: {},
         commandFn: commandName,
         commandProps: commandProps
       };

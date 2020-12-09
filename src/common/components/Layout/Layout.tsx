@@ -7,7 +7,6 @@ import MuiLayout, { Root, getContent } from '@mui-treasury/layout';
 import styled from 'styled-components';
 
 import { useAppConfig } from '../../state/app';
-import { useStaticContent } from '../../state/content';
 
 import Header from '../header';
 import MetaTitle from './MetaTitle';
@@ -29,7 +28,6 @@ const Layout: FunctionComponent<LayoutProps> = ({
   children
 }) => {
   const appConfig = useAppConfig();
-  const staticContent = useStaticContent();
 
   const styles = useStyles({ 
     hideNav,
@@ -41,7 +39,7 @@ const Layout: FunctionComponent<LayoutProps> = ({
   const isLoggedIn = useSelector(Auth.isLoggedIn);
   
   const mainMenu = getMainMenu(appConfig);
-  const profileMenu = getProfileMenu(appConfig, staticContent);
+  const profileMenu = getProfileMenu(appConfig);
   
   const mainNav = getMainNav(scheme, mainMenu, profileMenu, true, isLoggedIn);
 
