@@ -160,7 +160,7 @@ export type Content = {
 
 type LabelMap = { [id: string]: Label }
 
-type Label = {
+export type Label = {
   text: TemplateExecutor
   error: {
     short: TemplateExecutor

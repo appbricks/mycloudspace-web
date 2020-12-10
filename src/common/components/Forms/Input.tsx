@@ -51,10 +51,10 @@ const Input: FunctionComponent<InputProps> = ({
 }) => {
   const styles = useStyles();
 
-  const labelContent = useLabelContent()(id);
   if (!label) {
     // retrieve input label and error content from 
     // applications static content state store
+    const labelContent = useLabelContent()(id);
     label = labelContent.text();
     if (labelContent.error) {
       validatorOptions = {

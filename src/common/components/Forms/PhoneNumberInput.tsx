@@ -9,7 +9,7 @@ import 'react-phone-input-2/lib/style.css';
 
 import { ValidationResult } from '@appbricks/data-validators/lib/validator';
 
-import { useLabelContent } from '../../state/content';
+import { useLabelContent, Label } from '../../state/content';
 import Input, { InputProps } from './Input';
 
 const PhoneNumberInput: FunctionComponent<InputProps> = ({ 
@@ -26,10 +26,11 @@ const PhoneNumberInput: FunctionComponent<InputProps> = ({
 }) => {
   const styles = useStyles({ compact });
 
-  const labelContent = useLabelContent()(id);
+  let labelContent: Label;
   if (!label) {
     // retrieve input label and error content from 
     // applications static content state store
+    labelContent = useLabelContent()(id);
     label = labelContent.text();    
   }
 
@@ -51,8 +52,8 @@ const PhoneNumberInput: FunctionComponent<InputProps> = ({
               // ignore format validating countries with default mask
               formatMask: country.format != '+... ... ... ... ... ..' && country.format,
               formattedValue,
-              shortMessage: labelContent.error && labelContent.error.short(),
-              longMessage: labelContent.error && labelContent.error.long
+              shortMessage: labelContent && labelContent.error && labelContent.error.short(),
+              longMessage: labelContent && labelContent.error && labelContent.error.long
                 ? labelContent.error.long({
                     label: label!.toLocaleLowerCase(),
                     value: formattedValue, 
