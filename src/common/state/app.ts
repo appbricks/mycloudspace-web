@@ -4,15 +4,12 @@ import {
 } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 
-import { persistReducer } from 'redux-persist'
-import sessionStorage from 'redux-persist/lib/storage/session'
-
 import { RootState } from './store';
 import { AppConfig } from '../config';
 
 import { features } from '../../site-config';
 
-export const app = createSlice({
+const app = createSlice({
   name: 'app',
 
   initialState: {
@@ -90,14 +87,7 @@ export const {
   initApp,
 } = app.actions;
 
-export default persistReducer(
-  {
-    key: 'app',
-    storage: sessionStorage,
-    blacklist: []
-  }, 
-  app.reducer
-);
+export default app.reducer;
 
 type AppState = {
   initialized: boolean
