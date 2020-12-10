@@ -26,7 +26,7 @@ export type DialogNavProps = {
   location: DialogState
 }
 
-type DialogState = {
+export type DialogState = {
   state: {
     height?: number
     width?: number
