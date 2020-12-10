@@ -9,7 +9,7 @@ import 'react-phone-input-2/lib/style.css';
 
 import { ValidationResult } from '@appbricks/data-validators/lib/validator';
 
-import { useLabelContent, Label } from '../../state/content';
+import { useLabelContent, LabelTemplate } from '../../state/content';
 import Input, { InputProps } from './Input';
 
 const PhoneNumberInput: FunctionComponent<InputProps> = ({ 
@@ -26,7 +26,7 @@ const PhoneNumberInput: FunctionComponent<InputProps> = ({
 }) => {
   const styles = useStyles({ compact });
 
-  let labelContent: Label;
+  let labelContent: LabelTemplate;
   if (!label) {
     // retrieve input label and error content from 
     // applications static content state store
