@@ -169,7 +169,10 @@ const ProfileMenu: FunctionComponent<ProfileMenuProps> = ({
                           <ListItemIcon>
                             {item.icon}
                           </ListItemIcon>
-                          <ListItemText primary={item.title} />
+                          <ListItemText 
+                            primary={item.title} 
+                            className={styles.itemText}
+                          />
                         </ProfileMenuItem>
                       </div>
                     );
@@ -245,7 +248,10 @@ const useStyles = makeStyles(theme => ({
     borderStyle: 'solid',
     borderWidth: '3px',
     borderColor: '#3f51b5',
-    backgroundColor: '#efefef'
+    backgroundColor: '#efefef',
+  },
+  itemText: {
+    paddingRight: '1.5rem'
   },
   divider: {
     marginTop: '8px',
