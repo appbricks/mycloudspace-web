@@ -24,14 +24,12 @@ import {
 import { useAppConfig } from '../../../common/state/app';
 import { useStaticContent } from '../../../common/state/content';
 
-import { 
-  StaticContent 
-} from '../../../common/components/content';
 import {
   FormBox,
   CodeInput,
 } from '../../../common/components/forms';
 import { 
+  StaticContent,
   StaticLabel 
 } from '../../../common/components/content';
 import useDialogNavState, { 
