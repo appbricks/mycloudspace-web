@@ -235,7 +235,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           id='accept'
           onChange={(event, checked) => validateForm(checked)}
           disabled={serviceCallInProgress}
-          color='primary'
+          checkColor='primary'
           style={{
             marginLeft: '0.2rem'
           }}

@@ -1,0 +1,32 @@
+{
+  "labels": [
+    {
+      "id": "securityDialog",
+      "text": "Security"
+    },
+    {
+      "id": "passwordSection",
+      "text": "Password"
+    },
+    {
+      "id": "enhancedSecuritySection",
+      "text": "Enhanced Security"
+    },
+    {
+      "id": "mfaAuthentication",
+      "text": "Multi-Factor Authentication"
+    },
+    {
+      "id": "smsOption",
+      "text": "via a text to your mobile phone"
+    },
+    {
+      "id": "totpOption",
+      "text": "via a token using Google Authenticator app"
+    },
+    {
+      "id": "enableBiometric",
+      "text": "Enable biometric security where available"
+    }
+  ]
+}

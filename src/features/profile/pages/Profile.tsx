@@ -23,6 +23,9 @@ import {
   Input,
   PhoneNumberInput
 } from '../../../common/components/forms';
+import {
+  StaticLabel
+} from '../../../common/components/content';
 
 const Profile: FunctionComponent<ProfileProps> = ({
   open,
@@ -53,12 +56,15 @@ const Profile: FunctionComponent<ProfileProps> = ({
       onClose={onClose}
       disableBackdropClick
     >
-      <DialogTitle onClose={onClose}>Profile</DialogTitle>
+      <DialogTitle onClose={onClose}>
+        <StaticLabel id='profileDialog' />
+      </DialogTitle>
       <DialogContent dividers>
-        <DialogContentText>Names</DialogContentText>
+        <DialogContentText>
+          <StaticLabel id='namesSection' />
+        </DialogContentText>
         <Input
           id='firstName'
-          label='First'
           value={values.firstName}
           handleChange={handleChange.bind(this)}
           className={styles.input}
@@ -67,7 +73,6 @@ const Profile: FunctionComponent<ProfileProps> = ({
         />
         <Input
           id='middleName'
-          label='Middle'
           value={values.middleName}
           handleChange={handleChange.bind(this)}
           className={styles.input}
@@ -75,7 +80,6 @@ const Profile: FunctionComponent<ProfileProps> = ({
         />
         <Input
           id='familyName'
-          label='Family'
           value={values.familyName}
           handleChange={handleChange.bind(this)}
           className={styles.input}
@@ -84,17 +88,17 @@ const Profile: FunctionComponent<ProfileProps> = ({
         />
         <Input
           id='preferredName'
-          label='Preferred Name'
           value={values.preferredName}
           handleChange={handleChange.bind(this)}
           className={styles.input}
           compact
         />
         <Divider/>
-        <DialogContentText className={styles.contactContent}>Contact</DialogContentText>
+        <DialogContentText className={styles.contactContent}>
+          <StaticLabel id='contactSection' />
+        </DialogContentText>
         <Input
-          id='email'
-          label='Email'
+          id='emailAddress'
           type='email'
           value={values.email}
           required={true}
@@ -113,8 +117,7 @@ const Profile: FunctionComponent<ProfileProps> = ({
           compact
         />
         <PhoneNumberInput
-          id='phoneNumber'
-          label='Phone Number'
+          id='mobilePhone'
           value={values.phoneNumber}
           handleChange={handleChange.bind(this)}
           required={true}
@@ -134,10 +137,10 @@ const Profile: FunctionComponent<ProfileProps> = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
-          Cancel
+          <StaticLabel id='cancelButton' />
         </Button>
         <Button onClick={onClose} color="primary">
-          Save
+          <StaticLabel id='saveButton' />
         </Button>
       </DialogActions>
     </FormDialog>

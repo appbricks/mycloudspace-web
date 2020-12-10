@@ -5,6 +5,10 @@
       "text": "Cancel"
     },
     {
+      "id": "saveButton",
+      "text": "Save"
+    },
+    {
       "id": "username",
       "text": "Username"
     },
