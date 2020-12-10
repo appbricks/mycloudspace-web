@@ -2,7 +2,7 @@ import {
   createSlice, 
   PayloadAction 
 } from '@reduxjs/toolkit';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from "@reach/router";
 
 import { persistReducer } from 'redux-persist'
@@ -12,7 +12,7 @@ import { template, TemplateExecutor } from 'lodash';
 
 import { RootState } from './store';
 
-export const app = createSlice({
+const content = createSlice({
   name: 'content',
 
   initialState: {
@@ -100,10 +100,10 @@ export const app = createSlice({
             labelNode.labels.map(label => {
               const { id, text, error } = label;
               labelContent[id] = { 
-                text: template(text),
+                text: text,
                 error: error && {
-                  short: template(error.short),
-                  long: template(error.long)
+                  short: error.short,
+                  long: error.long
                 }
               };
             });            
@@ -125,29 +125,35 @@ export const app = createSlice({
             content,
             labels
           }
-        }
+        };
       }
-    },
+    }
   }
 })
 
 export const { 
   initContent  
-} = app.actions;
+} = content.actions;
 
 export default persistReducer(
   {
     key: 'content',
     storage: sessionStorage,
-    blacklist: []
+    blacklist: ['LabelTemplateMap']
   }, 
-  app.reducer
+  content.reducer
 );
 
 type ContentState = {
   initialized: boolean
   staticContent?: ContentMap
   labelContent?: LabelMap
+}
+
+// inialize action payload type
+export type InitializePayload = {
+  content: ContentNode[]
+  labels: LabelNode[]
 }
 
 type ContentMap = { [path: string]: ContentMap | ContentKeyMap }
@@ -159,19 +165,21 @@ export type Content = {
 }
 
 type LabelMap = { [id: string]: Label }
+type Label = {
+  text: string
+  error: {
+    short: string
+    long: string
+  }
+}
 
-export type Label = {
+type LabelTemplateMap = { [id: string]: LabelTemplate }
+export type LabelTemplate = {
   text: TemplateExecutor
   error: {
     short: TemplateExecutor
     long: TemplateExecutor
   }
-}
-
-// inialize action payload type
-export type InitializePayload = {
-  content: ContentNode[]
-  labels: LabelNode[]
 }
 
 export type ContentNode = {
@@ -226,19 +234,37 @@ export const useLocationContent = (): ContentKeyMap => {
 
 // label content hook
 export const useLabelContent = (): LabelLookup => {
+  const dispatch = useDispatch();
   const labelContent = useSelector(
     (state: RootState) => state.content.labelContent
-  );
+  );  
   if (!labelContent) {
     throw 'ERROR! The label content has not been loaded to the redux content state.'
   }
-  return (id, values = {}) => {
-    let label = labelContent[id];
-    if (!label) {
-      throw `ERROR! The label for id "${id}" was not found.`
+
+  return (id) => {
+    let labelTemplate = labelTemplateCache[id];
+    if (!labelTemplate) {
+      // compile label string templates and 
+      // cache compiled templates
+      let label = labelContent![id];
+      if (!label) {
+        throw `ERROR! The label for id "${id}" was not found.`
+      }
+      labelTemplate = {
+        text: template(label.text),
+        error: label.error && {
+          short: template(label.error.short),
+          long: template(label.error.long),
+        }
+      };
+      labelTemplateCache[id] = labelTemplate;
     }
-    return label
+    return labelTemplate;
   };
 }
 
-export type LabelLookup = (id: string, values?: { [name: string] : string}) =>  Label;
+// cache of compiled label templates
+const labelTemplateCache: { [id: string]: LabelTemplate } = {};
+
+export type LabelLookup = (id: string) => LabelTemplate
