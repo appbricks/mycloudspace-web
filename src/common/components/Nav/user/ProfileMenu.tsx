@@ -22,6 +22,7 @@ import Avatar from '@material-ui/core/Avatar';
 import cx from 'clsx';
 
 import { useAppConfig } from '../../../state/app';
+import { dismissNotification } from '../../../state/notifications';
 
 import MenuButton from './MenuButton';
 import { ProfileMenuDataItem } from './getProfileMenu';
@@ -56,6 +57,9 @@ const ProfileMenu: FunctionComponent<ProfileMenuProps> = ({
   }, [setState]);
 
   const handleClick = (event: MouseEvent<HTMLDivElement>) => {
+    // dismiss any notification shown 
+    dispatch(dismissNotification());
+
     setState({
       active: !state.active, 
       clicked: true,
