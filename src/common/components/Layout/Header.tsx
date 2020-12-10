@@ -1,23 +1,49 @@
-import React, { FunctionComponent } from 'react';
+import React, {
+  FunctionComponent
+} from 'react';
+import { useSelector } from 'react-redux';
 import Box from '@material-ui/core/Box';
 import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles } from '@material-ui/core/styles';
 import { getHeader } from '@mui-treasury/layout';
 import styled from 'styled-components';
 
+import { 
+  getDrawerSidebar, 
+  getSidebarContent 
+} from '@mui-treasury/layout';
+
+import { 
+  getMainMenu, 
+  getProfileMenu,
+  NavDelegate,
+  ToolbarNav,
+  SidbarNav,
+  UserNav
+} from '../nav';
+
 import { useAppConfig } from '../../state/app';
 import { AppConfig } from '../../config';
 import { headerHeight } from '../../config/layout';
-import { MainNav } from '../nav/main/getMainNav';
+
+import * as Auth from '../../state/auth';
 
 const Header: FunctionComponent<HeaderProps> = (props) => {
   const appConfig = useAppConfig();
   const styles = useStyles({ appConfig });
 
-  const { 
-    mainNav,
+  const {
+    sidebarId,
+    rightSideBar,
     hideNav = false
   } = props;
+
+  const isLoggedIn = useSelector(Auth.isLoggedIn);
+  
+  const mainMenuItems = getMainMenu(appConfig);
+  const profileMenuItems = getProfileMenu(appConfig);
+
+  const delegate = new NavDelegate(mainMenuItems, isLoggedIn);
 
   return (
     <HeaderMain className={styles.root}>
@@ -28,11 +54,11 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
             className={styles.logo1}
             alt='appbricks'
             src={appConfig.logos.primaryLogoSrc}
-            onClick={() => mainNav.delegate.setSelection(-1)}
+            onClick={() => delegate.setSelection(-1)}
           />
         </Box>
 
-        {!appConfig.logos.secondaryLogoSrc || 
+        {!appConfig.logos.secondaryLogoSrc ||
           (hideNav &&
             <Box display='flex' alignItems='center' className={styles.logoBadge}>
               <img
@@ -45,13 +71,33 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
         }
 
         {hideNav
-          ? mainNav.userNav
-          : mainNav.toolbarNav
+          ? <UserNav
+              menuItems={profileMenuItems}
+            />
+          : <ToolbarNav
+              menuItems={mainMenuItems}
+              rightSideBar={rightSideBar}
+              sidebarId={sidebarId}
+              isLoggedIn={isLoggedIn}
+              delegate={delegate}
+            />
         }
       </Toolbar>
       {hideNav
         ? <></>
-        : mainNav.sidbarNav
+        : <DrawerSidebar
+            sidebarId={sidebarId}
+          >
+            <SidebarContent>
+              <SidbarNav
+                menuItems={mainMenuItems}
+                rightSideBar={rightSideBar}
+                sidebarId={sidebarId}
+                isLoggedIn={isLoggedIn}
+                delegate={delegate}
+              />
+            </SidebarContent>
+          </DrawerSidebar>
       }
     </HeaderMain>
   );
@@ -94,8 +140,12 @@ const useStyles = makeStyles(theme => ({
 
 const HeaderMain = getHeader(styled);
 
+const DrawerSidebar = getDrawerSidebar(styled)
+const SidebarContent = getSidebarContent(styled)
+
 type HeaderProps = {
-  mainNav: MainNav
+  sidebarId: string
+  rightSideBar: boolean
   hideNav?: boolean
 }
 
