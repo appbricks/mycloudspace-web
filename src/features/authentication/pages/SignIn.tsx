@@ -33,8 +33,8 @@ import {
   Input,
   PasswordInput
 } from '../../../common/components/forms';
-import { 
-  StaticLabel 
+import {
+  StaticLabel
 } from '../../../common/components/content';
 import useDialogNavState, {
   DialogNavProps
@@ -93,7 +93,7 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
   useActionStatus(actionStatus,
     () => {
       switch (actionStatus.actionType) {
-        
+
         case SIGN_IN_REQ: {
           if (awaitingMFAConfirmation == AUTH_NO_MFA) {
             dispatch(
@@ -113,8 +113,8 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
 
         case RESET_PASSWORD_REQ: {
           thisDialog.state.data['username'] = values.username;
-          navigate(appConfig.routeMap['reset'].uri, thisDialog);    
-          break;  
+          navigate(appConfig.routeMap['reset'].uri, thisDialog);
+          break;
         }
       }
     },

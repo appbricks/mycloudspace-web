@@ -14,7 +14,7 @@ import verifyIcon from '@iconify/icons-mdi/check-bold';
 
 import { ActionResult } from '@appbricks/utils';
 
-import { 
+import {
   VALIDATE_MFA_CODE_REQ,
   AuthService,
   AuthActionProps,
@@ -27,8 +27,8 @@ import {
   FormBox,
   CodeInput,
 } from '../../../common/components/forms';
-import useDialogNavState, { 
-  DialogNavProps 
+import useDialogNavState, {
+  DialogNavProps
 } from '../../../common/components/forms/useDialogNavState';
 
 import { useActionStatus } from '../../../common/state/status';
@@ -54,7 +54,7 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
   const [values, setValues] = useState<State>({
     username,
     authCode: ''
-  }); 
+  });
 
   const handleChange = (prop: string, value: string) =>  {
     setValues({ ...values, [prop]: value.replaceAll(/[- #]/g, '') });
@@ -74,7 +74,7 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
   };
 
   // handle auth action status result
-  useActionStatus(actionStatus, 
+  useActionStatus(actionStatus,
     () => {
       if (actionStatus.actionType == VALIDATE_MFA_CODE_REQ) {
         navigate(appConfig.routeMap['appHome'].uri, thisDialog);
@@ -88,12 +88,13 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
     }
   );
 
-  // check if username is in context
-  if (!username) {    
+  // check if username is in context.
+  // if not redirect to sign in link
+  if (!username) {
     return (
-      <Redirect 
-        to={appConfig.routeMap['signin'].uri} 
-        noThrow 
+      <Redirect
+        to={appConfig.routeMap['signin'].uri}
+        noThrow
       />
     );
   }
@@ -101,9 +102,9 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
   // check if code is complete and enable
   // verification call buttons
   const disableVerify = (values.authCode.length != 6);
-  
-  // check auth state is pending change 
-  // due to a backend call in progress 
+
+  // check auth state is pending change
+  // due to a backend call in progress
   const serviceCallInProgress = (actionStatus.result == ActionResult.pending);
 
   return (
@@ -162,9 +163,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type AuthCodeProps = 
-  AuthStateProps & 
-  AuthActionProps & 
+type AuthCodeProps =
+  AuthStateProps &
+  AuthActionProps &
   DialogNavProps
 
 type State = {

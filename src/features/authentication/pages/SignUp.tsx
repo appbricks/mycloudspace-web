@@ -1,7 +1,8 @@
 import React, {
   FunctionComponent,
   MouseEvent,
-  useState
+  useState,
+  useEffect
 } from 'react';
 import { connect } from 'react-redux';
 import { navigate } from '@reach/router';
@@ -18,7 +19,7 @@ import PhoneIcon from '@material-ui/icons/Smartphone';
 
 import { ActionResult } from '@appbricks/utils';
 
-import { 
+import {
   usernameValidator,
   passwordValidator,
   emailAddressValidator,
@@ -26,7 +27,7 @@ import {
   inputValidator
 } from '@appbricks/data-validators';
 
-import { 
+import {
   SIGN_UP_REQ,
   User,
   AuthService,
@@ -44,11 +45,11 @@ import {
   PhoneNumberInput,
   CheckBox
 } from '../../../common/components/forms';
-import { 
-  StaticContent 
+import {
+  StaticContent
 } from '../../../common/components/content';
-import useDialogNavState, { 
-  DialogNavProps 
+import useDialogNavState, {
+  DialogNavProps
 } from '../../../common/components/forms/useDialogNavState';
 
 import { useActionStatus } from '../../../common/state/status';
@@ -64,8 +65,15 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
   const [ thisDialog, fromDialog ] = useDialogNavState(624, 350, props);
 
   // redux auth state: action status and user
-  const { actionStatus } = auth!;
-  
+  const { actionStatus, isLoggedIn } = auth!;
+
+  // if signed in then signout
+  useEffect(() => {
+    if (isLoggedIn) {
+      authService!.signOut();
+    }
+  }, [isLoggedIn])
+
   const [formData, setFormData] = useState<FormData>({
     username: '',
     password: '',
@@ -77,7 +85,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
   const [formIGO, setFormIGO] = useState<FormIGO>({
     validFields: {},
     accept: false,
-    inputOk: false    
+    inputOk: false
   });
 
   const handleChange = (prop: string, value: any) =>  {
@@ -109,7 +117,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
         user.password = formData.password;
         user.emailAddress = formData.emailAddress;
         user.mobilePhone = '+' + formData.mobilePhone;
-        
+
         authService!.signUp(user);
         break;
       }
@@ -123,8 +131,8 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
     }
   });
 
-  // check auth state is pending change 
-  // due to a backend call in progress 
+  // check auth state is pending change
+  // due to a backend call in progress
   const serviceCallInProgress = (actionStatus.result == ActionResult.pending);
 
   return (
@@ -191,7 +199,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           required={true}
           handleChange={handleChange}
           validator={inputValidator}
-          validatorOptions={{ 
+          validatorOptions={{
             verifyWith: formData.password
           }}
           handleValidationResult={handleValidationResult}
@@ -227,7 +235,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           className={styles.input}
           compact
         />
-        <StaticContent 
+        <StaticContent
           body={content['accept-terms'].body}
           style={{
             margin: '-1rem 1rem -0.5rem 1rem'
@@ -256,9 +264,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type SignUpProps = 
-  AuthStateProps & 
-  AuthActionProps & 
+type SignUpProps =
+  AuthStateProps &
+  AuthActionProps &
   DialogNavProps
 
 type FormData = {

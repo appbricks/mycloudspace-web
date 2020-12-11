@@ -1,7 +1,8 @@
 import React, {
   FunctionComponent,
   MouseEvent,
-  useState
+  useState,
+  useEffect
 } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { navigate, Redirect } from '@reach/router';
@@ -15,11 +16,11 @@ import verifyIcon from '@iconify/icons-mdi/check-bold';
 
 import { ActionResult } from '@appbricks/utils';
 
-import { 
+import {
   CONFIRM_SIGN_UP_CODE_REQ,
   AuthService,
   AuthActionProps,
-  AuthStateProps 
+  AuthStateProps
 } from '@appbricks/identity';
 
 import { useAppConfig } from '../../../common/state/app';
@@ -29,12 +30,12 @@ import {
   FormBox,
   CodeInput,
 } from '../../../common/components/forms';
-import { 
+import {
   StaticContent,
-  StaticLabel 
+  StaticLabel
 } from '../../../common/components/content';
-import useDialogNavState, { 
-  DialogNavProps 
+import useDialogNavState, {
+  DialogNavProps
 } from '../../../common/components/forms/useDialogNavState';
 
 import { notify } from '../../../common/state/notifications';
@@ -52,14 +53,21 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
   const [ thisDialog, fromDialog ] = useDialogNavState(338, 350, props);
 
   // redux auth state: action status and user
-  const { actionStatus, user, awaitingUserConfirmation } = auth!;
+  const { actionStatus, isLoggedIn, user, awaitingUserConfirmation } = auth!;
+
+  // if signed in then signout
+  useEffect(() => {
+    if (isLoggedIn) {
+      authService!.signOut();
+    }
+  }, [isLoggedIn])
 
   // retrieve username of account to verify which
   // may be passed via the signed up user object
   // or a username that was detected as unconfirmed
   // by the signin dialog.
-  const username = 
-    (user && !user.isConfirmed() && user.username) || 
+  const username =
+    (user && !user.isConfirmed() && user.username) ||
     fromDialog.state.data['username'];
 
   const [values, setValues] = useState<State>({
@@ -87,12 +95,12 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
       }
     }
   };
-  
+
   // handle auth action status result
   useActionStatus(actionStatus, () => {
     if (actionStatus.actionType == CONFIRM_SIGN_UP_CODE_REQ) {
       dispatch(
-        notify({ 
+        notify({
           content: content['notify-account-created'] ,
           values: { username: values.username }
         })
@@ -100,14 +108,14 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
       navigate(appConfig.routeMap['signin'].uri, thisDialog);
     }
   });
-  
-  // check if account confirmation is 
-  // in context and necessary
-  if (!username) {    
+
+  // check if account confirmation is in context and
+  // necessary. if not redirect to othe sign in page.
+  if (!username) {
     return (
-      <Redirect 
-        to={appConfig.routeMap['signin'].uri} 
-        noThrow 
+      <Redirect
+        to={appConfig.routeMap['signin'].uri}
+        noThrow
       />
     );
   }
@@ -115,14 +123,14 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
   // check if code is complete and enable
   // verification call buttons
   const disableVerify = (values.verificationCode.length != 6);
-  
-  // check auth state is pending change 
-  // due to a backend call in progress 
+
+  // check auth state is pending change
+  // due to a backend call in progress
   const serviceCallInProgress = (
     actionStatus.actionType == CONFIRM_SIGN_UP_CODE_REQ &&
     actionStatus.result == ActionResult.pending
   );
-  
+
   return (
     <FormBox
       id='verifyAccountForm'
@@ -155,7 +163,7 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
         justify='center'
         alignItems='center'
       >
-        <StaticContent 
+        <StaticContent
           body={content[awaitingUserConfirmation ? 'verify-code' : 'verify-code-generic'].body}
           className={styles.content}
         />
@@ -168,12 +176,12 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
           className={styles.input}
           first
         />
-        <Button variant='contained' 
+        <Button variant='contained'
           className={styles.button}
           onClick={handleResendCode}
           disabled={serviceCallInProgress}
         >
-          <StaticLabel id='resendConfirmCode' />          
+          <StaticLabel id='resendConfirmCode' />
         </Button>
       </Grid>
 
@@ -200,8 +208,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type VerifyProps = 
-  AuthStateProps & 
+type VerifyProps =
+  AuthStateProps &
   AuthActionProps &
   DialogNavProps
 

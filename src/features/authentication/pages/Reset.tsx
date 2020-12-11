@@ -1,7 +1,8 @@
 import React, {
   FunctionComponent,
   MouseEvent,
-  useState
+  useState,
+  useEffect
 } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { navigate, Redirect } from '@reach/router';
@@ -14,16 +15,16 @@ import verifyIcon from '@iconify/icons-mdi/check-bold';
 
 import { ActionResult } from '@appbricks/utils';
 
-import { 
+import {
   passwordValidator,
   inputValidator
 } from '@appbricks/data-validators';
 
-import { 
+import {
   UPDATE_PASSWORD_REQ,
   AuthService,
   AuthActionProps,
-  AuthStateProps 
+  AuthStateProps
 } from '@appbricks/identity';
 
 import { useAppConfig } from '../../../common/state/app';
@@ -34,11 +35,11 @@ import {
   CodeInput,
   PasswordInput
 } from '../../../common/components/forms';
-import { 
-  StaticContent 
+import {
+  StaticContent
 } from '../../../common/components/content';
-import useDialogNavState, { 
-  DialogNavProps 
+import useDialogNavState, {
+  DialogNavProps
 } from '../../../common/components/forms/useDialogNavState';
 
 import { notify } from '../../../common/state/notifications';
@@ -56,7 +57,14 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
   const [ thisDialog, fromDialog ] = useDialogNavState(485, 350, props);
 
   // redux auth state: action status and user
-  const { actionStatus } = auth!;
+  const { actionStatus, isLoggedIn } = auth!;
+
+  // if signed in then signout
+  useEffect(() => {
+    if (isLoggedIn) {
+      authService!.signOut();
+    }
+  }, [isLoggedIn])
 
   // retrieve username of account to verify which
   // may be passed via the signed up user object
@@ -70,7 +78,7 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
     passwordRepeat: ''
   });
 
-  const [inputIGO, setInputIGO] = useState<InputIGO>({    
+  const [inputIGO, setInputIGO] = useState<InputIGO>({
     validFields: {},
     inputOk: false
   });
@@ -105,10 +113,10 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
       }
     }
   };
-  
+
   // handle auth action status result
   useActionStatus(actionStatus, () => {
-    if (actionStatus.actionType == UPDATE_PASSWORD_REQ) {      
+    if (actionStatus.actionType == UPDATE_PASSWORD_REQ) {
       dispatch(
         notify({
           content: content['notify-password-reset'],
@@ -118,13 +126,14 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
       navigate(appConfig.routeMap['signin'].uri, thisDialog);
     }
   });
-  
-  // check if username is in context
-  if (!username) {    
+
+  // check if username is in context.
+  // if not redirect to sign in link
+  if (!username) {
     return (
-      <Redirect 
-        to={appConfig.routeMap['signin'].uri} 
-        noThrow 
+      <Redirect
+        to={appConfig.routeMap['signin'].uri}
+        noThrow
       />
     );
   }
@@ -132,14 +141,14 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
   // check if code is complete and enable
   // verification call buttons
   const disableVerify = (values.resetCode.length != 6);
-  
-  // check auth state is pending change 
-  // due to a backend call in progress 
+
+  // check auth state is pending change
+  // due to a backend call in progress
   const serviceCallInProgress = (
     actionStatus.actionType == UPDATE_PASSWORD_REQ &&
     actionStatus.result == ActionResult.pending
   );
-  
+
   return (
     <FormBox
       id='resetForm'
@@ -172,7 +181,7 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
         justify='center'
         alignItems='center'
       >
-        <StaticContent 
+        <StaticContent
           body={content['reset-code'].body}
           className={styles.content}
         />
@@ -183,7 +192,7 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
           numDigits={6}
           handleChange={handleChange}
           validator={inputValidator}
-          validatorOptions={{ 
+          validatorOptions={{
             verifyWithRegex: '\\d - \\d - \\d - \\d - \\d - \\d'
           }}
           disabled={serviceCallInProgress}
@@ -206,13 +215,13 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
           required={true}
           handleChange={handleChange}
           validator={inputValidator}
-          validatorOptions={{ 
+          validatorOptions={{
             verifyWith: values.password
           }}
           handleValidationResult={handleValidationResult}
           disabled={serviceCallInProgress}
           className={styles.input}
-        />        
+        />
       </Grid>
 
     </FormBox>
@@ -238,8 +247,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type ResetProps = 
-  AuthStateProps & 
+type ResetProps =
+  AuthStateProps &
   AuthActionProps &
   DialogNavProps
 
