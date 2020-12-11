@@ -246,9 +246,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           onChange={(event, checked) => validateForm(checked)}
           disabled={serviceCallInProgress}
           checkColor='primary'
-          style={{
-            marginLeft: '0.2rem'
-          }}
+          className={styles.checkBox}
         />
       </Grid>
 
@@ -261,6 +259,12 @@ export default connect(AuthService.stateProps, AuthService.dispatchProps)(SignUp
 const useStyles = makeStyles((theme) => ({
   input: {
     width: '90%'
+  },
+  checkBox: {
+    marginLeft: '0.2rem',
+    '&:hover': {
+      color: '#3f51b5',
+    }
   }
 }));
 
