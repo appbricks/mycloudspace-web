@@ -3,6 +3,7 @@ import * as redux from 'redux';
 
 // Site application config binding - site/config/site-config.json
 export type AppConfig = {
+  
   // raw config elements
   logos: {
     primaryLogo: string
@@ -14,6 +15,7 @@ export type AppConfig = {
     primaryLogoSrc?: string
     secondaryLogoSrc?: string
   }
+
   layout: {
     backgroundImage: string
     backgroundOverlay: string
@@ -22,6 +24,7 @@ export type AppConfig = {
     // via gatsby sharp plugin
     backgroundImageSrc?: string
   }
+
   colors: {
     darkModeName: string
     lightModeName: string
@@ -29,6 +32,20 @@ export type AppConfig = {
       name: string
     }[]
   }
+
+  routes: {
+    public: {
+      name: string
+      uri: string
+      feature: string
+    }[],
+    private: {
+      name: string
+      uri: string
+      feature: string
+    }[]
+  }
+
   navigation: {
     mainNavMenu: {
       iconDisplay: {
@@ -72,18 +89,6 @@ export type AppConfig = {
         feature: string
       }[]
     }
-  }
-  routes: {
-    public: {
-      name: string
-      uri: string
-      feature: string
-    }[],
-    private: {
-      name: string
-      uri: string
-      feature: string
-    }[]
   }
 
   // post processed config elements
