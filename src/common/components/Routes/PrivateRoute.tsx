@@ -21,11 +21,13 @@ const PrivateRoute: FunctionComponent<PrivateRouteProps> = ({
   
   const appConfig = useAppConfig();
   
-  // retrieve the auth state and prevent
-  // selector from testing for changes
-  // as that can cause re-renders if a
-  // dispatch to AuthService happened
-  const auth = useSelector(Auth, (left, right) => true);
+  // retrieve the auth state and allow
+  // selector to re-render only if 
+  // the logged in state changes
+  const auth = useSelector(
+    Auth, 
+    (left, right) => left.isLoggedIn == right.isLoggedIn
+  );
 
   // private routes are allowed only if a valid auth 
   // session exists and it has a logged in status
