@@ -4,6 +4,7 @@ import React, {
 } from 'react';
 import { useSelector } from 'react-redux';
 import { RouteComponentProps, Redirect } from '@reach/router';
+import * as _ from 'lodash';
 
 import { useAppConfig } from '../../state/app';
 import Auth from '../../state/auth';
@@ -18,10 +19,16 @@ const PrivateRoute: FunctionComponent<PrivateRouteProps> = ({
   if (!Component) 
     throw 'property Component is required for PrivateRoute element';
   
+  const appConfig = useAppConfig();
+  
+  // retrieve the auth state and prevent
+  // selector from testing for changes
+  // as that can cause re-renders if a
+  // dispatch to AuthService happened
+  const auth = useSelector(Auth, (left, right) => true);
+
   // private routes are allowed only if a valid auth 
   // session exists and it has a logged in status
-  const appConfig = useAppConfig();
-  const auth = useSelector(Auth);
   if (!auth.session.isValid() || !auth.isLoggedIn) {
     return (
       <Redirect 
