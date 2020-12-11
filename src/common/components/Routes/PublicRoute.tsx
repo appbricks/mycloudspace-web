@@ -19,18 +19,18 @@ const PublicRoute: FunctionComponent<PublicRouteProps> = ({
   if (!Component)
     throw 'properties Component is required for PublicRoute element';
 
-  const session = useSelector(Auth.session);
   const authService = AuthService.dispatchProps(useDispatch()).authService!;
-
+  const isValid = useSelector(Auth.session).isValid();
+  
   useEffect(() => {
     authService.loadAuthState();
-  }, [session.isValid()]);
+  }, [isValid]);
 
   return (
     <Layout
       {...other}
     >
-      {session.isValid() && (
+      {isValid && (
         <Component
           {...componentProps}
           {...other}
