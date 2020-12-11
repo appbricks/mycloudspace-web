@@ -3,7 +3,7 @@ import React, {
   MouseEvent,
   useState
 } from 'react';
-import { useDispatch } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { navigate, Redirect } from '@reach/router';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -17,6 +17,7 @@ import { ActionResult } from '@appbricks/utils';
 
 import { 
   CONFIRM_SIGN_UP_CODE_REQ,
+  AuthService,
   AuthActionProps,
   AuthStateProps 
 } from '@appbricks/identity';
@@ -180,7 +181,7 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
   );
 }
 
-export default Verify;
+export default connect(AuthService.stateProps, AuthService.dispatchProps)(Verify);
 
 const useStyles = makeStyles((theme) => ({
   content: {

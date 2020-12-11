@@ -3,6 +3,7 @@ import React, {
   MouseEvent,
   useState
 } from 'react';
+import { connect } from 'react-redux';
 import { navigate, Redirect } from '@reach/router';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -15,6 +16,7 @@ import { ActionResult } from '@appbricks/utils';
 
 import { 
   VALIDATE_MFA_CODE_REQ,
+  AuthService,
   AuthActionProps,
   AuthStateProps
 } from '@appbricks/identity';
@@ -152,7 +154,7 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
   );
 }
 
-export default AuthCode;
+export default connect(AuthService.stateProps, AuthService.dispatchProps)(AuthCode);
 
 const useStyles = makeStyles((theme) => ({
   input: {

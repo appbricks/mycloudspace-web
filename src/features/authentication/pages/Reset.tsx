@@ -3,7 +3,7 @@ import React, {
   MouseEvent,
   useState
 } from 'react';
-import { useDispatch } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { navigate, Redirect } from '@reach/router';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -21,6 +21,7 @@ import {
 
 import { 
   UPDATE_PASSWORD_REQ,
+  AuthService,
   AuthActionProps,
   AuthStateProps 
 } from '@appbricks/identity';
@@ -218,7 +219,7 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
   );
 }
 
-export default Reset;
+export default connect(AuthService.stateProps, AuthService.dispatchProps)(Reset);
 
 const useStyles = makeStyles((theme) => ({
   content: {

@@ -3,7 +3,7 @@ import React, {
   MouseEvent,
   useState
 } from 'react';
-import { useDispatch } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { navigate, Redirect } from '@reach/router';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
@@ -20,6 +20,7 @@ import {
   SIGN_IN_REQ,
   RESET_PASSWORD_REQ,
   AUTH_NO_MFA,
+  AuthService,
   AuthActionProps,
   AuthStateProps
 } from '@appbricks/identity';
@@ -221,7 +222,7 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
   );
 }
 
-export default SignIn;
+export default connect(AuthService.stateProps, AuthService.dispatchProps)(SignIn);
 
 const useStyles = makeStyles((theme) => ({
   input: {

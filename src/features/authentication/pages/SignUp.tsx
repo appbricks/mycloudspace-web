@@ -3,6 +3,7 @@ import React, {
   MouseEvent,
   useState
 } from 'react';
+import { connect } from 'react-redux';
 import { navigate } from '@reach/router';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -28,6 +29,7 @@ import {
 import { 
   SIGN_UP_REQ,
   User,
+  AuthService,
   AuthActionProps,
   AuthStateProps
 } from '@appbricks/identity';
@@ -246,7 +248,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
   );
 }
 
-export default SignUp;
+export default connect(AuthService.stateProps, AuthService.dispatchProps)(SignUp);
 
 const useStyles = makeStyles((theme) => ({
   input: {

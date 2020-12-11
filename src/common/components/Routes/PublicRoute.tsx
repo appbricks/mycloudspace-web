@@ -3,20 +3,15 @@ import React, {
   FunctionComponent,
   useEffect
 } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RouteComponentProps } from '@reach/router';
 
-import { 
-  AuthService,
-  AuthActionProps,
-  AuthStateProps
-} from '@appbricks/identity';
+import { AuthService } from '@appbricks/identity';
+import * as Auth from '../../state/auth';
 
 import Layout from '../layout/Layout';
 
 const PublicRoute: FunctionComponent<PublicRouteProps> = ({
-  auth,
-  authService,
   component: Component,
   componentProps,
   ...other
@@ -24,18 +19,19 @@ const PublicRoute: FunctionComponent<PublicRouteProps> = ({
   if (!Component)
     throw 'properties Component is required for PublicRoute element';
 
+  const session = useSelector(Auth.session);
+  const authService = AuthService.dispatchProps(useDispatch()).authService!;
+
   useEffect(() => {
-    authService!.loadAuthState();
-  }, [auth!.session.isValid()]);
+    authService.loadAuthState();
+  }, [session.isValid()]);
 
   return (
     <Layout
       {...other}
     >
-      {auth!.session.isValid() && (
+      {session.isValid() && (
         <Component
-          auth={auth}
-          authService={authService}
           {...componentProps}
           {...other}
         />
@@ -44,11 +40,9 @@ const PublicRoute: FunctionComponent<PublicRouteProps> = ({
   );
 }
 
-export default connect(AuthService.stateProps, AuthService.dispatchProps)(PublicRoute);
+export default PublicRoute;
 
 type PublicRouteProps = 
-  AuthStateProps & 
-  AuthActionProps & 
   RouteComponentProps<{
     component: ElementType
     componentProps?: { [props: string]: any }
