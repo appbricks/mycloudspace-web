@@ -1,5 +1,5 @@
 import Layout from './Layout';
-import calcViewPortDimensions from './utils';
+import useViewPortDimensions from './useViewPortDimensions';
 
 export default Layout;
-export { calcViewPortDimensions };
+export { useViewPortDimensions };

@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { graphql } from 'gatsby';
 
-import Layout, { calcViewPortDimensions } from '../common/components/layout';
+import Layout, { useViewPortDimensions } from '../common/components/layout';
 import { StaticFooter } from '../common/components/footer';
 
 import ContentTopic, { TopicMetadata, TopicRefType } from './components/ContentTopic';
@@ -16,7 +16,7 @@ const ContentPage: FunctionComponent<ContentPageProps> = ({
     bottomGutterHeight,
     scrollButtonUpTop,
     scrollButtonDownTop,
-  } = calcViewPortDimensions();
+  } = useViewPortDimensions();
 
   const { organization } = data.configJson;
   const topics = data.allMdx.edges;

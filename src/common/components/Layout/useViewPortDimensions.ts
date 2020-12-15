@@ -8,7 +8,7 @@ export const getLayoutViewPortHeight = (bottomGutterHeight?: string) => (
     : `calc(100vh - ${headerHeight}px)`
 )
 
-const calcViewPortDimensions = (): ViewportDimensions => {
+const useViewPortDimensions = (): ViewportDimensions => {
   const dimensions = {} as ViewportDimensions;
 
   dimensions.bottomGutterHeight = '48px';
@@ -29,7 +29,7 @@ const calcViewPortDimensions = (): ViewportDimensions => {
   return dimensions
 }
 
-export default calcViewPortDimensions;
+export default useViewPortDimensions;
 
 type ViewportDimensions = {
   viewPortHeight?: string
