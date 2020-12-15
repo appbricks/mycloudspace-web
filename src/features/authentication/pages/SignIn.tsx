@@ -52,7 +52,7 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
   const { auth, authService } = props;
 
   // current and previous dailog static state
-  const [ thisDialog, fromDialog ] = useDialogNavState(296, 350, props);
+  const [ thisDialog, fromDialog ] = useDialogNavState(315, 350, props);
 
   // redux auth state: action status and user
   const { actionStatus, isLoggedIn, user, awaitingMFAConfirmation } = auth!;

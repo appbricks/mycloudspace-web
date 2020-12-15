@@ -49,11 +49,13 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
 
   const { auth, authService } = props;
 
-  // current and previous dailog static states
-  const [ thisDialog, fromDialog ] = useDialogNavState(338, 350, props);
-
   // redux auth state: action status and user
   const { actionStatus, isLoggedIn, user, awaitingUserConfirmation } = auth!;
+
+  // current and previous dailog static states
+  const [ thisDialog, fromDialog ] = useDialogNavState(
+    awaitingUserConfirmation ? 340 : 385, 
+    350, props);
 
   // if signed in then signout
   useEffect(() => {
@@ -194,7 +196,7 @@ export default connect(AuthService.stateProps, AuthService.dispatchProps)(Verify
 const useStyles = makeStyles((theme) => ({
   content: {
     fontSize: '1rem',
-    margin: '0.4rem 1rem -0.9rem 1rem'
+    margin: '0.4rem 0rem -0.9rem 1rem'
   },
   input: {
     width: '90%'

@@ -54,7 +54,7 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
   const { auth, authService } = props;
 
   // current and previous dailog static states
-  const [ thisDialog, fromDialog ] = useDialogNavState(485, 350, props);
+  const [ thisDialog, fromDialog ] = useDialogNavState(515, 350, props);
 
   // redux auth state: action status and user
   const { actionStatus, isLoggedIn } = auth!;
