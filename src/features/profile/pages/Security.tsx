@@ -12,14 +12,17 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { ActionResult } from '@appbricks/utils';
 import {
   RESET_PASSWORD_REQ,
+  SAVE_USER_REQ,
   AuthService,
   AuthActionProps,
-  AuthStateProps
+  AuthStateProps,
+  User
 } from '@appbricks/identity';
 
 import { useAppConfig } from '../../../common/state/app';
@@ -50,15 +53,21 @@ const Security: FunctionComponent<SecurityProps> = (props) => {
   // redux auth state: action status and user
   const { actionStatus } = auth!;
 
-  const [values, setValues] = useState<State>({
+  const [input, setInput] = useState<Input>({    
+    user: Object.assign(new User(), auth!.user!)
   });
+  const user = input.user;
 
-  const handleChange = (prop: string, value: string) =>  {
-    setValues({ ...values, [prop]: value });
-  };
+  const [state, setState] = useState<State>({  
+    disableMFAOptions: user.enableMFA
+  });
 
   const handleResetPassword = () => {
     authService!.resetPassword(auth!.user!.username);
+  }
+
+  const handleSave = () => {
+    authService!.saveUser(user);
   }
 
   // handle auth action status result
@@ -78,8 +87,20 @@ const Security: FunctionComponent<SecurityProps> = (props) => {
           );
           break;
         }
+
+        case SAVE_USER_REQ: {
+          onClose();
+          break;
+        }
       }
     }
+  );
+
+  // check auth state is pending change
+  // due to a backend call in progress
+  const serviceCallInProgress = (
+    actionStatus.result == ActionResult.pending && 
+    actionStatus.actionType == SAVE_USER_REQ
   );
 
   return (
@@ -103,6 +124,7 @@ const Security: FunctionComponent<SecurityProps> = (props) => {
         />
         <Box display='flex' justifyContent='center'>
           <Button variant='contained'
+            disabled={serviceCallInProgress}
             onClick={handleResetPassword}
             className={styles.button}
           >
@@ -114,40 +136,98 @@ const Security: FunctionComponent<SecurityProps> = (props) => {
         <DialogContentText className={styles.mfaContent}>
           <StaticLabel id='enhancedSecuritySection' />
         </DialogContentText>
+        <CheckBox
+          id='enableMFA'
+          checked={user.enableMFA}
+          checkColor='primary'
+          disabled={serviceCallInProgress}
+          onChange={
+            (event, checked) => {
+              user.enableMFA = checked;
+              user.enableTOTP = user.enableTOTP && checked;
+              setInput({user});
+            }
+          }
+          className={styles.checkBox}
+        />
         <FormControl component="fieldset" className={styles.mfaControl}>
-          <FormLabel component="legend" className={styles.mfaLabel}>
-            <StaticLabel id='mfaAuthentication' />
-          </FormLabel>
           <RadioGroup name='mfa'>
             <RadioButton
               id='smsOption'
-              value='sms'
+              checked={user.enableMFA && !user.enableTOTP}
+              disabled={serviceCallInProgress || !user.enableMFA}
+              className={styles.mfaRadioControl}
               radioColor='primary'
-              radioClassName={styles.mfaRadio}
+              radioClassName={styles.mfaRadioButton}
+              onChange={
+                (event, checked) => {
+                  user.enableTOTP = !checked;
+                  setInput({user});
+                }
+              }
             />
             <RadioButton
               id='totpOption'
-              value='totp'
+              checked={user.enableMFA && user.enableTOTP}
+              className={styles.mfaRadioControl}
+              disabled={serviceCallInProgress || !user.enableMFA}
               radioColor='primary'
-              radioClassName={styles.mfaRadio}
+              radioClassName={styles.mfaRadioButton}
+              onChange={
+                (event, checked) => {
+                  user.enableTOTP = checked;
+                  setInput({user});
+                }
+              }
             />
           </RadioGroup>
         </FormControl>
         <CheckBox
           id='enableBiometric'
+          checked={user.enableBiometric}
           checkColor='primary'
-          style={{
-            marginLeft: '0.2rem'
-          }}
+          disabled={serviceCallInProgress}
+          onChange={
+            (event, checked) => {
+              user.enableBiometric = checked;
+              setInput({user});
+            }
+          }
+          className={styles.checkBox}
+        />
+        <CheckBox
+          id='rememberFor24h'
+          checked={user.rememberFor24h}
+          checkColor='primary'
+          disabled={serviceCallInProgress}
+          onChange={
+            (event, checked) => {
+              user.rememberFor24h = checked;
+              setInput({user});
+            }
+          }
+          className={styles.checkBox}
         />
 
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color='primary'>
+        <Button 
+          type='button'
+          disabled={serviceCallInProgress}
+          onClick={onClose} 
+          color='primary'
+        >
           <StaticLabel id='cancelButton' />
         </Button>
-        <Button onClick={onClose} color='primary'>
+        <Button 
+          type='submit'
+          disabled={serviceCallInProgress}
+          onClick={handleSave} 
+          color='primary'
+        >
           <StaticLabel id='saveButton' />
+          {serviceCallInProgress && 
+            <CircularProgress size={24} className={styles.buttonProgress} />}
         </Button>
       </DialogActions>
     </FormDialog>
@@ -172,17 +252,33 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: '1rem'
   },
   mfaControl: {
-    marginTop: '0.5rem',
+    marginTop: '-0.2rem',
+    marginRight: '-1rem',
     marginBottom: '0.5rem',
     marginLeft: '0.9rem'
   },
-  mfaLabel: {
-    marginBottom: '0.5rem',
-    color: 'rgba(0, 0, 0, 0.87)'
-  },
-  mfaRadio: {
+  mfaRadioControl: {
+    marginTop: '-0.2rem',
     marginLeft: '1rem',
+    '&:hover': {
+      color: '#3f51b5',
+    }
+  },
+  mfaRadioButton: {
     padding: '5px 9px 5px 9px'
+  },
+  checkBox: {
+    marginLeft: '0.2rem',
+    '&:hover': {
+      color: '#3f51b5',
+    }
+  },
+  buttonProgress: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
   }
 }));
 
@@ -194,5 +290,10 @@ type SecurityProps =
   onClose: () => void
 }
 
+type Input = {
+  user: User
+}
+
 type State = {
+  disableMFAOptions: boolean
 }

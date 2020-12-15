@@ -13,8 +13,8 @@
       "text": "Enhanced Security"
     },
     {
-      "id": "mfaAuthentication",
-      "text": "Multi-Factor Authentication"
+      "id": "enableMFA",
+      "text": "Enable Multi-Factor Authentication"
     },
     {
       "id": "smsOption",
@@ -27,6 +27,10 @@
     {
       "id": "enableBiometric",
       "text": "Enable biometric security where available"
+    },
+    {
+      "id": "rememberFor24h",
+      "text": "Remember sign on state for 24h"
     }
   ]
 }
