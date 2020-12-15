@@ -30,6 +30,10 @@ const FormDialog: FunctionComponent<FormDialogProps> = (props) => {
     opacity
   });
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  }
+
   return (
     <Dialog
       open={open}
@@ -41,7 +45,9 @@ const FormDialog: FunctionComponent<FormDialogProps> = (props) => {
       TransitionComponent={Transition}
       {...dialogProps}
     >
-      {children}
+      <form onSubmit={handleSubmit}>
+        {children}
+      </form>
     </Dialog>
   );
 }
