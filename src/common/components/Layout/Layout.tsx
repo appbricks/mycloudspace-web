@@ -12,7 +12,7 @@ import MetaTitle from './MetaTitle';
 import Notifier from './Notifier';
 
 import { headerHeight } from '../../config/layout';
-import { getLayoutViewPortHeight } from './utils';
+import { getLayoutViewPortHeight } from './useViewPortDimensions';
 
 import { AppConfig } from '../../config';
 
