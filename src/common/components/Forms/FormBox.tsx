@@ -29,8 +29,8 @@ const FormBox: FunctionComponent<FormBoxProps> = ({
   children
 }) => {
   const styles = useStyles({ 
-    height: `${height+20}px`, 
-    width: `${width+20}px`,
+    height: `${height}px`, 
+    width: `${width}px`,
     backgroundColor,
     opacity
   });
@@ -119,8 +119,8 @@ const useStyles = makeStyles((theme) => ({
     
     // center in the view
     position: 'relative',
-    top: `max(0px, calc((100vh - ${props.height})/2) - ${headerHeight}px)`, 
-    left: `calc((100vw - ${props.width})/2)`,
+    top: `max(0px, calc((100vh - ${props.height} - 20px)/2) - ${headerHeight}px)`, 
+    left: `calc((100vw - ${props.width} - 20px)/2)`,
     margin: 'auto',
 
     height: props.height,
