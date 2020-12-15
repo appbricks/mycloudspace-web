@@ -41,6 +41,10 @@ const FormBox: FunctionComponent<FormBoxProps> = ({
   }
   const ref = useRef<HTMLDivElement>(null);
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  }
+
   const animationStyles = makeStyles((theme) => ({
     dialog: {
       animation: `$dialog 500ms ${theme.transitions.easing.easeInOut}`,
@@ -69,7 +73,7 @@ const FormBox: FunctionComponent<FormBoxProps> = ({
       <h1 className={styles.heading}>{title}</h1>
       <Divider />
 
-      <form>
+      <form onSubmit={handleSubmit}>
         {children}
         <Grid
           container
