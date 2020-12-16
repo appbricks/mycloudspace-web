@@ -53,7 +53,7 @@ const Security: FunctionComponent<SecurityProps> = (props) => {
   // redux auth state: action status and user
   const { actionStatus } = auth!;
 
-  const [input, setInput] = useState<Input>({    
+  const [input, setInput] = useState<FormInput>({    
     user: Object.assign(new User(), auth!.user!)
   });
   const user = input.user;
@@ -216,6 +216,7 @@ const Security: FunctionComponent<SecurityProps> = (props) => {
           disabled={serviceCallInProgress}
           onClick={onClose} 
           color='primary'
+          variant='contained'
         >
           <StaticLabel id='cancelButton' />
         </Button>
@@ -224,6 +225,7 @@ const Security: FunctionComponent<SecurityProps> = (props) => {
           disabled={serviceCallInProgress}
           onClick={handleSave} 
           color='primary'
+          variant='contained'
         >
           <StaticLabel id='saveButton' />
           {serviceCallInProgress && 
@@ -290,7 +292,7 @@ type SecurityProps =
   onClose: () => void
 }
 
-type Input = {
+type FormInput = {
   user: User
 }
 

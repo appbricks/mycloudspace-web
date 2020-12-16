@@ -27,6 +27,14 @@
     {
       "id": "contactSection",
       "text": "Contact"
+    },
+    {
+      "id": "verifyEmailSection",
+      "text": "Email Address Verification"
+    },
+    {
+      "id": "verifyPhoneSection",
+      "text": "Phone Number Verification"
     }
   ]
 }

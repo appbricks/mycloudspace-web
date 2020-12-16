@@ -2,51 +2,98 @@ import React, {
   FunctionComponent,
   useState
 } from 'react';
+import { connect, useDispatch } from 'react-redux';
+import { navigate } from '@reach/router';
 import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import IconButton from '@material-ui/core/IconButton';
-
-import { Icon } from '@iconify/react';
-import emailConfirmed from '@iconify/icons-mdi/email-check';
-import emailUnconfirmed from '@iconify/icons-mdi/email-alert';
-import phoneConfirmed from '@iconify/icons-mdi/phone-check';
-import phoneUnconfirmed from '@iconify/icons-mdi/phone-alert';
-
 import { makeStyles } from '@material-ui/core/styles';
+
+import { ActionResult } from '@appbricks/utils';
+import {
+  SAVE_USER_REQ,
+  AuthService,
+  AuthActionProps,
+  AuthStateProps,
+  User
+} from '@appbricks/identity';
 
 import {
   FormDialog,
   DialogTitle,
-  Input,
-  PhoneNumberInput
 } from '../../../common/components/forms';
 import {
   StaticLabel
 } from '../../../common/components/content';
+import ProfileInput from '../components/ProfileInput';
+import VerifyEmailAddress from '../components/VerifyEmailAddress';
+import VerifyMobilePhone from '../components/VerifyMobilePhone';
 
-const Profile: FunctionComponent<ProfileProps> = ({
-  open,
-  onClose
-}) => {
+import { useAppConfig } from '../../../common/state/app';
+import { useStaticContent } from '../../../common/state/content';
+
+const Profile: FunctionComponent<ProfileProps> = (props) => {
+  const dispatch = useDispatch();
   const styles = useStyles();
+  const appConfig = useAppConfig();
+  const content = useStaticContent('profile', Profile.name);
 
-  const [values, setValues] = useState<State>({
-    firstName: '',
-    middleName: '',
-    familyName: '',
-    preferredName: '',
-    email: '',
-    emailVerified: false,
-    phoneNumber: '',
-    phoneNumberVerified: false
+  const { open, onClose, auth, authService } = props;
+
+  // redux auth state: action status and user
+  const { actionStatus } = auth!;
+
+  const [input, setInput] = useState<FormInput>({
+    user: Object.assign(new User(), auth!.user!)
   });
+  const user = input.user;
 
-  const handleChange = (prop: string, value: string) =>  {
-    setValues({ ...values, [prop]: value });
+  const [state, setState] = useState<State>({
+    verifyEmailAddress: false,
+    verifyMobilePhone: false
+  });
+  const { verifyEmailAddress, verifyMobilePhone } = state;
+
+  const handleUserInput = (user: User) => {
+    setInput({ user });
   };
+
+  const handleVerifyEmailAddress = () => {
+    setState({
+      ...state,
+      verifyEmailAddress: true
+    });
+  }
+
+  const handleVerifyMobilePhone = () => {
+    setState({
+      ...state,
+      verifyMobilePhone: true
+    });
+  }
+
+  const handleCancel = () => {
+    if (verifyEmailAddress || verifyMobilePhone) {
+      setState({
+        ...state,
+        verifyEmailAddress: false,
+        verifyMobilePhone: false
+      });
+    } else {
+      onClose();
+    }
+  }
+
+  const handleSubmit = () => {
+    if (verifyEmailAddress || verifyMobilePhone) {
+      setState({
+        ...state,
+        verifyEmailAddress: false,
+        verifyMobilePhone: false
+      });
+    } else {
+      onClose();
+    }    
+  }
 
   return (
     <FormDialog
@@ -59,118 +106,72 @@ const Profile: FunctionComponent<ProfileProps> = ({
       <DialogTitle onClose={onClose}>
         <StaticLabel id='profileDialog' />
       </DialogTitle>
-      <DialogContent dividers>
-        <DialogContentText>
-          <StaticLabel id='namesSection' />
-        </DialogContentText>
-        <Input
-          id='firstName'
-          value={values.firstName}
-          handleChange={handleChange.bind(this)}
-          className={styles.input}
-          required
-          compact
+      {!verifyEmailAddress && !verifyMobilePhone && (
+        <ProfileInput
+          user={user}
+          height={587}
+          handleUserInput={handleUserInput}
+          handleVerifyEmailAddress={handleVerifyEmailAddress}
+          handleVerifyMobilePhone={handleVerifyMobilePhone}
         />
-        <Input
-          id='middleName'
-          value={values.middleName}
-          handleChange={handleChange.bind(this)}
-          className={styles.input}
-          compact
+      )}
+      {verifyEmailAddress && (
+        <VerifyEmailAddress
+          capability={Profile.name}
+          user={user}
+          height={587}
         />
-        <Input
-          id='familyName'
-          value={values.familyName}
-          handleChange={handleChange.bind(this)}
-          className={styles.input}
-          required
-          compact
+      )}
+      {verifyMobilePhone && (
+        <VerifyMobilePhone
+          capability={Profile.name}
+          user={user}
+          height={587}
         />
-        <Input
-          id='preferredName'
-          value={values.preferredName}
-          handleChange={handleChange.bind(this)}
-          className={styles.input}
-          compact
-        />
-        <Divider/>
-        <DialogContentText className={styles.contactContent}>
-          <StaticLabel id='contactSection' />
-        </DialogContentText>
-        <Input
-          id='emailAddress'
-          type='email'
-          value={values.email}
-          required={true}
-          handleChange={handleChange.bind(this)}
-          iconElement={
-            values.emailVerified
-              ? <Icon width={24} icon={emailConfirmed} style={{ color: '#31a07f' }}/>
-              : <IconButton
-                  edge='end'
-                  style={{ color: '#ff9966' }}
-                >
-                  <Icon width={24} icon={emailUnconfirmed} />
-                </IconButton>
-          }
-          className={styles.input}
-          compact
-        />
-        <PhoneNumberInput
-          id='mobilePhone'
-          value={values.phoneNumber}
-          handleChange={handleChange.bind(this)}
-          required={true}
-          iconElement={
-            values.phoneNumberVerified
-              ? <Icon width={24} icon={phoneConfirmed} style={{ color: '#31a07f' }}/>
-              : <IconButton
-                  edge='end'
-                  style={{ color: '#ff9966' }}
-                >
-                  <Icon width={24} icon={phoneUnconfirmed} />
-                </IconButton>
-          }
-          className={styles.input}
-          compact
-        />
-      </DialogContent>
+    )}
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button 
+          type='button'
+          onClick={handleCancel} 
+          color='primary' 
+          variant='contained'
+        >
           <StaticLabel id='cancelButton' />
         </Button>
-        <Button onClick={onClose} color="primary">
-          <StaticLabel id='saveButton' />
+        <Button 
+          type='submit'
+          onClick={handleSubmit} 
+          color='primary' 
+          variant='contained'
+        >
+          {verifyEmailAddress || verifyMobilePhone 
+            ? <StaticLabel id='verifyButton' />
+            : <StaticLabel id='saveButton' />
+          }
         </Button>
       </DialogActions>
     </FormDialog>
   );
 }
 
-export default Profile;
+export default connect(AuthService.stateProps, AuthService.dispatchProps)(Profile);
 
-const useStyles = makeStyles((theme) => ({
-  input: {
-    width: '100%'
-  },
-  contactContent: {
-    paddingTop: '1rem'
-  }
+const useStyles = makeStyles((theme) => ({  
 }));
 
-type ProfileProps = {
+type ProfileProps =
+  AuthStateProps &
+  AuthActionProps & {
 
   open: boolean
   onClose: () => void
 }
 
+type FormInput = {
+  user: User
+}
+
 type State = {
-  firstName: string
-  middleName: string
-  familyName: string
-  preferredName: string
-  email: string
-  emailVerified: boolean
-  phoneNumber: string
-  phoneNumberVerified: boolean
+  verifyEmailAddress: boolean
+  verifyMobilePhone: boolean
 }
