@@ -57,7 +57,7 @@ type StateProviderProps = {
 // initialization.
 const appConfigQuery = graphql`
   query {
-    configs: allConfigJson {
+    configs: allConfigJson(filter: {appConfig: {version: {ne: null}}}) {
       nodes {
         appConfig {
           version

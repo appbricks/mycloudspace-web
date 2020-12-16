@@ -18,7 +18,7 @@ const ContentPage: FunctionComponent<ContentPageProps> = ({
     scrollButtonDownTop,
   } = useViewPortDimensions();
 
-  const { organization } = data.configJson;
+  const { organization } = data.allConfigJson.nodes[0];
   const topics = data.allMdx.edges;
 
   const topicRefs: TopicRefType[] = [];
@@ -102,19 +102,21 @@ export const pageQuery = graphql`
         }
       }
     }
-    configJson {
-      organization {
-        copyright
-        social {
-          github
-          linkedin
-          twitter
+    allConfigJson(filter: {organization: {businessName: {ne: null}}}) {
+      nodes {
+        organization {
+          copyright
+          social {
+            github
+            linkedin
+            twitter
+          }
+          contact {
+            email
+            phone
+          }
         }
-        contact {
-          email
-          phone
-        }
-      }
+      }      
     }
   }
   fragment FrontMatterFields on MdxFrontmatter {
@@ -172,19 +174,21 @@ type ContentPageProps = {
         }
       }[]
     }
-    configJson: {
-      organization: {
-        copyright: string
-        social: {
-          github: string
-          linkedin: string
-          twitter: string
+    allConfigJson: {
+      nodes: {
+        organization: {
+          copyright: string
+          social: {
+            github: string
+            linkedin: string
+            twitter: string
+          }
+          contact: {
+            email: string
+            phone: string
+          }
         }
-        contact: {
-          email: string
-          phone: string
-        }
-      }
+      }[]
     }
   }
 }
