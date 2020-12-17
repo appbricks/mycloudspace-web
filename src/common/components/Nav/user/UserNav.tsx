@@ -16,7 +16,7 @@ const UserNav: FunctionComponent<UserNavProps> = ({
   const styles = useStyles();
   const user = useSelector(
     Auth.user,
-    (left, right) => left!.username == right!.username
+    (left, right) => left!.profilePictureUrl == right!.profilePictureUrl
   );
 
   const name = user!.familyName && user!.firstName
