@@ -14,7 +14,10 @@ const UserNav: FunctionComponent<UserNavProps> = ({
   menuItems
 }) => {
   const styles = useStyles();
-  const user = useSelector(Auth.user);
+  const user = useSelector(
+    Auth.user,
+    (left, right) => left!.username == right!.username
+  );
 
   const name = user!.familyName && user!.firstName
     ? `${user!.firstName} ${user!.familyName}` 
