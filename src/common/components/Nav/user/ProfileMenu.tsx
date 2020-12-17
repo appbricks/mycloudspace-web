@@ -1,5 +1,5 @@
-import React, { 
-  FunctionComponent, 
+import React, {
+  FunctionComponent,
   ElementType,
   MouseEvent,
   KeyboardEvent,
@@ -8,7 +8,7 @@ import React, {
   useEffect
 } from 'react';
 import { useDispatch } from 'react-redux';
-import { makeStyles, withStyles  } from '@material-ui/core/styles';  
+import { makeStyles, withStyles  } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -27,7 +27,7 @@ import { dismissNotification } from '../../../state/notifications';
 import MenuButton from './MenuButton';
 import { ProfileMenuDataItem } from './getProfileMenu';
 
-const ProfileMenu: FunctionComponent<ProfileMenuProps> = ({ 
+const ProfileMenu: FunctionComponent<ProfileMenuProps> = ({
   avatarName,
   avatarUrl,
   avatarLetters,
@@ -57,11 +57,11 @@ const ProfileMenu: FunctionComponent<ProfileMenuProps> = ({
   }, [setState]);
 
   const handleClick = (event: MouseEvent<HTMLDivElement>) => {
-    // dismiss any notification shown 
+    // dismiss any notification shown
     dispatch(dismissNotification());
 
     setState({
-      active: !state.active, 
+      active: !state.active,
       clicked: true,
       selected: -1,
       popupAnchor: event.currentTarget
@@ -69,7 +69,7 @@ const ProfileMenu: FunctionComponent<ProfileMenuProps> = ({
   };
   const handleClose = () => {
     setState({
-      active: false, 
+      active: false,
       clicked: true,
       selected: -1,
       popupAnchor: null
@@ -79,7 +79,7 @@ const ProfileMenu: FunctionComponent<ProfileMenuProps> = ({
     if (event.key === 'Tab') {
       event.preventDefault();
       setState({
-        active: false, 
+        active: false,
         clicked: true,
         selected: -1,
         popupAnchor: null
@@ -89,22 +89,22 @@ const ProfileMenu: FunctionComponent<ProfileMenuProps> = ({
   const handleSelection = (index: number) => {
     if (menuItems[index].commandFn) {
       menuItems[index].commandFn!(
-        dispatch, 
-        appConfig, 
+        dispatch,
+        appConfig,
         menuItems[index].commandProps!
       );
     }
 
     setState({
-      active: false, 
+      active: false,
       clicked: true,
       selected: index,
       popupAnchor: null
     });
   };
   const handleMenuOptionClose = () => {
-    setState({      
-      active: false, 
+    setState({
+      active: false,
       clicked: false,
       selected: -1,
       popupAnchor: null
@@ -123,28 +123,28 @@ const ProfileMenu: FunctionComponent<ProfileMenuProps> = ({
 
   return (
     <>
-      <MenuButton 
+      <MenuButton
         menuAnchor={menuAnchor}
         active={state.active}
         clicked={state.clicked}
       >
-        <Avatar 
+        <Avatar
           alt={avatarName}
           src={avatarUrl}
           onClick={event => handleClick(event)}
           className={cx(
-            styles.avatar, 
+            styles.avatar,
             state.active ? styles.avatarActive: styles.avatarInactive
           )}
         >
           {avatarLetters}
         </Avatar>
-       
+
       </MenuButton>
-      <Popper 
-        open={state.active} 
-        anchorEl={menuAnchor.current} 
-        role={undefined} 
+      <Popper
+        open={state.active}
+        anchorEl={menuAnchor.current}
+        role={undefined}
         transition disablePortal
       >
         {({ TransitionProps, placement }) => (
@@ -153,11 +153,11 @@ const ProfileMenu: FunctionComponent<ProfileMenuProps> = ({
             timeout={500}
             style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
           >
-            <Paper 
+            <Paper
               elevation={4}
               className={styles.popupMenu}>
               <ClickAwayListener onClickAway={handleClose}>
-                <MenuList 
+                <MenuList
                   onKeyDown={handleListKeyDown}
                 >
                   {menuItems.map((item, index) => {
@@ -169,8 +169,8 @@ const ProfileMenu: FunctionComponent<ProfileMenuProps> = ({
                           <ListItemIcon>
                             {item.icon}
                           </ListItemIcon>
-                          <ListItemText 
-                            primary={item.title} 
+                          <ListItemText
+                            primary={item.title}
                             className={styles.itemText}
                           />
                         </ProfileMenuItem>
@@ -184,21 +184,21 @@ const ProfileMenu: FunctionComponent<ProfileMenuProps> = ({
         )}
       </Popper>
       {menuItems.map((item, index) => {
-        if (item.feature) {
+        if (item.feature && index == state.selected) {
           return (
-            <Feature 
+            <Feature
               key={index}
-              component={item.feature} 
+              component={item.feature}
               componentProps={{
-                open: index == state.selected,
+                open: true,
                 onClose: handleMenuOptionClose.bind(this),
                 ...item.featureProps
-              }} 
+              }}
             />
           );
         }
       })}
-    </>   
+    </>
   );
 };
 
@@ -206,7 +206,7 @@ export default ProfileMenu;
 
 const ProfileMenuItem = withStyles((theme) => ({
   root: {
-    color: '#4d4d4d',    
+    color: '#4d4d4d',
     '&:hover': {
       backgroundColor: '#4d4d4d',
       '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
@@ -227,7 +227,7 @@ const useStyles = makeStyles(theme => ({
     minWidth: '42px',
     minHeight: '42px',
     borderColor: '#4d4d4d',
-    borderStyle: 'solid',    
+    borderStyle: 'solid',
     cursor: 'pointer',
     '&:hover': {
       borderColor: '#3f51b5',
