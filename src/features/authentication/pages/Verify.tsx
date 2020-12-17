@@ -78,7 +78,7 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
   });
 
   const handleChange = (prop: string, value: string) =>  {
-    setValues({ ...values, [prop]: value.replaceAll(/[- #]/g, '') });
+    setValues({ ...values, [prop]: value });
   };
 
   const handleResendCode = (event: MouseEvent<HTMLButtonElement>) => {

@@ -57,7 +57,7 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
   });
 
   const handleChange = (prop: string, value: string) =>  {
-    setValues({ ...values, [prop]: value.replaceAll(/[- #]/g, '') });
+    setValues({ ...values, [prop]: value });
   };
 
   const handleButtonClick = (index: number) => (event: MouseEvent<HTMLButtonElement>) => {

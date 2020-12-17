@@ -7,6 +7,7 @@ import Input, { InputProps } from './Input';
 
 const CodeInput: FunctionComponent<CodeInputProps> = ({ 
   numDigits,
+  handleChange,
   ...other 
 }) => {
 
@@ -18,8 +19,15 @@ const CodeInput: FunctionComponent<CodeInputProps> = ({
     mask.push(/\d/);
   }
 
+  const handleCodeInput = (id: string, value: string) => {
+    if (handleChange) {
+      handleChange(id, value.replaceAll(/[- #]/g, ''));
+    }
+  }
+
   return (
     <Input
+      handleChange={handleCodeInput}
       inputComponent={CodeMask as any}
       inputProps={{
         mask
