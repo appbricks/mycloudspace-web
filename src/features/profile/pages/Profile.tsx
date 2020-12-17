@@ -136,6 +136,10 @@ const Profile: FunctionComponent<ProfileProps> = (props) => {
           break;
         }
         case CONFIRM_ATTRIBUTE_REQ: {
+          // update user from state
+          setInput({ 
+            user: Object.assign(new User(), auth!.user!) 
+          });
           // reset profile input view
           setState({
             ...state,
