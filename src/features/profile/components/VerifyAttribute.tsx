@@ -8,9 +8,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { Icon } from '@iconify/react';
-import phoneConfirmed from '@iconify/icons-mdi/phone-check';
-
-import { User } from '@appbricks/identity';
 
 import { CodeInput } from '../../../common/components/forms';
 import {
@@ -20,13 +17,24 @@ import {
 
 import { useStaticContent } from '../../../common/state/content';
 
-const VerifyMobilePhone: FunctionComponent<VerifyMobilePhoneProps> = ({
+const VerifyAttribute: FunctionComponent<VerifyAttributeProps> = ({
   capability,
-  user,
-  height
+  value,
+  height,
+  icon,
+  verifyLabelId,
+  verifyContentId,
+  disableInputs,
+  handleVerificationCodeInput,
+  handleInputOk
 }) => {
   const styles = useStyles({ height });
   const content = useStaticContent('profile', capability);
+
+  const handleChange = (id: string, value: string) => {
+    handleVerificationCodeInput(value);
+    handleInputOk(value.length == 6);
+  }
 
   return (
     <DialogContent 
@@ -35,29 +43,29 @@ const VerifyMobilePhone: FunctionComponent<VerifyMobilePhoneProps> = ({
     >
       <Box
         width='100%'
-        height='100%'
+        height='100%' 
         display='flex'
         flexDirection='column'
       >
         <Icon 
           width={200} 
-          icon={phoneConfirmed} 
+          icon={icon} 
           className={styles.icon}/>
 
         <Divider style={{ marginTop: 'auto' }}/>
 
-        <DialogContentText className={styles.contactContent}>
-          <StaticLabel id='verifyPhoneSection' />
+        <DialogContentText>
+          <StaticLabel id={verifyLabelId} />
         </DialogContentText>
         <StaticContent
-          body={content['verify-mobile-code'].body}
+          body={content[verifyContentId].body}
         />
         <CodeInput
           id='verificationCode'
-          value=''
+          value={value}
           numDigits={6}
-          // handleChange={handleChange}
-          // disabled={serviceCallInProgress}
+          disabled={disableInputs}
+          handleChange={handleChange}
           className={styles.input}
           first
         />
@@ -66,12 +74,22 @@ const VerifyMobilePhone: FunctionComponent<VerifyMobilePhoneProps> = ({
   )
 }
 
-export default VerifyMobilePhone;
+export default VerifyAttribute;
 
-type VerifyMobilePhoneProps = {
+type VerifyAttributeProps = {
+  value: string
   capability: string
-  user: User
   height: number
+
+  icon: object
+
+  verifyLabelId: string
+  verifyContentId: string
+
+  disableInputs: boolean  
+
+  handleVerificationCodeInput: (value: string) => void
+  handleInputOk: (inputOk: boolean) => void
 }
 
 const useStyles = makeStyles((theme) => ({

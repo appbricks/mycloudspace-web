@@ -25,9 +25,6 @@ import {
   User
 } from '@appbricks/identity';
 
-import { useAppConfig } from '../../../common/state/app';
-import { useStaticContent } from '../../../common/state/content';
-
 import {
   FormDialog,
   DialogTitle,
@@ -40,6 +37,8 @@ import {
 } from '../../../common/components/content';
 import { DialogState } from '../../../common/components/forms/useDialogNavState';
 
+import { useAppConfig } from '../../../common/state/app';
+import { useStaticContent } from '../../../common/state/content';
 import { useActionStatus } from '../../../common/state/status';
 
 const Security: FunctionComponent<SecurityProps> = (props) => {
