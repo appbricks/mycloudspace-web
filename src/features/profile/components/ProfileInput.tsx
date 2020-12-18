@@ -17,6 +17,8 @@ import phone from '@iconify/icons-mdi/phone';
 import phoneConfirmed from '@iconify/icons-mdi/phone-check';
 import phoneUnconfirmed from '@iconify/icons-mdi/phone-alert';
 
+import { User } from '@appbricks/identity';
+
 import {
   Input,
   PhoneNumberInput
@@ -31,7 +33,6 @@ import {
   inputValidator
 } from '@appbricks/data-validators';
 
-import { User } from '@appbricks/identity';
 import * as Auth from '../../../common/state/auth';
 
 const ProfileInput: FunctionComponent<ProfileInputProps> = ({ 
