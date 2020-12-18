@@ -2,7 +2,7 @@ import React, {
   FunctionComponent,
   useState
 } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -34,15 +34,10 @@ import {
 import ProfileInput from '../components/ProfileInput';
 import VerifyAttribute from '../components/VerifyAttribute';
 
-import { useAppConfig } from '../../../common/state/app';
-import { useStaticContent } from '../../../common/state/content';
 import { useActionStatus } from '../../../common/state/status';
 
 const Profile: FunctionComponent<ProfileProps> = (props) => {
-  const dispatch = useDispatch();
   const styles = useStyles();
-  const appConfig = useAppConfig();
-  const content = useStaticContent('profile', Profile.name);
 
   const { open, onClose, auth, authService } = props;
 
