@@ -95,7 +95,6 @@ const ProfileInput: FunctionComponent<ProfileInputProps> = ({
         forceValidate={!!user.firstName}
         className={styles.input}
         required
-        labelShrink
         compact
       />
       <Input
@@ -104,7 +103,6 @@ const ProfileInput: FunctionComponent<ProfileInputProps> = ({
         disabled={disableInputs}
         handleChange={handleChange}
         className={styles.input}
-        labelShrink
         compact
       />
       <Input
@@ -117,7 +115,6 @@ const ProfileInput: FunctionComponent<ProfileInputProps> = ({
         forceValidate={!!user.familyName}
         className={styles.input}
         required
-        labelShrink
         compact
       />
       <Input
@@ -126,7 +123,6 @@ const ProfileInput: FunctionComponent<ProfileInputProps> = ({
         disabled={disableInputs}
         handleChange={handleChange}
         className={styles.input}
-        labelShrink
         compact
       />
       <Divider/>
@@ -157,7 +153,6 @@ const ProfileInput: FunctionComponent<ProfileInputProps> = ({
         className={styles.input}
         forceValidate
         required
-        labelShrink
         compact
       />
       <PhoneNumberInput
@@ -183,7 +178,6 @@ const ProfileInput: FunctionComponent<ProfileInputProps> = ({
         className={styles.input}
         forceValidate
         required
-        labelShrink
         compact
         last
       />
