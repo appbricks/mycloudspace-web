@@ -157,7 +157,7 @@ export type InitializePayload = {
 }
 
 type ContentMap = { [path: string]: ContentMap | ContentKeyMap }
-type ContentKeyMap = { [key: string]: Content }
+export type ContentKeyMap = { [key: string]: Content }
 
 export type Content = {
   body: string
