@@ -112,7 +112,7 @@ const useStyles = makeStyles((theme) => ({
       ? '2.5rem !important' 
       : '3.5rem !important',
     width: '100% !important',
-    color: '#4d4d4d !important',
+    color: '#000000 !important',
     font: 'inherit !important',
     backgroundColor: 'inherit !important',
     borderWidth: '0px !important'

@@ -69,19 +69,20 @@ const Input: FunctionComponent<InputProps> = ({
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const [state, setState] = useState<State>({    
-    labelWidth: 0,
     hasFocus: false,
     validation: {
       isValid: true
     }
   });
-  const { labelWidth, hasFocus, validation } = state;
+  const { hasFocus, validation } = state;
 
-  // calculate label width for creatig notch on 
-  // outlined input when label has ben shrunk
-  useEffect(() => {
-    setState({ ...state, labelWidth: labelRef.current!.clientWidth });
-  }, [setState]);
+  // force refresh on mount inorder to retrieve
+  // the client width of the label element which
+  // is provided to the outlined input in order
+  // to create the notch when the label has been 
+  // shrunk
+  useEffect(() => setState(state), [setState]);
+  const labelWidth = labelRef.current ? labelRef.current.clientWidth : undefined;
 
   // input data validation result either the internal
   // determined value or the external value and the 
@@ -286,7 +287,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '1.5rem'
   },
   inputField: {
-    color: '#4d4d4d',
+    color: '#000000',
     backgroundColor: 'rgba(0, 0, 0, 0.09)',
   },
   inputFieldIconFocus: {
@@ -338,8 +339,6 @@ export type InputProps = OutlinedInputProps & {
 }
 
 type State = {
-  labelWidth: number
   hasFocus: boolean
-
   validation: ValidationResult
 }
