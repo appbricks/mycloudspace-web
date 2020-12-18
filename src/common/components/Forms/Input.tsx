@@ -81,7 +81,7 @@ const Input: FunctionComponent<InputProps> = ({
   // is provided to the outlined input in order
   // to create the notch when the label has been 
   // shrunk
-  useEffect(() => setState(state), [setState]);
+  useEffect(() => setState({ ...state }), [setState]);
   const labelWidth = labelRef.current ? labelRef.current.clientWidth : undefined;
 
   // input data validation result either the internal
