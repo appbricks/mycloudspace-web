@@ -325,7 +325,7 @@ export type InputProps = OutlinedInputProps & {
   validator?: Validator<string>
   validatorOptions?: ValidationOptions
   validationResult?: ValidationResult
-  forceValidate?: boolean
+  forceValidate?: number // if >0 then initial value is validated at render
   handleValidationResult?: (id: string, isValid: boolean) => void
 
   compact?: boolean

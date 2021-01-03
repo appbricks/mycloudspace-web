@@ -11,7 +11,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import emailConfirmed from '@iconify/icons-mdi/email-check';
 import phoneConfirmed from '@iconify/icons-mdi/phone-check';
 
-import { ActionResult } from '@appbricks/utils';
+import { isStatusPending } from '@appbricks/utils';
+
 import {
   SAVE_USER_REQ,
   VERIFY_ATTRIBUTE_REQ,
@@ -40,9 +41,6 @@ const Profile: FunctionComponent<ProfileProps> = (props) => {
   const styles = useStyles();
 
   const { open, onClose, auth, authService } = props;
-
-  // redux auth state: action status and user
-  const { actionStatus } = auth!;
 
   const [inputOk, setInputOk] = useState(false);
   const [input, setInput] = useState<FormInput>({
@@ -114,8 +112,8 @@ const Profile: FunctionComponent<ProfileProps> = (props) => {
   }
 
   // handle auth action status result
-  useActionStatus(actionStatus,
-    () => {
+  useActionStatus(auth!,
+    (actionStatus) => {
       switch (actionStatus.actionType) {
         case VERIFY_ATTRIBUTE_REQ: {
           // set email/phone verification view
@@ -149,7 +147,7 @@ const Profile: FunctionComponent<ProfileProps> = (props) => {
         }
       }
     },
-    (error) => {
+    (actionStatus, error) => {
       if (actionStatus.actionType == VERIFY_ATTRIBUTE_REQ) {
         // reset profile input view
         setState({
@@ -163,14 +161,9 @@ const Profile: FunctionComponent<ProfileProps> = (props) => {
   );
 
   // check if a service call is in progress
-  const disableInputs = actionStatus.result == ActionResult.pending;
-  const serviceCallInProgress = (
-    disableInputs &&
-    (
-      actionStatus.actionType == CONFIRM_ATTRIBUTE_REQ ||
-      actionStatus.actionType == SAVE_USER_REQ
-    )
-  );
+  const disableInputs = isStatusPending(auth!);
+  const serviceCallInProgress = isStatusPending(
+    auth!, CONFIRM_ATTRIBUTE_REQ, SAVE_USER_REQ);
 
   return (
     <FormDialog

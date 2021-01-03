@@ -1,6 +1,7 @@
 import React, {
   FunctionComponent,
   MouseEvent,
+  useRef,
   useState,
   useEffect
 } from 'react';
@@ -13,7 +14,7 @@ import { Icon } from '@iconify/react';
 import cancelIcon from '@iconify/icons-mdi/cancel';
 import verifyIcon from '@iconify/icons-mdi/check-bold';
 
-import { ActionResult } from '@appbricks/utils';
+import { isStatusPending } from '@appbricks/utils';
 
 import {
   passwordValidator,
@@ -57,7 +58,7 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
   const [ thisDialog, fromDialog ] = useDialogNavState(515, 350, props);
 
   // redux auth state: action status and user
-  const { actionStatus, isLoggedIn } = auth!;
+  const { isLoggedIn } = auth!;
 
   // if signed in then signout
   useEffect(() => {
@@ -83,7 +84,19 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
     inputOk: false
   });
 
+  // keep track of the field value change
+  // that caused last render. this is used
+  // to track if any related field needs to
+  // be validated such as the password 
+  // verification field.
+  const changedField = useRef<string | undefined>();
+  useEffect(() => {
+    changedField.current = undefined;
+  });
+
   const handleChange = (prop: string, value: string) =>  {
+    changedField.current = prop;
+
     if (prop == 'resetCode') {
       setValues({ ...values, resetCode: value.replaceAll(/[- #]/g, '') });
     } else {
@@ -115,7 +128,7 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
   };
 
   // handle auth action status result
-  useActionStatus(actionStatus, () => {
+  useActionStatus(auth!, (actionStatus) => {
     if (actionStatus.actionType == UPDATE_PASSWORD_REQ) {
       dispatch(
         notify({
@@ -144,10 +157,7 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
 
   // check auth state is pending change
   // due to a backend call in progress
-  const serviceCallInProgress = (
-    actionStatus.actionType == UPDATE_PASSWORD_REQ &&
-    actionStatus.result == ActionResult.pending
-  );
+  const serviceCallInProgress = isStatusPending(auth!, UPDATE_PASSWORD_REQ);
 
   return (
     <FormBox
@@ -169,7 +179,7 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
             icon: <Icon icon={verifyIcon} />,
             default: true,
             onClick: handleButtonClick,
-            disabled: disableVerify,
+            disabled: !inputIGO.inputOk,
             working: serviceCallInProgress
           }
         ]
@@ -195,6 +205,7 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
           validatorOptions={{
             verifyWithRegex: '\\d - \\d - \\d - \\d - \\d - \\d'
           }}
+          handleValidationResult={handleValidationResult}
           disabled={serviceCallInProgress}
           className={styles.input}
           first
@@ -219,6 +230,12 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
             verifyWith: values.password
           }}
           handleValidationResult={handleValidationResult}
+          forceValidate={
+            changedField.current == 'password' &&
+            values.passwordRepeat.length > 0
+              ? Date.now() // any valid number > 0 that will be different each time
+              : 0
+          }
           disabled={serviceCallInProgress}
           className={styles.input}
         />

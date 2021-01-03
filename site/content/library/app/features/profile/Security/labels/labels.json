@@ -31,6 +31,10 @@
     {
       "id": "rememberFor24h",
       "text": "Remember sign on state for 24h"
+    },
+    {
+      "id": "tokenSecretSection",
+      "text": "Time-based One-Time Token Secret"
     }
   ]
 }

@@ -1,13 +1,13 @@
 import React, {
-  FunctionComponent
+  FunctionComponent,
 } from 'react';
-import Box from '@material-ui/core/Box';
-import Divider from '@material-ui/core/Divider';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import Box from '@material-ui/core/Box';
+import QRCode from 'qrcode.react';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { Icon } from '@iconify/react';
+import { User } from '@appbricks/identity';
 
 import { CodeInput } from '../../../common/components/forms';
 import {
@@ -15,50 +15,52 @@ import {
   StaticLabel
 } from '../../../common/components/content';
 
-import { useStaticContent } from '../../../common/state/content';
+import { ContentKeyMap } from '../../../common/state/content';
 
-const VerifyAttribute: FunctionComponent<VerifyAttributeProps> = ({
-  capability,
+const ViewTokenSecret: FunctionComponent<ViewTokenSecretProps> = ({
+  user,
+  secret,
   value,
   height,
-  icon,
-  verifyLabelId,
-  verifyContentId,
+  content,
   disableInputs,
   handleVerificationCodeInput,
   handleInputOk
 }) => {
   const styles = useStyles({ height });
-  const content = useStaticContent('profile', capability);
+
+  const gauthUri = `otpauth://totp/${user.emailAddress}?secret=${secret}&issuer=MyCS`;
 
   const handleChange = (id: string, value: string) => {
     handleVerificationCodeInput(value);
     handleInputOk(value.length == 6);
   }
-
+  
   return (
-    <DialogContent 
+    <DialogContent
       dividers
       className={styles.root}
     >
+      <DialogContentText>
+        <StaticLabel id='tokenSecretSection' />
+      </DialogContentText>
+      <StaticContent
+        body={content['token-secret'].body}
+      />
       <Box
-        width='100%'
-        height='100%' 
         display='flex'
         flexDirection='column'
+        justifyContent='space-between'
       >
-        <Icon 
-          width={200} 
-          icon={icon} 
-          className={styles.icon}/>
-
-        <Divider style={{ marginTop: 'auto' }}/>
-
-        <DialogContentText>
-          <StaticLabel id={verifyLabelId} />
-        </DialogContentText>
-        <StaticContent
-          body={content[verifyContentId].body}
+        <QRCode
+          value={gauthUri}
+          size={160}
+          bgColor='#ffffff'
+          fgColor='#000000'
+          level='L'
+          includeMargin={false}
+          renderAs='svg'
+          className={styles.qrcode}
         />
         <CodeInput
           id='verificationCode'
@@ -70,46 +72,42 @@ const VerifyAttribute: FunctionComponent<VerifyAttributeProps> = ({
           first
         />
       </Box>
+
     </DialogContent>
   );
 }
 
-export default VerifyAttribute;
-
-type VerifyAttributeProps = {
-  value: string
-  capability: string
-  height: number
-
-  icon: object
-
-  verifyLabelId: string
-  verifyContentId: string
-
-  disableInputs: boolean  
-
-  handleVerificationCodeInput: (value: string) => void
-  handleInputOk: (inputOk: boolean) => void
-}
+export default ViewTokenSecret;
 
 const useStyles = makeStyles((theme) => ({
   root: (props: StyleProps) => ({
     overflow: 'auto',
     height: `${props.height}px`,
   }),
-  icon: {
-    marginTop: '50px',
-    marginLeft: 'auto', 
-    marginRight: 'auto', 
-    color: '#43a047' 
+  qrcode: {
+    marginTop: '5px',
+    marginRight: 'auto',
+    marginBottom: '10px',
+    marginLeft: 'auto'
   },
   input: {
     width: '100%'
-  },
-  contactContent: {
-    paddingTop: '1rem'
   }
 }));
+
+type ViewTokenSecretProps = {
+  user: User
+  secret: string
+  value: string
+
+  height: number
+  content: ContentKeyMap
+
+  disableInputs: boolean  
+
+  handleVerificationCodeInput: (value: string) => void
+  handleInputOk: (inputOk: boolean) => void
+}
 
 type StyleProps = {
   height: number

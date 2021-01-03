@@ -13,7 +13,7 @@ import { Icon } from '@iconify/react';
 import signinIcon from '@iconify/icons-mdi/login';
 import signupIcon from '@iconify/icons-mdi/account-edit';
 
-import { ActionResult } from '@appbricks/utils';
+import { isStatusPending } from '@appbricks/utils';
 
 import {
   ERROR_NOT_CONFIRMED,
@@ -55,7 +55,7 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
   const [ thisDialog, fromDialog ] = useDialogNavState(315, 350, props);
 
   // redux auth state: action status and user
-  const { actionStatus, isLoggedIn, user, awaitingMFAConfirmation } = auth!;
+  const { isLoggedIn, user, awaitingMFAConfirmation } = auth!;
 
   const [values, setValues] = useState<State>({
     username: user ? user.username : '',
@@ -90,8 +90,8 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
   }
 
   // handle auth action status result
-  useActionStatus(actionStatus,
-    () => {
+  useActionStatus(auth!,
+    (actionStatus) => {
       switch (actionStatus.actionType) {
 
         case SIGN_IN_REQ: {
@@ -118,7 +118,7 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
         }
       }
     },
-    (error) => {
+    (actionStatus, error) => {
       if (error.err.name == ERROR_NOT_CONFIRMED) {
         dispatch(
           notify({
@@ -154,7 +154,7 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
 
   // check auth state is pending change
   // due to a backend call in progress
-  const serviceCallInProgress = (actionStatus.result == ActionResult.pending);
+  const serviceCallInProgress = isStatusPending(auth!);
 
   return (
     <FormBox

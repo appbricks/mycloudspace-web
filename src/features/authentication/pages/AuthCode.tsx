@@ -12,7 +12,7 @@ import { Icon } from '@iconify/react';
 import cancelIcon from '@iconify/icons-mdi/cancel';
 import verifyIcon from '@iconify/icons-mdi/check-bold';
 
-import { ActionResult } from '@appbricks/utils';
+import { isStatusPending } from '@appbricks/utils';
 
 import {
   VALIDATE_MFA_CODE_REQ,
@@ -43,7 +43,7 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
   const [ thisDialog, fromDialog ] = useDialogNavState(205, 350, props);
 
   // redux auth state: action status and user
-  const { actionStatus } = auth!;
+  const { awaitingMFAConfirmation } = auth!;
 
   // retrieve username of account to verify which
   // may be passed via the signed up user object
@@ -67,20 +67,20 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
         break;
       }
       case 1: {
-        authService!.validateMFACode(values.authCode);
+        authService!.validateMFACode(values.authCode, awaitingMFAConfirmation!);
         break;
       }
     }
   };
 
   // handle auth action status result
-  useActionStatus(actionStatus,
-    () => {
+  useActionStatus(auth!,
+    (actionStatus) => {
       if (actionStatus.actionType == VALIDATE_MFA_CODE_REQ) {
         navigate(appConfig.routeMap['appHome'].uri, thisDialog);
       }
     },
-    () => {
+    (actionStatus, error) => {
       // if authcode validation fails navigate back to signin
       // as user is automatically logged out of the provider
       navigate(appConfig.routeMap['signin'].uri, thisDialog);
@@ -105,7 +105,7 @@ const AuthCode: FunctionComponent<AuthCodeProps> = (props) => {
 
   // check auth state is pending change
   // due to a backend call in progress
-  const serviceCallInProgress = (actionStatus.result == ActionResult.pending);
+  const serviceCallInProgress = isStatusPending(auth!);
 
   return (
     <FormBox

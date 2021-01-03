@@ -93,7 +93,7 @@ const ProfileInput: FunctionComponent<ProfileInputProps> = ({
         handleChange={handleChange}
         validator={inputValidator}
         handleValidationResult={handleValidationResult}
-        forceValidate={!!user.firstName}
+        forceValidate={!!user.firstName ? 1 : 0}
         className={styles.input}
         required
         compact
@@ -113,7 +113,7 @@ const ProfileInput: FunctionComponent<ProfileInputProps> = ({
         handleChange={handleChange}
         validator={inputValidator}
         handleValidationResult={handleValidationResult}
-        forceValidate={!!user.familyName}
+        forceValidate={!!user.familyName ? 1 : 0}
         className={styles.input}
         required
         compact
@@ -152,7 +152,7 @@ const ProfileInput: FunctionComponent<ProfileInputProps> = ({
               </IconButton>
         }
         className={styles.input}
-        forceValidate
+        forceValidate={1}
         required
         compact
       />
@@ -177,13 +177,13 @@ const ProfileInput: FunctionComponent<ProfileInputProps> = ({
               </IconButton>
         }
         className={styles.input}
-        forceValidate
+        forceValidate={1}
         required
         compact
         last
       />
     </DialogContent>    
-  )
+  );
 }
 
 export default ProfileInput;

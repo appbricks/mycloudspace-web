@@ -14,7 +14,7 @@ import { Icon } from '@iconify/react';
 import cancelIcon from '@iconify/icons-mdi/cancel';
 import verifyIcon from '@iconify/icons-mdi/check-bold';
 
-import { ActionResult } from '@appbricks/utils';
+import { isStatusPending } from '@appbricks/utils';
 
 import {
   CONFIRM_SIGN_UP_CODE_REQ,
@@ -50,7 +50,7 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
   const { auth, authService } = props;
 
   // redux auth state: action status and user
-  const { actionStatus, isLoggedIn, user, awaitingUserConfirmation } = auth!;
+  const { isLoggedIn, user, awaitingUserConfirmation } = auth!;
 
   // current and previous dailog static states
   const [ thisDialog, fromDialog ] = useDialogNavState(
@@ -99,7 +99,7 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
   };
 
   // handle auth action status result
-  useActionStatus(actionStatus, () => {
+  useActionStatus(auth!, (actionStatus) => {
     if (actionStatus.actionType == CONFIRM_SIGN_UP_CODE_REQ) {
       dispatch(
         notify({
@@ -127,11 +127,9 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
   const disableVerify = (values.verificationCode.length != 6);
 
   // check auth state is pending change
-  // due to a backend call in progress
-  const serviceCallInProgress = (
-    actionStatus.actionType == CONFIRM_SIGN_UP_CODE_REQ &&
-    actionStatus.result == ActionResult.pending
-  );
+  // due to confirm sign up backend call 
+  // in progress
+  const serviceCallInProgress = isStatusPending(auth!, CONFIRM_SIGN_UP_CODE_REQ);
 
   return (
     <FormBox

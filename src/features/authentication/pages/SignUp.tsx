@@ -1,6 +1,7 @@
 import React, {
   FunctionComponent,
   MouseEvent,
+  useRef,
   useState,
   useEffect
 } from 'react';
@@ -17,7 +18,7 @@ import UserIcon from '@material-ui/icons/Person';
 import EmailIcon from '@material-ui/icons/Email';
 import PhoneIcon from '@material-ui/icons/Smartphone';
 
-import { ActionResult } from '@appbricks/utils';
+import { isStatusPending } from '@appbricks/utils';
 
 import {
   usernameValidator,
@@ -65,7 +66,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
   const [ thisDialog, fromDialog ] = useDialogNavState(650, 350, props);
 
   // redux auth state: action status and user
-  const { actionStatus, isLoggedIn } = auth!;
+  const { isLoggedIn } = auth!;
 
   // if signed in then signout
   useEffect(() => {
@@ -88,21 +89,44 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
     inputOk: false
   });
 
+  // keep track of the field value change
+  // that caused last render. this is used
+  // to track if any related field needs to
+  // be validated such as the password 
+  // verification field.
+  const changedField = useRef<string | undefined>();
+  useEffect(() => {
+    changedField.current = undefined;
+  });
+
   const handleChange = (prop: string, value: any) =>  {
+    changedField.current = prop;
     setFormData({ ...formData, [prop]: value });
   };
 
-  const handleValidationResult = (prop: string, isValid: boolean) => {
-    formIGO.validFields[prop] = isValid;
-    validateForm(formIGO.accept);
+  const handleAccept = (accept: boolean) => { 
+    setFormIGO({ 
+      ...formIGO, 
+      accept,
+      inputOk: isFormValid(formIGO.validFields, accept)
+    });
   }
 
-  const validateForm = (accept: boolean) => {
-    const validFieldValues = Object.values(formIGO.validFields);
-    const inputOk = accept && validFieldValues.length == 5 &&
-      validFieldValues.reduce((isValid, fieldIsValid) => isValid && fieldIsValid);
+  const handleValidationResult = (prop: string, isValid: boolean) => {
+    formIGO.validFields[prop] = isValid;
 
-    setFormIGO({ ...formIGO, accept, inputOk });
+    setFormIGO({ ...formIGO, 
+      inputOk: isFormValid(formIGO.validFields, formIGO.accept)
+    });
+  }
+
+  const isFormValid = (
+    validFields: {[prop: string]: boolean },
+    accept: boolean
+  ): boolean => {
+    const validFieldValues = Object.values(validFields);
+    return accept && validFieldValues.length == 5 &&
+      validFieldValues.reduce((isValid, fieldIsValid) => isValid && fieldIsValid); 
   }
 
   const handleButtonClick = (index: number) => (event: MouseEvent<HTMLButtonElement>) => {
@@ -125,7 +149,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
   };
 
   // handle auth action status result
-  useActionStatus(actionStatus, () => {
+  useActionStatus(auth!, (actionStatus) => {
     if (actionStatus.actionType == SIGN_UP_REQ) {
       navigate(appConfig.routeMap['verify'].uri, thisDialog);
     }
@@ -133,7 +157,10 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
 
   // check auth state is pending change
   // due to a backend call in progress
-  const serviceCallInProgress = (actionStatus.result == ActionResult.pending);
+  const serviceCallInProgress = isStatusPending(auth!);
+
+  // validation is forced for any value >0
+  const forceValidate = formIGO.accept ? 1 : 0;
 
   return (
     <FormBox
@@ -174,7 +201,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           handleChange={handleChange}
           validator={usernameValidator}
           handleValidationResult={handleValidationResult}
-          forceValidate={formIGO.accept}
+          forceValidate={forceValidate}
           iconElement={<UserIcon />}
           disabled={serviceCallInProgress}
           className={styles.input}
@@ -188,7 +215,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           handleChange={handleChange}
           validator={passwordValidator}
           handleValidationResult={handleValidationResult}
-          forceValidate={formIGO.accept}
+          forceValidate={forceValidate}
           disabled={serviceCallInProgress}
           className={styles.input}
           compact
@@ -203,7 +230,12 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
             verifyWith: formData.password
           }}
           handleValidationResult={handleValidationResult}
-          forceValidate={formIGO.accept}
+          forceValidate={
+            changedField.current == 'password' &&
+            formData.passwordRepeat.length > 0
+              ? Date.now() // any valid number > 0 that will be different each time
+              : forceValidate
+          }
           disabled={serviceCallInProgress}
           className={styles.input}
           compact
@@ -216,7 +248,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           handleChange={handleChange}
           validator={emailAddressValidator}
           handleValidationResult={handleValidationResult}
-          forceValidate={formIGO.accept}
+          forceValidate={forceValidate}
           iconElement={<EmailIcon />}
           disabled={serviceCallInProgress}
           className={styles.input}
@@ -229,7 +261,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
           handleChange={handleChange}
           validator={phoneNumberValidator}
           handleValidationResult={handleValidationResult}
-          forceValidate={formIGO.accept}
+          forceValidate={forceValidate}
           iconElement={<PhoneIcon />}
           disabled={serviceCallInProgress}
           className={styles.input}
@@ -243,7 +275,8 @@ const SignUp: FunctionComponent<SignUpProps> = (props) => {
         />
         <CheckBox
           id='accept'
-          onChange={(event, checked) => validateForm(checked)}
+          checked={formIGO.accept}
+          onChange={(event, checked) => handleAccept(checked)}
           disabled={serviceCallInProgress}
           checkColor='primary'
           className={styles.checkBox}
