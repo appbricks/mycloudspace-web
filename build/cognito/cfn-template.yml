@@ -19,10 +19,6 @@ Outputs:
     Description: The user pool's web client Id
     Value:
       Ref: UserPoolWebClient
-  # UserPoolWebClientSecret:
-  #   Description: The user pool's web client secret
-  #   Value:
-  #     Fn::GetAtt: UserPoolWebClientInputs.appSecret
   UserPoolAppClientId:
     Description: The user pool's app client id
     Value:
@@ -31,6 +27,14 @@ Outputs:
     Description: The user pool's app client secret
     Value:
       Fn::GetAtt: UserPoolAppClientInputs.appSecret
+  UserPoolCLIClientId:
+    Description: The user pool's CLI client id
+    Value:
+      Ref: UserPoolCLIClient
+  UserPoolCLIClientSecret:
+    Description: The user pool's CLI client secret
+    Value:
+      Fn::GetAtt: UserPoolCLIClientInputs.appSecret
   CognitoJSConfig:
     Description: The cognito configuration javascript import
     Value:
@@ -219,6 +223,49 @@ Resources:
       UserPoolId:
         Ref: UserPool
 
+  # Provide mobile application access to user pool
+  UserPoolCLIClient:
+    Type: AWS::Cognito::UserPoolClient
+    DependsOn: UserPool
+    Properties:
+      ClientName:
+        Fn::Sub: ${prefix}_userPoolCLIClient
+      SupportedIdentityProviders: 
+        - COGNITO
+      AllowedOAuthFlows: 
+        - code
+      AllowedOAuthFlowsUserPoolClient: true
+      AllowedOAuthScopes:
+        - openid
+        - profile
+      ExplicitAuthFlows:
+        - ALLOW_USER_SRP_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+      CallbackURLs:
+        - http://localhost:9999
+      GenerateSecret: True
+      ReadAttributes:
+        - email
+        - email_verified
+        - phone_number
+        - phone_number_verified
+        - custom:preferences
+      WriteAttributes:
+        - email
+        - phone_number
+      RefreshTokenValidity: 7            
+      UserPoolId:
+        Ref: UserPool
+
+  UserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    DependsOn: UserPool
+    Properties:
+      Domain: 
+        Fn::Sub: ${prefix}
+      UserPoolId:
+        Ref: UserPool
+
   ########################################
   # User pool client lambda used by stack
   # to return the client secrets.
@@ -312,16 +359,6 @@ Resources:
                 - arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${lambda}:log-stream:*
                 - lambda:
                     Ref: UserPoolClientFn
-  # UserPoolWebClientInputs:
-  #   Type: 'Custom::LambdaCallout'
-  #   DependsOn: UserPoolClientFnLogPolicy
-  #   Properties:
-  #     ServiceToken:
-  #       Fn::GetAtt: UserPoolClientFn.Arn
-  #     clientId:
-  #       Ref: UserPoolWebClient
-  #     userPoolId:
-  #       Ref: UserPool
   UserPoolAppClientInputs:
     Type: Custom::LambdaCallout
     DependsOn: UserPoolClientFnLogPolicy
@@ -330,5 +367,15 @@ Resources:
         Fn::GetAtt: UserPoolClientFn.Arn
       clientId:
         Ref: UserPoolAppClient
+      userPoolId:
+        Ref: UserPool
+  UserPoolCLIClientInputs:
+    Type: Custom::LambdaCallout
+    DependsOn: UserPoolClientFnLogPolicy
+    Properties:
+      ServiceToken:
+        Fn::GetAtt: UserPoolClientFn.Arn
+      clientId:
+        Ref: UserPoolCLIClient
       userPoolId:
         Ref: UserPool
