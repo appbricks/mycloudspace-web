@@ -14,35 +14,64 @@ fi
 
 set -euo pipefail
 
-ROOT_DIR=$(cd $(dirname ${BASH_SOURCE})/../.. && pwd)
+scripts_dir=$(dirname $BASH_SOURCE)
+home_dir=$(cd ${scripts_dir}/../.. && pwd)
 
-ENV=${1:-dev}
-ENV_NAME="mycs${ENV}"
+function usage() {
+  echo -e "\nUSAGE: configure.sh [options]\n"
+  echo -e "  -e|--env [ENV]  the deployment environment"
+  echo -e "  -d|--debug      enable trace output"
+  echo -e "  -h|--help       show this help"
+}
 
-AWS_REGION=${AWS_DEFAULT_REGION:-us-east-1}
+env=dev
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -e|--env)
+      env=$2
+      shift
+      ;;
+    -d|--debug)
+      set -x
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo -e "\nERROR! Unknown option \"$1\"."
+      usage
+      exit 1
+      ;;
+  esac
+  shift
+done
 
-aws --region ${AWS_REGION} \
-  cloudformation deploy \
-  --capabilities CAPABILITY_NAMED_IAM \
-  --template-file ${ROOT_DIR}/build/cognito/cfn-template.yml \
-  --stack-name ${ENV_NAME} \
-  --parameter-overrides \
-    prefix=${ENV_NAME} \
-    serviceName="My Cloud Space"
+env_name="mycs${env}"
+aws_region=${AWS_DEFAULT_REGION:-us-east-1}
 
-outputs="$(aws --region ${AWS_REGION} cloudformation describe-stacks --stack-name ${ENV_NAME} | jq '.Stacks[0].Outputs[]')"
+outputs=$(aws --region ${aws_region} \
+  cloudformation describe-stacks \
+  --stack-name ${env_name}-identity \
+  | jq '.Stacks[0].Outputs[]' \
+  | sed 's|\\n|\\\\n|g')
 
 # Update Hosted UI for CLI client
-userPoolId=$(echo $outputs | jq -r 'select(.OutputKey=="UserPoolId") | .OutputValue')
-cliClientID=$(echo $outputs | jq -r 'select(.OutputKey=="UserPoolCLIClientId") | .OutputValue')
+userPoolId=$(echo "$outputs" | jq -r 'select(.OutputKey=="UserPoolId") | .OutputValue')
+cliClientID=$(echo "$outputs" | jq -r 'select(.OutputKey=="UserPoolCLIClientId") | .OutputValue')
 
-result=$(aws --region ${AWS_REGION} \
+set +e
+result=$(aws --region ${aws_region} \
   cognito-idp set-ui-customization \
   --user-pool-id "${userPoolId}" \
   --client-id "${cliClientID}" \
-  --image-file "fileb://${ROOT_DIR}/site/images/appbricks-logo-name.png" \
-  --css "$(cat ${ROOT_DIR}/build/cognito/ui-customization.css)")
+  --image-file "fileb://${home_dir}/site/images/appbricks-logo-name.png" \
+  --css "$(cat ${home_dir}/build/cognito/ui-customization.css)")
+if [[ $? -ne 0 ]]; then
+  echo -e "ERROR! Unable to set hosted UI customization.\n${result}\n"
+fi
+set -e
 
 # aws amplify config for mycloudspace web app
 cognitoJSConfig=$(echo $outputs | jq -r 'select(.OutputKey=="CognitoJSConfig") | .OutputValue')
-echo -e "$cognitoJSConfig" > ${ROOT_DIR}/src/aws-exports.ts
+echo -e "$cognitoJSConfig" > ${home_dir}/src/aws-exports.ts
