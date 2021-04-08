@@ -32,7 +32,7 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
       AWS_DEFAULT_REGION: us-east-1
-      ENV: dev
+      ENV: prod
 
     steps:
 
@@ -82,7 +82,7 @@ jobs:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v2
-      
+
     # Retrieve built content from previous job
     - name: Download site content for release
       uses: actions/download-artifact@master
