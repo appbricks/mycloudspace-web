@@ -2,6 +2,11 @@ name: Build, create and stage production release
 
 on:
   workflow_dispatch:
+    inputs:
+      nodeVersion:
+        description: 'Node version'
+        required: true
+        default: '12.x'
   push:
     branches: [ master ]
     paths:
@@ -40,10 +45,10 @@ jobs:
       run: exit 1
 
     # Install NodeJS
-    - name: Use Node.js ${{ github.event.inputs.logLevel }}
+    - name: Use Node.js ${{ github.event.inputs.nodeVersion }}
       uses: actions/setup-node@v1
       with:
-        node-version: ${{ github.event.inputs.logLevel }}
+        node-version: ${{ github.event.inputs.nodeVersion }}
 
     # Install the latest version of Terraform CLI
     - name: Setup Terraform

@@ -2,7 +2,7 @@ name: Build and publish dev site
 
 on:
   workflow_dispatch:
-    input:
+    inputs:
       nodeVersion:
         description: 'Node version'
         required: true
@@ -34,10 +34,10 @@ jobs:
       run: exit 1
 
     # Install NodeJS
-    - name: Use Node.js ${{ github.event.inputs.logLevel }}
+    - name: Use Node.js ${{ github.event.inputs.nodeVersion }}
       uses: actions/setup-node@v1
       with:
-        node-version: ${{ github.event.inputs.logLevel }}
+        node-version: ${{ github.event.inputs.nodeVersion }}
 
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
