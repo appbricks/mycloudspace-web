@@ -8,7 +8,7 @@ import { useLocation } from "@reach/router";
 import { persistReducer } from 'redux-persist'
 import sessionStorage from 'redux-persist/lib/storage/session'
 
-import { template, TemplateExecutor } from 'lodash';
+import { template } from 'lodash';
 
 import { RootState } from './store';
 
@@ -175,10 +175,10 @@ type Label = {
 
 type LabelTemplateMap = { [id: string]: LabelTemplate }
 export type LabelTemplate = {
-  text: TemplateExecutor
+  text: ReturnType<typeof template>
   error: {
-    short: TemplateExecutor
-    long: TemplateExecutor
+    short: ReturnType<typeof template>
+    long: ReturnType<typeof template>
   }
 }
 
@@ -265,6 +265,6 @@ export const useLabelContent = (): LabelLookup => {
 }
 
 // cache of compiled label templates
-const labelTemplateCache: { [id: string]: LabelTemplate } = {};
+const labelTemplateCache: LabelTemplateMap = {};
 
 export type LabelLookup = (id: string) => LabelTemplate
