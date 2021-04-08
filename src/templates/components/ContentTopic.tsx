@@ -1,9 +1,9 @@
-import React, { 
-  FunctionComponent, 
-  MutableRefObject, 
-  useRef, 
-  useState, 
-  useEffect 
+import React, {
+  FunctionComponent,
+  MutableRefObject,
+  useRef,
+  useState,
+  useEffect
 } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -32,7 +32,7 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
   if (height) {
     topicMetadata.viewPortHeight = height;
   } else {
-    // override fill view port and default 
+    // override fill view port and default
     // to false as no height was passed in
     topicMetadata.fillViewPort = false;
   }
@@ -43,11 +43,14 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
   const styles = useStyles(topicMetadata);
 
   useEffect(() => {
-    topicRefs.push(ref);
-    
+    var refFound = topicRefs.find(r => r === ref);
+    if (!refFound) {
+      topicRefs.push(ref);
+    }
+
     if (topicMetadata.fillViewPort) {
       const cleanup = handleParentScroll(onScroll, ref);
-      return () => cleanup();  
+      return () => cleanup();
     }
   });
 
@@ -57,46 +60,46 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
 
   const onScroll = (pos: Position) => {
     if (topicMetadata.fillViewPort) {
-      if (hideScrollButton 
+      if (hideScrollButton
         && pos.y >= scrollButtonPosYLow && pos.y <= scrollButtonPosYHigh) {
-        
+
         setHideScrollButton(false);
-      } else if (!hideScrollButton 
+      } else if (!hideScrollButton
         && (pos.y < scrollButtonPosYLow || pos.y > scrollButtonPosYHigh)) {
-        
+
         setHideScrollButton(true);
       }
-    } 
+    }
   }
 
   const textBlock = (<>
-    <Paper 
+    <Paper
       elevation={
-        topicMetadata.textBlockBorder && 
+        topicMetadata.textBlockBorder &&
         topicMetadata.textBlockBorder == 'none' ? 0 : 4
-      } 
+      }
       variant={
-        topicMetadata.textBlockBorder && 
+        topicMetadata.textBlockBorder &&
         (topicMetadata.textBlockBorder == 'outlined'
           || topicMetadata.textBlockBorder.startsWith('outlined-'))
         ? 'outlined' : 'elevation'
       }
       square={
         topicMetadata.textBlockBorder &&
-        (topicMetadata.textBlockBorder == 'square' || 
+        (topicMetadata.textBlockBorder == 'square' ||
           topicMetadata.textBlockBorder.endsWith('-square'))
         ? true : false
       }
       className={styles.topicContentBody}>
-      
+
       <MDXRenderer>{content}</MDXRenderer>
 
       {topicMetadata.button && (
         <Box pb={2} display='flex' justifyContent='center'>
-          <Button 
+          <Button
             href={topicMetadata.buttonLink}
-            size='large' 
-            variant={topicMetadata.buttonBackgroundColor == topicMetadata.textBlockBackgroundColor 
+            size='large'
+            variant={topicMetadata.buttonBackgroundColor == topicMetadata.textBlockBackgroundColor
               ? 'outlined': 'contained'}
             className={styles.topicButton}
           >
@@ -109,9 +112,9 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
 
   const scrollUpButton = (<>
     {index == 0
-      || !scrollButtonUpTop 
+      || !scrollButtonUpTop
       || (
-        <ScrollButton 
+        <ScrollButton
           index={index - 1}
           topicRefs={topicRefs}
           topOffset={scrollButtonUpTop!}
@@ -123,9 +126,9 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
 
   const scrollDownButton = (<>
     {lastTopic
-      || !scrollButtonDownTop 
+      || !scrollButtonDownTop
       || (
-        <ScrollButton 
+        <ScrollButton
           index={index + 1}
           topicRefs={topicRefs}
           topOffset={scrollButtonDownTop!}
@@ -174,7 +177,7 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
 
 export default ContentTopic;
 
-// delta the content page can scroll 
+// delta the content page can scroll
 // before scroll button is hidden
 const scrollButtonShowDelta = 20;
 
@@ -210,11 +213,11 @@ const useStyles = makeStyles((theme) => ({
   }),
   topicContentBody: (props: TopicMetadata) => {
 
-    const fontMultiplier = 
+    const fontMultiplier =
       props.textFontSize == 'large' ? 2 :
       props.textFontSize == 'medium' ? 1.5 :
       props.textFontSize == 'extra-small' ? 0.8 : 1;
-    
+
     return {
       padding: props.textBlockPadding || '8px 32px 8px 32px',
       marginTop: props.textMarginTop,
@@ -249,11 +252,11 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '2rem',
         fontWeight: 'bold'
       },
-      '& p': 
+      '& p':
         props.textLineSpacing == 'compact' ? {
           marginBlockStart: '0px',
           marginBlockEnd: '20.8px'
-        } : 
+        } :
         props.textLineSpacing == 'extra-space' ? {
           marginBlockStart: '40px',
           marginBlockEnd: '20.8px'
@@ -271,7 +274,7 @@ const useStyles = makeStyles((theme) => ({
           backgroundColor: emphasize(props.buttonBackgroundColor, 0.1)
         }
       };
-  
+
       if (props.buttonBackgroundColor == props.textBlockBackgroundColor) {
         Object.assign(styles, {
           borderColor: props.textBlockForegroundColor,
@@ -293,9 +296,9 @@ type ContentTopicProps = {
 
   height?: string
 
-  topicRefs: TopicRefType[] 
+  topicRefs: TopicRefType[]
   topicMetadata: TopicMetadata
-  
+
   content: string
 
   scrollButtonDownTop?: string
