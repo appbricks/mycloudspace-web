@@ -29,7 +29,7 @@
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\""
   },
   "dependencies": {
-    "@appbricks/data-validators": "0.0.0",
+    "@appbricks/data-validators": "0.0.1",
     "@appbricks/identity": "0.0.6",
     "@appbricks/utils": "0.0.4",
     "@iconify/icons-mdi": "^1.1.13",
