@@ -34,6 +34,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - run: npm install -g gatsby-cli
-    - run: npm run clean
+    - run: rm -fr node_modules/ package-lock.json && npm install
     - run: echo -e "${{ secrets.AWS_AMPLIFY_EXPORTS }}" > src/aws-exports.ts
     - run: gatsby build
