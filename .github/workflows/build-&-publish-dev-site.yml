@@ -52,7 +52,7 @@ jobs:
 
     - name: Build site content
       run: |
-        sudo npm install
+        npm install
         npm install gatsby-cli
         node_modules/.bin/gatsby build
 
