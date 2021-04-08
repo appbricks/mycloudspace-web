@@ -42,4 +42,5 @@ jobs:
     - run: build/cognito/configure.sh -e ${ENV}
     - run: npm install -g gatsby-cli
     - run: npm install
+    - run: echo -e "${{ secrets.AWS_AMPLIFY_EXPORTS }}" > src/aws-exports.ts
     - run: gatsby build
