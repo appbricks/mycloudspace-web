@@ -62,7 +62,7 @@ jobs:
     - name: Build site content
       run: |        
         npm install
-        node_modules/.bin/gatsby build
+        gatsby build
 
     - name: Upload site content
       uses: actions/upload-artifact@master
