@@ -2,6 +2,11 @@ name: Build, create and stage production release
 
 on:
   workflow_dispatch:
+    inputs:
+      nodeVersion:
+        description: 'Node version'
+        required: true
+        default: '12.x'
   push:
     branches: [ master ]
     paths:
@@ -15,22 +20,19 @@ on:
     - 'package.json'
 
 jobs:
-  build-and-stage:
+  build:
     runs-on: ubuntu-latest
 
     defaults:
       run:
         shell: bash
 
-    # Setup default environment for running Terraform
+    # Setup environment for running AWS CLI
     env:
-      VERSION: '0.0'
-      AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
-      AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
       AWS_DEFAULT_REGION: us-east-1
-      TF_VAR_env: stage
-      TF_VAR_domain: appbricks.io
-      TF_VAR_publish_path: ${{ github.workspace }}/public
+      ENV: prod
 
     steps:
 
@@ -40,24 +42,55 @@ jobs:
       run: exit 1
 
     # Install NodeJS
-    - name: Use Node.js ${{ github.event.inputs.logLevel }}
+    - name: Use Node.js ${{ github.event.inputs.nodeVersion }}
       uses: actions/setup-node@v1
       with:
-        node-version: ${{ github.event.inputs.logLevel }}
-
-    # Install the latest version of Terraform CLI
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-
-    # Install the latest version of AWS CLI
-    - name: Install AWS CLI
-      uses: chrislennon/action-aws-cli@v1.1
+        node-version: ${{ github.event.inputs.nodeVersion }}
 
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v2
 
-    # Create and tag release 
+    #
+    # Configure and run site content build
+    #
+
+    - name: Create AWS Amplify configuration file
+      run: build/cognito/configure.sh -e ${ENV}
+
+    - name: Build site content
+      run: |
+        npm install -g gatsby-cli
+        npm install
+        node_modules/.bin/gatsby build
+
+    - name: Upload site content
+      uses: actions/upload-artifact@master
+      with:
+        name: site-content
+        path: ${{ github.workspace }}/public
+
+  release:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    # Retrieve built content from previous job
+    - name: Download site content for release
+      uses: actions/download-artifact@master
+      with:
+        name: site-content
+        path: ${{ github.workspace }}/public
+
+    # Create and tag release
     - name: Create release tag
       id: release_tag
       run: |
@@ -84,26 +117,13 @@ jobs:
 
         echo "::set-output name=value::$(echo ${release_tag})"
 
-    #
-    # Configure and run site content build
-    #
-
-    - name: Create AWS Amplify configuration file
-      run: echo -e "${{ secrets.AWS_AMPLIFY_PROD_CONFIG }}" > src/aws-exports.ts
-
-    - name: Build site content
-      run: |
-        npm install
-        npm install gatsby-cli
-        node_modules/.bin/gatsby build
-
-    - name: Create release asset
+    - name: Create release archive
       run: |
         zip -r ./site-content.zip public/
 
     - name: Create release
       uses: actions/create-release@v1
-      id: create_release  
+      id: create_release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -112,7 +132,7 @@ jobs:
         body_path: ./docs/release-notes.md
         draft: false
         prerelease: true
-    
+
     - name: Upload release archive
       uses: actions/upload-release-asset@v1
       env:
@@ -123,9 +143,36 @@ jobs:
         asset_name: site-content.zip
         asset_content_type: application/zip
 
-    #
-    # Stage site 
-    #
+  stage:
+    needs: build
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    # Setup default environment for running AWS CLI and Terraform
+    env:
+      VERSION: '0.0'
+      AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+      AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      AWS_DEFAULT_REGION: us-east-1
+      TF_VAR_env: stage
+      TF_VAR_domain: appbricks.io
+      TF_VAR_publish_path: ${{ github.workspace }}/public
+
+    steps:
+
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    # Retrieve built content from previous job
+    - name: Download site content to be staged
+      uses: actions/download-artifact@master
+      with:
+        name: site-content
+        path: ${{ github.workspace }}/public
 
     # Initialize a new or existing Terraform working
     # directory by creating initial files, loading any

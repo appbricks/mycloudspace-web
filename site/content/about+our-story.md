@@ -1,6 +1,6 @@
 ---
 contentPage: about
-order: 2
+order: 1
 
 image: ../images/backgrounds/our-story.jpg
 

@@ -1,0 +1,17 @@
+{
+  "organization": {
+    "businessName": "AppBricks, Inc.",
+    "copyright": "© 2020 AppBricks, Inc.",
+    "social": {
+      "github": "https://github.com/appbricks",
+      "twitter": "https://twitter.com/appbrix",
+      "linkedin": "https://www.linkedin.com/company/appbricks"
+    },
+    "contact": {
+      "phone": "+1-716-575-5305",
+      "email": "marketing@appbricks.io",
+      "supportEmail": "support@appbricks.io",
+      "supportChannel": "https://appbricks.slack.io"
+    }
+  }
+}

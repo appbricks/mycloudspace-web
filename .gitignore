@@ -1,6 +1,5 @@
 # Project dependencies
-.envrc
-.cache
+.*
 pkg/
 node_modules
 yarn-error.log
