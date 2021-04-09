@@ -41,7 +41,7 @@ jobs:
       run: exit 1
 
     - run: echo ${GITHUB_REF}
-    - run: ech ${GITHUB_REF##*/}
+    - run: echo ${GITHUB_REF##*/}
     - run: exit 1
 
     # Install NodeJS
