@@ -41,7 +41,7 @@ jobs:
       run: exit 1
 
     - run: echo ${GITHUB_REF}
-    - run: TF_VAR_env=${GITHUB_REF##*/} echo ${TF_VAR_env}
+    - run: ech ${GITHUB_REF##*/}
     - run: exit 1
 
     # Install NodeJS
