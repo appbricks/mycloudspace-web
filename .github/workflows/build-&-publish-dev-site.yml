@@ -40,11 +40,6 @@ jobs:
       if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
       run: exit 1
 
-    - run: |
-        export TF_VAR_env=${GITHUB_REF##*/}
-        echo $TF_VAR_env
-        exit 1
-  
     # Install NodeJS
     - name: Use Node.js ${{ github.event.inputs.nodeVersion }}
       uses: actions/setup-node@v1
