@@ -47,6 +47,8 @@ jobs:
       with:
         node-version: ${{ github.event.inputs.nodeVersion }}
 
+    - run: npm install -g gatsby-cli
+
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v2
@@ -60,9 +62,8 @@ jobs:
 
     - name: Build site content
       run: |
-        npm install -g gatsby-cli
         npm install
-        node_modules/.bin/gatsby build
+        gatsby build
 
     - name: Upload site content
       uses: actions/upload-artifact@master
@@ -71,11 +72,15 @@ jobs:
         path: ${{ github.workspace }}/public
 
   release:
+    needs: build
     runs-on: ubuntu-latest
 
     defaults:
       run:
         shell: bash
+
+    env:
+      VERSION: '0.0'
 
     steps:
 
@@ -153,7 +158,6 @@ jobs:
 
     # Setup default environment for running AWS CLI and Terraform
     env:
-      VERSION: '0.0'
       AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
       AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
       AWS_DEFAULT_REGION: us-east-1
