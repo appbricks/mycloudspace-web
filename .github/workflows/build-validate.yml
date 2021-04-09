@@ -39,6 +39,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    - run: echo "==>${GITHUB_REF}<=="
+    - run: echo "==>${GITHUB_REF##*/}<=="
     - run: build/cognito/configure.sh -e ${ENV}
     - run: npm install -g gatsby-cli
     - run: npm install
