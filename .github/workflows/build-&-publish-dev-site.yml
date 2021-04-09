@@ -40,6 +40,7 @@ jobs:
       if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
       run: exit 1
 
+    - run: echo ${GITHUB_REF}
     - run: TF_VAR_env=${GITHUB_REF##*/} echo ${TF_VAR_env}
     - run: exit 1
 
