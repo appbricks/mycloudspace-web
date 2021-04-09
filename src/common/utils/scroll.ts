@@ -1,6 +1,6 @@
 import { RefObject } from 'react';
 
-const isBrowser = typeof window !== `undefined`;
+import { isBrowser } from './'
 
 function getScrollPosition(element: RefObject<Element>): Position {
 
@@ -12,19 +12,19 @@ function getScrollPosition(element: RefObject<Element>): Position {
 }
 
 export function handleParentScroll(
-  scrollCallback: ScrollCallback, 
-  element: RefObject<Element>, 
-  wait?: number 
+  scrollCallback: ScrollCallback,
+  element: RefObject<Element>,
+  wait?: number
 ): () => void {
 
-  var throttleTimeout: number | null = null;
+  var throttleTimeout: any | null = null;
 
   const callback = () => {
     scrollCallback(getScrollPosition(element));
     throttleTimeout = null;
   }
   callback();
-  
+
   const handleScroll = () => {
     if (wait) {
       if (throttleTimeout === null) {
@@ -36,7 +36,11 @@ export function handleParentScroll(
   }
 
   element.current!.parentNode!.addEventListener('scroll', handleScroll);
-  return () => element.current!.parentNode!.removeEventListener('scroll', handleScroll);
+  return () => {
+    if (element.current && element.current.parentNode) {
+      element.current.parentNode.removeEventListener('scroll', handleScroll);
+    }
+  }
 }
 
 export type ScrollCallback = (pos: Position) => void;

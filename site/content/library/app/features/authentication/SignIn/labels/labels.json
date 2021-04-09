@@ -1,0 +1,20 @@
+{
+  "labels": [
+    {
+      "id": "signInForm",
+      "text": "Sign In"
+    },
+    {
+      "id": "signUpButton",
+      "text": "Sign Up"
+    },
+    {
+      "id": "signInButton",
+      "text": "Sign In"
+    },
+    {
+      "id": "resetPassword",
+      "text": "Reset Password"
+    }
+  ]
+}

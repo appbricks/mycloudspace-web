@@ -1,0 +1,12 @@
+{
+  "labels": [
+    {
+      "id": "signUpForm",
+      "text": "Sign Up"
+    },
+    {
+      "id": "accept",
+      "text": "I accept and agree to the terms of use"
+    }
+  ]
+}

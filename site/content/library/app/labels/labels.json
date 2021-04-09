@@ -1,0 +1,42 @@
+{
+  "labels": [    
+    {
+      "id": "cancelButton",
+      "text": "Cancel"
+    },
+    {
+      "id": "verifyButton",
+      "text": "Verify"
+    },
+    {
+      "id": "saveButton",
+      "text": "Save"
+    },
+    {
+      "id": "username",
+      "text": "Username"
+    },
+    {
+      "id": "password",
+      "text": "Password"
+    },
+    {
+      "id": "passwordRepeat",
+      "text": "Verify Password",
+      "error": {
+        "long": "The verification password does not match the password entered."
+      }
+    },
+    {
+      "id": "emailAddress",
+      "text": "Email"
+    },
+    {
+      "id": "mobilePhone",
+      "text": "Mobile Phone Number",
+      "error": {
+        "long": "<%= value %> is not a valid <%= label %> in <%= country %>."
+      }
+    }
+  ]
+}

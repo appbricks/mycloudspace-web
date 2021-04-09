@@ -5,8 +5,8 @@ import React, { FunctionComponent } from 'react';
 const MDXProvider = require('@mdx-js/react').MDXProvider;
 
 // custom markdown components
-import ContentCards from './content-cards';
-import SiteContact from './site-contact';
+import ContentCards from './ContentCards';
+import SiteContact from './SiteContact';
 
 const shortcodes = { ContentCards, SiteContact }
 

@@ -1,0 +1,20 @@
+{
+  "labels": [
+    {
+      "id": "verifyAccountForm",
+      "text": "Verify Account"
+    },
+    {
+      "id": "verifyAccountButton",
+      "text": "Verify"
+    },
+    {
+      "id": "verificationCode",
+      "text": "Verification Code"
+    },
+    {
+      "id": "resendConfirmCode",
+      "text": "Re-send Confirmation Code"
+    }
+  ]
+}

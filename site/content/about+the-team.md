@@ -1,6 +1,6 @@
 ---
 contentPage: 'about'
-order: 1
+order: 2
 
 fillViewPort: false
 

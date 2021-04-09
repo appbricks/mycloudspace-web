@@ -1,0 +1,16 @@
+{
+  "labels": [
+    {
+      "id": "authCodeForm",
+      "text": "Sign In Code"
+    },
+    {
+      "id": "authCodeButton",
+      "text": "Verify"
+    },
+    {
+      "id": "authCode",
+      "text": "Authentication Code"
+    }
+  ]
+}

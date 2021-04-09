@@ -1,0 +1,174 @@
+{
+  "appConfig": {
+    "version": "0.0",
+    "logos": {
+      "primaryLogo": "appbricks-logo-name.png",
+      "secondaryLogo": "mycloudspace-logo-name.png",
+      "logoBadgeColor": "#3f51b5"
+    },
+    "layout": {
+      "backgroundImage": "backgrounds/appbricks.jpg",
+      "backgroundOverlay": "#4d4d4d"
+    },
+    "colors": {
+      "lightModeName": "Light",
+      "darkModeName": "Dark",
+      "themes": [
+        {
+          "name": "Light"
+        },
+        {
+          "name": "Dark"
+        }
+      ]
+    },
+    "routes": {
+      "public": [
+        {
+          "name": "signin",
+          "uri": "/mycs/signin",
+          "feature": "SignIn"
+        },
+        {
+          "name": "signup",
+          "uri": "/mycs/signup",
+          "feature": "SignUp"
+        },
+        {
+          "name": "verify",
+          "uri": "/mycs/verify",
+          "feature": "Verify"
+        },
+        {
+          "name": "authcode",
+          "uri": "/mycs/authcode",
+          "feature": "AuthCode"
+        },
+        {
+          "name": "reset",
+          "uri": "/mycs/reset",
+          "feature": "Reset"
+        }
+      ],
+      "private": [
+        {
+          "name": "appHome",
+          "uri": "/mycs",
+          "feature": "AppNav"
+        }
+      ]
+    },
+    "navigation": {
+      "mainNavMenu": {
+        "iconDisplay": {
+          "anchorRightInMain": true,
+          "anchorRightInSideBar": false,
+          "width": 24
+        },
+        "menuItems": [
+          {
+            "title": "About",
+            "subTitle": "",
+            "icon": "aboutIcon",
+            "showIconInMain": false,
+            "uri": "/about"
+          },
+          {
+            "title": "Products",
+            "subTitle": "",
+            "icon": "productIcon",
+            "showIconInMain": false,
+            "uri": "/products"
+          },
+          {
+            "title": "Contact",
+            "subTitle": "",
+            "icon": "contactIcon",
+            "showIconInMain": false,
+            "uri": "/contact"
+          },
+          {
+            "title": "My Cloud Space",
+            "subTitle": "",
+            "icon": "loginIcon",
+            "showIconInMain": true,
+            "uri": "/mycs/signin",
+
+            "contextItems": [
+              {
+                "key": "loggedin",
+                "title": "My Cloud Space",
+                "subTitle": "",
+                "icon": "homeIcon",
+                "showIconInMain": true,
+                "uri": "/mycs"
+              }
+            ]
+          }
+        ]
+      },
+      "userNavMenu": {
+        "iconDisplay": {
+          "width": 24
+        },
+        "profile": {
+          "menuItems": [
+            {
+              "divider": false,
+              "title": "Profile",
+              "icon": "profileSetupIcon",
+              "feature": "Profile"
+            },
+            {
+              "divider": false,
+              "title": "Security",
+              "icon": "profileSecurityIcon",
+              "feature": "Security"
+            },
+            {
+              "divider": true,
+              "title": "Sign Out",
+              "icon": "logoutIcon",
+              "command": {
+                "name": "signout",
+                "args": [
+                  {
+                    "name": "route",
+                    "value": "signin"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "appNavMenu": {
+        "iconDisplay": {
+          "width": 32
+        },
+        "menuItems": [
+          {
+            "title": "Spaces",
+            "icon": "homeIcon",
+            "feature": "SpacesHome"
+          },
+          {
+            "title": "Apps",
+            "icon": "appsIcon",
+            "feature": "AppsHome"
+          },
+          {
+            "title": "Account",
+            "icon": "accountIcon",
+            "feature": "AccountHome"
+          },
+          {
+            "title": "Help",
+            "icon": "helpIcon",
+            "feature": "HelpHome"
+          }
+        ]
+      }
+    }
+  }
+}

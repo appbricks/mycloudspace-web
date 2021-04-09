@@ -1,0 +1,19 @@
+{
+  "labels": [
+    {
+      "id": "resetForm",
+      "text": "Reset Password"
+    },
+    {
+      "id": "resetButton",
+      "text": "Reset"
+    },
+    {
+      "id": "resetCode",
+      "text": "Reset Code",
+      "error": {
+        "long": "The reset code should be 6 digits long."
+      }
+    }
+  ]
+}

@@ -2,7 +2,7 @@ name: Build and publish dev site
 
 on:
   workflow_dispatch:
-    input:
+    inputs:
       nodeVersion:
         description: 'Node version'
         required: true
@@ -26,6 +26,13 @@ jobs:
       run:
         shell: bash
 
+    # Setup environment for running AWS CLI
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      AWS_DEFAULT_REGION: us-east-1
+      ENV: dev
+
     steps:
 
     # Ensure this action is not master/main branches
@@ -34,10 +41,12 @@ jobs:
       run: exit 1
 
     # Install NodeJS
-    - name: Use Node.js ${{ github.event.inputs.logLevel }}
+    - name: Use Node.js ${{ github.event.inputs.nodeVersion }}
       uses: actions/setup-node@v1
       with:
-        node-version: ${{ github.event.inputs.logLevel }}
+        node-version: ${{ github.event.inputs.nodeVersion }}
+
+    - run: npm install -g gatsby-cli
 
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
@@ -48,13 +57,12 @@ jobs:
     #
 
     - name: Create AWS Amplify configuration file
-      run: echo -e "${{ secrets.AWS_AMPLIFY_NON_PROD_CONFIG }}" > src/aws-exports.ts
+      run: build/cognito/configure.sh -e ${ENV}
 
     - name: Build site content
-      run: |
+      run: |        
         npm install
-        npm install gatsby-cli
-        node_modules/.bin/gatsby build
+        gatsby build
 
     - name: Upload site content
       uses: actions/upload-artifact@master
@@ -84,14 +92,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    # Install the latest version of Terraform CLI
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-
-    # Install the latest version of AWS CLI
-    - name: Install AWS CLI
-      uses: chrislennon/action-aws-cli@v1.1
-
     # Retrieve built content from previous job
     - name: Download site content
       uses: actions/download-artifact@master
@@ -104,7 +104,8 @@ jobs:
     # remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
-        TF_VAR_env=${GITHUB_REF##*/} terraform init \
+        export TF_VAR_env=${GITHUB_REF##*/}
+        terraform init \
           -backend-config="key=website/appbricks-io_${TF_VAR_env}" \
           -backend-config="bucket=appbricks-tfstate-useast1" \
           build/publish
@@ -112,11 +113,13 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Site update plan (Terraform Plan)
       run: |
-        TF_VAR_env=${GITHUB_REF##*/} terraform plan \
+        export TF_VAR_env=${GITHUB_REF##*/}
+        terraform plan \
           build/publish
 
     # Apply Terraform plan and deploy site to a dev url
     - name: Publish Site (Terraform Apply)
       run: |
-        TF_VAR_env=${GITHUB_REF##*/} terraform apply -auto-approve \
+        export TF_VAR_env=${GITHUB_REF##*/}
+        terraform apply -auto-approve \
           build/publish

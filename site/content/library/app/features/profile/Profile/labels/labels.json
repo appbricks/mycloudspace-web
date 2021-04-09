@@ -1,0 +1,40 @@
+{
+  "labels": [
+    {
+      "id": "profileDialog",
+      "text": "Profile"
+    },
+    {
+      "id": "namesSection",
+      "text": "Names"
+    },
+    {
+      "id": "firstName",
+      "text": "First"
+    },
+    {
+      "id": "middleName",
+      "text": "Middle"
+    },
+    {
+      "id": "familyName",
+      "text": "Family"
+    },
+    {
+      "id": "preferredName",
+      "text": "Preferred Name"
+    },
+    {
+      "id": "contactSection",
+      "text": "Contact"
+    },
+    {
+      "id": "verifyEmailSection",
+      "text": "Email Address Verification"
+    },
+    {
+      "id": "verifyPhoneSection",
+      "text": "Phone Number Verification"
+    }
+  ]
+}

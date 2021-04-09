@@ -1,4 +1,8 @@
 ---
+#
+# Static site content attributes
+#
+
 pageTemplate:
 
 # Following fields need to have default type values 
@@ -39,4 +43,12 @@ buttonBackgroundColor: ''
 links:                    # list of links to show in content footer
 - name: ''                # values: 'linkedin', 'twitter', 'github'
   url: ''                 # social app/site url
+
+
+#
+# Application content attributes
+#
+
+contentType: # 'normal' | 'notification'
+notifyType: # 'default' | 'error' | 'success' | 'warning' | 'info'
 ---
