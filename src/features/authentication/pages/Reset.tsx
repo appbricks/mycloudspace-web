@@ -50,7 +50,7 @@ const Reset: FunctionComponent<ResetProps> = (props) => {
   const dispatch = useDispatch();
   const styles = useStyles(props);
   const appConfig = useAppConfig();
-  const content = useStaticContent('authentication', Reset.name);
+  const content = useStaticContent('authentication', 'Reset');
 
   const { auth, authService } = props;
 

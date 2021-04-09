@@ -58,7 +58,7 @@ import { useActionStatus } from '../../../common/state/status';
 const SignUp: FunctionComponent<SignUpProps> = (props) => {
   const styles = useStyles();
   const appConfig = useAppConfig();
-  const content = useStaticContent('authentication', SignUp.name);
+  const content = useStaticContent('authentication', 'SignUp');
 
   const { auth, authService } = props;
 

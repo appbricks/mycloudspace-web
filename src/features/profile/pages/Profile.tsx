@@ -190,7 +190,7 @@ const Profile: FunctionComponent<ProfileProps> = (props) => {
       )}
       {verifyState == VerifyState.showVerifyEmailAddress && (
         <VerifyAttribute
-          capability={Profile.name}
+          capability='Profile'
           value={verificationCode}
           height={587}
           icon={emailConfirmed}
@@ -204,7 +204,7 @@ const Profile: FunctionComponent<ProfileProps> = (props) => {
       {verifyState == VerifyState.showVerifyMobilePhone && (
         <VerifyAttribute
           value={verificationCode}
-          capability={Profile.name}
+          capability='Profile'
           height={587}
           icon={phoneConfirmed}
           verifyLabelId='verifyPhoneSection'

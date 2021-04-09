@@ -45,7 +45,7 @@ const Verify: FunctionComponent<VerifyProps> = (props) => {
   const dispatch = useDispatch();
   const styles = useStyles(props);
   const appConfig = useAppConfig();
-  const content = useStaticContent('authentication', Verify.name);
+  const content = useStaticContent('authentication', 'Verify');
 
   const { auth, authService } = props;
 

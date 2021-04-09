@@ -46,7 +46,7 @@ const Security: FunctionComponent<SecurityProps> = (props) => {
   const dispatch = useDispatch();
   const styles = useStyles();
   const appConfig = useAppConfig();
-  const content = useStaticContent('profile', Security.name);
+  const content = useStaticContent('profile', 'Security');
 
   const { open, onClose, auth, authService } = props;
 

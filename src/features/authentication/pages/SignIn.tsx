@@ -47,7 +47,7 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
   const dispatch = useDispatch();
   const styles = useStyles(props);
   const appConfig = useAppConfig();
-  const content = useStaticContent('authentication', SignIn.name);
+  const content = useStaticContent('authentication', 'SignIn');
 
   const { auth, authService } = props;
 
