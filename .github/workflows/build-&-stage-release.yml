@@ -6,7 +6,7 @@ on:
       nodeVersion:
         description: 'Node version'
         required: true
-        default: '12.x'
+        default: '14.x'
   push:
     branches: [ master ]
     paths:
