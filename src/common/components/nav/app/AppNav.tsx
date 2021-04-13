@@ -176,7 +176,7 @@ const TabPanel: FunctionComponent<TabPanelProps> = ({
   );
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     height: '100%',
     width: '100%',

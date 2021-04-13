@@ -101,7 +101,7 @@ const PhoneNumberInput: FunctionComponent<InputProps> = ({
 
 export default PhoneNumberInput;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   button: {
     border: '0px !important',
     borderRadius: '2px 0 0 2px !important',

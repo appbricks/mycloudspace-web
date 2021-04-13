@@ -23,7 +23,7 @@ const CloseButton: FunctionComponent<CloseButtonProps> = ({ nKey }) => {
 
 export default CloseButton;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   close: {
     padding: theme.spacing(0.5),
   }

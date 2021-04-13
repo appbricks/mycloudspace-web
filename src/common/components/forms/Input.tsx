@@ -273,7 +273,7 @@ const Input: FunctionComponent<InputProps> = ({
 
 export default Input;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   formControl: {
     marginBottom: '1.9rem'
   },

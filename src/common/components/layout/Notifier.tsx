@@ -119,7 +119,7 @@ const Notifier: FunctionComponent<NotifierProps> = (props) => {
 
 export default Notifier;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   content: {
     '& h1': {
       marginBlockStart: '0',
