@@ -158,6 +158,11 @@
             "feature": "AppsHome"
           },
           {
+            "title": "Devices",
+            "icon": "devicesIcon",
+            "feature": "DevicesHome"
+          },
+          {
             "title": "Account",
             "icon": "accountIcon",
             "feature": "AccountHome"
