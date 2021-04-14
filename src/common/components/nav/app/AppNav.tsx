@@ -89,12 +89,14 @@ const AppNavTabs = withStyles((theme: Theme) => ({
     backgroundColor: '#3f51b5',
 
     top: undefined,
-    height: undefined,
+    left: 0,
     width: '5px',
+    height: undefined,
     [theme.breakpoints.down('xs')]: {
       top: 0,
-      height: '5px',
-      width: undefined
+      left: undefined,
+      width: undefined,
+      height: '5px'
     }
   }
 }))(({
@@ -136,14 +138,14 @@ const AppNavTab = withStyles((theme: Theme) => ({
         position: 'absolute',
  
         top: undefined,
-        right: 0,
+        left: 0,
         width: '5px',
         height: '105%',
         [theme.breakpoints.down('xs')]: {
           top: 0,
           right: undefined,
           width: '100%',
-          height: '5px',
+          height: '5px'
         }
       }
     },
