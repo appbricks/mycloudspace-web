@@ -1,15 +1,18 @@
 import React, { FunctionComponent } from 'react';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 import { makeStyles, Theme } from '@material-ui/core/styles';
+
+import DevicePlaceHolder from '../components/DevicePlaceHolder';
 
 const DevicesHome: FunctionComponent<DevicesHomeProps> = (props) => {
   const styles = useStyles(props);
 
   return (
-    <Box p={3} className={styles.root}>
-      <Typography>Devices Home</Typography>
-    </Box>  
+    <Grid container justify='flex-start' spacing={2} className={styles.root}>
+      <Grid item>
+        <DevicePlaceHolder />
+      </Grid>
+    </Grid>
   );
 }
 
@@ -17,7 +20,16 @@ export default DevicesHome;
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
-    color: '#ffffff'
+    margin: theme.spacing(1),
+    flexGrow: 1   
+  },
+  paper: {
+    height: 200,
+    width: 300,
+    backgroundColor: '#e0e0e0'
+  },
+  content: {
+    color: '#000000'
   }
 }));
 

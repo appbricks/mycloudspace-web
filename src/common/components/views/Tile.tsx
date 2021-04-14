@@ -4,23 +4,35 @@ import React, {
 } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import MuiCard from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
+import CardHeader, { CardHeaderProps } from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Divider from '@material-ui/core/Divider';
+import cx from 'clsx';
 
 const Tile: FunctionComponent<TileProps> = ({ 
-  title, 
   width,
+  minWidth,
   height,
+  minHeight,
+  header, 
+  insetHeader,
   actions,
-  children 
+  centerActions,
+  children,
+  ...other
 }) => {
-  const styles = useStyles({width, height});
+  const styles = useStyles({
+    width, 
+    minWidth, 
+    height, 
+    minHeight,
+    centerActions
+  });
 
   return (
     <MuiCard className={styles.root}>
-      <CardHeader title={title} className={styles.header} />
+      <CardHeader {...header} className={cx(styles.header, insetHeader && styles.insetText)} />
       <Divider variant="middle" />
       <CardContent>
         {children}
@@ -49,23 +61,34 @@ const useStyles = makeStyles(theme => ({
   }),
   header: {
     textAlign: 'center',
-    spacing: 10,
+    spacing: 10
   },
-  action: {
+  insetText: {
+    color: 'transparent',
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    textShadow: '1px 1px 1px rgba(255,255,255,0.5)',
+    backgroundClip: 'text',
+    WebkitBackgroundClip: 'text'
+  },
+  action: (props: StyleProps) => ({
     display: 'flex',
-    justifyContent: 'flex-end',
+    justifyContent: props.centerActions ? 'space-around': 'flex-end',
     marginInlineEnd: theme.spacing(0.5)
-  }
+  })
 }));
 
 type TileProps = {
-  title: string
 
-  height?: number
   width?: number
   minWidth?: number
+  height?: number
+  minHeight?: number
+
+  header: CardHeaderProps
+  insetHeader?: boolean
 
   actions?: ReactElement
+  centerActions?: boolean
 }
 
 type StyleProps = {
@@ -73,4 +96,6 @@ type StyleProps = {
   minWidth?: number
   height?: number
   minHeight?: number
+
+  centerActions?: boolean
 }

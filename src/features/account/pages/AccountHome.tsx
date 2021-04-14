@@ -13,7 +13,9 @@ const AccountHome: FunctionComponent<AccountHomeProps> = (props) => {
     <Grid container justify='flex-start' spacing={2} className={styles.root}>
       <Grid item>
         <Tile 
-          title='Basic Free5 Plan' 
+          header={{
+            title: 'Basic Free5 Plan'   
+          }}
           width={320}
           actions={
             <Button disabled size="small" color="primary">
