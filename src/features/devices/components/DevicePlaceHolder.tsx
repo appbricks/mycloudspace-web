@@ -26,7 +26,7 @@ const DevicePlaceHolder: FunctionComponent<DevicePlaceHolderProps> = () => {
         title: 'Your Device Here'
       }}
       insetHeader
-      width={320}
+      width={330}
       actions={<>
         <IconButton disabled
           size='small'
@@ -74,8 +74,8 @@ export default DevicePlaceHolder;
 
 const useStyles = makeStyles((theme: Theme) => ({  
   body: {
-    paddingRight: '15px',
-    paddingLeft: '15px',
+    paddingRight: '10px',
+    paddingLeft: '10px',
   }
 }));
 

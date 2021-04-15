@@ -2,4 +2,4 @@
 contentType: normal
 ---
 
-Download the Cloud Builder desktop client or CLI and build you first Cloud Space.
+Download the **My Cloud Space** Cloud Builder desktop client and build you first Cloud Space.

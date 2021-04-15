@@ -7,7 +7,10 @@ import MuiCard from '@material-ui/core/Card';
 import CardHeader, { CardHeaderProps } from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
+import Collapse from '@material-ui/core/Collapse';
 import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import cx from 'clsx';
 
 const Tile: FunctionComponent<TileProps> = ({ 
@@ -19,6 +22,8 @@ const Tile: FunctionComponent<TileProps> = ({
   insetHeader,
   actions,
   centerActions,
+  toggleExpand,
+  expandedContent,
   children,
   ...other
 }) => {
@@ -30,6 +35,12 @@ const Tile: FunctionComponent<TileProps> = ({
     centerActions
   });
 
+  const [expanded, setExpanded] = React.useState(false);
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+
   return (
     <MuiCard className={styles.root}>
       <CardHeader {...header} className={cx(styles.header, insetHeader && styles.insetText)} />
@@ -40,10 +51,28 @@ const Tile: FunctionComponent<TileProps> = ({
       <Divider variant="middle" />
 
       {actions &&
-        <CardActions className={styles.action}>
+        <CardActions disableSpacing className={styles.action}>
           {actions}
+          {toggleExpand && 
+            <IconButton
+              size='small'
+              className={cx(styles.expand, {
+                [styles.expandOpen]: expanded,
+              })}
+              onClick={handleExpandClick}
+            >
+              <ExpandMoreIcon />
+            </IconButton>
+          }
         </CardActions>
       }
+
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <Divider variant="middle" />
+        <CardContent>
+          {expandedContent}
+        </CardContent>
+      </Collapse>
     </MuiCard>
   );
 }
@@ -72,9 +101,22 @@ const useStyles = makeStyles(theme => ({
   },
   action: (props: StyleProps) => ({
     display: 'flex',
+    position: 'relative',
     justifyContent: props.centerActions ? 'space-around': 'flex-end',
     marginInlineEnd: theme.spacing(0.5)
-  })
+  }),
+  expand: {
+    position: 'absolute',
+    bottom: theme.spacing(1.4),
+    right: theme.spacing(2),
+    transform: 'rotate(0deg)',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  }
 }));
 
 type TileProps = {
@@ -89,6 +131,9 @@ type TileProps = {
 
   actions?: ReactElement
   centerActions?: boolean
+
+  toggleExpand?: boolean
+  expandedContent?: ReactElement
 }
 
 type StyleProps = {

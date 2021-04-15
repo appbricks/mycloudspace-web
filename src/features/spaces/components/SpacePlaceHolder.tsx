@@ -26,7 +26,7 @@ const SpacePlaceHolder: FunctionComponent<SpacePlaceHolderProps> = () => {
         title: 'Your Space Here'
       }}
       insetHeader
-      width={320}
+      width={300}
       actions={<>
         <IconButton disabled
           size='small'
@@ -64,8 +64,8 @@ export default SpacePlaceHolder;
 
 const useStyles = makeStyles((theme: Theme) => ({  
   body: {
-    paddingRight: '15px',
-    paddingLeft: '15px',
+    paddingRight: '10px',
+    paddingLeft: '10px',
   }
 }));
 
