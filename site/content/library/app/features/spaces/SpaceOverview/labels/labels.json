@@ -1,0 +1,36 @@
+{
+  "labels": [
+    {
+      "id": "spaceProvider",
+      "text": "Cloud Provider"
+    },
+    {
+      "id": "spaceType",
+      "text": "Type"
+    },
+    {
+      "id": "spaceStatus",
+      "text": "Status"
+    },
+    {
+      "id": "spaceClients",
+      "text": "Clients Connected"
+    },
+    {
+      "id": "spaceEstCost",
+      "text": "Est. Cloud Cost"
+    },
+    {
+      "id": "spaceTime",
+      "text": "Run Time"
+    },
+    {
+      "id": "spaceBytesIn",
+      "text": "Data Usage In"
+    },
+    {
+      "id": "spaceBytesOut",
+      "text": "Data Usage Out"
+    }
+  ]
+}

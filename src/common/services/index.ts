@@ -1,10 +1,15 @@
-import Amplify, { Auth } from 'aws-amplify';
+import Amplify, { Auth, API } from 'aws-amplify';
 import awsconfig from '../../aws-exports';
 
 import { 
-  AuthService,
-  AwsProvider 
+  AuthService, 
+  AwsProvider as AuthAwsProvider 
 } from '@appbricks/identity';
+import { 
+  UserSpaceService, 
+  AwsProvider as UserSpaceAwsProvider 
+} from '@appbricks/user-space';
+
 import { 
   LOG_LEVEL_TRACE, 
   Logger, 
@@ -13,6 +18,24 @@ import {
 } from '@appbricks/utils';
 
 import { isBrowser } from '../utils';
+
+// need to use id token as auth header instead of access
+// token as the access token defaults to scope 
+// 'aws.cognito.signin.user.admin' which does not provide
+// the user id claim required by the API.
+// 
+// https://github.com/aws-amplify/amplify-js/issues/1370
+// https://github.com/aws-amplify/amplify-js/issues/3326
+Amplify.configure({
+  API: {
+    graphql_headers: async () => {
+      const session = await Auth.currentSession();
+      return {
+        Authorization: session.getIdToken().getJwtToken(),
+      };
+    },
+  },
+});
 
 const initServices = (): Services => {
 
@@ -54,18 +77,22 @@ const initServices = (): Services => {
 
   // Configure AWS Amplify services
   Amplify.configure(awsconfig);
-  const authService = new AuthService(new AwsProvider(Auth));
+
+  const authService = new AuthService(new AuthAwsProvider(Auth));
   authService.init();
 
   return {
-    authService
+    authService,
+    userspaceService: new UserSpaceService(new UserSpaceAwsProvider(API))
   };
 }
 
 export const {
-  authService
+  authService,
+  userspaceService
 } = initServices();
 
 type Services = {
   authService: AuthService
+  userspaceService: UserSpaceService
 }

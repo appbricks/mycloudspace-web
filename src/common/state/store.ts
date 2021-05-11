@@ -17,7 +17,10 @@ import {
 import app from './app';
 import content from './content';
 import notifications from './notifications';
-import { authService } from '../services';
+import { 
+  authService,
+  userspaceService
+} from '../services';
 
 // store state reducers
 const rootReducer = combineReducers({
@@ -28,11 +31,14 @@ const rootReducer = combineReducers({
   // notifications state
   notifications,
   // auth state
-  auth: authService.reducer()
+  auth: authService.reducer(),
+  // userspace state
+  userspace: userspaceService.reducer()
 });
 // rxjs service action handlers
 const rootEpic = combineEpicsWithGlobalErrorHandler([
-  ...authService.epics()
+  ...authService.epics(),
+  ...userspaceService.epics()
 ]);
 
 export default function configureAppStore(preloadedState?: RootState): Store {

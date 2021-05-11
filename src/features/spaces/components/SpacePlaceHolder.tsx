@@ -3,8 +3,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Icon } from '@iconify/react';
-import android from '@iconify/icons-mdi/android';
-import ios from '@iconify/icons-mdi/apple-ios';
 import apple from '@iconify/icons-mdi/apple';
 import microsoft from '@iconify/icons-mdi/microsoft';
 import linux from '@iconify/icons-mdi/linux';
@@ -52,7 +50,7 @@ const SpacePlaceHolder: FunctionComponent<SpacePlaceHolderProps> = () => {
       centerActions
     >
       <div className={styles.body}>
-        <Typography>
+        <Typography component='div'>
           <StaticContent body={content['no-spaces-placeholder'].body} />
         </Typography>
       </div>
