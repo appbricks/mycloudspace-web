@@ -106,10 +106,11 @@ jobs:
     - name: Terraform Init
       run: |
         export TF_VAR_env=${GITHUB_REF##*/}
-        terraform init \
+        echo terraform init \
           -backend-config="key=website/appbricks-io_${TF_VAR_env}" \
           -backend-config="bucket=appbricks-tfstate-useast1" \
           build/publish
+        exit 1
 
     # Generates an execution plan for Terraform
     - name: Site update plan (Terraform Plan)
