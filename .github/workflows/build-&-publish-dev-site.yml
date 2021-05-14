@@ -61,7 +61,7 @@ jobs:
 
     - name: Build site content
       run: |
-        sudo chown -R `whoami` /home/runner/
+        sudo chown -R `whoami` /home/runner
         npm install
         gatsby build
 
