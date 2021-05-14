@@ -47,6 +47,7 @@ jobs:
         node-version: ${{ github.event.inputs.nodeVersion }}
 
     - run: sudo npm install -g gatsby-cli
+    - run: sudo rm -fr /home/runner/.config
 
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
