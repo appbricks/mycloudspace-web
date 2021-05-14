@@ -57,14 +57,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: theme.spacing(1),
     flexGrow: 1   
   },
-  paper: {
-    height: 200,
-    width: 300,
-    backgroundColor: '#e0e0e0'
-  },
-  content: {
-    color: '#000000'
-  }
 }));
 
 type SpacesHomeProps = 
