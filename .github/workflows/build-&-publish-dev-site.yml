@@ -47,7 +47,6 @@ jobs:
         node-version: ${{ github.event.inputs.nodeVersion }}
 
     - run: sudo npm install -g gatsby-cli
-    - run: sudo rm -fr /home/runner/.config
 
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
@@ -61,7 +60,8 @@ jobs:
       run: build/cognito/configure.sh -e ${ENV}
 
     - name: Build site content
-      run: |        
+      run: |
+        sudo su -
         npm install
         gatsby build
 
