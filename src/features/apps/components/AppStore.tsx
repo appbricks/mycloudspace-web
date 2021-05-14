@@ -3,7 +3,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Icon } from '@iconify/react';
-import store from '@iconify/icons-mdi/store-plus';
+import store from '@iconify/icons-mdi/store';
 
 import { StaticContent } from '../../../common/components/content';
 
@@ -37,7 +37,7 @@ const AppStore: FunctionComponent<AppStoreProps> = () => {
       </>}
     >
       <div className={styles.body}>
-        <Typography>
+        <Typography component='div'>
           <StaticContent body={content['app-store-info'].body} />
         </Typography>
       </div>

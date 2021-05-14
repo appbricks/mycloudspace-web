@@ -62,7 +62,7 @@ const DevicePlaceHolder: FunctionComponent<DevicePlaceHolderProps> = () => {
       centerActions
     >
       <div className={styles.body}>
-        <Typography>
+        <Typography component='div'>
           <StaticContent body={content['no-devices-placeholder'].body} />
         </Typography>
       </div>
