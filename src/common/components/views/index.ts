@@ -1,2 +1,10 @@
 import Tile from './Tile';
-export { Tile };
+import TableList from './TableList';
+export { Tile, TableList };
+
+export type { 
+  ColumnProps, 
+  RowData,
+  Column,
+  Value
+} from './TableList'
