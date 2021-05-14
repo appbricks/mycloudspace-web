@@ -45,6 +45,8 @@ const initServices = (): Services => {
     setLogLevel(LOG_LEVEL_TRACE);
   }
 
+  Logger.debug('initServices', 'Initializing service modules');
+
   // setup persistence service's backend
   setLocalStorageImpl({
     setItem: (key: string, value: string): Promise<void> => {
