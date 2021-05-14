@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
+import Divider from '@material-ui/core/Divider';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Icon } from '@iconify/react';
 import spaceOwner from '@iconify/icons-mdi/account-supervisor-outline';
@@ -16,6 +17,8 @@ import { Tile } from '../../../common/components/views';
 
 import { useLabelContent } from '../../../common/state/content';
 
+import SpaceUserList from './SpaceUserList';
+
 const SpaceOverview: FunctionComponent<SpaceOverviewProps> = ({ userSpace }) => {
   const styles = useStyles();
   const labelLookup = useLabelContent();
@@ -28,14 +31,13 @@ const SpaceOverview: FunctionComponent<SpaceOverviewProps> = ({ userSpace }) => 
         title: space!.spaceName
       }}
       width={300}
+      toggleExpand
+      toggleExpandLabel='Users'
+      expandedContent={<>
+        <SpaceUserList />
+      </>}
     >
       <div className={styles.body}>
-        <Typography component='div'>
-          <strong>{labelLookup('spaceProvider').text()}: </strong>{space!.iaas}
-        </Typography>
-        <Typography component='div'>
-          <strong>{labelLookup('spaceType').text()}: </strong>{space!.recipe}
-        </Typography>
         <Typography component='div'>
           <strong>{labelLookup('spaceStatus').text()}: </strong>
           <Chip 
@@ -43,7 +45,7 @@ const SpaceOverview: FunctionComponent<SpaceOverviewProps> = ({ userSpace }) => 
             label={space!.status || 'unknown'}
           />
         </Typography>
-        <br></br>
+        <Divider variant="fullWidth" className={styles.divider} />
         <Typography component='div'>
           <strong>{labelLookup('spaceClients').text()}: </strong>10
         </Typography>
@@ -52,6 +54,13 @@ const SpaceOverview: FunctionComponent<SpaceOverviewProps> = ({ userSpace }) => 
         </Typography>
         <Typography component='div'>
           <strong>{labelLookup('spaceBytesOut').text()}: </strong>{bytesToSize(10000000)}
+        </Typography>
+        <Divider variant="fullWidth" className={styles.divider} />
+        <Typography component='div'>
+          <strong>{labelLookup('spaceProvider').text()}: </strong>{space!.iaas}
+        </Typography>
+        <Typography component='div'>
+          <strong>{labelLookup('spaceType').text()}: </strong>{space!.recipe}
         </Typography>
       </div>
     </Tile>
@@ -65,6 +74,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingRight: '10px',
     paddingLeft: '10px',
     textAlign: 'left'
+  },
+  divider: {
+    marginBlockStart: '0.5rem',
+    marginBlockEnd: '0.5rem'
   }
 }));
 
