@@ -21,5 +21,5 @@ variable "publish_path" {
 locals {
   env_domain = (length(var.env) == 0
     ? var.domain 
-    : join(".", list(var.env, var.domain)))
+    : join(".", tolist([var.env, var.domain])))
 }

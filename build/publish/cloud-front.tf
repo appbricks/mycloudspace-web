@@ -60,7 +60,7 @@ resource "aws_cloudfront_distribution" "appbricks-io" {
   }
 
   aliases = (length(var.env) == 0
-    ? list(local.env_domain, "www.${local.env_domain}")
+    ? tolist([local.env_domain, "www.${local.env_domain}"])
     : [])
 
   dynamic "viewer_certificate" {
