@@ -17,5 +17,5 @@ export {
   Input,
   PasswordInput,
   PhoneNumberInput,
-  CodeInput
+  CodeInput,
 }
