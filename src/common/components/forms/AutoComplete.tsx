@@ -13,7 +13,7 @@ import {
 
 import cx from 'clsx';
 
-export default function AutoCompleteP<T>(props: AutoCompleteProps<T>) {
+export default function AutoComplete<T>(props: AutoCompleteProps<T>) {
   const localClasses = useStyles();
 
   const [state, setState] = React.useState<State<T>>({ 
@@ -38,6 +38,7 @@ export default function AutoCompleteP<T>(props: AutoCompleteProps<T>) {
     handleOptionsSelected,
 
     loading,
+    disabled,
 
     className,
     classes,
@@ -49,14 +50,15 @@ export default function AutoCompleteP<T>(props: AutoCompleteProps<T>) {
       freeSolo
       multiple
       size='small'
-      loading={true}
+      loading={loading}
+      disabled={disabled}
       value={selected}
       inputValue={inputValue}
       options={options}
       open={open}
       noOptionsText='No users found'
       getOptionSelected={optionEquals}
-      getOptionDisabled={o => !!selected.find(s => optionEquals(o, s))}
+      getOptionDisabled={o => !!o.disabled}
       getOptionLabel={
         option => option.value 
           ? optionLabel(option)
@@ -114,7 +116,8 @@ export default function AutoCompleteP<T>(props: AutoCompleteProps<T>) {
         });
       }}
       onClose={(event, reason) => {
-        if (reason != 'select-option') {
+        const r = reason as string; // fix typescript warning
+        if (r != 'select-option' && r != 'remove-option') {
           setState({ 
             ...state,
             open: false,
@@ -187,9 +190,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     '&[aria-selected="true"]': {
       backgroundColor: '#3f51b5',
       color: '#ffffff'
-    },
-    '&[aria-disabled="true"]': {
-      opacity: 1
     }
   }
 }));
@@ -208,6 +208,7 @@ type AutoCompleteProps<T = any> = {
   handleOptionsSelected: (selected: T[]) => void
 
   loading?: boolean
+  disabled?: boolean
 
   className?: string
   classes?: any
@@ -217,6 +218,7 @@ type AutoCompleteProps<T = any> = {
 export type Option<T> = {
   navOption?: ListPageNav
   value?: T
+  disabled?: boolean
 }
 
 export enum ListPageNav {
