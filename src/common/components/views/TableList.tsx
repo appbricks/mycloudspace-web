@@ -14,7 +14,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import { 
   makeStyles,
-  createStyles, 
   lighten,
   Theme
 } from '@material-ui/core/styles';
@@ -24,14 +23,16 @@ import { Icon } from '@iconify/react';
 import cx from 'clsx';
 
 const TableList: FunctionComponent<TableListProps> = ({
+  keyField,
   columns,
   rows,
+  tableRowFormat,
   toolbarProps
 }) => {
   const classes = useStyles();
 
   // first column provides selection keys
-  const keyCol = columns[0].id;
+  const keyCol = keyField || columns[0].id;
 
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<Column>(keyCol);
@@ -91,7 +92,7 @@ const TableList: FunctionComponent<TableListProps> = ({
     <div className={classes.root}>
       {toolbarProps && 
         <ExTableToolbar selected={selected} {...toolbarProps} />
-      }      
+      }
       <TableContainer>
         <Table
           className={classes.table}
@@ -111,19 +112,21 @@ const TableList: FunctionComponent<TableListProps> = ({
           <TableBody>
             {stableSort<RowData>(rows, getComparator<Column>(order, orderBy))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => {
+              .map((row, rowIndex) => {
                 const isItemSelected = isSelected(row[keyCol]);
-                const labelId = `enhanced-table-checkbox-${index}`;
+                const labelId = `enhanced-table-checkbox-${rowIndex}`;
+
+                const cellFormats = tableRowFormat ? tableRowFormat(columns, row) : {};
                 
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row[keyCol])}
+                    key={rowIndex}
+                    tabIndex={-1}
                     role='checkbox'
                     aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row.user}
                     selected={isItemSelected}
+                    onClick={(event) => handleClick(event, row[keyCol])}
                   >
                     <TableCell key={-1} padding='checkbox'>
                       <Checkbox
@@ -142,6 +145,7 @@ const TableList: FunctionComponent<TableListProps> = ({
                             id={labelId} 
                             scope='row' 
                             padding='none'
+                            className={cellFormats[col.id]}
                           >
                             {row[col.id]}
                           </TableCell>
@@ -151,7 +155,11 @@ const TableList: FunctionComponent<TableListProps> = ({
                           <TableCell 
                             key={colIndex} 
                             align={col.align || 'left'} 
-                            className={cx(!col.disablePadding && classes.sizeSmall)}
+                            className={cx(
+                              cellFormats[col.id], 
+                              !col.disablePadding && classes.sizeSmall
+                            )}
+                            style={col.rowCellStyle}
                           >
                             {row[col.id]}
                           </TableCell>    
@@ -163,7 +171,7 @@ const TableList: FunctionComponent<TableListProps> = ({
               })}
             {emptyRows > 0 && (
               <TableRow style={{ height: 33 * emptyRows }}>
-                <TableCell colSpan={6} />
+                <TableCell colSpan={columns.length+1} />
               </TableRow>
             )}
           </TableBody>
@@ -175,6 +183,10 @@ const TableList: FunctionComponent<TableListProps> = ({
         count={rows.length}
         rowsPerPage={rowsPerPage}
         page={page}
+        labelDisplayedRows={
+          ({ from, to, count }) =>  count > 0 
+            ? `${from}-${to} of ${count !== -1 ? count : `more than ${to}`}` : ''
+        }
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
@@ -184,46 +196,49 @@ const TableList: FunctionComponent<TableListProps> = ({
 
 export default TableList;
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: '100%',
-      '& .Mui-selected': {
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    width: '100%',
+    '& .Mui-selected': {
+      backgroundColor: theme.palette.type === 'light'
+        ? lighten(theme.palette.primary.light, 0.75)
+        : theme.palette.primary.dark,
+      '&:hover': {
         backgroundColor: theme.palette.type === 'light'
-          ? lighten(theme.palette.primary.light, 0.75)
-          : theme.palette.primary.dark,
-        '&:hover': {
-          backgroundColor: theme.palette.type === 'light'
-            ? lighten(theme.palette.primary.light, 0.5)
-            : lighten(theme.palette.primary.dark, 0.25),
-        }
+          ? lighten(theme.palette.primary.light, 0.5)
+          : lighten(theme.palette.primary.dark, 0.25),
       }
-    },
-    table: {
-      minWidth: 600,
-      borderRight: '1px solid rgba(224, 224, 224, 1)',
-      borderLeft: '1px solid rgba(224, 224, 224, 1)',
-    },
-    highlight:
-      theme.palette.type === 'light'
-        ? {
-            color: theme.palette.primary.main,
-            backgroundColor: lighten(theme.palette.primary.light, 0.85),
-          }
-        : {
-            color: theme.palette.text.primary,
-            backgroundColor: theme.palette.primary.dark,
-          },
-    // TableCell CSS override
-    sizeSmall: {
-      padding: '6px 0px 6px 8px',
     }
-  }),
-);
+  },
+  table: {
+    minWidth: 600,
+    borderRight: '2px solid rgba(224, 224, 224, 1)',
+    borderBottom: '2px solid rgba(224, 224, 224, 1)',
+    borderLeft: '2px solid rgba(224, 224, 224, 1)',
+  },
+  highlight:
+    theme.palette.type === 'light'
+      ? {
+          color: theme.palette.primary.main,
+          backgroundColor: lighten(theme.palette.primary.light, 0.85),
+        }
+      : {
+          color: theme.palette.text.primary,
+          backgroundColor: theme.palette.primary.dark,
+        },
+  // TableCell CSS override
+  sizeSmall: {
+    padding: '6px 0px 6px 8px',
+  }
+}));
 
 type TableListProps = {
+  keyField?: string
   columns: ColumnProps[]
   rows: RowData[]
+
+  // row format callback
+  tableRowFormat?: (columns: ColumnProps[], row: RowData) => RowCellClasses
 
   // title and actions to show in toolbar
   toolbarProps?: TableToolbarProps
@@ -234,8 +249,11 @@ export interface ColumnProps {
   disablePadding: boolean
   align?: 'left' | 'right' | 'center'
   label: string
+  headCellStyle?: React.CSSProperties
+  rowCellStyle?: React.CSSProperties
 }
 export type RowData = { [ column: string ]: Value }
+export type RowCellClasses = { [ column: string ]: string }
 export type Column = string
 export type Value = string | number
 
@@ -276,6 +294,7 @@ const ExTableHead: FunctionComponent<ExTableHeadProps> = ({
             padding={col.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === col.id ? order : false}
             className={cx(classes.tableHeadCell, !col.disablePadding && classes.sizeSmall)}
+            style={col.headCellStyle}
           >
             <TableSortLabel
               active={orderBy === col.id}
@@ -306,34 +325,32 @@ interface ExTableHeadProps {
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const useTableHeadStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    tableHeadCell: {
-      fontWeight: 'bold',
-      backgroundColor: 'rgba(224, 224, 224, 1)'
-    },
-    visuallyHidden: {
-      border: 0,
-      clip: 'rect(0 0 0 0)',
-      height: 1,
-      margin: -1,
-      overflow: 'hidden',
-      padding: 0,
-      position: 'absolute',
-      top: 20,
-      width: 1,
-    },
-    // TableCell CSS override
-    sizeSmall: {
-      padding: '6px 0px 6px 8px',
-    }
-  }),
-);
+const useTableHeadStyles = makeStyles((theme: Theme) => ({
+  tableHeadCell: {
+    fontWeight: 'bold',
+    backgroundColor: 'rgba(224, 224, 224, 1)'
+  },
+  visuallyHidden: {
+    border: 0,
+    clip: 'rect(0 0 0 0)',
+    height: 1,
+    margin: -1,
+    overflow: 'hidden',
+    padding: 0,
+    position: 'absolute',
+    top: 20,
+    width: 1,
+  },
+  // TableCell CSS override
+  sizeSmall: {
+    padding: '6px 0px 6px 8px',
+  }
+}));
 
 const ExTableToolbar: FunctionComponent<ExTableToolbarProps> = ({ 
   selected,
   title,
-  defaultActions,
+  defaultActions = [],
   selectedItemName,
   selectedItemActions
 }) => {
@@ -395,7 +412,7 @@ interface ExTableToolbarProps extends TableToolbarProps {
 
 export interface TableToolbarProps {
   title: string
-  defaultActions: UnselectedToolBarAction[]
+  defaultActions?: UnselectedToolBarAction[]
   selectedItemName: string
   selectedItemActions: SelectedToolBarAction[]
 }
@@ -415,28 +432,26 @@ type SelectedToolBarAction = ToolBarAction & {
   handler: (selected: Value[]) => void
 }
 
-const useToolbarStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      paddingLeft: theme.spacing(1),
-      paddingRight: theme.spacing(1),
-    },
-    highlight:
-      theme.palette.type === 'light'
-        ? {
-            color: theme.palette.primary.main,
-            backgroundColor: lighten(theme.palette.primary.light, 0.75),
-          }
-        : {
-            color: theme.palette.text.primary,
-            backgroundColor: theme.palette.primary.dark,
-          },
-    title: {
-      flex: '1 1 100%',
-      textAlign: 'left'
-    },
-  }),
-);
+const useToolbarStyles = makeStyles((theme: Theme) => ({
+  root: {
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1),
+  },
+  highlight:
+    theme.palette.type === 'light'
+      ? {
+          color: theme.palette.primary.main,
+          backgroundColor: lighten(theme.palette.primary.light, 0.75),
+        }
+      : {
+          color: theme.palette.text.primary,
+          backgroundColor: theme.palette.primary.dark,
+        },
+  title: {
+    flex: '1 1 100%',
+    textAlign: 'left'
+  },
+}));
 
 // Sorting
 

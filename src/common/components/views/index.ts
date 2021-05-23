@@ -5,6 +5,7 @@ export { Tile, TableList };
 export type { 
   ColumnProps, 
   RowData,
+  RowCellClasses,
   Column,
   Value
 } from './TableList'
