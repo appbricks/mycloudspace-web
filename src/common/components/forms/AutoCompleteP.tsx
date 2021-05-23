@@ -1,6 +1,7 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import PageBackIcon from '@material-ui/icons/ArrowBack';
 import PageForwardIcon from '@material-ui/icons/ArrowForward';
 
@@ -24,6 +25,9 @@ export default function AutoCompleteP<T>(props: AutoCompleteProps<T>) {
 
   // component props
   const { 
+    inputLabel,
+    inputPlaceholder,
+
     options, 
     optionLabel,
     optionEquals,
@@ -32,6 +36,8 @@ export default function AutoCompleteP<T>(props: AutoCompleteProps<T>) {
     handleOptionPageNext,
     handleOptionPagePrev,
     handleOptionsSelected,
+
+    loading,
 
     className,
     classes,
@@ -43,6 +49,7 @@ export default function AutoCompleteP<T>(props: AutoCompleteProps<T>) {
       freeSolo
       multiple
       size='small'
+      loading={true}
       value={selected}
       inputValue={inputValue}
       options={options}
@@ -60,8 +67,17 @@ export default function AutoCompleteP<T>(props: AutoCompleteProps<T>) {
         <TextField
           {...params}
           variant='outlined'
-          label='Invite Users to Space'
-          placeholder='username'
+          label={inputLabel}
+          placeholder={inputPlaceholder}
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: (
+              <React.Fragment>
+                {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                {params.InputProps.endAdornment}
+              </React.Fragment>
+            ),
+          }}
         />
       )}
       renderOption={(option) => (
@@ -70,7 +86,7 @@ export default function AutoCompleteP<T>(props: AutoCompleteProps<T>) {
             ? optionLabel(option)
             : option.navOption == ListPageNav.prev
               ? <PageBackIcon style={{ marginLeft: -5 }}/>
-              : <PageForwardIcon style={{ marginLeft: -5 }}/>
+              : <PageForwardIcon style={{ marginLeft: 'auto' }}/>
           }
         </React.Fragment>
       )}
@@ -81,6 +97,16 @@ export default function AutoCompleteP<T>(props: AutoCompleteProps<T>) {
         option: localClasses.autoCompleteOption
       }, classes)}
       style={style}
+      onFocus={() => {
+        // handle intermittent case
+        // where option list does not
+        // popup when focus returns to
+        // control
+        setState({ 
+          ...state,
+          open: true
+        });
+      }}
       onOpen={() => {
         setState({ 
           ...state,
@@ -89,12 +115,12 @@ export default function AutoCompleteP<T>(props: AutoCompleteProps<T>) {
       }}
       onClose={(event, reason) => {
         if (reason != 'select-option') {
-          handleUpdateOptionList('');
           setState({ 
             ...state,
             open: false,
             inputValue: ''
           });
+          handleUpdateOptionList('');
         }
       }}
       onChange={(event, values, reason) => {
@@ -169,6 +195,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type AutoCompleteProps<T = any> = {
+  inputLabel: string
+  inputPlaceholder: string
+
   options: Option<T>[]
   optionLabel: (option: Option<T>) => string
   optionEquals: (o1: Option<T>, o2: Option<T>) => boolean
@@ -177,6 +206,8 @@ type AutoCompleteProps<T = any> = {
   handleOptionPagePrev: () => void
   handleOptionPageNext: () => void
   handleOptionsSelected: (selected: T[]) => void
+
+  loading?: boolean
 
   className?: string
   classes?: any
