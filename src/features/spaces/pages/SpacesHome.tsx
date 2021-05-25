@@ -32,13 +32,13 @@ const SpacesHome: FunctionComponent<SpacesHomeProps> = (props) => {
         ? userSpaces.filter(userSpace => userSpace.isOwner)
           .map((userSpace, index) =>
             <Grid key={index} item>
-              <SpaceOverview userSpace={userSpace} />
+              <SpaceOverview key={index} userSpace={userSpace} />
             </Grid>) 
           .concat(
             userSpaces.filter(userSpace => !userSpace.isOwner)
             .map((userSpace, index) =>
               <Grid key={index+userSpaces.length} item>
-                <SpaceOverview userSpace={userSpace} />
+                <SpaceOverview key={index} userSpace={userSpace} />
               </Grid>) 
           )
         : 

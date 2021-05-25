@@ -10,24 +10,26 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import { 
+
+import {
   makeStyles,
   lighten,
   Theme
 } from '@material-ui/core/styles';
 
-import { Icon } from '@iconify/react';
-
 import cx from 'clsx';
+
+import IconButton from '../../../common/components/forms/IconButton';
 
 const TableList: FunctionComponent<TableListProps> = ({
   keyField,
   columns,
   rows,
   tableRowFormat,
-  toolbarProps
+  toolbarProps,
+  selected,
+  handleRowsSelected,
+  disabled
 }) => {
   const classes = useStyles();
 
@@ -36,7 +38,6 @@ const TableList: FunctionComponent<TableListProps> = ({
 
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<Column>(keyCol);
-  const [selected, setSelected] = React.useState<Value[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -49,10 +50,10 @@ const TableList: FunctionComponent<TableListProps> = ({
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       const newSelecteds = rows.map(n => n[keyCol]);
-      setSelected(newSelecteds);
+      handleRowsSelected(newSelecteds);
       return;
     }
-    setSelected([]);
+    handleRowsSelected([]);
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, keyValue: Value) => {
@@ -72,7 +73,7 @@ const TableList: FunctionComponent<TableListProps> = ({
       );
     }
 
-    setSelected(newSelected);
+    handleRowsSelected(newSelected);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -90,8 +91,11 @@ const TableList: FunctionComponent<TableListProps> = ({
 
   return (
     <div className={classes.root}>
-      {toolbarProps && 
-        <ExTableToolbar selected={selected} {...toolbarProps} />
+      {toolbarProps &&
+        <ExTableToolbar 
+          numSelected={selected.length}
+          {...toolbarProps}
+        />
       }
       <TableContainer>
         <Table
@@ -101,6 +105,7 @@ const TableList: FunctionComponent<TableListProps> = ({
           aria-label='enhanced table'
         >
           <ExTableHead
+            disabled={disabled}
             order={order}
             orderBy={orderBy}
             numSelected={selected.length}
@@ -117,7 +122,7 @@ const TableList: FunctionComponent<TableListProps> = ({
                 const labelId = `enhanced-table-checkbox-${rowIndex}`;
 
                 const cellFormats = tableRowFormat ? tableRowFormat(columns, row) : {};
-                
+
                 return (
                   <TableRow
                     hover
@@ -126,24 +131,28 @@ const TableList: FunctionComponent<TableListProps> = ({
                     role='checkbox'
                     aria-checked={isItemSelected}
                     selected={isItemSelected}
-                    onClick={(event) => handleClick(event, row[keyCol])}
+                    onClick={(event) => disabled || handleClick(event, row[keyCol])}
                   >
-                    <TableCell key={-1} padding='checkbox'>
+                    <TableCell 
+                      key={-1} 
+                      padding='checkbox'
+                    >
                       <Checkbox
                         size='small'
                         checked={isItemSelected}
                         inputProps={{ 'aria-labelledby': labelId }}
                         color='primary'
+                        disabled={disabled}
                       />
                     </TableCell>
                     {columns.map((col, colIndex) => {
                       if (colIndex === 0) {
                         return (
-                          <TableCell 
-                            key={colIndex} 
-                            component='th' 
-                            id={labelId} 
-                            scope='row' 
+                          <TableCell
+                            key={colIndex}
+                            component='th'
+                            id={labelId}
+                            scope='row'
                             padding='none'
                             className={cellFormats[col.id]}
                           >
@@ -152,20 +161,20 @@ const TableList: FunctionComponent<TableListProps> = ({
                         );
                       } else {
                         return (
-                          <TableCell 
-                            key={colIndex} 
-                            align={col.align || 'left'} 
+                          <TableCell
+                            key={colIndex}
+                            align={col.align || 'left'}
                             className={cx(
-                              cellFormats[col.id], 
+                              cellFormats[col.id],
                               !col.disablePadding && classes.sizeSmall
                             )}
                             style={col.rowCellStyle}
                           >
                             {row[col.id]}
-                          </TableCell>    
+                          </TableCell>
                         );
                       }
-                    })}                    
+                    })}
                   </TableRow>
                 );
               })}
@@ -184,7 +193,7 @@ const TableList: FunctionComponent<TableListProps> = ({
         rowsPerPage={rowsPerPage}
         page={page}
         labelDisplayedRows={
-          ({ from, to, count }) =>  count > 0 
+          ({ from, to, count }) =>  count > 0
             ? `${from}-${to} of ${count !== -1 ? count : `more than ${to}`}` : ''
         }
         onChangePage={handleChangePage}
@@ -242,6 +251,11 @@ type TableListProps = {
 
   // title and actions to show in toolbar
   toolbarProps?: TableToolbarProps
+
+  selected: Value[]
+  handleRowsSelected: (selected: Value[]) => void
+
+  disabled?: boolean
 }
 
 export interface ColumnProps {
@@ -260,13 +274,14 @@ export type Value = string | number
 // Table Header
 
 const ExTableHead: FunctionComponent<ExTableHeadProps> = ({
-  order, 
-  orderBy, 
-  numSelected, 
+  disabled,
+  order,
+  orderBy,
+  numSelected,
   rowCount,
-  columns, 
+  columns,
   onRequestSort,
-  onSelectAllClick 
+  onSelectAllClick
 }) => {
   const classes = useTableHeadStyles();
 
@@ -283,14 +298,15 @@ const ExTableHead: FunctionComponent<ExTableHeadProps> = ({
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
-            inputProps={{ 'aria-label': 'select all users' }}           
-            color='primary' 
+            inputProps={{ 'aria-label': 'select all users' }}
+            color='primary'
+            disabled={disabled}
           />
         </TableCell>
         {columns.map(col => (
           <TableCell
             key={col.id}
-            align={col.align || 'left'} 
+            align={col.align || 'left'}
             padding={col.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === col.id ? order : false}
             className={cx(classes.tableHeadCell, !col.disablePadding && classes.sizeSmall)}
@@ -316,6 +332,7 @@ const ExTableHead: FunctionComponent<ExTableHeadProps> = ({
 }
 
 interface ExTableHeadProps {
+  disabled?: boolean
   order: Order
   orderBy: string
   numSelected: number
@@ -347,16 +364,30 @@ const useTableHeadStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-const ExTableToolbar: FunctionComponent<ExTableToolbarProps> = ({ 
-  selected,
+const ExTableToolbar: FunctionComponent<ExTableToolbarProps> = ({
   title,
   defaultActions = [],
   selectedItemName,
-  selectedItemActions
+  selectedItemActions,
+  numSelected
 }) => {
   const classes = useToolbarStyles();
 
-  const numSelected = selected.length;
+  const renderToolbarAction = (action: ToolbarAction, index: number) => {    
+    return (!!action.hidden ||
+      <IconButton
+        key={index} 
+        ariaLabel={action.ariaLabel}
+        tooltip={action.tooltip}
+        color='primary'
+        size='small'
+        icon={action.icon}
+        disabled={action.disabled}
+        processing={action.processing}
+        handleClick={() => action.handler()}
+      />
+    );
+  }
 
   return (
     <Toolbar
@@ -370,36 +401,14 @@ const ExTableToolbar: FunctionComponent<ExTableToolbarProps> = ({
           <Typography className={classes.title} color='inherit' variant='subtitle1' component='div'>
             &nbsp;&nbsp;{numSelected} {selectedItemName}{numSelected > 1 ? 's': ''} selected
           </Typography>
-          {selectedItemActions.map((action, index) => (
-            <Tooltip key={index} title={action.tooltip}>
-              <IconButton 
-                aria-label={action.ariaLabel} 
-                color='primary' 
-                size='small'
-                onClick={() => action.handler(selected)}
-              >
-                <Icon width={24} icon={action.icon} />
-              </IconButton>
-            </Tooltip>
-          ))}          
+          {selectedItemActions.map(renderToolbarAction)}
         </>
       ) : (
         <>
           <Typography className={classes.title} variant='h6' id='tableTitle' component='div'>
             &nbsp;&nbsp;{title}
           </Typography>
-          {defaultActions.map((action, index) => (
-            <Tooltip key={index} title={action.tooltip}>
-              <IconButton 
-                aria-label={action.ariaLabel} 
-                color='primary' 
-                size='small'
-                onClick={() => action.handler()}
-              >
-                <Icon width={24} icon={action.icon} />
-              </IconButton>
-            </Tooltip>
-          ))}          
+          {defaultActions.map(renderToolbarAction)}
         </>
       )}
     </Toolbar>
@@ -407,29 +416,24 @@ const ExTableToolbar: FunctionComponent<ExTableToolbarProps> = ({
 };
 
 interface ExTableToolbarProps extends TableToolbarProps {
-  selected: Value[]
+  numSelected: number
 }
 
 export interface TableToolbarProps {
   title: string
-  defaultActions?: UnselectedToolBarAction[]
+  defaultActions?: ToolbarAction[]
   selectedItemName: string
-  selectedItemActions: SelectedToolBarAction[]
+  selectedItemActions: ToolbarAction[]
 }
 
-type ToolBarAction = {
+type ToolbarAction = {
   icon: object
   tooltip: string
   ariaLabel: string
-  handler: (selected: Value[]) => void
-}
-
-type UnselectedToolBarAction = ToolBarAction & {
+  hidden?: boolean
+  disabled?: boolean
+  processing?: boolean
   handler: () => void
-}
-
-type SelectedToolBarAction = ToolBarAction & {
-  handler: (selected: Value[]) => void
 }
 
 const useToolbarStyles = makeStyles((theme: Theme) => ({

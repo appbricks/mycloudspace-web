@@ -3,15 +3,13 @@ import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
 import Divider from '@material-ui/core/Divider';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { Icon } from '@iconify/react';
-import spaceOwner from '@iconify/icons-mdi/account-supervisor-outline';
-import spaceUser from '@iconify/icons-mdi/account-outline';
-import spaceRunning from '@iconify/icons-mdi/cloud-sync-outline';
-import spaceStopped from '@iconify/icons-mdi/account-outline';
 
 import { bytesToSize } from '@appbricks/utils';
 
-import { SpaceUser } from '@appbricks/user-space';
+import { 
+  SpaceUser,
+  SpaceStatus
+} from '@appbricks/user-space';
 
 import { Tile } from '../../../common/components/views';
 
@@ -23,27 +21,24 @@ const SpaceOverview: FunctionComponent<SpaceOverviewProps> = ({ userSpace }) => 
   const styles = useStyles();
   const labelLookup = useLabelContent();
 
-  const { space } = userSpace;
+  const { space, isOwner } = userSpace;
 
   return (
     <Tile 
       header={{
         title: space!.spaceName
       }}
-      width={300}
-      toggleExpand
+      width={350}
+      toggleExpand={isOwner as boolean}
       toggleExpandLabel='Users'
       expandedContent={<>
-        <SpaceUserList />
+        <SpaceUserList space={space!} />
       </>}
     >
       <div className={styles.body}>
         <Typography component='div'>
           <strong>{labelLookup('spaceStatus').text()}: </strong>
-          <Chip 
-            size='small'
-            label={space!.status || 'unknown'}
-          />
+          <StatusChip status={space!.status} />
         </Typography>
         <Divider variant="fullWidth" className={styles.divider} />
         <Typography component='div'>
@@ -84,3 +79,43 @@ const useStyles = makeStyles((theme: Theme) => ({
 type SpaceOverviewProps = {
   userSpace: SpaceUser
 }
+
+const StatusChip: FunctionComponent<StatusChipProps> = (props) => {
+  const classes = useStatusChipStyles(props);
+
+  return <Chip 
+    size='small'
+    label={props.status || 'unknown'}
+    className={classes.statusChip}
+  />;
+}
+
+type StatusChipProps = {
+  status?: SpaceStatus | null
+}
+
+const useStatusChipStyles = makeStyles((theme: Theme) => ({  
+  statusChip: (props: StatusChipProps) => {
+    let color: string | undefined = undefined;
+    let backgroundColor: string | undefined = undefined;
+    
+    switch (props.status) {
+      case SpaceStatus.undeployed:
+        backgroundColor = '#bfc0c0';
+        break;
+      case SpaceStatus.running:
+        color = '#ffffff';
+        backgroundColor = '#28965a';
+        break;
+      case SpaceStatus.pending:
+        color = '#ffffff';
+        backgroundColor = '#ff570a';
+        break;
+      case SpaceStatus.shutdown:
+        color = '#ffffff';
+        backgroundColor = '#ef0000'
+        break;
+    }
+    return { color, backgroundColor }
+  }
+}));

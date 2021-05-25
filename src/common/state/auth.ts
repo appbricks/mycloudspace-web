@@ -1,6 +1,6 @@
 import { RootState } from './store';
 
-// session selector
+// auth selector
 const Auth = (state: RootState) => state.auth;
 export default Auth;
 

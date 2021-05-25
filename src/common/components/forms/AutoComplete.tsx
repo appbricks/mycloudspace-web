@@ -17,17 +17,17 @@ export default function AutoComplete<T>(props: AutoCompleteProps<T>) {
   const localClasses = useStyles();
 
   const [state, setState] = React.useState<State<T>>({ 
-    selected: [], 
     open: false, 
     inputValue: '' 
   });
-  const { selected, open, inputValue } = state;
+  const { open, inputValue } = state;
 
   // component props
   const { 
     inputLabel,
     inputPlaceholder,
 
+    selected,
     options, 
     optionLabel,
     optionEquals,
@@ -150,12 +150,7 @@ export default function AutoComplete<T>(props: AutoCompleteProps<T>) {
         const selected = values.filter(
           value => !!(value as Option<T>).value
         ) as Option<T>[];
-        handleOptionsSelected(selected.map(value => value.value as T));
-
-        setState({ 
-          ...state,
-          selected
-        });  
+        handleOptionsSelected(selected);
       }}
       onInputChange={(event, value, reason) => {
         if (reason == 'input') {
@@ -198,6 +193,7 @@ type AutoCompleteProps<T = any> = {
   inputLabel: string
   inputPlaceholder: string
 
+  selected: Option<T>[]
   options: Option<T>[]
   optionLabel: (option: Option<T>) => string
   optionEquals: (o1: Option<T>, o2: Option<T>) => boolean
@@ -205,7 +201,7 @@ type AutoCompleteProps<T = any> = {
   handleUpdateOptionList: (filter: string) => void
   handleOptionPagePrev: () => void
   handleOptionPageNext: () => void
-  handleOptionsSelected: (selected: T[]) => void
+  handleOptionsSelected: (selected: Option<T>[]) => void
 
   loading?: boolean
   disabled?: boolean
@@ -227,8 +223,6 @@ export enum ListPageNav {
 }
 
 type State<T> = {
-  selected: Option<T>[]
-
   open: boolean
   inputValue: string
 }
