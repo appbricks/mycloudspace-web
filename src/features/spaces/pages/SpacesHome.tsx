@@ -7,12 +7,14 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import {
+  UserAccessStatus,
   UserSpaceService,
   UserSpaceStateProps,
   UserSpaceActionProps
 } from '@appbricks/user-space';
 
 import SpaceOverview from '../components/SpaceOverview';
+import SpaceInvite from '../components/SpaceInvite';
 import SpacePlaceHolder from '../components/SpacePlaceHolder';
 
 const SpacesHome: FunctionComponent<SpacesHomeProps> = (props) => {
@@ -35,10 +37,14 @@ const SpacesHome: FunctionComponent<SpacesHomeProps> = (props) => {
               <SpaceOverview key={index} userSpace={userSpace} />
             </Grid>) 
           .concat(
-            userSpaces.filter(userSpace => !userSpace.isOwner)
-            .map((userSpace, index) =>
+            userSpaces.filter(userSpace => !userSpace.isOwner && 
+              (
+                userSpace.status == UserAccessStatus.pending ||
+                userSpace.status == UserAccessStatus.active
+              )
+            ).map((userSpace, index) =>
               <Grid key={index+userSpaces.length} item>
-                <SpaceOverview key={index} userSpace={userSpace} />
+                <SpaceInvite key={index} userSpace={userSpace} />
               </Grid>) 
           )
         : 
