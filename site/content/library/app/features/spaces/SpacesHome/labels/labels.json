@@ -31,6 +31,18 @@
     {
       "id": "spaceBytesOut",
       "text": "Data Usage Out"
+    },
+    {
+      "id": "spaceAccessType",
+      "text": "Admin Access"
+    },
+    {
+      "id": "spaceEgressAllowed",
+      "text": "Internet Egress Node"
+    },
+    {
+      "id": "spaceInvitation",
+      "text": "Invitation"
     }
   ]
 }
