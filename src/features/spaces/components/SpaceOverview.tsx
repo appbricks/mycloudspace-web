@@ -1,21 +1,18 @@
 import React, { FunctionComponent } from 'react';
 import Typography from '@material-ui/core/Typography';
-import Chip from '@material-ui/core/Chip';
 import Divider from '@material-ui/core/Divider';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { bytesToSize } from '@appbricks/utils';
 
-import { 
-  SpaceUser,
-  SpaceStatus
-} from '@appbricks/user-space';
+import { SpaceUser } from '@appbricks/user-space';
 
 import { Tile } from '../../../common/components/views';
 
 import { useLabelContent } from '../../../common/state/content';
 
 import SpaceUserList from './SpaceUserList';
+import StatusChip from './StatusChip';
 
 const SpaceOverview: FunctionComponent<SpaceOverviewProps> = ({ userSpace }) => {
   const styles = useStyles();
@@ -79,43 +76,3 @@ const useStyles = makeStyles((theme: Theme) => ({
 type SpaceOverviewProps = {
   userSpace: SpaceUser
 }
-
-const StatusChip: FunctionComponent<StatusChipProps> = (props) => {
-  const classes = useStatusChipStyles(props);
-
-  return <Chip 
-    size='small'
-    label={props.status || 'unknown'}
-    className={classes.statusChip}
-  />;
-}
-
-type StatusChipProps = {
-  status?: SpaceStatus | null
-}
-
-const useStatusChipStyles = makeStyles((theme: Theme) => ({  
-  statusChip: (props: StatusChipProps) => {
-    let color: string | undefined = undefined;
-    let backgroundColor: string | undefined = undefined;
-    
-    switch (props.status) {
-      case SpaceStatus.undeployed:
-        backgroundColor = '#bfc0c0';
-        break;
-      case SpaceStatus.running:
-        color = '#ffffff';
-        backgroundColor = '#28965a';
-        break;
-      case SpaceStatus.pending:
-        color = '#ffffff';
-        backgroundColor = '#ff570a';
-        break;
-      case SpaceStatus.shutdown:
-        color = '#ffffff';
-        backgroundColor = '#ef0000'
-        break;
-    }
-    return { color, backgroundColor }
-  }
-}));
