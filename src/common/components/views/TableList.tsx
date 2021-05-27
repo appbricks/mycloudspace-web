@@ -383,7 +383,7 @@ const ExTableToolbar: FunctionComponent<ExTableToolbarProps> = ({
         size='small'
         icon={action.icon}
         disabled={action.disabled}
-        processing={action.processing}
+        wipIndicator={action.processing}
         handleClick={() => action.handler()}
       />
     );
