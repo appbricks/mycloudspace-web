@@ -40,7 +40,7 @@ const Tile: FunctionComponent<TileProps> = ({
 
   const [expanded, setExpanded] = React.useState(false);
 
-  const handleExpandClick = () => {
+  const handleExpand = () => {
     setExpanded(!expanded);
   };
 
@@ -64,23 +64,25 @@ const Tile: FunctionComponent<TileProps> = ({
                     clickable
                     color='primary'
                     variant='outlined'
-                    onClick={handleExpandClick}
-                    onDelete={handleExpandClick}
+                    onClick={handleExpand}
+                    onDelete={handleExpand}
                     deleteIcon={
                       <ExpandMoreIcon 
                         className={cx(
+                          styles.actionButtonColor,
                           styles.expand, 
                           {[styles.expandOpen]: expanded}
                         )}
                       />
                     }
+                    className={styles.actionButtonColor}
                   />
                 : <IconButton
                     size='small'
                     className={cx(
                       styles.expandToggleOnly, 
                       styles.expand, {[styles.expandOpen]: expanded})}
-                    onClick={handleExpandClick}
+                    onClick={handleExpand}
                   >
                     <ExpandMoreIcon />
                   </IconButton>
@@ -128,6 +130,10 @@ const useStyles = makeStyles(theme => ({
     justifyContent: props.centerActions ? 'space-around': 'flex-end',
     marginInlineEnd: theme.spacing(0.5)
   }),
+  actionButtonColor: {
+    color: theme.palette.primary.main,
+    borderColor: theme.palette.primary.main
+  },
   expand: {
     bottom: theme.spacing(1.4),
     right: theme.spacing(2),
