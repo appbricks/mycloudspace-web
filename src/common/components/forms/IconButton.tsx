@@ -16,7 +16,7 @@ const IconButton: FunctionComponent<IconButtonProps> = ({
   tooltip,
   icon,
   disabled,
-  processing,
+  wipIndicator,
   handleClick,
   ...other
 }) => {
@@ -28,7 +28,7 @@ const IconButton: FunctionComponent<IconButtonProps> = ({
           {...other}
         >
           <Icon width={24} icon={icon} />
-          {processing && <ProcessingIndicator />}
+          {wipIndicator && <ProcessingIndicator />}
         </MuiIconButton>
       : <Tooltip title={tooltip}>
           <MuiIconButton
@@ -37,7 +37,7 @@ const IconButton: FunctionComponent<IconButtonProps> = ({
             {...other}
           >
             <Icon width={24} icon={icon} />
-            {processing && <ProcessingIndicator />}
+            {wipIndicator && <ProcessingIndicator />}
           </MuiIconButton>
         </Tooltip>
     }
@@ -54,7 +54,7 @@ type IconButtonProps = MuiIconButtonProps & {
   icon: object
 
   disabled?: boolean
-  processing?: boolean
+  wipIndicator?: boolean
 
   handleClick: () => void
 }

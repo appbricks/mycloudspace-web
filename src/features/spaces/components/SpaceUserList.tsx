@@ -13,7 +13,6 @@ import deactivateUser from '@iconify/icons-mdi/account-off-outline';
 import removeUser from '@iconify/icons-mdi/delete';
 
 import { 
-  Action,
   ActionStatus,
   ActionStatusTracker 
 } from '@appbricks/utils';
@@ -274,7 +273,7 @@ const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
           size='small'
           icon={addUser}
           disabled={optionsSelected.length === 0 || sendingInvite}
-          processing={sendingInvite}
+          wipIndicator={sendingInvite}
           className={classes.addUserButton}
           handleClick={handleAddUsers}
         />
