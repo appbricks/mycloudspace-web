@@ -220,7 +220,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
   },
   table: {
-    minWidth: 600,
     borderRight: '2px solid rgba(224, 224, 224, 1)',
     borderBottom: '2px solid rgba(224, 224, 224, 1)',
     borderLeft: '2px solid rgba(224, 224, 224, 1)',

@@ -329,40 +329,40 @@ const columns: ColumnProps[] = [
   {
     id: 'userName',
     label: 'User',
-    disablePadding: true,
-    headCellStyle: { minWidth: '5rem' }
+    disablePadding: true
   },
   {
     id: 'fullName',
     label: 'Name',
     disablePadding: false,
-    headCellStyle: { minWidth: '5rem' }
+    headCellStyle: { minWidth: '5rem' },
+    rowCellStyle: { whiteSpace: 'nowrap', paddingRight: '1rem' }
   },
   {
     id: 'status',
     label: 'Status',
     disablePadding: false,
-    headCellStyle: { minWidth: '4rem' }
+    headCellStyle: { whiteSpace: 'nowrap' }
   },
   {
     id: 'lastConnectTime',
     label: 'Last Seen',
     disablePadding: false,
     align: 'right',
-    headCellStyle: { minWidth: '7rem' }
+    headCellStyle: { whiteSpace: 'nowrap' }
   },
   {
     id: 'bytesUploaded',
     label: 'Data Usage Up',
     disablePadding: false,
     align: 'right',
-    headCellStyle: { minWidth: '9rem' }
+    headCellStyle: {whiteSpace: 'nowrap' }
   },
   {
     id: 'bytesDownloaded',
     label: 'Data Usage Down',
     disablePadding: false,
     align: 'right',
-    headCellStyle: { minWidth: '11rem' }
+    headCellStyle: {whiteSpace: 'nowrap' }
   },
 ];
