@@ -215,7 +215,7 @@ const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
         rows={rows}
         tableRowFormat={tableRowFormat}
         toolbarProps={{
-          title: 'Space Users',
+          title: 'Guest Users',
           selectedItemName: 'user',
           selectedItemActions: [
             {

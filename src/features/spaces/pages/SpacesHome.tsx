@@ -4,7 +4,11 @@ import React, {
 } from 'react';
 import { connect } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+
+import { 
+  makeStyles, 
+  Theme 
+} from '@material-ui/core/styles';
 
 import {
   UserAccessStatus,

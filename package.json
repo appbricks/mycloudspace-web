@@ -31,7 +31,7 @@
   "dependencies": {
     "@appbricks/data-validators": "^0.0.2",
     "@appbricks/identity": "^0.0.11",
-    "@appbricks/user-space": "^0.0.8",
+    "@appbricks/user-space": "^0.0.9",
     "@appbricks/utils": "^0.0.17",
     "@iconify/icons-mdi": "^1.1.15",
     "@iconify/react": "^1.1.4",

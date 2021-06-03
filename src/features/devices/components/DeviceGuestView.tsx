@@ -1,38 +1,21 @@
 import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { bytesToSize } from '@appbricks/utils';
 
-import { 
-  DeviceUser,
-  UserAccessStatus
-} from '@appbricks/user-space';
+import { DeviceUser } from '@appbricks/user-space';
 
 import { Tile } from '../../../common/components/views';
 
 import { useLabelContent } from '../../../common/state/content';
-import UserSpace from '../../../common/state/userspace';
 
-import DeviceUserList from './DeviceUserList';
-
-const DeviceOverview: FunctionComponent<DeviceOverviewProps> = ({ userDevice }) => {
+const DeviceGuestView: FunctionComponent<DeviceGuestViewProps> = ({ userDevice }) => {
   const styles = useStyles();
   const labelLookup = useLabelContent();
 
   const { device, isOwner } = userDevice;
-
-  const userspace = useSelector(UserSpace);
-  const numAccessRequests = userspace!.deviceUsers[device!.deviceID!]
-    .reduce(
-      (numAccessRequests, deviceUser) => 
-        deviceUser.status == UserAccessStatus.pending 
-          ? numAccessRequests + 1 
-          : numAccessRequests, 
-      0
-    );
 
   return (
     <Tile 
@@ -40,12 +23,6 @@ const DeviceOverview: FunctionComponent<DeviceOverviewProps> = ({ userDevice }) 
         title: device!.deviceName
       }}
       width={350}
-      toggleExpand={isOwner as boolean}
-      toggleExpandLabel='Users'
-      toggleBadgeValue={numAccessRequests}
-      expandedContent={<>
-        <DeviceUserList device={device!} />
-      </>}
     >
       <div className={styles.body}>
         <Typography component='div'>
@@ -62,9 +39,6 @@ const DeviceOverview: FunctionComponent<DeviceOverviewProps> = ({ userDevice }) 
           <strong>{labelLookup('deviceConnectedSpace').text()}: </strong>ken's space #1
         </Typography>
         <Typography component='div'>
-          <strong>{labelLookup('deviceConnectedUser').text()}: </strong>Jane Doe
-        </Typography>
-        <Typography component='div'>
           <strong>{labelLookup('deviceBytesIn').text()}: </strong>{bytesToSize(10000000)}
         </Typography>
         <Typography component='div'>
@@ -75,7 +49,7 @@ const DeviceOverview: FunctionComponent<DeviceOverviewProps> = ({ userDevice }) 
   );
 }
 
-export default DeviceOverview;
+export default DeviceGuestView;
 
 const useStyles = makeStyles((theme: Theme) => ({  
   body: {
@@ -89,6 +63,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-type DeviceOverviewProps = {
+type DeviceGuestViewProps = {
   userDevice: DeviceUser
 }

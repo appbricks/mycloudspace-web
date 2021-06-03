@@ -11,6 +11,7 @@ import Collapse from '@material-ui/core/Collapse';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Chip from '@material-ui/core/Chip';
+import Badge from '@material-ui/core/Badge';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import cx from 'clsx';
 
@@ -25,6 +26,7 @@ const Tile: FunctionComponent<TileProps> = ({
   centerActions,
   toggleExpand,
   toggleExpandLabel,
+  toggleBadgeValue = 0,
   expandedContent,
   children,
   ...other
@@ -67,13 +69,15 @@ const Tile: FunctionComponent<TileProps> = ({
                     onClick={handleExpand}
                     onDelete={handleExpand}
                     deleteIcon={
-                      <ExpandMoreIcon 
-                        className={cx(
-                          styles.actionButtonColor,
-                          styles.expand, 
-                          {[styles.expandOpen]: expanded}
-                        )}
-                      />
+                      <Badge badgeContent={toggleBadgeValue} color='primary' classes={{colorPrimary: styles.badgeColor}}>
+                        <ExpandMoreIcon 
+                          className={cx(
+                            styles.actionButtonColor,
+                            styles.expand, 
+                            {[styles.expandOpen]: expanded}
+                          )}
+                        />
+                      </Badge>
                     }
                     className={styles.actionButtonColor}
                   />
@@ -134,6 +138,10 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.primary.main,
     borderColor: theme.palette.primary.main
   },
+  badgeColor: {
+    color: '#ffffff',
+    backgroundColor: theme.palette.info.main
+  },
   expand: {
     bottom: theme.spacing(1.4),
     right: theme.spacing(2),
@@ -165,6 +173,7 @@ type TileProps = {
 
   toggleExpand?: boolean
   toggleExpandLabel?: string
+  toggleBadgeValue?: number
   expandedContent?: ReactElement
 }
 
