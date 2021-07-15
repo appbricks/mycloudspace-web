@@ -34,7 +34,7 @@ const DevicesHome: FunctionComponent<DevicesHomeProps> = (props) => {
 
   return (
     <Grid container justify='flex-start' spacing={2} className={styles.root}>
-      {userDevices 
+      {userDevices && userDevices.length > 0
         ? userDevices.filter(userDevice => userDevice.isOwner)
           .map((userDevice, index) =>
             <Grid key={index} item>

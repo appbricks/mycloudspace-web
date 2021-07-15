@@ -34,7 +34,7 @@ const SpacesHome: FunctionComponent<SpacesHomeProps> = (props) => {
 
   return (
     <Grid container justify='flex-start' spacing={2} className={styles.root}>
-      {userSpaces 
+      {userSpaces && userSpaces.length > 0
         ? userSpaces.filter(userSpace => userSpace.isOwner)
           .map((userSpace, index) =>
             <Grid key={index} item>
