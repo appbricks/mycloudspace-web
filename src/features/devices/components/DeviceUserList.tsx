@@ -16,7 +16,8 @@ import {
 } from '@appbricks/utils';
 
 import {
-  Device,
+  DeviceUser,
+  DeviceDetail,
   UserAccessStatus,
   UserSpaceService,
   UserSpaceStateProps,
@@ -30,6 +31,7 @@ import {
   ColumnProps,
   RowData,
   RowCellClasses,
+  TableRowFormat,
   Value
 } from '../../../common/components/views';
 
@@ -42,7 +44,7 @@ const DeviceUserList: FunctionComponent<DeviceUserListProps> = (props) => {
   const [rowsSelected, setRowsSelected] = React.useState<Value[]>([]);
 
   const { device, userspace, userspaceService } = props;
-  const rows = userspace!.deviceUsers[device.deviceID!];
+  const rows = device.users;
 
   const actionStatusTracker = React.useRef(new ActionStatusTracker());
 
@@ -62,24 +64,31 @@ const DeviceUserList: FunctionComponent<DeviceUserListProps> = (props) => {
     });
   };
 
-  const tableRowFormat = (columns: ColumnProps[], row: RowData): RowCellClasses => {
+  const tableRowFormat = (columns: ColumnProps[], row: RowData): TableRowFormat => {
 
-    const rowCellClasses = {} as RowCellClasses;
+    const cellFormats = {} as RowCellClasses;
     const status = row['status'];
 
+    const deviceUser = (row['deviceUser'] as unknown) as DeviceUser;
+    const rowIsDisabled = !!deviceUser.isOwner;
+
     columns.forEach(col => {
-      switch (status) {
-        case 'pending': {
-          rowCellClasses[col.id] = classes.pendingUserCell;
-          break;
-        }
-        case 'inactive': {
-          rowCellClasses[col.id] = classes.inactiveUserCell;
-          break;
-        }
+      if (rowIsDisabled) {
+        cellFormats[col.id] = classes.disabledUserCell;
+      } else {
+        switch (status) {
+          case 'pending': {
+            cellFormats[col.id] = classes.pendingUserCell;
+            break;
+          }
+          case 'inactive': {
+            cellFormats[col.id] = classes.inactiveUserCell;
+            break;
+          }
+        }  
       }
     });
-    return rowCellClasses;
+    return { rowIsDisabled, cellFormats };
   };
 
   const untrackAction = (actionStatus: ActionStatus) => {
@@ -123,7 +132,7 @@ const DeviceUserList: FunctionComponent<DeviceUserListProps> = (props) => {
         rows={rows}
         tableRowFormat={tableRowFormat}
         toolbarProps={{
-          title: 'Guest Users',
+          title: 'Device Users',
           selectedItemName: 'user',
           selectedItemActions: [
             {
@@ -186,12 +195,15 @@ const useStyles = makeStyles((theme: Theme) => ({
   inactiveUserCell: {
     color: '#b5b5b5'
   },
+  disabledUserCell: {
+    color: 'rgba(0, 0, 0, 0.38)'
+  },
 }));
 
 type DeviceUserListProps =
   UserSpaceStateProps &
   UserSpaceActionProps & {
-  device: Device
+  device: DeviceDetail
 }
 
 // Data
@@ -219,18 +231,18 @@ const columns: ColumnProps[] = [
     id: 'lastAccessTime',
     label: 'Last Active',
     disablePadding: false,
-    align: 'right',
-    headCellStyle: { whiteSpace: 'nowrap' }
+    headCellStyle: { whiteSpace: 'nowrap' },
+    rowCellStyle: { whiteSpace: 'nowrap' }
   },
   {
-    id: 'bytesUploaded',
+    id: 'dataUsageOut',
     label: 'Data Usage Up',
     disablePadding: false,
     align: 'right',
     headCellStyle: {whiteSpace: 'nowrap' }
   },
   {
-    id: 'bytesDownloaded',
+    id: 'dataUsageIn',
     label: 'Data Usage Down',
     disablePadding: false,
     align: 'right',

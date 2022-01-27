@@ -30,7 +30,7 @@ const DevicesHome: FunctionComponent<DevicesHomeProps> = (props) => {
     userspaceService!.getUserDevices();
   }, [])
 
-  const userDevices = userspace && userspace.userDevices;
+  const userDevices = userspace?.userDevices;
 
   return (
     <Grid container justify='flex-start' spacing={2} className={styles.root}>
@@ -38,7 +38,11 @@ const DevicesHome: FunctionComponent<DevicesHomeProps> = (props) => {
         ? userDevices.filter(userDevice => userDevice.isOwner)
           .map((userDevice, index) =>
             <Grid key={index} item>
-              <DeviceOverview key={index} userDevice={userDevice} />
+              <DeviceOverview 
+                key={index} 
+                device={userspace.devices[userDevice.device!.deviceID!]} 
+                isOwner={userDevice.isOwner!}
+              />
             </Grid>) 
           .concat(
             userDevices.filter(userDevice => !userDevice.isOwner && 

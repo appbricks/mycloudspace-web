@@ -38,7 +38,11 @@ const SpacesHome: FunctionComponent<SpacesHomeProps> = (props) => {
         ? userSpaces.filter(userSpace => userSpace.isOwner)
           .map((userSpace, index) =>
             <Grid key={index} item>
-              <SpaceOverview key={index} userSpace={userSpace} />
+              <SpaceOverview 
+                key={index} 
+                space={userspace.spaces[userSpace.space!.spaceID!]} 
+                isOwner={userSpace.isOwner!} 
+              />
             </Grid>) 
           .concat(
             userSpaces.filter(userSpace => !userSpace.isOwner && 

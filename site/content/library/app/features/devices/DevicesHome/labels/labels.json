@@ -5,20 +5,24 @@
       "text": "Type of Device"
     },
     {
+      "id": "deviceVersion",
+      "text": "version"
+    },
+    {
       "id": "deviceAdmin",
-      "text": "Device Administrator"
+      "text": "Admin"
     },
     {
       "id": "deviceLastAccess",
       "text": "Last Accessed"
     },
     {
-      "id": "deviceConnectedSpace",
-      "text": "Connected to Space"
+      "id": "deviceAccessedBy",
+      "text": "Acccessed by"
     },
     {
-      "id": "deviceConnectedUser",
-      "text": "Connected by User"
+      "id": "deviceConnectedTo",
+      "text": "Connected to"
     },
     {
       "id": "deviceBytesIn",

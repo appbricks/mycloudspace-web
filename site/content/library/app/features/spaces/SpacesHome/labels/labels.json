@@ -9,6 +9,18 @@
       "text": "Type"
     },
     {
+      "id": "spaceLocation",
+      "text": "Location"
+    },
+    {
+      "id": "spaceVersion",
+      "text": "Version"
+    },
+    {
+      "id": "spaceOwner",
+      "text": "Owner"
+    },
+    {
       "id": "spaceStatus",
       "text": "Status"
     },

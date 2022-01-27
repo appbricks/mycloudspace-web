@@ -33,9 +33,9 @@ export default function AutoComplete<T>(props: AutoCompleteProps<T>) {
     optionEquals,
 
     handleUpdateOptionList,
+    handleOptionsSelected,
     handleOptionPageNext,
     handleOptionPagePrev,
-    handleOptionsSelected,
 
     loading,
     disabled,
@@ -136,11 +136,11 @@ export default function AutoComplete<T>(props: AutoCompleteProps<T>) {
           if (pageNavValue) {
             switch (pageNavValue.navOption) {
               case ListPageNav.prev: {
-                handleOptionPagePrev();
+                handleOptionPagePrev!();
                 return;
               }
               case ListPageNav.next: {
-                handleOptionPageNext();
+                handleOptionPageNext!();
                 return;
               }
             }            
@@ -199,9 +199,9 @@ type AutoCompleteProps<T = any> = {
   optionEquals: (o1: Option<T>, o2: Option<T>) => boolean
 
   handleUpdateOptionList: (filter: string) => void
-  handleOptionPagePrev: () => void
-  handleOptionPageNext: () => void
   handleOptionsSelected: (selected: Option<T>[]) => void
+  handleOptionPagePrev?: () => void
+  handleOptionPageNext?: () => void
 
   loading?: boolean
   disabled?: boolean

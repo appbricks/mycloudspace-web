@@ -3,27 +3,26 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { bytesToSize } from '@appbricks/utils';
+import { SpaceDetail } from '@appbricks/user-space';
 
-import { SpaceUser } from '@appbricks/user-space';
-
-import { Tile } from '../../../common/components/views';
+import { 
+  Text,
+  Tile 
+} from '../../../common/components/views';
 
 import { useLabelContent } from '../../../common/state/content';
 
 import SpaceUserList from './SpaceUserList';
 import StatusChip from './StatusChip';
 
-const SpaceOverview: FunctionComponent<SpaceOverviewProps> = ({ userSpace }) => {
+const SpaceOverview: FunctionComponent<SpaceOverviewProps> = ({ space, isOwner }) => {
   const styles = useStyles();
   const labelLookup = useLabelContent();
-
-  const { space, isOwner } = userSpace;
 
   return (
     <Tile 
       header={{
-        title: space!.spaceName
+        title: space.name
       }}
       width={350}
       toggleExpand={isOwner as boolean}
@@ -35,24 +34,33 @@ const SpaceOverview: FunctionComponent<SpaceOverviewProps> = ({ userSpace }) => 
       <div className={styles.body}>
         <Typography component='div'>
           <strong>{labelLookup('spaceStatus').text()}: </strong>
-          <StatusChip status={space!.status} />
+          <StatusChip status={space.status} />
         </Typography>
         <Divider variant="fullWidth" className={styles.divider} />
         <Typography component='div'>
-          <strong>{labelLookup('spaceClients').text()}: </strong>10
+          <strong>{labelLookup('spaceClients').text()}: </strong><Text data={space.clientsConnected.toString()}/>
         </Typography>
         <Typography component='div'>
-          <strong>{labelLookup('spaceBytesIn').text()}: </strong>{bytesToSize(10000000)}
+          <strong>{labelLookup('spaceBytesIn').text()}: </strong><Text data={space.dataUsageIn}/>
         </Typography>
         <Typography component='div'>
-          <strong>{labelLookup('spaceBytesOut').text()}: </strong>{bytesToSize(10000000)}
+          <strong>{labelLookup('spaceBytesOut').text()}: </strong><Text data={space.dataUsageOut}/>
         </Typography>
         <Divider variant="fullWidth" className={styles.divider} />
         <Typography component='div'>
-          <strong>{labelLookup('spaceProvider').text()}: </strong>{space!.iaas}
+          <strong>{labelLookup('spaceProvider').text()}: </strong>{space!.cloudProvider}
         </Typography>
         <Typography component='div'>
-          <strong>{labelLookup('spaceType').text()}: </strong>{space!.recipe}
+          <strong>{labelLookup('spaceType').text()}: </strong>{space!.type}
+        </Typography>
+        <Typography component='div'>
+          <strong>{labelLookup('spaceLocation').text()}: </strong>{space!.location}
+        </Typography>
+        <Typography component='div'>
+          <strong>{labelLookup('spaceVersion').text()}: </strong><Text data={space!.version}/>
+        </Typography>
+        <Typography component='div'>
+          <strong>{labelLookup('spaceOwner').text()}: </strong>{space!.ownerAdmin}
         </Typography>
       </div>
     </Tile>
@@ -74,5 +82,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type SpaceOverviewProps = {
-  userSpace: SpaceUser
+  space: SpaceDetail
+  isOwner: boolean
 }

@@ -40,6 +40,9 @@ const TableList: FunctionComponent<TableListProps> = ({
   const [orderBy, setOrderBy] = React.useState<Column>(keyCol);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  
+  const disabledRows = React.useRef(new Set<Value>());
+  disabledRows.current.clear();
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -47,9 +50,9 @@ const TableList: FunctionComponent<TableListProps> = ({
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelecteds = rows.map(n => n[keyCol]);
+  const handleSelectAllClick = (checked: boolean, wasIndeterminate: boolean) => {
+    if (checked && !wasIndeterminate) {
+      const newSelecteds = rows.filter(v => !disabledRows.current.has(v[keyCol])).map(v => v[keyCol]);
       handleRowsSelected(newSelecteds);
       return;
     }
@@ -121,17 +124,24 @@ const TableList: FunctionComponent<TableListProps> = ({
                 const isItemSelected = isSelected(row[keyCol]);
                 const labelId = `enhanced-table-checkbox-${rowIndex}`;
 
-                const cellFormats = tableRowFormat ? tableRowFormat(columns, row) : {};
+                const { rowIsDisabled, cellFormats } = tableRowFormat 
+                  ? tableRowFormat(columns, row) 
+                  : { rowIsDisabled: false, cellFormats: {} };
+
+                const rowDisabled = disabled || rowIsDisabled;
+                if (rowDisabled) {
+                  disabledRows.current.add(row[keyCol]);
+                }
 
                 return (
                   <TableRow
-                    hover
+                    hover={!rowDisabled}
                     key={rowIndex}
                     tabIndex={-1}
                     role='checkbox'
                     aria-checked={isItemSelected}
                     selected={isItemSelected}
-                    onClick={(event) => disabled || handleClick(event, row[keyCol])}
+                    onClick={(event) => rowDisabled || handleClick(event, row[keyCol])}
                   >
                     <TableCell 
                       key={-1} 
@@ -142,7 +152,7 @@ const TableList: FunctionComponent<TableListProps> = ({
                         checked={isItemSelected}
                         inputProps={{ 'aria-labelledby': labelId }}
                         color='primary'
-                        disabled={disabled}
+                        disabled={rowDisabled}
                       />
                     </TableCell>
                     {columns.map((col, colIndex) => {
@@ -246,7 +256,10 @@ type TableListProps = {
   rows: RowData[]
 
   // row format callback
-  tableRowFormat?: (columns: ColumnProps[], row: RowData) => RowCellClasses
+  tableRowFormat?: (
+    columns: ColumnProps[], 
+    row: RowData
+  ) => TableRowFormat
 
   // title and actions to show in toolbar
   toolbarProps?: TableToolbarProps
@@ -268,7 +281,8 @@ export interface ColumnProps {
 export type RowData = { [ column: string ]: Value }
 export type RowCellClasses = { [ column: string ]: string }
 export type Column = string
-export type Value = string | number
+export type Value = string | number | boolean
+export type TableRowFormat = { rowIsDisabled: boolean, cellFormats: RowCellClasses }
 
 // Table Header
 
@@ -288,15 +302,17 @@ const ExTableHead: FunctionComponent<ExTableHeadProps> = ({
     onRequestSort(event, property);
   };
 
+  const indeterminate = numSelected > 0 && numSelected < rowCount;
+
   return (
     <TableHead>
       <TableRow>
         <TableCell padding='checkbox' className={classes.tableHeadCell}>
           <Checkbox
             size='small'
-            indeterminate={numSelected > 0 && numSelected < rowCount}
+            indeterminate={indeterminate}
             checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
+            onChange={event => onSelectAllClick(event.target.checked, indeterminate)}
             inputProps={{ 'aria-label': 'select all users' }}
             color='primary'
             disabled={disabled}
@@ -338,7 +354,7 @@ interface ExTableHeadProps {
   rowCount: number
   columns: ColumnProps[]
   onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onSelectAllClick: (checked: boolean, wasIndeterminate: boolean) => void
 }
 
 const useTableHeadStyles = makeStyles((theme: Theme) => ({
@@ -463,7 +479,7 @@ type Order = 'asc' | 'desc';
 function getComparator<Key extends keyof any>(
   order: Order,
   orderBy: Key,
-): (a: { [key in Key]: number | string }, b: { [key in Key]: number | string }) => number {
+): (a: { [key in Key]: Value }, b: { [key in Key]: Value }) => number {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);

@@ -1,34 +1,30 @@
 import React, { FunctionComponent } from 'react';
-import { useSelector } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
-import { bytesToSize } from '@appbricks/utils';
-
 import { 
-  DeviceUser,
+  DeviceDetail,
   UserAccessStatus
 } from '@appbricks/user-space';
 
-import { Tile } from '../../../common/components/views';
+import { 
+  Text, 
+  Tile 
+} from '../../../common/components/views';
 
 import { useLabelContent } from '../../../common/state/content';
-import UserSpace from '../../../common/state/userspace';
 
 import DeviceUserList from './DeviceUserList';
 
-const DeviceOverview: FunctionComponent<DeviceOverviewProps> = ({ userDevice }) => {
+const DeviceOverview: FunctionComponent<DeviceOverviewProps> = ({ device, isOwner }) => {
   const styles = useStyles();
   const labelLookup = useLabelContent();
 
-  const { device, isOwner } = userDevice;
-
-  const userspace = useSelector(UserSpace);
-  const numAccessRequests = userspace!.deviceUsers[device!.deviceID!]
+  const numAccessRequests = device.users
     .reduce(
-      (numAccessRequests, deviceUser) => 
-        deviceUser.status == UserAccessStatus.pending 
+      (numAccessRequests, user) => 
+        user.status == UserAccessStatus.pending 
           ? numAccessRequests + 1 
           : numAccessRequests, 
       0
@@ -37,9 +33,9 @@ const DeviceOverview: FunctionComponent<DeviceOverviewProps> = ({ userDevice }) 
   return (
     <Tile 
       header={{
-        title: device!.deviceName
+        title: device.name
       }}
-      width={350}
+      width={390}
       toggleExpand={isOwner as boolean}
       toggleExpandLabel='Users'
       toggleBadgeValue={numAccessRequests}
@@ -49,26 +45,29 @@ const DeviceOverview: FunctionComponent<DeviceOverviewProps> = ({ userDevice }) 
     >
       <div className={styles.body}>
         <Typography component='div'>
-          <strong>{labelLookup('deviceType').text()}: </strong>iPhone
+          <strong>{labelLookup('deviceType').text()}: </strong>{device.type}
         </Typography>
         <Typography component='div'>
-          <strong>{labelLookup('deviceAdmin').text()}: </strong>John Doe
+          <strong>{labelLookup('deviceVersion').text()}: </strong>{device.version}
+        </Typography>
+        <Typography component='div'>
+          <strong>{labelLookup('deviceAdmin').text()}: </strong>{device.ownerAdmin}
         </Typography>
         <Divider variant="fullWidth" className={styles.divider} />
         <Typography component='div'>
-          <strong>{labelLookup('deviceLastAccess').text()}: </strong>6/2/2021 13:36:19 EDT
+          <strong>{labelLookup('deviceLastAccess').text()}: </strong>{device.lastAccessed}
         </Typography>
         <Typography component='div'>
-          <strong>{labelLookup('deviceConnectedSpace').text()}: </strong>ken's space #1
+          <strong>{labelLookup('deviceAccessedBy').text()}: </strong><Text data={device.lastAccessedBy}/>
         </Typography>
         <Typography component='div'>
-          <strong>{labelLookup('deviceConnectedUser').text()}: </strong>Jane Doe
+          <strong>{labelLookup('deviceConnectedTo').text()}: </strong><Text data={device.lastSpaceConnectedTo}/>
         </Typography>
         <Typography component='div'>
-          <strong>{labelLookup('deviceBytesIn').text()}: </strong>{bytesToSize(10000000)}
+          <strong>{labelLookup('deviceBytesIn').text()}: </strong><Text data={device.dataUsageIn}/>
         </Typography>
         <Typography component='div'>
-          <strong>{labelLookup('deviceBytesOut').text()}: </strong>{bytesToSize(10000000)}
+          <strong>{labelLookup('deviceBytesOut').text()}: </strong><Text data={device.dataUsageOut}/>
         </Typography>
       </div>
     </Tile>
@@ -90,5 +89,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type DeviceOverviewProps = {
-  userDevice: DeviceUser
+  device: DeviceDetail
+  isOwner: boolean
 }

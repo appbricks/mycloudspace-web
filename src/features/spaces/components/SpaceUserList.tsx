@@ -18,12 +18,13 @@ import {
 } from '@appbricks/utils';
 
 import {
-  Space,
+  SpaceUser,
+  SpaceDetail,
   UserAccessStatus,
   UserSpaceService,
   UserSpaceStateProps,
   UserSpaceActionProps,
-  UserSearchItem,
+  UserRef,
   USER_SEARCH,
   INVITE_USER_TO_SPACE,
   REMOVE_USER_ACCESS_TO_SPACE,
@@ -42,6 +43,7 @@ import {
   ColumnProps,
   RowData,
   RowCellClasses,
+  TableRowFormat,
   Value
 } from '../../../common/components/views';
 
@@ -56,10 +58,10 @@ const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
   // user list rows selected
   const [rowsSelected, setRowsSelected] = React.useState<Value[]>([]);
   // user invite autocomplete options selected
-  const [optionsSelected, setOptionsSelected] = React.useState<Option<UserSearchItem>[]>([]);
+  const [optionsSelected, setOptionsSelected] = React.useState<Option<UserRef>[]>([]);
 
   const { space, userspace, userspaceService } = props;
-  const rows = userspace!.spaceUsers[space.spaceID!];
+  const rows = space.users;
 
   const actionStatusTracker = React.useRef(new ActionStatusTracker());
 
@@ -71,24 +73,15 @@ const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
   }, [])
 
   // build autocomplete option list
-  let options: Option<UserSearchItem>[] = [];
+  let options: Option<UserRef>[] = [];
   if (userspace!.userSearchResult) {
-    const { result, pageInfo } = userspace!.userSearchResult;
-
-    options = result.map(value => {
+    options = userspace!.userSearchResult.map(value => {
       return {
         value,
         // disable any users that are already associated with the space
         disabled: value.userName == loggedInUser!.username || rows.some(r => r.userID == value.userID)
-      } as Option<UserSearchItem>;
+      } as Option<UserRef>;
     });
-    // add pagination options for option list
-    if (pageInfo.hasPreviousePage) {
-      options.unshift({ navOption: ListPageNav.prev })
-    }
-    if (pageInfo.hasNextPage) {
-      options.push({ navOption: ListPageNav.next })
-    }
   }
 
   const handleDeactivateUsers = () => {
@@ -124,39 +117,36 @@ const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
   };
 
   const handleUpdateOptionList = (filter: string) => {
-    if (userspace!.userSearchResult!.searchPrefix != filter) {
-      actionStatusTracker.current.track(
-        userspaceService!.userSearch(filter, 10)
-      );
-    }
+    actionStatusTracker.current.track(
+      userspaceService!.userSearch(filter, 20)
+    );
   };
 
-  const handleOptionPagePrev = () => {
-    userspaceService!.userSearchPagePrev();
-  };
+  const tableRowFormat = (columns: ColumnProps[], row: RowData): TableRowFormat => {
 
-  const handleOptionPageNext = () => {
-    userspaceService!.userSearchPageNext();
-  };
-
-  const tableRowFormat = (columns: ColumnProps[], row: RowData): RowCellClasses => {
-
-    const rowCellClasses = {} as RowCellClasses;
+    const cellFormats = {} as RowCellClasses;
     const status = row['status'];
+    
+    const spaceUser = (row['spaceUser'] as unknown) as SpaceUser;
+    const rowIsDisabled = !!spaceUser.isOwner;
 
     columns.forEach(col => {
-      switch (status) {
-        case 'pending': {
-          rowCellClasses[col.id] = classes.pendingUserCell;
-          break;
-        }
-        case 'inactive': {
-          rowCellClasses[col.id] = classes.inactiveUserCell;
-          break;
-        }
+      if (rowIsDisabled) {
+        cellFormats[col.id] = classes.disabledUserCell;
+      } else {
+        switch (status) {
+          case 'pending': {
+            cellFormats[col.id] = classes.pendingUserCell;
+            break;
+          }
+          case 'inactive': {
+            cellFormats[col.id] = classes.inactiveUserCell;
+            break;
+          }
+        }  
       }
     });
-    return rowCellClasses;
+    return { rowIsDisabled, cellFormats };
   };
 
   const untrackAction = (actionStatus: ActionStatus) => {
@@ -215,7 +205,7 @@ const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
         rows={rows}
         tableRowFormat={tableRowFormat}
         toolbarProps={{
-          title: 'Guest Users',
+          title: 'Space Users',
           selectedItemName: 'user',
           selectedItemActions: [
             {
@@ -259,8 +249,6 @@ const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
           optionLabel={option => option.value!.userName as string}
           optionEquals={(o1, o2) => !!(o1.value && o2.value && o1.value!.userName == o2.value!.userName)}
           handleUpdateOptionList={handleUpdateOptionList}
-          handleOptionPagePrev={handleOptionPagePrev}
-          handleOptionPageNext={handleOptionPageNext}
           handleOptionsSelected={setOptionsSelected}
           disabled={sendingInvite}
           loading={userSearchCallInProgress}
@@ -315,12 +303,15 @@ const useStyles = makeStyles((theme: Theme) => ({
   inactiveUserCell: {
     color: '#b5b5b5'
   },
+  disabledUserCell: {
+    color: 'rgba(0, 0, 0, 0.38)'
+  }
 }));
 
 type SpaceUserListProps =
   UserSpaceStateProps &
   UserSpaceActionProps & {
-  space: Space
+  space: SpaceDetail
 }
 
 // Data
@@ -352,14 +343,14 @@ const columns: ColumnProps[] = [
     headCellStyle: { whiteSpace: 'nowrap' }
   },
   {
-    id: 'bytesUploaded',
+    id: 'dataUsageOut',
     label: 'Data Usage Up',
     disablePadding: false,
     align: 'right',
     headCellStyle: {whiteSpace: 'nowrap' }
   },
   {
-    id: 'bytesDownloaded',
+    id: 'dataUsageIn',
     label: 'Data Usage Down',
     disablePadding: false,
     align: 'right',

@@ -60,8 +60,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
   },
   disabled: {
-    color: 'rgba(0, 0, 0, 0.26)',
-    borderColor: 'rgba(0, 0, 0, 0.26)'
+    color: 'rgba(0, 0, 0, 0.38)',
+    borderColor: 'rgba(0, 0, 0, 0.38)'
   }
 }));
 
