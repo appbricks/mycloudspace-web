@@ -283,7 +283,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginBottom: '1.9rem'
   },
   formControlWithError: {
-    marginBottom: '0.46rem'
+    marginBottom: '0.40rem'
   },
   firstControl: {
     marginTop: '1.5rem'
