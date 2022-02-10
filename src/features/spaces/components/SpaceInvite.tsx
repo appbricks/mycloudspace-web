@@ -112,7 +112,7 @@ const SpaceInvite: FunctionComponent<SpaceInviteProps> = (props) => {
           </>
         }
       </>}
-      width={350}
+      width={400}
     >
       <div className={styles.body}>
         <Typography component='div'>

@@ -337,23 +337,30 @@ const columns: ColumnProps[] = [
   },
   {
     id: 'lastConnectTime',
-    label: 'Last Seen',
+    label: 'Last Connected',
     disablePadding: false,
-    align: 'right',
-    headCellStyle: { whiteSpace: 'nowrap' }
+    headCellStyle: { whiteSpace: 'nowrap' },
+    rowCellStyle: { whiteSpace: 'nowrap' }
+  },
+  {
+    id: 'lastDeviceConnected',
+    label: 'Device Connected',
+    disablePadding: false,
+    headCellStyle: { whiteSpace: 'nowrap' },
+    rowCellStyle: { whiteSpace: 'nowrap' }
   },
   {
     id: 'dataUsageOut',
     label: 'Data Usage Up',
     disablePadding: false,
     align: 'right',
-    headCellStyle: {whiteSpace: 'nowrap' }
+    headCellStyle: { whiteSpace: 'nowrap' }
   },
   {
     id: 'dataUsageIn',
     label: 'Data Usage Down',
     disablePadding: false,
     align: 'right',
-    headCellStyle: {whiteSpace: 'nowrap' }
+    headCellStyle: { whiteSpace: 'nowrap' }
   },
 ];

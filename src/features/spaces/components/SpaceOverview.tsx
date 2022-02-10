@@ -24,7 +24,7 @@ const SpaceOverview: FunctionComponent<SpaceOverviewProps> = ({ space, isOwner }
       header={{
         title: space.name
       }}
-      width={350}
+      width={400}
       toggleExpand={isOwner as boolean}
       toggleExpandLabel='Users'
       expandedContent={<>
@@ -37,6 +37,9 @@ const SpaceOverview: FunctionComponent<SpaceOverviewProps> = ({ space, isOwner }
           <StatusChip status={space.status} />
         </Typography>
         <Divider variant="fullWidth" className={styles.divider} />
+        <Typography component='div'>
+          <strong>{labelLookup('lastSeen').text()}: </strong><Text data={space.lastSeen}/>
+        </Typography>
         <Typography component='div'>
           <strong>{labelLookup('spaceClients').text()}: </strong><Text data={space.clientsConnected.toString()}/>
         </Typography>

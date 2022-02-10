@@ -22,7 +22,7 @@ const DeviceGuestView: FunctionComponent<DeviceGuestViewProps> = ({ userDevice }
       header={{
         title: device!.deviceName
       }}
-      width={350}
+      width={400}
     >
       <div className={styles.body}>
         <Typography component='div'>

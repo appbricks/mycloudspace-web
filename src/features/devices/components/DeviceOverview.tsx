@@ -35,7 +35,7 @@ const DeviceOverview: FunctionComponent<DeviceOverviewProps> = ({ device, isOwne
       header={{
         title: device.name
       }}
-      width={390}
+      width={400}
       toggleExpand={isOwner as boolean}
       toggleExpandLabel='Users'
       toggleBadgeValue={numAccessRequests}

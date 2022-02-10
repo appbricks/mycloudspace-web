@@ -25,6 +25,10 @@
       "text": "Status"
     },
     {
+      "id": "lastSeen",
+      "text": "Last Seen"
+    },
+    {
       "id": "spaceClients",
       "text": "Clients Connected"
     },

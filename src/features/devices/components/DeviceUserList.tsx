@@ -239,13 +239,13 @@ const columns: ColumnProps[] = [
     label: 'Data Usage Up',
     disablePadding: false,
     align: 'right',
-    headCellStyle: {whiteSpace: 'nowrap' }
+    headCellStyle: { whiteSpace: 'nowrap' }
   },
   {
     id: 'dataUsageIn',
     label: 'Data Usage Down',
     disablePadding: false,
     align: 'right',
-    headCellStyle: {whiteSpace: 'nowrap' }
+    headCellStyle: { whiteSpace: 'nowrap' }
   },
 ];

@@ -16,7 +16,7 @@ const AccountHome: FunctionComponent<AccountHomeProps> = (props) => {
           header={{
             title: 'Basic Free5 Plan'   
           }}
-          width={320}
+          width={400}
           actions={
             <Button disabled size="small" color="primary">
               Upgrade
@@ -29,8 +29,6 @@ const AccountHome: FunctionComponent<AccountHomeProps> = (props) => {
           <div className={styles.list}>
             <Typography align="center">Launch up to 5 spaces.</Typography>
             <Typography align="center">Run up to 5 apps in a space</Typography>
-            <Typography align="center">Invite up to 5 users to a space</Typography>
-            <Typography align="center">Add up to 5 devices to an account</Typography>
             <Typography align="center">Connect up to 5 devices at a time</Typography>
           </div>
         </Tile>

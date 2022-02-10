@@ -26,7 +26,7 @@ const DevicePlaceHolder: FunctionComponent<DevicePlaceHolderProps> = () => {
         title: 'Your Device Here'
       }}
       insetHeader
-      width={330}
+      width={400}
       actions={<>
         <IconButton disabled
           size='small'

@@ -21,7 +21,7 @@ const AppStore: FunctionComponent<AppStoreProps> = () => {
         title: 'Your App Here'
       }}
       insetHeader
-      width={300}
+      width={400}
       actions={<>
         <IconButton disabled
           size='small'

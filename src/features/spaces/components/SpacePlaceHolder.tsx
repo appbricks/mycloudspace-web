@@ -24,7 +24,7 @@ const SpacePlaceHolder: FunctionComponent<SpacePlaceHolderProps> = () => {
         title: 'Your Space Here'
       }}
       insetHeader
-      width={300}
+      width={400}
       actions={<>
         <IconButton disabled
           size='small'
