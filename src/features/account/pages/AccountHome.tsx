@@ -29,7 +29,7 @@ const AccountHome: FunctionComponent<AccountHomeProps> = (props) => {
           <div className={styles.list}>
             <Typography align="center">Launch up to 5 spaces.</Typography>
             <Typography align="center">Run up to 5 apps in a space</Typography>
-            <Typography align="center">Connect up to 5 devices at a time</Typography>
+            <Typography align="center">Connect up to 5 devices to a space</Typography>
           </div>
         </Tile>
       </Grid>
