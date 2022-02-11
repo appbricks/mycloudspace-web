@@ -41,7 +41,7 @@ for f in $(find ${var.publish_path} -not -path '*/\.*' -type f -print); do
   echo -n "$f"
   next=y
 done
-echo "\"}"
+echo -n "\", \"sha1\": \"$(find ${var.publish_path} -type f -print0 | sort -z | xargs -0 sha1sum | sha1sum)\" }"
 SCRIPT
   ]
 }
@@ -49,6 +49,7 @@ SCRIPT
 locals {
   publish_path_prefix_len = length(var.publish_path) + 1
   publish_file_list = split(",", data.external.publish.result.files)
+  publish_file_sha1 = data.external.publish.result.sha1
 
   publish_file_list_ext = [ for file in local.publish_file_list 
     : reverse(split(".", basename(file)))[0] ]
