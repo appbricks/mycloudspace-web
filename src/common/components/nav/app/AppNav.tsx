@@ -39,7 +39,7 @@ const AppNav: FunctionComponent<AppNavProps> = (props) => {
     setValue(newValue);
     
     // dispatch a noop action to 
-    // refresh auth inactivity timer
+    // refresh activity timer
     dispatch(noopAction);
   };
 

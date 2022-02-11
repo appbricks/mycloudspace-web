@@ -9,6 +9,7 @@ import * as _ from 'lodash';
 
 import { useAppConfig } from '../../state/app';
 import Auth, { signoutAction } from '../../state/auth';
+import { noopAction } from '../../services';
 
 import Layout from '../layout/Layout';
 
@@ -76,6 +77,9 @@ const PrivateRoute: FunctionComponent<PrivateRouteProps> = ({
           checkSessionTimedout, auth.session.timeoutIn(auth.user!));
       }
       checkSessionTimedout();
+      // dispatch a noop action to 
+      // refresh activity timer
+      dispatch(noopAction);
 
     } else {
       // we should not be here
