@@ -97,6 +97,10 @@ SCRIPT
     content = md5(join(" ", aws_s3_object.content.*.etag))
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   depends_on = [aws_cloudfront_distribution.appbricks-io]
 }
 
