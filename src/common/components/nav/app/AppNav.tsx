@@ -1,13 +1,29 @@
-import React, { FunctionComponent, ElementType, ReactElement, ChangeEvent, useState } from 'react';
-import { withStyles, makeStyles, useTheme, Theme } from '@material-ui/core/styles';
+import React, { 
+  FunctionComponent, 
+  ElementType, 
+  ReactElement, 
+  ChangeEvent, 
+  useState 
+} from 'react';
+import { 
+  withStyles, 
+  makeStyles, 
+  useTheme, 
+  Theme 
+} from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
+import { useDispatch } from 'react-redux';
+
+import { noopAction } from '../../../services';
 import { useAppConfig } from '../../../state/app';
 import getAppMenu from './getAppMenu';
 
 const AppNav: FunctionComponent<AppNavProps> = (props) => {
+
+  const dispatch = useDispatch();
 
   const appConfig = useAppConfig();
   const menuItems = getAppMenu(appConfig);
@@ -21,6 +37,10 @@ const AppNav: FunctionComponent<AppNavProps> = (props) => {
   // user menu selection
   const handleChange = (event: ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
+    
+    // dispatch a noop action to 
+    // refresh auth inactivity timer
+    dispatch(noopAction);
   };
 
   const a11yProps = (index: number) => ({

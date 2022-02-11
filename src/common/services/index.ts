@@ -14,7 +14,9 @@ import {
   LOG_LEVEL_TRACE, 
   Logger, 
   setLogLevel, 
-  setLocalStorageImpl 
+  setLocalStorageImpl,
+  NOOP,
+  createAction
 } from '@appbricks/utils';
 
 import { isBrowser } from '../utils';
@@ -98,3 +100,6 @@ type Services = {
   authService: AuthService
   userspaceService: UserSpaceService
 }
+
+// global noop action
+export const noopAction = createAction(NOOP);
