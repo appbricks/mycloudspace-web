@@ -3,6 +3,10 @@
 # 
 resource "aws_s3_bucket" "appbricks-io" {
   bucket = local.env_domain
+}
+
+resource "aws_s3_bucket_acl" "appbricks-io" {
+  bucket = aws_s3_bucket.appbricks-io.id
   acl    = "public-read"
 }
 
@@ -58,7 +62,7 @@ locals {
 #
 # Upload website content to s3 bucket
 #
-resource "aws_s3_bucket_object" "content" {
+resource "aws_s3_object" "content" {
   count  = length(local.publish_file_list)
   bucket = aws_s3_bucket.appbricks-io.bucket
 

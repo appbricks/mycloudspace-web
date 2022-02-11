@@ -94,7 +94,7 @@ SCRIPT
   }
 
   triggers = {
-    content = md5(join(" ", aws_s3_bucket_object.content.*.etag))
+    content = md5(join(" ", aws_s3_object.content.*.etag))
   }
 
   depends_on = [aws_cloudfront_distribution.appbricks-io]
