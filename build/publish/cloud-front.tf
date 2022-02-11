@@ -94,8 +94,7 @@ SCRIPT
   }
 
   triggers = {
-    content = local.publish_file_sha1
-    # content = md5(join(" ", aws_s3_object.content.*.etag))
+    content = local.publish_file_list_sha1
   }
 
   lifecycle {

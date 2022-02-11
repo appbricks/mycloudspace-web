@@ -49,7 +49,7 @@ SCRIPT
 locals {
   publish_path_prefix_len = length(var.publish_path) + 1
   publish_file_list = split(",", data.external.publish.result.files)
-  publish_file_sha1 = data.external.publish.result.sha1
+  publish_file_list_sha1 = data.external.publish.result.sha1
 
   publish_file_list_ext = [ for file in local.publish_file_list 
     : reverse(split(".", basename(file)))[0] ]
