@@ -38,15 +38,15 @@ const Notifier: FunctionComponent<NotifierProps> = (props) => {
         }
 
         // do nothing if snackbar exists enqueue 
-        // request was made less than 500ms ago.
+        // request was made less than 50ms ago.
         // this handles the condition when enqueue
         // might not complete if a dom refresh
         // happened around the same time.
         const enqueuedTime = displayed[key];
         if (enqueuedTime) {
           if (enqueuedTime == -1) {
-            // once an notification has been displayed
-            // any dom updates should clear those 
+            // once a notification has been displayed
+            // any dom updates should clear those
             // notifications from state
             dispatch(removeNotification(key));
             return
