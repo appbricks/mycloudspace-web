@@ -28,6 +28,19 @@ export const useActionStatus = (
   useEffect(() => {
     // handle all action statuses in state
     state.status.forEach(actionStatus => {
+      // remove action status from state
+      dispatch(createResetStatusAction(actionStatus));
+      
+      if (!actionStatus.hasOwnProperty('handled')) {
+        Object.defineProperty(actionStatus, 'handled', {
+          value: true,
+          writable: false
+        });        
+      } else {
+        // status has already been handled so ignore
+        return
+      }
+
       switch (actionStatus.result) {
 
         case ActionResult.error: 
@@ -58,8 +71,6 @@ export const useActionStatus = (
         default:
           return;
       }
-      
-      dispatch(createResetStatusAction(actionStatus));
     });
   });
 }
