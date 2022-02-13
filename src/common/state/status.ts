@@ -32,10 +32,7 @@ export const useActionStatus = (
       dispatch(createResetStatusAction(actionStatus));
       
       if (!actionStatus.hasOwnProperty('handled')) {
-        Object.defineProperty(actionStatus, 'handled', {
-          value: true,
-          writable: false
-        });        
+        Object.defineProperty(actionStatus, 'handled', { writable: false });
       } else {
         // status has already been handled so ignore
         return
@@ -50,7 +47,14 @@ export const useActionStatus = (
             handled = errorCallback(actionStatus, error);
           } 
           if (!handled) {
-            const message = error ? error.message : 'ERROR! An unknown error occurred';
+            const message = error 
+              ? error.message.endsWith('APIError') 
+                ? 'An API error occurred!'
+                : error.message.match(/^[a-zA-Z]+Error$/) 
+                  ? 'An application error occurred!'
+                  : error.message 
+              : 'An unknown error occurred!';
+            
             dispatch(notify(message, { variant: 'error' }));  
           }
           break;
