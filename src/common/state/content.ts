@@ -234,7 +234,6 @@ export const useLocationContent = (): ContentKeyMap => {
 
 // label content hook
 export const useLabelContent = (): LabelLookup => {
-  const dispatch = useDispatch();
   const labelContent = useSelector(
     (state: RootState) => state.content.labelContent
   );  
