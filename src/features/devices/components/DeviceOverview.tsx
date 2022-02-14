@@ -16,6 +16,7 @@ import {
 import { useLabelContent } from '../../../common/state/content';
 
 import DeviceUserList from './DeviceUserList';
+import UserAccessStatusChip from './UserAccessStatusChip';
 
 const DeviceOverview: FunctionComponent<DeviceOverviewProps> = ({ device, isOwner }) => {
   const styles = useStyles();
@@ -57,9 +58,11 @@ const DeviceOverview: FunctionComponent<DeviceOverviewProps> = ({ device, isOwne
         <Typography component='div'>
           <strong>{labelLookup('deviceLastAccess').text()}: </strong>{device.lastAccessed}
         </Typography>
-        <Typography component='div'>
-          <strong>{labelLookup('deviceAccessedBy').text()}: </strong><Text data={device.lastAccessedBy}/>
-        </Typography>
+        {isOwner &&
+          <Typography component='div'>
+            <strong>{labelLookup('deviceAccessedBy').text()}: </strong><Text data={device.lastAccessedBy}/>
+          </Typography>
+        }
         <Typography component='div'>
           <strong>{labelLookup('deviceConnectedTo').text()}: </strong><Text data={device.lastSpaceConnectedTo}/>
         </Typography>
@@ -69,6 +72,15 @@ const DeviceOverview: FunctionComponent<DeviceOverviewProps> = ({ device, isOwne
         <Typography component='div'>
           <strong>{labelLookup('deviceBytesOut').text()}: </strong><Text data={device.dataUsageOut}/>
         </Typography>
+        {!isOwner && 
+          <>
+            <Divider variant="fullWidth" className={styles.divider} />
+            <Typography component='div'>
+              <strong>{labelLookup('deviceAccessStatus').text()}: </strong>
+              <UserAccessStatusChip status={device.accessStatus} />
+            </Typography>
+          </>        
+        }
       </div>
     </Tile>
   );

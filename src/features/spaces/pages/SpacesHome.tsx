@@ -45,14 +45,9 @@ const SpacesHome: FunctionComponent<SpacesHomeProps> = (props) => {
               />
             </Grid>) 
           .concat(
-            userSpaces.filter(userSpace => !userSpace.isOwner && 
-              (
-                userSpace.status == UserAccessStatus.pending ||
-                userSpace.status == UserAccessStatus.active
-              )
-            ).map((userSpace, index) =>
+            userSpaces.filter(userSpace => !userSpace.isOwner).map((userSpace, index) =>
               <Grid key={index+userSpaces.length} item>
-                <SpaceInvite key={index} userSpace={userSpace} />
+                <SpaceInvite key={index} space={userspace.spaces[userSpace.space!.spaceID!]} />
               </Grid>) 
           )
         : 

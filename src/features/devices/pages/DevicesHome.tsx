@@ -19,7 +19,6 @@ import {
 
 import DevicePlaceHolder from '../components/DevicePlaceHolder';
 import DeviceOverview from '../components/DeviceOverview';
-import DeviceGuestView from '../components/DeviceGuestView';
 
 const DevicesHome: FunctionComponent<DevicesHomeProps> = (props) => {
   const styles = useStyles(props);
@@ -41,7 +40,7 @@ const DevicesHome: FunctionComponent<DevicesHomeProps> = (props) => {
               <DeviceOverview 
                 key={index} 
                 device={userspace.devices[userDevice.device!.deviceID!]} 
-                isOwner={userDevice.isOwner!}
+                isOwner={true}
               />
             </Grid>) 
           .concat(
@@ -52,7 +51,11 @@ const DevicesHome: FunctionComponent<DevicesHomeProps> = (props) => {
               )
             ).map((userDevice, index) =>
               <Grid key={index+userDevices.length} item>
-                <DeviceGuestView key={index} userDevice={userDevice} />
+                <DeviceOverview 
+                  key={index} 
+                  device={userspace.devices[userDevice.device!.deviceID!]} 
+                  isOwner={false}
+                />
               </Grid>) 
           )
         : 

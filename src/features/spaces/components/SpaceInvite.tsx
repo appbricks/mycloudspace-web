@@ -1,7 +1,8 @@
 import React, { FunctionComponent } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import cx from 'clsx';
 
 import { 
   makeStyles, 
@@ -13,12 +14,11 @@ import DeclineIcon from '@iconify/icons-mdi/close-circle';
 import LeaveIcon from '@iconify/icons-mdi/presence-exit';
 
 import { 
-  ActionStatus,
   ActionStatusTracker 
 } from '@appbricks/utils';
 
 import { 
-  SpaceUser,
+  SpaceDetail,
   UserAccessStatus,
   UserSpaceService,
   UserSpaceStateProps,
@@ -27,7 +27,10 @@ import {
   LEAVE_SPACE
 } from '@appbricks/user-space';
 
-import { Tile } from '../../../common/components/views';
+import { 
+  Tile,
+  Text
+} from '../../../common/components/views';
 import { ChipButton } from '../../../common/components/forms';
 
 import { useLabelContent } from '../../../common/state/content';
@@ -39,8 +42,7 @@ const SpaceInvite: FunctionComponent<SpaceInviteProps> = (props) => {
   const styles = useStyles();
   const labelLookup = useLabelContent();
 
-  const { userSpace, userspace, userspaceService } = props;
-  const { space, status, isAdmin, isEgressNode } = userSpace;
+  const { space, userspace, userspaceService } = props;
 
   const actionStatusTracker = React.useRef(new ActionStatusTracker());
 
@@ -74,20 +76,21 @@ const SpaceInvite: FunctionComponent<SpaceInviteProps> = (props) => {
   return (
     <Tile 
       header={{
-        title: space!.spaceName
+        title: space!.name
       }}
-      actions={<>
-        {status == UserAccessStatus.active
-          ? <ChipButton
-            aria-label='leave space'
-            label='Leave'
-            wipIndicator={decliningInvite}
-            disabled={disable}
-            handleClick={handleDeclineInvitation}
-            icon={LeaveIcon}
-            className={styles.actionButton}
-          />
-          : <>
+      actions={
+        space.accessStatus == UserAccessStatus.active
+        ? <ChipButton
+          aria-label='leave space'
+          label='Leave'
+          wipIndicator={decliningInvite}
+          disabled={disable}
+          handleClick={handleDeclineInvitation}
+          icon={LeaveIcon}
+          className={styles.actionButton}
+        />
+        : space.accessStatus == UserAccessStatus.pending
+          ? <>
             <Typography component='div' className={styles.actionText}>
               <strong>{labelLookup('spaceInvitation').text()}:</strong>
             </Typography>
@@ -110,28 +113,43 @@ const SpaceInvite: FunctionComponent<SpaceInviteProps> = (props) => {
               className={styles.actionButton}
               />
           </>
-        }
-      </>}
+          : undefined
+      }
       width={400}
     >
-      <div className={styles.body}>
-        <Typography component='div'>
+      <div className={cx(styles.body, space.accessStatus == UserAccessStatus.inactive && styles.disabled)}>
+      <Typography component='div'>
           <strong>{labelLookup('spaceStatus').text()}: </strong>
-          <StatusChip status={space!.status} />
+          <StatusChip status={space.status} grayedOut={space.accessStatus == UserAccessStatus.inactive}/>
         </Typography>
         <Divider variant="fullWidth" className={styles.divider} />
         <Typography component='div'>
-          <strong>{labelLookup('spaceAccessType').text()}? </strong>{isAdmin ? 'yes' : 'no'}
+          <strong>{labelLookup('lastSeen').text()}: </strong><Text data={space.lastSeen}/>
         </Typography>
         <Typography component='div'>
-          <strong>{labelLookup('spaceEgressAllowed').text()}? </strong>{isEgressNode ? 'yes' : 'no'}
+          <strong>{labelLookup('spaceClients').text()}: </strong><Text data={space.clientsConnected.toString()}/>
+        </Typography>
+        <Typography component='div'>
+          <strong>{labelLookup('spaceBytesIn').text()}: </strong><Text data={space.dataUsageIn}/>
+        </Typography>
+        <Typography component='div'>
+          <strong>{labelLookup('spaceBytesOut').text()}: </strong><Text data={space.dataUsageOut}/>
         </Typography>
         <Divider variant="fullWidth" className={styles.divider} />
         <Typography component='div'>
-          <strong>{labelLookup('spaceProvider').text()}: </strong>{space!.iaas}
+          <strong>{labelLookup('spaceProvider').text()}: </strong>{space!.cloudProvider}
         </Typography>
         <Typography component='div'>
-          <strong>{labelLookup('spaceType').text()}: </strong>{space!.recipe}
+          <strong>{labelLookup('spaceType').text()}: </strong>{space!.type}
+        </Typography>
+        <Typography component='div'>
+          <strong>{labelLookup('spaceLocation').text()}: </strong>{space!.location}
+        </Typography>
+        <Typography component='div'>
+          <strong>{labelLookup('spaceVersion').text()}: </strong><Text data={space!.version}/>
+        </Typography>
+        <Typography component='div'>
+          <strong>{labelLookup('spaceOwner').text()}: </strong>{space!.ownerAdmin}
         </Typography>
       </div>
     </Tile>
@@ -157,14 +175,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   actionButton: {
     marginLeft: theme.spacing(1)
   },
-  // actionButtonColor: {
-  //   color: theme.palette.primary.main,
-  //   borderColor: theme.palette.primary.main
-  // }
+  disabled: {
+    color: 'rgba(0, 0, 0, 0.38)',
+    borderColor: 'rgba(0, 0, 0, 0.38)'
+  },
 }));
 
 type SpaceInviteProps = 
   UserSpaceStateProps &
   UserSpaceActionProps & {
-  userSpace: SpaceUser
+  space: SpaceDetail
 }

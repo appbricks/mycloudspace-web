@@ -59,6 +59,10 @@
     {
       "id": "spaceInvitation",
       "text": "Invitation"
+    },
+    {
+      "id": "spaceAccessStatus",
+      "text": "Space access status"
     }
   ]
 }
