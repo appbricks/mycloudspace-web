@@ -28,9 +28,6 @@ export const useActionStatus = (
   useEffect(() => {
     // handle all action statuses in state
     state.status.forEach(actionStatus => {
-      // remove action status from state
-      dispatch(createResetStatusAction(actionStatus));
-      
       if (!actionStatus.hasOwnProperty('handled')) {
         Object.defineProperty(actionStatus, 'handled', { writable: false });
       } else {
@@ -75,6 +72,8 @@ export const useActionStatus = (
         default:
           return;
       }
+      // remove action status from state
+      dispatch(createResetStatusAction(actionStatus));
     });
   });
 }
