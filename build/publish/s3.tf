@@ -36,7 +36,7 @@ data "external" "publish" {
     "/bin/bash", "-c",
     <<SCRIPT
 echo -n "{ \"files\": \""
-for f in $(find ${var.publish_path} -not -path '*/\.*' -type f -print); do
+for f in $(find ${var.publish_path} -not -path '*/\.*' -type f -print | sort -n); do
   [[ -z $next ]] || echo -n ","
   echo -n "$f"
   next=y
