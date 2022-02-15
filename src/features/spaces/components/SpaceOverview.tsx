@@ -1,6 +1,8 @@
 import React, { FunctionComponent } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import SettingsIcon from '@material-ui/icons/Settings';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { SpaceDetail } from '@appbricks/user-space';
@@ -15,14 +17,34 @@ import { useLabelContent } from '../../../common/state/content';
 import SpaceUserList from './SpaceUserList';
 import StatusChip from './StatusChip';
 
+import OwnerSettings from './OwnerSettings';
+
 const SpaceOverview: FunctionComponent<SpaceOverviewProps> = ({ space, isOwner }) => {
   const styles = useStyles();
   const labelLookup = useLabelContent();
 
-  return (
+  const [openSettings, setOpenSettings] = React.useState(false);
+
+  const handleOpenSettings = () => {
+    setOpenSettings(true);
+  };
+
+  const handleCloseSettings = () => {
+    setOpenSettings(false);
+  };
+
+  return (<>
     <Tile 
       header={{
-        title: space.name
+        title: space.name,
+        action: <>
+          <IconButton 
+            aria-label="settings"
+            onClick={handleOpenSettings}
+          >
+            <SettingsIcon />
+          </IconButton>
+        </>
       }}
       width={400}
       toggleExpand={isOwner as boolean}
@@ -67,7 +89,12 @@ const SpaceOverview: FunctionComponent<SpaceOverviewProps> = ({ space, isOwner }
         </Typography>
       </div>
     </Tile>
-  );
+    <OwnerSettings 
+      space={space}
+      open={openSettings}
+      onClose={handleCloseSettings}
+    />
+  </>);
 }
 
 export default SpaceOverview;

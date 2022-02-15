@@ -11,7 +11,6 @@ import {
 } from '@material-ui/core/styles';
 
 import {
-  UserAccessStatus,
   UserSpaceService,
   UserSpaceStateProps,
   UserSpaceActionProps

@@ -15,7 +15,7 @@ import { notify } from './notifications';
 // errors and success conditions
 export const useActionStatus = (
   state: State, 
-  successCallback: (
+  successCallback?: (
     actionStatus: ActionStatus
   ) => void,
   errorCallback?: (
@@ -66,7 +66,9 @@ export const useActionStatus = (
           break;
         
         case ActionResult.success:
-          successCallback(actionStatus);
+          if (successCallback) {
+            successCallback(actionStatus);
+          }
           break;
   
         default:

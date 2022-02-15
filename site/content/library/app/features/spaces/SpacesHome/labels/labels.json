@@ -63,6 +63,22 @@
     {
       "id": "spaceAccessStatus",
       "text": "Space access status"
+    },
+    {
+      "id": "spaceSettingsDialog",
+      "text": "Space Settings"
+    },
+    {
+      "id": "spaceNameToDelete",
+      "text": "Space Name to Delete"
+    },
+    {
+      "id": "deleteSpace",
+      "text": "Delete Space"
+    },
+    {
+      "id": "deleteSpaceMembership",
+      "text": "Delete Space Membership"
     }
   ]
 }

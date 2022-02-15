@@ -35,6 +35,22 @@
     {
       "id": "deviceAccessStatus",
       "text": "Device access status"
+    },
+    {
+      "id": "deviceSettingsDialog",
+      "text": "Device Settings"
+    },
+    {
+      "id": "deviceNameToDelete",
+      "text": "Device Name to Delete"
+    },
+    {
+      "id": "deleteDevice",
+      "text": "Delete Device"
+    },
+    {
+      "id": "deleteDeviceAccess",
+      "text": "Delete Device Access"
     }
   ]
 }

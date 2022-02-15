@@ -1,6 +1,8 @@
 import React, { FunctionComponent } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import SettingsIcon from '@material-ui/icons/Settings';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { 
@@ -18,9 +20,22 @@ import { useLabelContent } from '../../../common/state/content';
 import DeviceUserList from './DeviceUserList';
 import UserAccessStatusChip from './UserAccessStatusChip';
 
+import OwnerSettings from './OwnerSettings';
+import UserSettings from './UserSettings';
+
 const DeviceOverview: FunctionComponent<DeviceOverviewProps> = ({ device, isOwner }) => {
   const styles = useStyles();
   const labelLookup = useLabelContent();
+
+  const [openSettings, setOpenSettings] = React.useState(false);
+
+  const handleOpenSettings = () => {
+    setOpenSettings(true);
+  };
+
+  const handleCloseSettings = () => {
+    setOpenSettings(false);
+  };
 
   const numAccessRequests = device.users
     .reduce(
@@ -31,10 +46,18 @@ const DeviceOverview: FunctionComponent<DeviceOverviewProps> = ({ device, isOwne
       0
     );
 
-  return (
+  return (<>
     <Tile 
       header={{
-        title: device.name
+        title: device.name,
+        action: <>
+          <IconButton 
+            aria-label="settings"
+            onClick={handleOpenSettings}
+          >
+            <SettingsIcon />
+          </IconButton>
+        </>
       }}
       width={400}
       toggleExpand={isOwner as boolean}
@@ -83,7 +106,19 @@ const DeviceOverview: FunctionComponent<DeviceOverviewProps> = ({ device, isOwne
         }
       </div>
     </Tile>
-  );
+    {isOwner
+      ? <OwnerSettings 
+          device={device}
+          open={openSettings}
+          onClose={handleCloseSettings}
+        />
+      : <UserSettings 
+          device={device}
+          open={openSettings}
+          onClose={handleCloseSettings}
+        />
+    }
+  </>);
 }
 
 export default DeviceOverview;

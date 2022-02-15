@@ -2,6 +2,8 @@ import React, { FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import SettingsIcon from '@material-ui/icons/Settings';
 import cx from 'clsx';
 
 import { 
@@ -38,13 +40,25 @@ import { useActionStatus } from '../../../common/state/status';
 
 import StatusChip from './StatusChip';
 
+import MemberSettings from './MemberSettings';
+
 const SpaceInvite: FunctionComponent<SpaceInviteProps> = (props) => {
   const styles = useStyles();
   const labelLookup = useLabelContent();
 
+  const [openSettings, setOpenSettings] = React.useState(false);
+
   const { space, userspace, userspaceService } = props;
 
   const actionStatusTracker = React.useRef(new ActionStatusTracker());
+
+  const handleOpenSettings = () => {
+    setOpenSettings(true);
+  };
+
+  const handleCloseSettings = () => {
+    setOpenSettings(false);
+  };
 
   const handleAcceptInvitation = () => {
     actionStatusTracker.current.track(
@@ -73,10 +87,18 @@ const SpaceInvite: FunctionComponent<SpaceInviteProps> = (props) => {
   const decliningInvite = actionStatusTracker.current.isStatusPending(LEAVE_SPACE, userspace!);
   const disable = acceptingInvite || decliningInvite;
 
-  return (
+  return (<>
     <Tile 
       header={{
-        title: space!.name
+        title: space!.name,
+        action: <>
+          <IconButton 
+            aria-label="settings"
+            onClick={handleOpenSettings}
+          >
+            <SettingsIcon />
+          </IconButton>
+        </>
       }}
       actions={
         space.accessStatus == UserAccessStatus.active
@@ -153,7 +175,12 @@ const SpaceInvite: FunctionComponent<SpaceInviteProps> = (props) => {
         </Typography>
       </div>
     </Tile>
-  );
+    <MemberSettings 
+      space={space}
+      open={openSettings}
+      onClose={handleCloseSettings}
+    />
+  </>);
 }
 
 export default connect(UserSpaceService.stateProps, UserSpaceService.dispatchProps)(SpaceInvite);
