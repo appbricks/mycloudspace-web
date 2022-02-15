@@ -64,7 +64,7 @@ const Text: FunctionComponent<TextProps> = ({
     },
     '@keyframes highlight': highlightFrames.current
   }))();
-  const highlight = lastValue.current.length > 0 && data != lastValue.current;
+  const highlight = lastValue.current && lastValue.current.length > 0 && data != lastValue.current;
   lastValue.current = data;
 
   return <span ref={ref} className={cx(highlight && highlightStyle.highlight)}>{data}</span>
@@ -76,7 +76,3 @@ type TextProps = {
   data: string,
   emphasisColor?: string
 }
-
-const useStyles = makeStyles((theme: Theme) => ({  
-
-}));
