@@ -400,6 +400,7 @@ const ExTableToolbar: FunctionComponent<ExTableToolbarProps> = ({
         disabled={action.disabled}
         wipIndicator={action.processing}
         handleClick={() => action.handler()}
+        className={classes.iconButton}
       />
     );
   }
@@ -470,6 +471,12 @@ const useToolbarStyles = makeStyles((theme: Theme) => ({
     flex: '1 1 100%',
     textAlign: 'left'
   },
+  iconButton: {
+    'padding': 5,
+    '&:hover': {
+      backgroundColor: lighten(theme.palette.primary.light, 0.5),
+    }
+  }
 }));
 
 // Sorting
