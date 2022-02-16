@@ -54,8 +54,10 @@ const OwnerSettings: FunctionComponent<OwnerSettingsProps> = (props) => {
     onClose();
   }
 
-  // handle auth action status result
-  useActionStatus(userspace!);
+  if (open) {
+    // handle auth action status result
+    useActionStatus(userspace!);
+  }
 
   return (
     <FormDialog

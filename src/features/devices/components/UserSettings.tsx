@@ -39,8 +39,10 @@ const MemberSettings: FunctionComponent<MemberSettingsProps> = (props) => {
     onClose();
   }
 
-  // handle auth action status result
-  useActionStatus(userspace!);
+  if (open) {
+    // handle auth action status result
+    useActionStatus(userspace!);
+  }
 
   return (
     <FormDialog
