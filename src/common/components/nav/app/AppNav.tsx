@@ -15,15 +15,10 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
-import { useDispatch } from 'react-redux';
-
-import { noopAction } from '../../../services';
 import { useAppConfig } from '../../../state/app';
 import getAppMenu from './getAppMenu';
 
 const AppNav: FunctionComponent<AppNavProps> = (props) => {
-
-  const dispatch = useDispatch();
 
   const appConfig = useAppConfig();
   const menuItems = getAppMenu(appConfig);
@@ -36,11 +31,7 @@ const AppNav: FunctionComponent<AppNavProps> = (props) => {
 
   // user menu selection
   const handleChange = (event: ChangeEvent<{}>, newValue: number) => {
-    setValue(newValue);
-    
-    // dispatch a noop action to 
-    // refresh activity timer
-    dispatch(noopAction);
+    setValue(newValue);    
   };
 
   const a11yProps = (index: number) => ({

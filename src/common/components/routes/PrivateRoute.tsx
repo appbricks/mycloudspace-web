@@ -47,10 +47,12 @@ const PrivateRoute: FunctionComponent<PrivateRouteProps> = ({
   // out sessions
   useEffect(
     () => {
+      window.document.addEventListener("click", onDocumentClick)
       window.addEventListener("focus", onWindowFocus);
       window.addEventListener("blur", onWindowBlur);
 
       return () => {
+        window.document.removeEventListener("click", onDocumentClick)
         window.removeEventListener("focus", onWindowFocus);
         window.removeEventListener("blur", onWindowBlur);
         clearTimeoutID();
@@ -58,6 +60,11 @@ const PrivateRoute: FunctionComponent<PrivateRouteProps> = ({
     },
     [],
   );
+  const onDocumentClick = () => {
+    // dispatch a noop action to 
+    // refresh activity timer
+    dispatch(noopAction);
+  }
   const onWindowFocus = () => {
     // clear signout timer 
     clearTimeoutID();
