@@ -31,7 +31,7 @@ export const useActionStatus = (
   // *** invocations of useActionStatus that can    ***
   // *** create side effects that cause bugs        ***
   let loggerName = 'useActionStatus';
-  if (!process.env.NODE_ENV || process.env.NODE_ENV == 'development') {
+  if (process.env.NODE_ENV && process.env.NODE_ENV == 'development') {
     const re = /(\w+)@|at (\w+) \(/g;
     loggerName = re.exec(new Error().stack!.split('\n')[2])![2] + '.useActionStatus';
   }

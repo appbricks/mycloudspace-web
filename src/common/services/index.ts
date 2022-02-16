@@ -42,7 +42,7 @@ Amplify.configure({
 const initServices = (): Services => {
 
   // set log trace levels in dev environment
-  if (!process.env.NODE_ENV || process.env.NODE_ENV == 'development') {
+  if (process.env.NODE_ENV && process.env.NODE_ENV == 'development') {
     Amplify.Logger.LOG_LEVEL = 'DEBUG';
     setLogLevel(LOG_LEVEL_TRACE);
   }
