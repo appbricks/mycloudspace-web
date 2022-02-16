@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { 
+  Logger,
   State,
   ErrorPayload, 
   ActionStatus,
@@ -10,6 +11,7 @@ import {
 } from '@appbricks/utils';
 
 import { notify } from './notifications';
+import { BooleanValueNode } from 'graphql';
 
 // Hook to handle action status 
 // errors and success conditions
@@ -25,7 +27,19 @@ export const useActionStatus = (
 ) => {
   const dispatch = useDispatch();
 
+  // *** debug code that allows tracing unnecessary ***
+  // *** invocations of useActionStatus that can    ***
+  // *** create side effects that cause bugs        ***
+  let loggerName = 'useActionStatus';
+  if (!process.env.NODE_ENV || process.env.NODE_ENV == 'development') {
+    const re = /(\w+)@|at (\w+) \(/g;
+    loggerName = re.exec(new Error().stack!.split('\n')[2])![2] + '.useActionStatus';
+  }
+  // **************************************************
+
   useEffect(() => {
+    Logger.trace(loggerName, 'State status change being handled', state);
+
     // handle all action statuses in state
     state.status.forEach(actionStatus => {
       if (!actionStatus.hasOwnProperty('handled')) {
@@ -77,5 +91,5 @@ export const useActionStatus = (
       // remove action status from state
       dispatch(createResetStatusAction(actionStatus));
     });
-  });
+  }, [state.status]);
 }
