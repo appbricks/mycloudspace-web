@@ -1,23 +1,34 @@
 import React, { FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles, darken } from '@material-ui/core/styles';
 
+import { 
+  ActionStatus,
+  ActionStatusTracker 
+} from '@appbricks/utils';
+
 import {
+  SpaceDefaults,
   SpaceDetail,
   UserSpaceService,
   UserSpaceStateProps,
-  UserSpaceActionProps
+  UserSpaceActionProps,
+  DELETE_SPACE,
+  UPDATE_SPACE
 } from '@appbricks/user-space';
 
 import {
   FormDialog,
   DialogTitle,
-  Input
+  Input,
+  CheckBox
 } from '../../../common/components/forms';
 import {
   StaticLabel,
@@ -33,7 +44,10 @@ const OwnerSettings: FunctionComponent<OwnerSettingsProps> = (props) => {
 
   const { space, open, onClose, userspace, userspaceService } = props;
 
+  const [spaceDefaults, setSpaceDefaults] = React.useState<SpaceDefaults>(space.spaceDefaults);
   const [spaceNameToDelete, setSpaceNameToDelete] = React.useState('');
+
+  const actionStatusTracker = React.useRef(new ActionStatusTracker());
 
   const handleSpaceNameToDeleteChange = (id: string, value: string) => {
     setSpaceNameToDelete(value);
@@ -54,10 +68,32 @@ const OwnerSettings: FunctionComponent<OwnerSettingsProps> = (props) => {
     onClose();
   }
 
-  if (open) {
-    // handle auth action status result
-    useActionStatus(userspace!);
+  // handle updating space user defaults
+  const handleSpaceDefaultsChanged = (defaults: SpaceDefaults) => {
+
+    actionStatusTracker.current.track(
+      userspaceService!.updateSpace(space.spaceID, undefined, undefined, defaults)
+    );
+    setSpaceDefaults(defaults);
   }
+
+  // handle auth action status result
+  useActionStatus(userspace!, 
+    actionStatus => {
+      actionStatusTracker.current.untrack(actionStatus);
+    },
+    (actionStatus, error) => {
+      actionStatusTracker.current.untrack(actionStatus);
+      return false;
+    },
+    [
+      DELETE_SPACE, 
+      UPDATE_SPACE
+    ]
+  );
+
+  // check if defaults save is in progress
+  const savingSpaceDefaults = actionStatusTracker.current.isStatusPending(UPDATE_SPACE, userspace!);
 
   return (
     <FormDialog
@@ -71,6 +107,28 @@ const OwnerSettings: FunctionComponent<OwnerSettingsProps> = (props) => {
         <Typography variant='overline' component='div'>{space.name}</Typography>
       </DialogTitle>
       <DialogContent dividers>
+        <DialogContentText>
+          <StaticLabel id='spaceDefaults' />
+        </DialogContentText>
+        <CheckBox
+          id='enableSpaceEgress'
+          disabled={savingSpaceDefaults}
+          checked={spaceDefaults.isEgressNode}
+          checkColor='primary'
+          onChange={
+            (event, checked) => {
+              handleSpaceDefaultsChanged({
+                ...spaceDefaults,
+                isEgressNode: !spaceDefaults.isEgressNode
+              });
+            }
+          }
+          className={styles.checkBox}
+        />
+        <Divider style={{ marginTop: '0.8rem' }} />
+        <DialogContentText className={styles.housekeepingContent}>
+          <StaticLabel id='spaceHousekeeping'/>
+        </DialogContentText>
         <StaticContent
           body={content['delete-owned-space'].body}
         />
@@ -107,6 +165,15 @@ const useStyles = makeStyles((theme) => ({
   input: {
     width: '100%'
   },
+  housekeepingContent: {
+    paddingTop: '1rem'
+  },
+  checkBox: {
+    marginLeft: '0.2rem',
+    '&:hover': {
+      color: '#3f51b5',
+    }
+  },
   deleteButton: {
     marginBlockStart: '0.6rem', 
     paddingBlockStart: '0.45rem', 
@@ -138,9 +205,4 @@ type OwnerSettingsProps =
 
   open: boolean
   onClose: () => void
-}
-
-type State = {
-  showTokenSecret: boolean
-  tokenVerificationCode: string
 }

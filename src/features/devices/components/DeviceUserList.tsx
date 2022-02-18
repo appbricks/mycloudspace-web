@@ -111,7 +111,11 @@ const DeviceUserList: FunctionComponent<DeviceUserListProps> = (props) => {
     (actionStatus, error) => {
       untrackAction(actionStatus);
       return false;
-    }
+    },
+    [
+      ACTIVATE_USER_ON_DEVICE,
+      DELETE_USER_FROM_DEVICE
+    ]
   );
 
   const activatingUsers = actionStatusTracker.current.isStatusPending(ACTIVATE_USER_ON_DEVICE, userspace!);

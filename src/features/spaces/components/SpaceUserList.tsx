@@ -8,6 +8,8 @@ import {
 } from '@material-ui/core/styles';
 
 import addUser from '@iconify/icons-mdi/account-plus-outline';
+import enableEgress from '@iconify/icons-mdi/cloud-check-outline';
+import disableEgress from '@iconify/icons-mdi/cloud-off-outline';
 import activateUser from '@iconify/icons-mdi/account-check-outline';
 import deactivateUser from '@iconify/icons-mdi/account-off-outline';
 import removeUser from '@iconify/icons-mdi/delete';
@@ -27,14 +29,14 @@ import {
   UserRef,
   USER_SEARCH,
   INVITE_USER_TO_SPACE,
+  UPDATE_SPACE_USER,
   REMOVE_USER_ACCESS_TO_SPACE,
   GRANT_USER_ACCESS_TO_SPACE,
   DELETE_USER_FROM_SPACE
 } from '@appbricks/user-space';
 
 import AutoComplete, {
-  Option,
-  ListPageNav
+  Option
 } from '../../../common/components/forms/AutoComplete';
 import IconButton from '../../../common/components/forms/IconButton';
 
@@ -84,6 +86,22 @@ const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
     });
   }
 
+  const handleEnableEgressForUsers = () => {
+    rowsSelected.forEach(userID => {
+      actionStatusTracker.current.track(
+        userspaceService!.updateSpaceUser(space.spaceID!, userID as string, true)
+      );
+    });
+  };
+
+  const handleDisableEgressForUsers = () => {
+    rowsSelected.forEach(userID => {
+      actionStatusTracker.current.track(
+        userspaceService!.updateSpaceUser(space.spaceID!, userID as string, false)
+      );
+    });
+  };
+
   const handleDeactivateUsers = () => {
     rowsSelected.forEach(userID => {
       actionStatusTracker.current.track(
@@ -111,7 +129,7 @@ const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
   const handleAddUsers = () => {
     optionsSelected.forEach(option => {
       actionStatusTracker.current.track(
-        userspaceService!.inviteUserToSpace(space.spaceID!, option.value!.userID!, false, false)
+        userspaceService!.inviteUserToSpace(space.spaceID!, option.value!.userID!, space.spaceDefaults.isEgressNode)
       );
     });
   };
@@ -157,6 +175,7 @@ const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
         case INVITE_USER_TO_SPACE:
           setOptionsSelected([]);
           break;
+        case UPDATE_SPACE_USER:
         case REMOVE_USER_ACCESS_TO_SPACE:
         case GRANT_USER_ACCESS_TO_SPACE:
         case DELETE_USER_FROM_SPACE:
@@ -173,7 +192,14 @@ const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
     (actionStatus, error) => {
       untrackAction(actionStatus);
       return false;
-    }
+    },
+    [ 
+      INVITE_USER_TO_SPACE, 
+      UPDATE_SPACE_USER,
+      REMOVE_USER_ACCESS_TO_SPACE, 
+      GRANT_USER_ACCESS_TO_SPACE, 
+      DELETE_USER_FROM_SPACE 
+    ]
   );
 
   // check is user search call is in progress
@@ -181,11 +207,22 @@ const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
   // check is user invite calls are in progress
   const sendingInvite = actionStatusTracker.current.isStatusPending(INVITE_USER_TO_SPACE, userspace!);
 
+  const updatingSpaceUser = actionStatusTracker.current.isStatusPending(UPDATE_SPACE_USER, userspace!);
   const deactivatingUsers = actionStatusTracker.current.isStatusPending(REMOVE_USER_ACCESS_TO_SPACE, userspace!);
   const activatingUsers = actionStatusTracker.current.isStatusPending(GRANT_USER_ACCESS_TO_SPACE, userspace!);
   const deletingUsers = actionStatusTracker.current.isStatusPending(DELETE_USER_FROM_SPACE, userspace!);
-  const disableTableList = deactivatingUsers || activatingUsers || deletingUsers;
+  const disableTableList = updatingSpaceUser || deactivatingUsers || activatingUsers || deletingUsers;
 
+  const enableEgressHidden = rowsSelected.some(
+    userID => rows.some(
+      row => row.userID == userID && row.egressAllowed == 'yes'
+    )
+  );
+  const disableEgressHidden = rowsSelected.some(
+    userID => rows.some(
+      row => row.userID == userID && row.egressAllowed == 'no'
+    )
+  );
   const deactivateUsersHidden = rowsSelected.some(
     userID => rows.some(
       row => row.userID == userID && row.status == UserAccessStatus.inactive
@@ -209,13 +246,22 @@ const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
           selectedItemName: 'user',
           selectedItemActions: [
             {
-              icon: deactivateUser,
-              tooltip: 'Deactivate Users',
-              ariaLabel: 'deactivate selected users',
-              hidden: deactivateUsersHidden,
+              icon: enableEgress,
+              tooltip: 'Allow Use as Egress Node',
+              ariaLabel: 'allow this node to be used to egress to the internet',
+              hidden: enableEgressHidden,
               disabled: disableTableList,
-              processing: deactivatingUsers,
-              handler: handleDeactivateUsers
+              processing: updatingSpaceUser,
+              handler: handleEnableEgressForUsers
+            },
+            {
+              icon: disableEgress,
+              tooltip: 'Disallow Use as Egress Node',
+              ariaLabel: 'disallow this node from beeing used to egress to the internet',
+              hidden: disableEgressHidden,
+              disabled: disableTableList,
+              processing: updatingSpaceUser,
+              handler: handleDisableEgressForUsers
             },
             {
               icon: activateUser,
@@ -225,6 +271,15 @@ const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
               disabled: disableTableList,
               processing: activatingUsers,
               handler: handleActivateUsers
+            },
+            {
+              icon: deactivateUser,
+              tooltip: 'Deactivate Users',
+              ariaLabel: 'deactivate selected users',
+              hidden: deactivateUsersHidden,
+              disabled: disableTableList,
+              processing: deactivatingUsers,
+              handler: handleDeactivateUsers
             },
             {
               icon: removeUser,
@@ -332,6 +387,12 @@ const columns: ColumnProps[] = [
   {
     id: 'status',
     label: 'Status',
+    disablePadding: false,
+    headCellStyle: { whiteSpace: 'nowrap' }
+  },
+  {
+    id: 'egressAllowed',
+    label: 'Can Egress',
     disablePadding: false,
     headCellStyle: { whiteSpace: 'nowrap' }
   },

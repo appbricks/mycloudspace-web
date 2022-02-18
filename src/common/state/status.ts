@@ -11,7 +11,6 @@ import {
 } from '@appbricks/utils';
 
 import { notify } from './notifications';
-import { BooleanValueNode } from 'graphql';
 
 // Hook to handle action status 
 // errors and success conditions
@@ -23,7 +22,8 @@ export const useActionStatus = (
   errorCallback?: (
     actionStatus: ActionStatus, 
     error: ErrorPayload
-  ) => boolean
+  ) => boolean,
+  actionTypes?: string[]
 ) => {
   const dispatch = useDispatch();
 
@@ -37,11 +37,20 @@ export const useActionStatus = (
   }
   // **************************************************
 
+  const actionTypeFilter = new Set(actionTypes);
+
   useEffect(() => {
     Logger.trace(loggerName, 'State status change being handled', state);
 
     // handle all action statuses in state
     state.status.forEach(actionStatus => {
+
+      // if an action type filter is provided then
+      // only handle action types in the filter
+      if (actionTypes && !actionTypeFilter.has(actionStatus.actionType)) {
+        return
+      }
+
       if (!actionStatus.hasOwnProperty('handled')) {
         Object.defineProperty(actionStatus, 'handled', { writable: false });
       } else {

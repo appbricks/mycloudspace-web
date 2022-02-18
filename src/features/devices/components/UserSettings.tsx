@@ -11,7 +11,8 @@ import {
   DeviceDetail,
   UserSpaceService,
   UserSpaceStateProps,
-  UserSpaceActionProps
+  UserSpaceActionProps,
+  DELETE_USER_FROM_DEVICE
 } from '@appbricks/user-space';
 
 import {
@@ -39,10 +40,7 @@ const MemberSettings: FunctionComponent<MemberSettingsProps> = (props) => {
     onClose();
   }
 
-  if (open) {
-    // handle auth action status result
-    useActionStatus(userspace!);
-  }
+  useActionStatus(userspace!, undefined, undefined, [DELETE_USER_FROM_DEVICE]);
 
   return (
     <FormDialog

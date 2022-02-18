@@ -69,6 +69,22 @@
       "text": "Space Settings"
     },
     {
+      "id": "spaceDefaults",
+      "text": "Defaults for new space users"
+    },
+    {
+      "id": "enableSpaceAdmin",
+      "text": "Grant user admin access to space"
+    },
+    {
+      "id": "enableSpaceEgress",
+      "text": "Allow user to set space as egress node when connected"
+    },
+    {
+      "id": "spaceHousekeeping",
+      "text": "House Keeping"
+    },
+    {
       "id": "spaceNameToDelete",
       "text": "Space Name to Delete"
     },
