@@ -43,19 +43,19 @@ jobs:
     # remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
-        terraform init \
+        echo "Initializing for production environment."
+        terraform -chdir=build/publish init \
           -backend-config="key=website/appbricks-io" \
-          -backend-config="bucket=appbricks-tfstate-useast1" \
-          build/publish
+          -backend-config="bucket=appbricks-tfstate-useast1"
 
     # Generates an execution plan for Terraform
     - name: Site update plan (Terraform Plan)
       run: |
-        terraform plan \
-          build/publish
+        echo "Publish plan for production environment"
+        terraform -chdir=build/publish plan
 
     # Apply Terraform plan and deploy site to a dev url
     - name: Publish Site (Terraform Apply)
       run: |
-        terraform apply -auto-approve \
-          build/publish
+        echo "Publishing to production environment."
+        terraform -chdir=build/publish apply -auto-approve

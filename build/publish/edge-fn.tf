@@ -10,7 +10,7 @@ locals {
 }
 
 resource "aws_iam_role" "edge-fn" {
-  name = "appbricks-io_edge-fn-${var.env}"
+  name = "appbricks-io_edge-fn-${var.env == "" ? "prod" : var.env}"
 
   assume_role_policy = <<EOF
 {
