@@ -1,8 +1,10 @@
 import FormDialog from './FormDialog';
 import DialogTitle from './DialogTitle';
 import FormBox from './FormBox';
-import CheckBox from './CheckBox';
+import IconButton from './IconButton';
+import ChipButton from './ChipButton';
 import RadioButton from './RadioButton';
+import CheckBox from './CheckBox';
 import Input from './Input';
 import PasswordInput from './PasswordInput';
 import PhoneNumberInput from './PhoneNumberInput';
@@ -12,10 +14,12 @@ export {
   FormDialog,
   DialogTitle,
   FormBox,
-  CheckBox,
+  IconButton,
+  ChipButton,
   RadioButton,
+  CheckBox,
   Input,
   PasswordInput,
   PhoneNumberInput,
-  CodeInput
+  CodeInput,
 }

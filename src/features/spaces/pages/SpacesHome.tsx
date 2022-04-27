@@ -1,44 +1,72 @@
-import React, { FunctionComponent } from 'react';
+import React, { 
+  FunctionComponent,
+  useEffect
+} from 'react';
+import { connect } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+
+import { 
+  makeStyles, 
+  Theme 
+} from '@material-ui/core/styles';
+
+import {
+  UserSpaceService,
+  UserSpaceStateProps,
+  UserSpaceActionProps
+} from '@appbricks/user-space';
+
+import SpaceOverview from '../components/SpaceOverview';
+import SpaceInvite from '../components/SpaceInvite';
+import SpacePlaceHolder from '../components/SpacePlaceHolder';
 
 const SpacesHome: FunctionComponent<SpacesHomeProps> = (props) => {
   const styles = useStyles(props);
 
+  const { userspace, userspaceService } = props;
+
+  useEffect(() => {
+    userspaceService!.getUserSpaces();
+  }, [])
+
+  const userSpaces = userspace && userspace.userSpaces;
+
   return (
-    <Grid container justify='flex-start' spacing={5} className={styles.root}>
-      {[...Array(50).keys()].map((value) => (
-        <Grid key={value} item>
-          <Paper className={styles.paper}>
-            <Box p={3} className={styles.content}>
-              <Typography variant='h6'>Space #{value}</Typography>
-            </Box>  
-            </Paper>
-        </Grid>
-      ))}
+    <Grid container justify='flex-start' spacing={2} className={styles.root}>
+      {userSpaces && userSpaces.length > 0
+        ? userSpaces.filter(userSpace => userSpace.isOwner)
+          .map((userSpace, index) =>
+            <Grid key={index} item>
+              <SpaceOverview 
+                key={index} 
+                space={userspace.spaces[userSpace.space!.spaceID!]} 
+                isOwner={userSpace.isOwner!} 
+              />
+            </Grid>) 
+          .concat(
+            userSpaces.filter(userSpace => !userSpace.isOwner).map((userSpace, index) =>
+              <Grid key={index+userSpaces.length} item>
+                <SpaceInvite key={index} space={userspace.spaces[userSpace.space!.spaceID!]} />
+              </Grid>) 
+          )
+        : 
+          <Grid item>
+            <SpacePlaceHolder />
+          </Grid>
+      }
     </Grid>
   );
 }
 
-export default SpacesHome;
+export default connect(UserSpaceService.stateProps, UserSpaceService.dispatchProps)(SpacesHome);
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
-    margin: '10px 0px',
-    flexGrow: 1    
+    margin: theme.spacing(1),
+    flexGrow: 1   
   },
-  paper: {
-    height: 200,
-    width: 300,
-    backgroundColor: '#e0e0e0'
-  },
-  content: {
-    color: '#000000'
-  }
 }));
 
-type SpacesHomeProps = {
-}
+type SpacesHomeProps = 
+  UserSpaceStateProps &
+  UserSpaceActionProps

@@ -6,6 +6,7 @@ import productIcon from '@iconify/icons-mdi/package-variant-closed';
 import contactIcon from '@iconify/icons-mdi/contacts-outline';
 import loginIcon from '@iconify/icons-mdi/login';
 import homeIcon from '@iconify/icons-mdi/home-outline';
+import devicesIcon from '@iconify/icons-mdi/devices';
 import appsIcon from '@iconify/icons-mdi/apps';
 import accountIcon from '@iconify/icons-mdi/account-details-outline';
 import helpIcon from '@iconify/icons-mdi/help';
@@ -19,6 +20,7 @@ export const icons = {
   contactIcon,
   loginIcon,
   homeIcon,
+  devicesIcon,
   profileSetupIcon,
   profileSecurityIcon,
   logoutIcon,
@@ -48,6 +50,7 @@ import {
   Security
 } from './features/profile/pages';
 import { SpacesHome } from './features/spaces/pages';
+import { DevicesHome } from './features/devices/pages';
 import { AppsHome } from './features/apps/pages';
 import { AccountHome } from './features/account/pages';
 import { HelpHome } from './features/help/pages';
@@ -62,6 +65,7 @@ export const features = {
   Profile,
   Security,
   SpacesHome,
+  DevicesHome,
   AppsHome,
   AccountHome,
   HelpHome

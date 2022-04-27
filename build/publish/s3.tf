@@ -3,6 +3,10 @@
 # 
 resource "aws_s3_bucket" "appbricks-io" {
   bucket = local.env_domain
+}
+
+resource "aws_s3_bucket_acl" "appbricks-io" {
+  bucket = aws_s3_bucket.appbricks-io.id
   acl    = "public-read"
 }
 
@@ -32,12 +36,12 @@ data "external" "publish" {
     "/bin/bash", "-c",
     <<SCRIPT
 echo -n "{ \"files\": \""
-for f in $(find ${var.publish_path} -not -path '*/\.*' -type f -print); do
+for f in $(find ${var.publish_path} -not -path '*/\.*' -type f -print | sort -n); do
   [[ -z $next ]] || echo -n ","
   echo -n "$f"
   next=y
 done
-echo "\"}"
+echo -n "\", \"sha1\": \"$(find ${var.publish_path} -type f -print0 | sort -z | xargs -0 sha1sum | sha1sum)\" }"
 SCRIPT
   ]
 }
@@ -45,6 +49,7 @@ SCRIPT
 locals {
   publish_path_prefix_len = length(var.publish_path) + 1
   publish_file_list = split(",", data.external.publish.result.files)
+  publish_file_list_sha1 = data.external.publish.result.sha1
 
   publish_file_list_ext = [ for file in local.publish_file_list 
     : reverse(split(".", basename(file)))[0] ]
@@ -58,7 +63,7 @@ locals {
 #
 # Upload website content to s3 bucket
 #
-resource "aws_s3_bucket_object" "content" {
+resource "aws_s3_object" "content" {
   count  = length(local.publish_file_list)
   bucket = aws_s3_bucket.appbricks-io.bucket
 

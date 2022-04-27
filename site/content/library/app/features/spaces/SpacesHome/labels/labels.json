@@ -1,0 +1,100 @@
+{
+  "labels": [
+    {
+      "id": "spaceProvider",
+      "text": "Cloud Provider"
+    },
+    {
+      "id": "spaceType",
+      "text": "Type"
+    },
+    {
+      "id": "spaceLocation",
+      "text": "Location"
+    },
+    {
+      "id": "spaceVersion",
+      "text": "Version"
+    },
+    {
+      "id": "spaceOwner",
+      "text": "Owner"
+    },
+    {
+      "id": "spaceStatus",
+      "text": "Status"
+    },
+    {
+      "id": "lastSeen",
+      "text": "Last Seen"
+    },
+    {
+      "id": "spaceClients",
+      "text": "Clients Connected"
+    },
+    {
+      "id": "spaceEstCost",
+      "text": "Est. Cloud Cost"
+    },
+    {
+      "id": "spaceTime",
+      "text": "Run Time"
+    },
+    {
+      "id": "spaceBytesIn",
+      "text": "Data Usage In"
+    },
+    {
+      "id": "spaceBytesOut",
+      "text": "Data Usage Out"
+    },
+    {
+      "id": "spaceAccessType",
+      "text": "Admin Access"
+    },
+    {
+      "id": "spaceEgressAllowed",
+      "text": "Internet Egress Node"
+    },
+    {
+      "id": "spaceInvitation",
+      "text": "Invitation"
+    },
+    {
+      "id": "spaceAccessStatus",
+      "text": "Space access status"
+    },
+    {
+      "id": "spaceSettingsDialog",
+      "text": "Space Settings"
+    },
+    {
+      "id": "spaceDefaults",
+      "text": "Defaults for new space users"
+    },
+    {
+      "id": "enableSpaceAdmin",
+      "text": "Grant user admin access to space"
+    },
+    {
+      "id": "enableSpaceEgress",
+      "text": "Allow user to set space as egress node when connected"
+    },
+    {
+      "id": "spaceHousekeeping",
+      "text": "House Keeping"
+    },
+    {
+      "id": "spaceNameToDelete",
+      "text": "Space Name to Delete"
+    },
+    {
+      "id": "deleteSpace",
+      "text": "Delete Space"
+    },
+    {
+      "id": "deleteSpaceMembership",
+      "text": "Delete Space Membership"
+    }
+  ]
+}

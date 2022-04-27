@@ -17,7 +17,7 @@ const Footer: FunctionComponent<FooterProps> = ({ sticky, children }) => {
 
 export default Footer;
 
-const useStyles = makeStyles((props: StyleProps) => ({
+const useStyles = makeStyles(theme => ({
   root: (props: StyleProps) => ({
     position: props.sticky ? 'fixed' : 'static',
     flexGrow: 1,

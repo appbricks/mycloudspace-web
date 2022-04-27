@@ -1,0 +1,56 @@
+{
+  "labels": [
+    {
+      "id": "deviceType",
+      "text": "Type of Device"
+    },
+    {
+      "id": "deviceVersion",
+      "text": "version"
+    },
+    {
+      "id": "deviceAdmin",
+      "text": "Admin"
+    },
+    {
+      "id": "deviceLastAccess",
+      "text": "Last Accessed"
+    },
+    {
+      "id": "deviceAccessedBy",
+      "text": "Acccessed by"
+    },
+    {
+      "id": "deviceConnectedTo",
+      "text": "Connected to"
+    },
+    {
+      "id": "deviceBytesIn",
+      "text": "Data Usage In"
+    },
+    {
+      "id": "deviceBytesOut",
+      "text": "Data Usage Out"
+    },
+    {
+      "id": "deviceAccessStatus",
+      "text": "Device access status"
+    },
+    {
+      "id": "deviceSettingsDialog",
+      "text": "Device Settings"
+    },
+    {
+      "id": "deviceNameToDelete",
+      "text": "Device Name to Delete"
+    },
+    {
+      "id": "deleteDevice",
+      "text": "Delete Device"
+    },
+    {
+      "id": "deleteDeviceAccess",
+      "text": "Delete Device Access"
+    }
+  ]
+}

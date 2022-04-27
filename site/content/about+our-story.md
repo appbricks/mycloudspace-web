@@ -1,5 +1,5 @@
 ---
-contentPage: about
+contentPage: 'xxxabout'
 order: 1
 
 image: ../images/backgrounds/our-story.jpg

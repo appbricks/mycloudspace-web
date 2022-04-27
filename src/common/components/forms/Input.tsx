@@ -14,7 +14,12 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { 
+  makeStyles,
+  lighten,
+  Theme
+} from '@material-ui/core/styles';
+
 import cx from 'clsx';
 
 import { 
@@ -273,12 +278,12 @@ const Input: FunctionComponent<InputProps> = ({
 
 export default Input;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   formControl: {
     marginBottom: '1.9rem'
   },
   formControlWithError: {
-    marginBottom: '0.46rem'
+    marginBottom: '0.40rem'
   },
   firstControl: {
     marginTop: '1.5rem'
@@ -288,7 +293,7 @@ const useStyles = makeStyles((theme) => ({
   },
   inputField: {
     color: '#000000',
-    backgroundColor: 'rgba(0, 0, 0, 0.09)',
+    backgroundColor: lighten('#efefef', 0.5),
   },
   inputFieldIconFocus: {
     color: '#3f51b5',

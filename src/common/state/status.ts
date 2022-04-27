@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { 
+  Logger,
   State,
   ErrorPayload, 
   ActionStatus,
@@ -15,19 +16,48 @@ import { notify } from './notifications';
 // errors and success conditions
 export const useActionStatus = (
   state: State, 
-  successCallback: (
+  successCallback?: (
     actionStatus: ActionStatus
   ) => void,
   errorCallback?: (
     actionStatus: ActionStatus, 
     error: ErrorPayload
-  ) => boolean
+  ) => boolean,
+  actionTypes?: string[]
 ) => {
   const dispatch = useDispatch();
 
+  // *** debug code that allows tracing unnecessary ***
+  // *** invocations of useActionStatus that can    ***
+  // *** create side effects that cause bugs        ***
+  let loggerName = 'useActionStatus';
+  if (process.env.NODE_ENV && process.env.NODE_ENV == 'development') {
+    const re = /(\w+)@|at (\w+) \(/g;
+    loggerName = re.exec(new Error().stack!.split('\n')[2])![2] + '.useActionStatus';
+  }
+  // **************************************************
+
+  const actionTypeFilter = new Set(actionTypes);
+
   useEffect(() => {
+    Logger.trace(loggerName, 'State status change being handled', state);
+
     // handle all action statuses in state
     state.status.forEach(actionStatus => {
+
+      // if an action type filter is provided then
+      // only handle action types in the filter
+      if (actionTypes && !actionTypeFilter.has(actionStatus.actionType)) {
+        return
+      }
+
+      if (!actionStatus.hasOwnProperty('handled')) {
+        Object.defineProperty(actionStatus, 'handled', { writable: false });
+      } else {
+        // status has already been handled so ignore
+        return
+      }
+
       switch (actionStatus.result) {
 
         case ActionResult.error: 
@@ -37,7 +67,14 @@ export const useActionStatus = (
             handled = errorCallback(actionStatus, error);
           } 
           if (!handled) {
-            const message = error ? error.message : 'ERROR! An unknown error occurred';
+            const message = error 
+              ? error.message.endsWith('APIError') 
+                ? 'An API error occurred!'
+                : error.message.match(/^[a-zA-Z]+Error$/) 
+                  ? 'An application error occurred!'
+                  : error.message 
+              : 'An unknown error occurred!';
+            
             dispatch(notify(message, { variant: 'error' }));  
           }
           break;
@@ -52,14 +89,16 @@ export const useActionStatus = (
           break;
         
         case ActionResult.success:
-          successCallback(actionStatus);
+          if (successCallback) {
+            successCallback(actionStatus);
+          }
           break;
   
         default:
           return;
       }
-      
+      // remove action status from state
       dispatch(createResetStatusAction(actionStatus));
     });
-  });
+  }, [state.status]);
 }

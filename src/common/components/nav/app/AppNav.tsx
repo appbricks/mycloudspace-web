@@ -1,5 +1,16 @@
-import React, { FunctionComponent, ElementType, ReactElement, ChangeEvent, useState } from 'react';
-import { withStyles, makeStyles, useTheme, Theme } from '@material-ui/core/styles';
+import React, { 
+  FunctionComponent, 
+  ElementType, 
+  ReactElement, 
+  ChangeEvent, 
+  useState 
+} from 'react';
+import { 
+  withStyles, 
+  makeStyles, 
+  useTheme, 
+  Theme 
+} from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -20,7 +31,7 @@ const AppNav: FunctionComponent<AppNavProps> = (props) => {
 
   // user menu selection
   const handleChange = (event: ChangeEvent<{}>, newValue: number) => {
-    setValue(newValue);
+    setValue(newValue);    
   };
 
   const a11yProps = (index: number) => ({
@@ -89,12 +100,14 @@ const AppNavTabs = withStyles((theme: Theme) => ({
     backgroundColor: '#3f51b5',
 
     top: undefined,
-    height: undefined,
+    left: 0,
     width: '5px',
+    height: undefined,
     [theme.breakpoints.down('xs')]: {
       top: 0,
-      height: '5px',
-      width: undefined
+      left: undefined,
+      width: undefined,
+      height: '5px'
     }
   }
 }))(({
@@ -136,14 +149,14 @@ const AppNavTab = withStyles((theme: Theme) => ({
         position: 'absolute',
  
         top: undefined,
-        right: 0,
+        left: 0,
         width: '5px',
         height: '105%',
         [theme.breakpoints.down('xs')]: {
           top: 0,
           right: undefined,
           width: '100%',
-          height: '5px',
+          height: '5px'
         }
       }
     },
@@ -176,7 +189,7 @@ const TabPanel: FunctionComponent<TabPanelProps> = ({
   );
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     height: '100%',
     width: '100%',

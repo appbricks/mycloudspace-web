@@ -45,7 +45,7 @@ const FormBox: FunctionComponent<FormBoxProps> = ({
     event.preventDefault();
   }
 
-  const animationStyles = makeStyles((theme) => ({
+  const animationStyles = makeStyles(theme => ({
     dialog: {
       animation: `$dialog 500ms ${theme.transitions.easing.easeInOut}`,
     },
@@ -112,7 +112,7 @@ const FormBox: FunctionComponent<FormBoxProps> = ({
 
 export default FormBox;
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   dialog: (props: StyleProps) => ({
     backgroundColor: props.backgroundColor,
     opacity: props.opacity,

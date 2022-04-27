@@ -60,7 +60,7 @@ resource "aws_cloudfront_distribution" "appbricks-io" {
   }
 
   aliases = (length(var.env) == 0
-    ? list(local.env_domain, "www.${local.env_domain}")
+    ? tolist([local.env_domain, "www.${local.env_domain}"])
     : [])
 
   dynamic "viewer_certificate" {
@@ -94,7 +94,11 @@ SCRIPT
   }
 
   triggers = {
-    content = md5(join(" ", aws_s3_bucket_object.content.*.etag))
+    content = local.publish_file_list_sha1
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 
   depends_on = [aws_cloudfront_distribution.appbricks-io]
