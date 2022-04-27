@@ -135,8 +135,8 @@ jobs:
         tag_name: ${{ steps.release_tag.outputs.value }}
         release_name: AppBricks MyCloudSpace Release ${{ steps.release_tag.outputs.value }}
         body_path: ./docs/release-notes.md
-        draft: false
-        prerelease: true
+        draft: true
+        prerelease: false
 
     - name: Upload release archive
       uses: actions/upload-release-asset@v1
@@ -183,19 +183,19 @@ jobs:
     # remote state, downloading modules, etc.
     - name: Terraform Init
       run: |
-        terraform init \
+        echo "Initializing for environment: $TF_VAR_env"
+        terraform -chdir=build/publish init \
           -backend-config="key=website/appbricks-io_${TF_VAR_env}" \
-          -backend-config="bucket=appbricks-tfstate-useast1" \
-          build/publish
+          -backend-config="bucket=appbricks-tfstate-useast1"
 
     # Generates an execution plan for Terraform
     - name: Site update plan (Terraform Plan)
       run: |
-        terraform plan \
-          build/publish
+        echo "Publish plan for environment: $TF_VAR_env"
+        terraform -chdir=build/publish plan
 
     # Apply Terraform plan and deploy site to a dev url
     - name: Publish Site (Terraform Apply)
       run: |
-        terraform apply -auto-approve \
-          build/publish
+        echo "Publishing to environment: $TF_VAR_env"
+        terraform -chdir=build/publish apply -auto-approve
