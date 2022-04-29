@@ -1,6 +1,6 @@
 ---
 contentPage: 'index'
-order: 2
+order: 4
 
 fillViewPort: true
 
