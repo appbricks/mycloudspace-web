@@ -4,18 +4,12 @@ order: 2
 
 fillViewPort: true
 
-image: '../images/products/cloud-sandbox.jpg'
+image: '../images/backgrounds/vpn-network.jpg'
 backgroundColor: '#f0f0f0'
 
 textBlockAlign: 'left'
 textBlockForegroundColor: '#4d4d4d'
 textBlockBackgroundColor: 'rgba(255, 255, 255, 0.7)'
-
-# button: 'About Us'
-# buttonMargins: '50px 0 0 0'
-# buttonLink: '/about'
-# buttonForegroundColor: '#ffffff'
-# buttonBackgroundColor: '#4d4d4d'
 ---
 
 ## The Network

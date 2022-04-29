@@ -10,12 +10,6 @@ backgroundColor: '#f0f0f0'
 textBlockAlign: 'right'
 textBlockForegroundColor: '#4d4d4d'
 textBlockBackgroundColor: 'rgba(255, 255, 255, 0.7)'
-
-# button: 'Our Products'
-# buttonMargins: '10px 0 0 0'
-# buttonLink: '/products'
-# buttonForegroundColor: '#ffffff'
-# buttonBackgroundColor: '#4d4d4d'
 ---
 
 ## The Web and Beyond
