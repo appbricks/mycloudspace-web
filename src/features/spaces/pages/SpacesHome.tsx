@@ -3,6 +3,7 @@ import React, {
   useEffect
 } from 'react';
 import { connect } from 'react-redux';
+import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 
 import { 
@@ -32,29 +33,31 @@ const SpacesHome: FunctionComponent<SpacesHomeProps> = (props) => {
   const userSpaces = userspace && userspace.userSpaces;
 
   return (
-    <Grid container justify='flex-start' spacing={2} className={styles.root}>
-      {userSpaces && userSpaces.length > 0
-        ? userSpaces.filter(userSpace => userSpace.isOwner)
-          .map((userSpace, index) =>
-            <Grid key={index} item>
-              <SpaceOverview 
-                key={index} 
-                space={userspace.spaces[userSpace.space!.spaceID!]} 
-                isOwner={userSpace.isOwner!} 
-              />
-            </Grid>) 
-          .concat(
-            userSpaces.filter(userSpace => !userSpace.isOwner).map((userSpace, index) =>
-              <Grid key={index+userSpaces.length} item>
-                <SpaceInvite key={index} space={userspace.spaces[userSpace.space!.spaceID!]} />
+    <Box style={{ marginRight: 32 }}>
+      <Grid container justify='flex-start' spacing={2} className={styles.root}>
+        {userSpaces && userSpaces.length > 0
+          ? userSpaces.filter(userSpace => userSpace.isOwner)
+            .map((userSpace, index) =>
+              <Grid key={index} item>
+                <SpaceOverview 
+                  key={index} 
+                  space={userspace.spaces[userSpace.space!.spaceID!]} 
+                  isOwner={userSpace.isOwner!} 
+                />
               </Grid>) 
-          )
-        : 
-          <Grid item>
-            <SpacePlaceHolder />
-          </Grid>
-      }
-    </Grid>
+            .concat(
+              userSpaces.filter(userSpace => !userSpace.isOwner).map((userSpace, index) =>
+                <Grid key={index+userSpaces.length} item>
+                  <SpaceInvite key={index} space={userspace.spaces[userSpace.space!.spaceID!]} />
+                </Grid>) 
+            )
+          : 
+            <Grid item>
+              <SpacePlaceHolder />
+            </Grid>
+        }
+      </Grid>
+    </Box>
   );
 }
 

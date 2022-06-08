@@ -3,6 +3,7 @@ import React, {
   useEffect
 } from 'react';
 import { connect } from 'react-redux';
+import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 
 import { 
@@ -32,38 +33,40 @@ const DevicesHome: FunctionComponent<DevicesHomeProps> = (props) => {
   const userDevices = userspace?.userDevices;
 
   return (
-    <Grid container justify='flex-start' spacing={2} className={styles.root}>
-      {userDevices && userDevices.length > 0
-        ? userDevices.filter(userDevice => userDevice.isOwner)
-          .map((userDevice, index) =>
-            <Grid key={index} item>
-              <DeviceOverview 
-                key={index} 
-                device={userspace.devices[userDevice.device!.deviceID!]} 
-                isOwner={true}
-              />
-            </Grid>) 
-          .concat(
-            userDevices.filter(userDevice => !userDevice.isOwner && 
-              (
-                userDevice.status == UserAccessStatus.pending ||
-                userDevice.status == UserAccessStatus.active
-              )
-            ).map((userDevice, index) =>
-              <Grid key={index+userDevices.length} item>
+    <Box style={{ marginRight: 32 }}>
+      <Grid container justify='flex-start' spacing={2} className={styles.root}>
+        {userDevices && userDevices.length > 0
+          ? userDevices.filter(userDevice => userDevice.isOwner)
+            .map((userDevice, index) =>
+              <Grid key={index} item>
                 <DeviceOverview 
                   key={index} 
                   device={userspace.devices[userDevice.device!.deviceID!]} 
-                  isOwner={false}
+                  isOwner={true}
                 />
               </Grid>) 
-          )
-        : 
-          <Grid item>
-            <DevicePlaceHolder />
-          </Grid>
-      }
-    </Grid>
+            .concat(
+              userDevices.filter(userDevice => !userDevice.isOwner && 
+                (
+                  userDevice.status == UserAccessStatus.pending ||
+                  userDevice.status == UserAccessStatus.active
+                )
+              ).map((userDevice, index) =>
+                <Grid key={index+userDevices.length} item>
+                  <DeviceOverview 
+                    key={index} 
+                    device={userspace.devices[userDevice.device!.deviceID!]} 
+                    isOwner={false}
+                  />
+                </Grid>) 
+            )
+          : 
+            <Grid item>
+              <DevicePlaceHolder />
+            </Grid>
+        }
+      </Grid>
+    </Box>
   );
 }
 
