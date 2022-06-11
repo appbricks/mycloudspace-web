@@ -1,5 +1,6 @@
 import React, { 
   FunctionComponent,
+  useRef,
   useEffect
 } from 'react';
 import { connect } from 'react-redux';
@@ -21,19 +22,28 @@ import {
 import DevicePlaceHolder from '../components/DevicePlaceHolder';
 import DeviceOverview from '../components/DeviceOverview';
 
+import { useOnScreen } from '../../../common/utils/onscreen';
+
 const DevicesHome: FunctionComponent<DevicesHomeProps> = (props) => {
   const styles = useStyles(props);
 
   const { userspace, userspaceService } = props;
 
+  const ref = useRef<HTMLDivElement>(null);
+  const onScreen = useOnScreen(ref);
+
   useEffect(() => {
-    userspaceService!.getUserDevices();
-  }, [])
+    if (onScreen) {
+      userspaceService!.getUserDevices();
+    } else {
+      userspaceService!.unsubscribeFromDeviceUpdates();
+    }    
+  }, [onScreen])
 
   const userDevices = userspace?.userDevices;
 
   return (
-    <Box style={{ marginRight: 32 }}>
+    <div ref={ref} style={{ marginRight: 32 }}>
       <Grid container justify='flex-start' spacing={2} className={styles.root}>
         {userDevices && userDevices.length > 0
           ? userDevices.filter(userDevice => userDevice.isOwner)
@@ -66,7 +76,7 @@ const DevicesHome: FunctionComponent<DevicesHomeProps> = (props) => {
             </Grid>
         }
       </Grid>
-    </Box>
+    </div>
   );
 }
 

@@ -1,5 +1,6 @@
 import React, { 
   FunctionComponent,
+  useRef,
   useEffect
 } from 'react';
 import { connect } from 'react-redux';
@@ -21,19 +22,28 @@ import SpaceOverview from '../components/SpaceOverview';
 import SpaceInvite from '../components/SpaceInvite';
 import SpacePlaceHolder from '../components/SpacePlaceHolder';
 
+import { useOnScreen } from '../../../common/utils/onscreen';
+
 const SpacesHome: FunctionComponent<SpacesHomeProps> = (props) => {
   const styles = useStyles(props);
 
   const { userspace, userspaceService } = props;
 
+  const ref = useRef<HTMLDivElement>(null);
+  const onScreen = useOnScreen(ref);
+
   useEffect(() => {
-    userspaceService!.getUserSpaces();
-  }, [])
+    if (onScreen) {
+      userspaceService!.getUserSpaces();
+    } else {
+      userspaceService!.unsubscribeFromSpaceUpdates();
+    }
+  }, [onScreen])
 
   const userSpaces = userspace && userspace.userSpaces;
 
   return (
-    <Box style={{ marginRight: 32 }}>
+    <div ref={ref} style={{ marginRight: 32 }}>
       <Grid container justify='flex-start' spacing={2} className={styles.root}>
         {userSpaces && userSpaces.length > 0
           ? userSpaces.filter(userSpace => userSpace.isOwner)
@@ -57,7 +67,7 @@ const SpacesHome: FunctionComponent<SpacesHomeProps> = (props) => {
             </Grid>
         }
       </Grid>
-    </Box>
+    </div>
   );
 }
 
