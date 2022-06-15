@@ -4,7 +4,6 @@ import React, {
   useEffect
 } from 'react';
 import { connect } from 'react-redux';
-import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 
 import { 
@@ -51,8 +50,7 @@ const SpacesHome: FunctionComponent<SpacesHomeProps> = (props) => {
               <Grid key={index} item>
                 <SpaceOverview 
                   key={index} 
-                  space={userspace.spaces[userSpace.space!.spaceID!]} 
-                  isOwner={userSpace.isOwner!} 
+                  space={userspace.spaces[userSpace.space!.spaceID!]}
                 />
               </Grid>) 
             .concat(
