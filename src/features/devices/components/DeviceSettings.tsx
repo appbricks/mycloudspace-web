@@ -138,8 +138,3 @@ type OwnerSettingsProps =
   open: boolean
   onClose: () => void
 }
-
-type State = {
-  showTokenSecret: boolean
-  tokenVerificationCode: string
-}

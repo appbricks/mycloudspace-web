@@ -20,7 +20,7 @@ import { useLabelContent } from '../../../common/state/content';
 import DeviceUserList from './DeviceUserList';
 import UserAccessStatusChip from './UserAccessStatusChip';
 
-import OwnerSettings from './OwnerSettings';
+import DeviceSettings from './DeviceSettings';
 import UserSettings from './UserSettings';
 
 const DeviceOverview: FunctionComponent<DeviceOverviewProps> = ({ device, isOwner }) => {
@@ -107,7 +107,7 @@ const DeviceOverview: FunctionComponent<DeviceOverviewProps> = ({ device, isOwne
       </div>
     </Tile>
     {isOwner
-      ? <OwnerSettings 
+      ? <DeviceSettings 
           device={device}
           open={openSettings}
           onClose={handleCloseSettings}

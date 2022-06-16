@@ -17,7 +17,7 @@ import { useLabelContent } from '../../../common/state/content';
 import SpaceUserList from './SpaceUserList';
 import StatusChip from './StatusChip';
 
-import OwnerSettings from './OwnerSettings';
+import SpaceSettings from './SpaceSettings';
 
 const SpaceOverview: FunctionComponent<SpaceOverviewProps> = ({ space }) => {
   const styles = useStyles();
@@ -89,7 +89,7 @@ const SpaceOverview: FunctionComponent<SpaceOverviewProps> = ({ space }) => {
         </Typography>
       </div>
     </Tile>
-    <OwnerSettings 
+    <SpaceSettings 
       space={space}
       open={openSettings}
       onClose={handleCloseSettings}

@@ -1,6 +1,9 @@
 import React, { FunctionComponent } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import SettingsIcon from '@material-ui/icons/Settings';
+
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 import { AppDetail } from '@appbricks/user-space';
@@ -15,14 +18,35 @@ import { useLabelContent } from '../../../common/state/content';
 import AppUserList from './AppUserList';
 import StatusChip from './StatusChip';
 
+import AppSettings from './AppSettings';
+import UserSettings from './UserSettings';
+
 const AppOverview: FunctionComponent<AppOverviewProps> = ({ app, isOwner }) => {
   const styles = useStyles();
   const labelLookup = useLabelContent();
+
+  const [openSettings, setOpenSettings] = React.useState(false);
+
+  const handleOpenSettings = () => {
+    setOpenSettings(true);
+  };
+
+  const handleCloseSettings = () => {
+    setOpenSettings(false);
+  };
 
   return (<>
     <Tile 
       header={{
         title: app.name,
+        action: <>
+          <IconButton 
+            aria-label="settings"
+            onClick={handleOpenSettings}
+          >
+            <SettingsIcon />
+          </IconButton>
+        </>
       }}
       width={400}
       toggleExpand={isOwner as boolean}
@@ -48,6 +72,18 @@ const AppOverview: FunctionComponent<AppOverviewProps> = ({ app, isOwner }) => {
         </Typography>
       </div>
     </Tile>
+    {isOwner
+      ? <AppSettings 
+          app={app}
+          open={openSettings}
+          onClose={handleCloseSettings}
+        />
+      : <UserSettings 
+          app={app}
+          open={openSettings}
+          onClose={handleCloseSettings}
+        />
+    }
   </>);
 }
 
