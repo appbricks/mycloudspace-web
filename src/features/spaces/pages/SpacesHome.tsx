@@ -22,6 +22,7 @@ import SpaceInvite from '../components/SpaceInvite';
 import SpacePlaceHolder from '../components/SpacePlaceHolder';
 
 import { useOnScreen } from '../../../common/utils/onscreen';
+import { useActionStatus } from '../../../common/state/status';
 
 const SpacesHome: FunctionComponent<SpacesHomeProps> = (props) => {
   const styles = useStyles(props);
@@ -38,6 +39,9 @@ const SpacesHome: FunctionComponent<SpacesHomeProps> = (props) => {
       userspaceService!.unsubscribeFromSpaceUpdates();
     }
   }, [onScreen])
+
+  // handle service action result
+  useActionStatus(userspace!)
 
   const userSpaces = userspace && userspace.userSpaces;
 

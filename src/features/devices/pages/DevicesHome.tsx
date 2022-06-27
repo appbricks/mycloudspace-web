@@ -22,6 +22,7 @@ import DevicePlaceHolder from '../components/DevicePlaceHolder';
 import DeviceOverview from '../components/DeviceOverview';
 
 import { useOnScreen } from '../../../common/utils/onscreen';
+import { useActionStatus } from '../../../common/state/status';
 
 const DevicesHome: FunctionComponent<DevicesHomeProps> = (props) => {
   const styles = useStyles(props);
@@ -38,6 +39,9 @@ const DevicesHome: FunctionComponent<DevicesHomeProps> = (props) => {
       userspaceService!.unsubscribeFromDeviceUpdates();
     }    
   }, [onScreen])
+
+  // handle service action result
+  useActionStatus(userspace!)
 
   const userDevices = userspace?.userDevices;
 

@@ -21,6 +21,7 @@ import AppOverview from '../components/AppOverview';
 import AppStore from '../components/AppStore';
 
 import { useOnScreen } from '../../../common/utils/onscreen';
+import { useActionStatus } from '../../../common/state/status';
 
 const AppsHome: FunctionComponent<AppsHomeProps> = (props) => {
   const styles = useStyles(props);
@@ -37,6 +38,9 @@ const AppsHome: FunctionComponent<AppsHomeProps> = (props) => {
       userspaceService!.unsubscribeFromAppUpdates();
     }
   }, [onScreen])
+
+  // handle service action result
+  useActionStatus(userspace!)
 
   const userApps = userspace && userspace.userApps;
 
