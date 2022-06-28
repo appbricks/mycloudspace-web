@@ -10,7 +10,6 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles, darken } from '@material-ui/core/styles';
 
 import { 
-  ActionStatus,
   ActionStatusTracker 
 } from '@appbricks/utils';
 
@@ -38,7 +37,7 @@ import {
 import { useStaticContent } from '../../../common/state/content';
 import { useActionStatus } from '../../../common/state/status';
 
-const OwnerSettings: FunctionComponent<OwnerSettingsProps> = (props) => {
+const SpaceSettings: FunctionComponent<SpaceSettingsProps> = (props) => {
   const styles = useStyles();
   const content = useStaticContent('spaces', 'SpaceSettings');
 
@@ -111,15 +110,45 @@ const OwnerSettings: FunctionComponent<OwnerSettingsProps> = (props) => {
           <StaticLabel id='spaceDefaults' />
         </DialogContentText>
         <CheckBox
-          id='enableSpaceEgress'
+          id='makeSpaceAdmin'
           disabled={savingSpaceDefaults}
-          checked={spaceDefaults.isEgressNode}
+          checked={spaceDefaults.isSpaceAdmin}
           checkColor='primary'
           onChange={
             (event, checked) => {
               handleSpaceDefaultsChanged({
                 ...spaceDefaults,
-                isEgressNode: !spaceDefaults.isEgressNode
+                isSpaceAdmin: !spaceDefaults.isSpaceAdmin
+              });
+            }
+          }
+          className={styles.checkBox}
+        />
+        <CheckBox
+          id='enableSpaceEgress'
+          disabled={!space.isEgressNode || savingSpaceDefaults}
+          checked={space.isEgressNode && spaceDefaults.canUseSpaceForEgress}
+          checkColor='primary'
+          onChange={
+            (event, checked) => {
+              handleSpaceDefaultsChanged({
+                ...spaceDefaults,
+                canUseSpaceForEgress: !spaceDefaults.canUseSpaceForEgress
+              });
+            }
+          }
+          className={styles.checkBox}
+        />
+        <CheckBox
+          id='enableSiteBlocking'
+          disabled={savingSpaceDefaults}
+          checked={spaceDefaults.enableSiteBlocking}
+          checkColor='primary'
+          onChange={
+            (event, checked) => {
+              handleSpaceDefaultsChanged({
+                ...spaceDefaults,
+                enableSiteBlocking: !spaceDefaults.enableSiteBlocking
               });
             }
           }
@@ -159,7 +188,7 @@ const OwnerSettings: FunctionComponent<OwnerSettingsProps> = (props) => {
   );
 }
 
-export default connect(UserSpaceService.stateProps, UserSpaceService.dispatchProps)(OwnerSettings);
+export default connect(UserSpaceService.stateProps, UserSpaceService.dispatchProps)(SpaceSettings);
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -197,7 +226,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type OwnerSettingsProps =
+type SpaceSettingsProps =
   UserSpaceStateProps &
   UserSpaceActionProps & {
 
