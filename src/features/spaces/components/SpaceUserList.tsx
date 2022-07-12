@@ -77,6 +77,7 @@ const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
 
   const handleCloseSettings = () => {
     setOpenSettings(false);
+    setRowsSelected([])
   };
 
   // user search
