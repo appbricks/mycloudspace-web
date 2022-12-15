@@ -1,4 +1,4 @@
-import Amplify, { Auth, API } from 'aws-amplify';
+import { Amplify, Auth, API } from 'aws-amplify';
 import awsconfig from '../../aws-exports';
 
 import { 
