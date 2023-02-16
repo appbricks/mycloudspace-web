@@ -69,11 +69,11 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
   const handleButtonClick = (index: number) => (event: MouseEvent<HTMLButtonElement>) => {
     switch(index) {
       case 0: {
-        navigate('/mycs/signup', thisDialog);
+        authService!.signIn(values.username, values.password);
         break;
       }
       case 1: {
-        authService!.signIn(values.username, values.password);
+        navigate('/mycs/signup', thisDialog);
         break;
       }
     }
@@ -166,18 +166,18 @@ const SignIn: FunctionComponent<SignInProps> = (props) => {
       buttons={
         [
           {
-            id: 'signUpButton',
-            icon: <Icon icon={signupIcon} />,
-            onClick: handleButtonClick,
-            disabled: serviceCallInProgress
-          },
-          {
             id: 'signInButton',
             icon: <Icon icon={signinIcon} />,
             default: true,
             onClick: handleButtonClick,
             disabled: disableSignIn,
             working: serviceCallInProgress
+          },
+          {
+            id: 'signUpButton',
+            icon: <Icon icon={signupIcon} />,
+            onClick: handleButtonClick,
+            disabled: serviceCallInProgress
           }
         ]
       }
