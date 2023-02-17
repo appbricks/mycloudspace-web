@@ -17,9 +17,9 @@ import { useLabelContent } from '../../../common/state/content';
 import SpaceUserList from './SpaceUserList';
 import StatusChip from './StatusChip';
 
-import OwnerSettings from './OwnerSettings';
+import SpaceSettings from './SpaceSettings';
 
-const SpaceOverview: FunctionComponent<SpaceOverviewProps> = ({ space, isOwner }) => {
+const SpaceOverview: FunctionComponent<SpaceOverviewProps> = ({ space }) => {
   const styles = useStyles();
   const labelLookup = useLabelContent();
 
@@ -47,7 +47,7 @@ const SpaceOverview: FunctionComponent<SpaceOverviewProps> = ({ space, isOwner }
         </>
       }}
       width={400}
-      toggleExpand={isOwner as boolean}
+      toggleExpand
       toggleExpandLabel='Users'
       expandedContent={<>
         <SpaceUserList space={space!} />
@@ -60,7 +60,7 @@ const SpaceOverview: FunctionComponent<SpaceOverviewProps> = ({ space, isOwner }
         </Typography>
         <Divider variant="fullWidth" className={styles.divider} />
         <Typography component='div'>
-          <strong>{labelLookup('lastSeen').text()}: </strong><Text data={space.lastSeen}/>
+          <strong>{labelLookup('spaceLastSeen').text()}: </strong><Text data={space.lastSeen}/>
         </Typography>
         <Typography component='div'>
           <strong>{labelLookup('spaceClients').text()}: </strong><Text data={space.clientsConnected.toString()}/>
@@ -89,7 +89,7 @@ const SpaceOverview: FunctionComponent<SpaceOverviewProps> = ({ space, isOwner }
         </Typography>
       </div>
     </Tile>
-    <OwnerSettings 
+    <SpaceSettings 
       space={space}
       open={openSettings}
       onClose={handleCloseSettings}
@@ -113,5 +113,4 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 type SpaceOverviewProps = {
   space: SpaceDetail
-  isOwner: boolean
 }

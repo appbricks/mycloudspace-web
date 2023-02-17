@@ -8,8 +8,7 @@ import {
 } from '@material-ui/core/styles';
 
 import addUser from '@iconify/icons-mdi/account-plus-outline';
-import enableEgress from '@iconify/icons-mdi/cloud-check-outline';
-import disableEgress from '@iconify/icons-mdi/cloud-off-outline';
+import userSettings from '@iconify/icons-mdi/account-cog-outline';
 import activateUser from '@iconify/icons-mdi/account-check-outline';
 import deactivateUser from '@iconify/icons-mdi/account-off-outline';
 import removeUser from '@iconify/icons-mdi/delete';
@@ -52,6 +51,8 @@ import {
 import { useActionStatus } from '../../../common/state/status';
 import { user } from '../../../common/state/auth';
 
+import SpaceUserSettings from './SpaceUserSettings';
+
 const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
   const classes = useStyles();
 
@@ -67,6 +68,19 @@ const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
 
   const actionStatusTracker = React.useRef(new ActionStatusTracker());
 
+  // user settings
+  const [openSettings, setOpenSettings] = React.useState(false);
+
+  const handleOpenSettings = () => {
+    setOpenSettings(true);
+  };
+
+  const handleCloseSettings = () => {
+    setOpenSettings(false);
+    setRowsSelected([])
+  };
+
+  // user search
   React.useEffect(() => {
     userspaceService!.userSearch('', 10);
     return () => {
@@ -85,22 +99,6 @@ const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
       } as Option<UserRef>;
     });
   }
-
-  const handleEnableEgressForUsers = () => {
-    rowsSelected.forEach(userID => {
-      actionStatusTracker.current.track(
-        userspaceService!.updateSpaceUser(space.spaceID!, userID as string, true)
-      );
-    });
-  };
-
-  const handleDisableEgressForUsers = () => {
-    rowsSelected.forEach(userID => {
-      actionStatusTracker.current.track(
-        userspaceService!.updateSpaceUser(space.spaceID!, userID as string, false)
-      );
-    });
-  };
 
   const handleDeactivateUsers = () => {
     rowsSelected.forEach(userID => {
@@ -234,6 +232,10 @@ const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
     )
   );
 
+  const selectedUsers = rows.filter(
+    row => rowsSelected.includes(row.userID)
+  );
+
   return (
     <div className={classes.root}>
       <TableList
@@ -246,22 +248,12 @@ const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
           selectedItemName: 'user',
           selectedItemActions: [
             {
-              icon: enableEgress,
-              tooltip: 'Allow Use as Egress Node',
-              ariaLabel: 'allow this node to be used to egress to the internet',
-              hidden: enableEgressHidden,
+              icon: userSettings,
+              tooltip: 'Modify user settings',
+              ariaLabel: 'modify the selected users\' space settings',
               disabled: disableTableList,
               processing: updatingSpaceUser,
-              handler: handleEnableEgressForUsers
-            },
-            {
-              icon: disableEgress,
-              tooltip: 'Disallow Use as Egress Node',
-              ariaLabel: 'disallow this node from beeing used to egress to the internet',
-              hidden: disableEgressHidden,
-              disabled: disableTableList,
-              processing: updatingSpaceUser,
-              handler: handleDisableEgressForUsers
+              handler: handleOpenSettings
             },
             {
               icon: activateUser,
@@ -321,6 +313,12 @@ const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
           handleClick={handleAddUsers}
         />
       </div>
+      <SpaceUserSettings 
+        space={space}
+        selectedUsers={selectedUsers}
+        open={openSettings}
+        onClose={handleCloseSettings}
+      />
     </div>
   );
 }

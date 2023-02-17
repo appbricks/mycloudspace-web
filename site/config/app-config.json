@@ -166,11 +166,6 @@
             "title": "Account",
             "icon": "accountIcon",
             "feature": "AccountHome"
-          },
-          {
-            "title": "Help",
-            "icon": "helpIcon",
-            "feature": "HelpHome"
           }
         ]
       }

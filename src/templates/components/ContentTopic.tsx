@@ -37,7 +37,7 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
     topicMetadata.fillViewPort = false;
   }
 
-  const [ hideScrollButton, setHideScrollButton ] = useState(!topicMetadata.fillViewPort);
+  const [ hideScrollButton, setHideScrollButton ] = useState(true);
   const ref = useRef<HTMLDivElement>(null);
 
   const styles = useStyles(topicMetadata);
@@ -48,10 +48,8 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
       topicRefs.push(ref);
     }
 
-    if (topicMetadata.fillViewPort) {
-      const cleanup = handleParentScroll(onScroll, ref);
-      return () => cleanup();
-    }
+    const cleanup = handleParentScroll(onScroll, ref);
+    return () => cleanup();
   });
 
   // content view scroll bounds for hiding scroll button
@@ -59,16 +57,15 @@ const ContentTopic: FunctionComponent<ContentTopicProps> = ({
   const scrollButtonPosYHigh = headerHeight + scrollButtonShowDelta;
 
   const onScroll = (pos: Position) => {
-    if (topicMetadata.fillViewPort) {
-      if (hideScrollButton
-        && pos.y >= scrollButtonPosYLow && pos.y <= scrollButtonPosYHigh) {
 
-        setHideScrollButton(false);
-      } else if (!hideScrollButton
-        && (pos.y < scrollButtonPosYLow || pos.y > scrollButtonPosYHigh)) {
+    if (hideScrollButton
+      && pos.y >= scrollButtonPosYLow && pos.y <= scrollButtonPosYHigh) {
 
-        setHideScrollButton(true);
-      }
+      setHideScrollButton(false);
+    } else if (!hideScrollButton
+      && (pos.y < scrollButtonPosYLow || pos.y > scrollButtonPosYHigh)) {
+
+      setHideScrollButton(true);
     }
   }
 

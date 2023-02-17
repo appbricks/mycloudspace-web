@@ -1,5 +1,6 @@
 import React, { 
   FunctionComponent,
+  useRef,
   useEffect
 } from 'react';
 import { connect } from 'react-redux';
@@ -20,41 +21,55 @@ import SpaceOverview from '../components/SpaceOverview';
 import SpaceInvite from '../components/SpaceInvite';
 import SpacePlaceHolder from '../components/SpacePlaceHolder';
 
+import { useOnScreen } from '../../../common/utils/onscreen';
+import { useActionStatus } from '../../../common/state/status';
+
 const SpacesHome: FunctionComponent<SpacesHomeProps> = (props) => {
   const styles = useStyles(props);
 
   const { userspace, userspaceService } = props;
 
+  const ref = useRef<HTMLDivElement>(null);
+  const onScreen = useOnScreen(ref);
+
   useEffect(() => {
-    userspaceService!.getUserSpaces();
-  }, [])
+    if (onScreen) {
+      userspaceService!.getUserSpaces();
+    } else {
+      userspaceService!.unsubscribeFromSpaceUpdates();
+    }
+  }, [onScreen])
+
+  // handle service action result
+  useActionStatus(userspace!)
 
   const userSpaces = userspace && userspace.userSpaces;
 
   return (
-    <Grid container justify='flex-start' spacing={2} className={styles.root}>
-      {userSpaces && userSpaces.length > 0
-        ? userSpaces.filter(userSpace => userSpace.isOwner)
-          .map((userSpace, index) =>
-            <Grid key={index} item>
-              <SpaceOverview 
-                key={index} 
-                space={userspace.spaces[userSpace.space!.spaceID!]} 
-                isOwner={userSpace.isOwner!} 
-              />
-            </Grid>) 
-          .concat(
-            userSpaces.filter(userSpace => !userSpace.isOwner).map((userSpace, index) =>
-              <Grid key={index+userSpaces.length} item>
-                <SpaceInvite key={index} space={userspace.spaces[userSpace.space!.spaceID!]} />
+    <div ref={ref} style={{ marginRight: 32 }}>
+      <Grid container justify='flex-start' spacing={2} className={styles.root}>
+        {userSpaces && userSpaces.length > 0
+          ? userSpaces.filter(userSpace => userSpace.isOwner)
+            .map((userSpace, index) =>
+              <Grid key={index} item>
+                <SpaceOverview 
+                  key={index} 
+                  space={userspace.spaces[userSpace.space!.spaceID!]}
+                />
               </Grid>) 
-          )
-        : 
-          <Grid item>
-            <SpacePlaceHolder />
-          </Grid>
-      }
-    </Grid>
+            .concat(
+              userSpaces.filter(userSpace => !userSpace.isOwner).map((userSpace, index) =>
+                <Grid key={index+userSpaces.length} item>
+                  <SpaceInvite key={index} space={userspace.spaces[userSpace.space!.spaceID!]} />
+                </Grid>) 
+            )
+          : 
+            <Grid item>
+              <SpacePlaceHolder />
+            </Grid>
+        }
+      </Grid>
+    </div>
   );
 }
 

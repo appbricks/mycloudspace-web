@@ -18,6 +18,8 @@ import Tab from '@material-ui/core/Tab';
 import { useAppConfig } from '../../../state/app';
 import getAppMenu from './getAppMenu';
 
+import { wkScrollbar } from '../../layout/Layout';
+
 const AppNav: FunctionComponent<AppNavProps> = (props) => {
 
   const appConfig = useAppConfig();
@@ -131,7 +133,7 @@ const AppNavTab = withStyles((theme: Theme) => ({
       padding: '10px 5px 5px 5px',
     },
     textTransform: 'none',
-    fontWeight: theme.typography.fontWeightRegular,
+    fontWeight: theme.typography.fontWeightRegular as any, // TODO: fix type incompatibilities between material-ui and react
     fontSize: '0.75rem',
     opacity: 0.5,
     '&:focus': {
@@ -193,6 +195,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     height: '100%',
     width: '100%',
+    overflow: 'hidden',
     display: 'flex',
     flexGrow: 1,
     flexDirection: 'row',
@@ -203,8 +206,10 @@ const useStyles = makeStyles(theme => ({
   tabPanel: {
     flexGrow: 100, 
     maxWidth: '100%',
-    overflowY: 'scroll',
-    overflowX: 'hidden'
+    overflowY: 'auto',
+    overflowX: 'hidden',
+    scrollbarWidth: 'thin',
+    ...wkScrollbar
   }
 }));
 

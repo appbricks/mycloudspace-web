@@ -10,6 +10,7 @@ import { useLabelContent } from '../../../common/state/content';
 const CheckBox: FunctionComponent<CheckBoxProps> = ({
   id,
   label,
+  indeterminate,
   checkColor,
   checkStyle,
   checkClassName,
@@ -22,6 +23,7 @@ const CheckBox: FunctionComponent<CheckBoxProps> = ({
     
     control={
       <Checkbox 
+        indeterminate={indeterminate}
         color={checkColor} 
         style={checkStyle}
         className={checkClassName}
@@ -35,6 +37,7 @@ export default CheckBox;
 
 type CheckBoxProps = Partial<Omit<FormControlLabelProps, 'id' | 'control'>> & {
   id: string
+  indeterminate?: boolean
   checkColor?: 'primary' | 'secondary' | 'default' 
   checkStyle?: any
   checkClassName?: any

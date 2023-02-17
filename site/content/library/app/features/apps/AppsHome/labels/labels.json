@@ -1,0 +1,36 @@
+{
+  "labels": [
+    {
+      "id": "appStatus",
+      "text": "Status"
+    },
+    {
+      "id": "appLastSeen",
+      "text": "Last Seen"
+    },
+    {
+      "id": "appInstalledSpace",
+      "text": "Space Installed To"
+    },
+    {
+      "id": "appSpaceOwner",
+      "text": "Space Owner"
+    },
+    {
+      "id": "appSettingsDialog",
+      "text": "App Settings"
+    },
+    {
+      "id": "appNameToDelete",
+      "text": "App Name to Delete"
+    },
+    {
+      "id": "deleteApp",
+      "text": "Delete App"
+    },
+    {
+      "id": "deleteAppAccess",
+      "text": "Delete App Access"
+    }
+  ]
+}

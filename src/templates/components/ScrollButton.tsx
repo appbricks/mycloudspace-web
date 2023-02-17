@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   root: (props: ScrollButtonType) => ({
     position: 'absolute',
     top: props.topOffset,
-    left: `calc(100vw - 70px)`,
+    left: `calc(100vw - 78px)`,
   }),
   button: {
     backgroundColor: '#0050ff',

@@ -25,7 +25,7 @@
       "text": "Status"
     },
     {
-      "id": "lastSeen",
+      "id": "spaceLastSeen",
       "text": "Last Seen"
     },
     {
@@ -77,8 +77,16 @@
       "text": "Grant user admin access to space"
     },
     {
+      "id": "makeSpaceAdmin",
+      "text": "Make user a space admin"
+    },
+    {
       "id": "enableSpaceEgress",
       "text": "Allow user to set space as egress node when connected"
+    },
+    {
+      "id": "enableSiteBlocking",
+      "text": "Configure user connections to block restricted sites"
     },
     {
       "id": "spaceHousekeeping",
@@ -95,6 +103,22 @@
     {
       "id": "deleteSpaceMembership",
       "text": "Delete Space Membership"
+    },
+    {
+      "id": "spaceUserSettingsDialog",
+      "text": "Space User Settings"
+    },
+    {
+      "id": "spaceUserSettingsSpace",
+      "text": "For space"
+    },
+    {
+      "id": "spaceUserSettingsUsers",
+      "text": "Users"
+    },
+    {
+      "id": "applySpaceUserSettings",
+      "text": "Apply following settings to all selected space users"
     }
   ]
 }

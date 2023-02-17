@@ -146,7 +146,7 @@ const SpaceInvite: FunctionComponent<SpaceInviteProps> = (props) => {
         </Typography>
         <Divider variant="fullWidth" className={styles.divider} />
         <Typography component='div'>
-          <strong>{labelLookup('lastSeen').text()}: </strong><Text data={space.lastSeen}/>
+          <strong>{labelLookup('spaceLastSeen').text()}: </strong><Text data={space.lastSeen}/>
         </Typography>
         <Typography component='div'>
           <strong>{labelLookup('spaceClients').text()}: </strong><Text data={space.clientsConnected.toString()}/>

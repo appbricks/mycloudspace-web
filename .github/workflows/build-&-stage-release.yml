@@ -6,7 +6,7 @@ on:
       nodeVersion:
         description: 'Node version'
         required: true
-        default: '14.x'
+        default: '16.x'
   push:
     branches: [ master ]
     paths:
@@ -47,7 +47,7 @@ jobs:
       with:
         node-version: ${{ github.event.inputs.nodeVersion }}
 
-    - run: npm install -g gatsby-cli
+    - run: npm install -g gatsby-cli@latest-v3
 
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
