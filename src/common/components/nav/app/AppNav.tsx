@@ -131,7 +131,7 @@ const AppNavTab = withStyles((theme: Theme) => ({
       padding: '10px 5px 5px 5px',
     },
     textTransform: 'none',
-    fontWeight: theme.typography.fontWeightRegular,
+    fontWeight: theme.typography.fontWeightRegular as any, // TODO: fix type incompatibilities between material-ui and react
     fontSize: '0.75rem',
     opacity: 0.5,
     '&:focus': {
