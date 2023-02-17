@@ -65,8 +65,11 @@ const useStyles = makeStyles(() => ({
   content: (props: StyleProps) => {
     if (props.noBackground) {
       return {
-        height: getLayoutViewPortHeight(props.bottomGutterHeight),
-        overflowY: 'scroll'
+        height: getLayoutViewPortHeight(props.bottomGutterHeight),        
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        scrollbarWidth: 'thin',
+        ...wkScrollbar
       };
 
     } else {
@@ -78,11 +81,26 @@ const useStyles = makeStyles(() => ({
         backgroundColor: props.appConfig.layout.backgroundOverlay,
         backgroundBlendMode: 'overlay',
         height: getLayoutViewPortHeight(props.bottomGutterHeight),
-        overflowY: props.hideNav ? 'hidden' : 'scroll'
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        scrollbarWidth: 'thin',
+        ...wkScrollbar
       }
     }
   }
 }));
+
+export const wkScrollbar = {
+  '&::-webkit-scrollbar': {
+    'display': 'auto',
+    'width': 8,
+    'background': '#2b2d32'
+  },
+  '&::-webkit-scrollbar-thumb': {
+    'background': '#efefef',
+    'border': '2px solid #2b2d32'
+  }
+};
 
 const scheme = MuiLayout();
 const sidebarId = 'navSidebar';

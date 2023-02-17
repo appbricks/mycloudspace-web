@@ -18,6 +18,8 @@ import Tab from '@material-ui/core/Tab';
 import { useAppConfig } from '../../../state/app';
 import getAppMenu from './getAppMenu';
 
+import { wkScrollbar } from '../../layout/Layout';
+
 const AppNav: FunctionComponent<AppNavProps> = (props) => {
 
   const appConfig = useAppConfig();
@@ -193,6 +195,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     height: '100%',
     width: '100%',
+    overflow: 'hidden',
     display: 'flex',
     flexGrow: 1,
     flexDirection: 'row',
@@ -203,8 +206,10 @@ const useStyles = makeStyles(theme => ({
   tabPanel: {
     flexGrow: 100, 
     maxWidth: '100%',
-    overflowY: 'scroll',
-    overflowX: 'hidden'
+    overflowY: 'auto',
+    overflowX: 'hidden',
+    scrollbarWidth: 'thin',
+    ...wkScrollbar
   }
 }));
 
