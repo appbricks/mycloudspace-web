@@ -82,7 +82,7 @@ const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
 
   // user search
   React.useEffect(() => {
-    userspaceService!.userSearch('', 10);
+    userspaceService!.userSearch('', 50);
     return () => {
       userspaceService!.clearUserSearchResults();
     };
@@ -134,7 +134,7 @@ const SpaceUserList: FunctionComponent<SpaceUserListProps> = (props) => {
 
   const handleUpdateOptionList = (filter: string) => {
     actionStatusTracker.current.track(
-      userspaceService!.userSearch(filter, 20)
+      userspaceService!.userSearch(filter, 50)
     );
   };
 
