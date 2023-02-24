@@ -14,7 +14,9 @@ import {
 import {
   UserSpaceService,
   UserSpaceStateProps,
-  UserSpaceActionProps
+  UserSpaceActionProps,
+  GET_USER_SPACES, 
+  UNSUBSCRIBE_FROM_SPACE_UPDATES
 } from '@appbricks/user-space';
 
 import SpaceOverview from '../components/SpaceOverview';
@@ -41,7 +43,15 @@ const SpacesHome: FunctionComponent<SpacesHomeProps> = (props) => {
   }, [onScreen])
 
   // handle service action result
-  useActionStatus(userspace!)
+  useActionStatus(
+    userspace!, 
+    undefined,
+    undefined,
+    [ 
+      GET_USER_SPACES, 
+      UNSUBSCRIBE_FROM_SPACE_UPDATES
+    ]
+  );
 
   const userSpaces = userspace && userspace.userSpaces;
 

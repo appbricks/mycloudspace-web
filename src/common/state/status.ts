@@ -61,6 +61,7 @@ export const useActionStatus = (
       switch (actionStatus.result) {
 
         case ActionResult.error: 
+          Logger.trace(loggerName, 'Handling action status error:', actionStatus.actionType, actionStatus);
           const error = actionStatus.data['error'] as ErrorPayload;
           let handled = false;
           if (errorCallback) {
@@ -80,21 +81,22 @@ export const useActionStatus = (
           break;
   
         case ActionResult.warn: 
+          Logger.trace(loggerName, 'Handling action status warn:', actionStatus.actionType, actionStatus);
           break;
   
         case ActionResult.info: 
+          Logger.trace(loggerName, 'Handling action status info:', actionStatus.actionType, actionStatus);
           break;
   
-        case ActionResult.error: 
-          break;
-        
         case ActionResult.success:
+          Logger.trace(loggerName, 'Handling action status success:', actionStatus.actionType, actionStatus);
           if (successCallback) {
             successCallback(actionStatus);
           }
           break;
   
         default:
+          Logger.trace(loggerName, 'Action status pending:', actionStatus.actionType, actionStatus);
           return;
       }
       // remove action status from state

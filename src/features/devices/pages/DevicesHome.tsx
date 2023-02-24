@@ -15,7 +15,9 @@ import {
   UserAccessStatus,
   UserSpaceService,
   UserSpaceStateProps,
-  UserSpaceActionProps
+  UserSpaceActionProps,
+  GET_USER_DEVICES,
+  UNSUBSCRIBE_FROM_DEVICE_UPDATES
 } from '@appbricks/user-space';
 
 import DevicePlaceHolder from '../components/DevicePlaceHolder';
@@ -41,7 +43,15 @@ const DevicesHome: FunctionComponent<DevicesHomeProps> = (props) => {
   }, [onScreen])
 
   // handle service action result
-  useActionStatus(userspace!)
+  useActionStatus(
+    userspace!,
+    undefined,
+    undefined,
+    [ 
+      GET_USER_DEVICES, 
+      UNSUBSCRIBE_FROM_DEVICE_UPDATES
+    ]
+  );
 
   const userDevices = userspace?.userDevices;
 
