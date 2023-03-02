@@ -47,11 +47,13 @@ const SpaceOverview: FunctionComponent<SpaceOverviewProps> = ({ space }) => {
         </>
       }}
       width={400}
-      toggleExpand
-      toggleExpandLabel='Users'
-      expandedContent={<>
-        <SpaceUserList space={space!} />
-      </>}
+      toggles={[
+        {
+          expandable: true,
+          expandLabel: 'Users',
+          content: <SpaceUserList space={space!} />
+        }
+      ]}
     >
       <div className={styles.body}>
         <Typography component='div'>
