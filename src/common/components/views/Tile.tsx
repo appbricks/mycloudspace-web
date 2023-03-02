@@ -73,7 +73,7 @@ const Tile: FunctionComponent<TileProps> = ({
           <CardActions className={styles.action}>
             {actions}
             {toggles.map((toggle, index) => {               
-              return toggle.expand 
+              return toggle.expandable 
                 ? toggle.expandLabel
                   ? (
                     <Chip
@@ -194,7 +194,7 @@ type TileProps = {
 }
 
 export type TileToggle = {
-  expand: boolean
+  expandable: boolean
   expandLabel?: string
   badgeValue?: number
   content: ReactElement
