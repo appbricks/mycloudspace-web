@@ -3,6 +3,10 @@ import Tile from './Tile';
 import TableList from './TableList';
 export { Text, Tile, TableList };
 
+export type {
+  TileToggle  
+} from './Tile';
+
 export type { 
   ColumnProps, 
   RowData,
