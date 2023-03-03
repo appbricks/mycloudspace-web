@@ -45,7 +45,7 @@ const UserSettings: FunctionComponent<UserSettingsProps> = (props) => {
   return (
     <FormDialog
       fullWidth
-      maxWidth='sm'
+      maxWidth='xs'
       open={open}
       onClose={onClose}
     >
