@@ -51,6 +51,30 @@
     {
       "id": "deleteDeviceAccess",
       "text": "Delete Device Access"
+    },
+    {
+      "id": "spaceAccessConfigDialog",
+      "text": "Space Access Config"
+    },
+    {
+      "id": "spaceAccessConfigSpaceName",
+      "text": "Space Name"
+    },
+    {
+      "id": "spaceAccessConfigVPNType",
+      "text": "VPN Type"
+    },
+    {
+      "id": "spaceAccessConfigActiveExp",
+      "text": "Active Expiration"
+    },
+    {
+      "id": "spaceAccessConfigInactiveExp",
+      "text": "Inactive Expiration"
+    },
+    {
+      "id": "spaceAccessConfigDownload",
+      "text": "Download"
     }
   ]
 }

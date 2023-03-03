@@ -12,12 +12,13 @@ import {
 
 import { 
   Text, 
-  Tile 
+  Tile
 } from '../../../common/components/views';
 
 import { useLabelContent } from '../../../common/state/content';
 
 import DeviceUserList from './DeviceUserList';
+import SpaceAccessConfigList from './SpaceAccessConfigList';
 import UserAccessStatusChip from './UserAccessStatusChip';
 
 import DeviceSettings from './DeviceSettings';
@@ -60,12 +61,21 @@ const DeviceOverview: FunctionComponent<DeviceOverviewProps> = ({ device, isOwne
         </>
       }}
       width={400}
-      toggleExpand={isOwner as boolean}
-      toggleExpandLabel='Users'
-      toggleBadgeValue={numAccessRequests}
-      expandedContent={<>
-        <DeviceUserList device={device!} />
-      </>}
+
+      toggles={[
+        {
+          expandable: device.spaceAccessConfigs.length > 0,
+          expandLabel: 'Space Access Configs',
+          badgeValue: numAccessRequests,
+          content: <SpaceAccessConfigList device={device!} />
+        },
+        {
+          expandable: isOwner,
+          expandLabel: 'Users',
+          badgeValue: numAccessRequests,
+          content: <DeviceUserList device={device!} />
+        }
+      ]}
     >
       <div className={styles.body}>
         <Typography component='div'>
