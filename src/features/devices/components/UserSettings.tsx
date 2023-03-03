@@ -27,7 +27,7 @@ import {
 import { useStaticContent } from '../../../common/state/content';
 import { useActionStatus } from '../../../common/state/status';
 
-const MemberSettings: FunctionComponent<MemberSettingsProps> = (props) => {
+const UserSettings: FunctionComponent<UserSettingsProps> = (props) => {
   const styles = useStyles();
   const content = useStaticContent('devices', 'DeviceSettings');
 
@@ -72,7 +72,7 @@ const MemberSettings: FunctionComponent<MemberSettingsProps> = (props) => {
   );
 }
 
-export default connect(UserSpaceService.stateProps, UserSpaceService.dispatchProps)(MemberSettings);
+export default connect(UserSpaceService.stateProps, UserSpaceService.dispatchProps)(UserSettings);
 
 const useStyles = makeStyles((theme) => ({
   deleteButton: {
@@ -98,7 +98,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-type MemberSettingsProps =
+type UserSettingsProps =
   UserSpaceStateProps &
   UserSpaceActionProps & {
 
