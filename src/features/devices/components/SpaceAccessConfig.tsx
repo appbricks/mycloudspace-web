@@ -1,4 +1,7 @@
-import React, { FunctionComponent } from 'react';
+import React, { 
+  FunctionComponent,
+  useEffect
+} from 'react';
 import { connect } from 'react-redux';
 import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
@@ -12,7 +15,8 @@ import {
   UserSpaceService,
   UserSpaceStateProps,
   UserSpaceActionProps,
-  DeviceDetail
+  DeviceDetail,
+  SpaceAccessConfig as SpaceAccessConfigT
 } from '@appbricks/user-space';
 
 import {
@@ -30,11 +34,16 @@ const SpaceAccessConfig: FunctionComponent<SpaceAccessConfigProps> = (props) => 
   const styles = useStyles();
   const content = useStaticContent('devices', 'SpaceAccessConfig');
 
-  const { device, spaceID, open, onClose } = props;
-  if (!spaceID) {
-    return <></>
-  }
-  const accessConfig = device.spaceAccessConfigs.find(c => c.spaceID == spaceID);
+  let accessConfig: SpaceAccessConfigT | undefined = undefined;
+
+  const { device, spaceID, open, onClose, userspaceService } = props;
+  accessConfig = device.spaceAccessConfigs.find(c => c.spaceID == spaceID);
+
+  useEffect(() => {
+    if (accessConfig && !accessConfig.viewed) {
+      userspaceService!.setDeviceSpaceAccessConfig(device.deviceID, accessConfig.spaceID, true);
+    }
+  }, [accessConfig])
 
   const downloadConfig = () => {    
     const blob = new Blob([accessConfig!.wgConfig!], { type: "text/plain" });
@@ -45,69 +54,75 @@ const SpaceAccessConfig: FunctionComponent<SpaceAccessConfigProps> = (props) => 
     link.click();
   };
 
-  return (
-    <FormDialog
-      fullWidth
-      maxWidth='xs'
-      open={open}
-      onClose={onClose}
-    >
-      <DialogTitle onClose={onClose}>
-        <StaticLabel id='spaceAccessConfigDialog' />
-        <Typography variant='overline' component='div'>{device.name}</Typography>
-      </DialogTitle>
-      <DialogContent dividers>
-        <StaticContent
-          body={content['space-access-info'].body}
-        />        
-        <div className={styles.detail}>
-          <Divider variant="fullWidth" className={styles.divider} />
-          <Typography component='div'>
-            <strong><StaticLabel id='spaceAccessConfigSpaceName' />: </strong>{accessConfig!.spaceName}
-          </Typography>
-          <Typography component='div'>
-            <strong><StaticLabel id='spaceAccessConfigVPNType' />: </strong>
-            {accessConfig!.vpnURL! != ''
-              ? (<a href={accessConfig!.vpnURL!} target='_blank'>{accessConfig!.vpnType}</a>)
-              : (accessConfig!.vpnType)
-            }
-          </Typography>
-          <Typography component='div'>
-            <strong><StaticLabel id='spaceAccessConfigActiveExp' />: </strong>{accessConfig!.expireAt}
-          </Typography>
-          <Typography component='div'>
-            <strong><StaticLabel id='spaceAccessConfigInactiveExp' />: </strong>{accessConfig!.inactivityExpireAt}
-          </Typography>
-          <Divider variant="fullWidth" className={styles.divider} />
-        </div>
-        <StaticContent
-          body={content['get-config'].body}
-        /> 
-        <Box display='flex' justifyContent='center'>
-          <QRCodeSVG
-            value={accessConfig!.wgConfig}
-            size={160}
-            bgColor='#ffffff'
-            fgColor='#000000'
-            level='L'
-            includeMargin={false}
-            className={styles.qrcode}
-          />
-        </Box>
-        <Box display='flex' justifyContent='center'>
-          <Button
-            type='button'
-            color='primary'
-            variant='contained'
-            onClick={downloadConfig}
-          >
-            <StaticLabel id='spaceAccessConfigDownload' />
-          </Button>
-        </Box>
-      </DialogContent>
+  if (spaceID) {
 
-    </FormDialog>
-  );
+    return (
+      <FormDialog
+        fullWidth
+        maxWidth='xs'
+        open={open}
+        onClose={onClose}
+      >
+        <DialogTitle onClose={onClose}>
+          <StaticLabel id='spaceAccessConfigDialog' />
+          <Typography variant='overline' component='div'>{device.name}</Typography>
+        </DialogTitle>
+        <DialogContent dividers>
+          <StaticContent
+            body={content['space-access-info'].body}
+          />        
+          <div className={styles.detail}>
+            <Divider variant="fullWidth" className={styles.divider} />
+            <Typography component='div'>
+              <strong><StaticLabel id='spaceAccessConfigSpaceName' />: </strong>{accessConfig!.spaceName}
+            </Typography>
+            <Typography component='div'>
+              <strong><StaticLabel id='spaceAccessConfigVPNType' />: </strong>
+              {accessConfig!.vpnURL! != ''
+                ? (<a href={accessConfig!.vpnURL!} target='_blank'>{accessConfig!.vpnType}</a>)
+                : (accessConfig!.vpnType)
+              }
+            </Typography>
+            <Typography component='div'>
+              <strong><StaticLabel id='spaceAccessConfigActiveExp' />: </strong>{accessConfig!.expireAt}
+            </Typography>
+            <Typography component='div'>
+              <strong><StaticLabel id='spaceAccessConfigInactiveExp' />: </strong>{accessConfig!.inactivityExpireAt}
+            </Typography>
+            <Divider variant="fullWidth" className={styles.divider} />
+          </div>
+          <StaticContent
+            body={content['get-config'].body}
+          /> 
+          <Box display='flex' justifyContent='center'>
+            <QRCodeSVG
+              value={accessConfig!.wgConfig}
+              size={160}
+              bgColor='#ffffff'
+              fgColor='#000000'
+              level='L'
+              includeMargin={false}
+              className={styles.qrcode}
+            />
+          </Box>
+          <Box display='flex' justifyContent='center'>
+            <Button
+              type='button'
+              color='primary'
+              variant='contained'
+              onClick={downloadConfig}
+            >
+              <StaticLabel id='spaceAccessConfigDownload' />
+            </Button>
+          </Box>
+        </DialogContent>
+
+      </FormDialog>
+    );
+
+  } else {
+    return <></>
+  }
 }
 
 export default connect(UserSpaceService.stateProps, UserSpaceService.dispatchProps)(SpaceAccessConfig);

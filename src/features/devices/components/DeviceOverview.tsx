@@ -38,6 +38,15 @@ const DeviceOverview: FunctionComponent<DeviceOverviewProps> = ({ device, isOwne
     setOpenSettings(false);
   };
 
+  const numNewSpaceAccessConfigs = device.spaceAccessConfigs
+    .reduce(
+      (numNewSpaceAccessConfigs, accessConfig) =>
+        accessConfig.viewed
+          ? numNewSpaceAccessConfigs
+          : numNewSpaceAccessConfigs + 1,
+      0
+    );
+
   const numAccessRequests = device.users
     .reduce(
       (numAccessRequests, user) => 
@@ -66,7 +75,7 @@ const DeviceOverview: FunctionComponent<DeviceOverviewProps> = ({ device, isOwne
         {
           expandable: device.spaceAccessConfigs.length > 0,
           expandLabel: 'Space Access Configs',
-          badgeValue: numAccessRequests,
+          badgeValue: numNewSpaceAccessConfigs,
           content: <SpaceAccessConfigList device={device!} />
         },
         {
