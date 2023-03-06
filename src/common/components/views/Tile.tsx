@@ -72,11 +72,12 @@ const Tile: FunctionComponent<TileProps> = ({
           <Divider variant='middle' />
           <CardActions className={styles.action}>
             {actions}
-            {toggles.map((toggle, index) => {               
+            {toggles.map((toggle, index) => {
               return toggle.expandable 
                 ? toggle.expandLabel
                   ? (
                     <Chip
+                      key={index}
                       label={toggle.expandLabel}
                       clickable
                       color='primary'
@@ -99,6 +100,7 @@ const Tile: FunctionComponent<TileProps> = ({
                   )
                   : (
                     <IconButton
+                      key={index}
                       size='small'
                       className={cx(
                         styles.expandToggleOnly, 
@@ -108,8 +110,8 @@ const Tile: FunctionComponent<TileProps> = ({
                       <ExpandMoreIcon />
                     </IconButton>
                   )
-                : (<></>)
-            })}            
+                : (<div key={index} />)
+            })}
           </CardActions>
         </>
       }
