@@ -42,28 +42,14 @@ const SpaceAccessConfigList: FunctionComponent<SpaceAccessConfigListProps> = (pr
   const tableRowFormat = (columns: ColumnProps[], row: RowData): TableRowFormat => {
 
     const cellFormats = {} as RowCellClasses;
-    const status = row['status'];
-
-    const deviceUser = (row['deviceUser'] as unknown) as DeviceUser;
-    const rowIsDisabled = !!deviceUser.isOwner;
+    const viewed = row['viewed'];
 
     columns.forEach(col => {
-      if (rowIsDisabled) {
-        cellFormats[col.id] = classes.disabledUserCell;
-      } else {
-        switch (status) {
-          case 'pending': {
-            cellFormats[col.id] = classes.pendingUserCell;
-            break;
-          }
-          case 'inactive': {
-            cellFormats[col.id] = classes.inactiveUserCell;
-            break;
-          }
-        }  
+      if (!viewed) {
+        cellFormats[col.id] = classes.unreadUserCell;
       }
     });
-    return { rowIsDisabled, cellFormats };
+    return { rowIsDisabled: false, cellFormats };
   };
 
   return (
@@ -72,6 +58,7 @@ const SpaceAccessConfigList: FunctionComponent<SpaceAccessConfigListProps> = (pr
         keyField='spaceID'
         columns={columns}
         rows={rows}
+        tableRowFormat={tableRowFormat}
         toolbarProps={{
           title: 'Space Access Configs'
         }}
@@ -96,36 +83,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {
     width: '100%'
   },
-  autoCompleteContainer: {
-    display: 'flex',
-    flexDirection: 'row'
-  },
-  autoCompleteComponent: {
-    flex: '2',
-  },
-  autoCompleteInput: {
-    minHeight: '21px'
-  },
-  autoCompleteList: {
-    borderStyle: 'solid',
-    borderWidth: '2px',
-    borderColor: '#3f51b5',
-    backgroundColor: lighten('#efefef', 0.5),
-    marginBlockEnd: theme.spacing(1.5)
-  },
-  addUserButton: {
-    height: '40px'
-  },
-  pendingUserCell: {
+  unreadUserCell: {
     color: theme.palette.info.main,
     fontStyle: 'italic'
-  },
-  inactiveUserCell: {
-    color: '#b5b5b5'
-  },
-  disabledUserCell: {
-    color: 'rgba(0, 0, 0, 0.38)'
-  },
+  }
 }));
 
 type SpaceAccessConfigListProps =
