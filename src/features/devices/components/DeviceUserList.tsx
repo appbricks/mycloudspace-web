@@ -171,27 +171,7 @@ export default connect(UserSpaceService.stateProps, UserSpaceService.dispatchPro
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     width: '100%'
-  },
-  autoCompleteContainer: {
-    display: 'flex',
-    flexDirection: 'row'
-  },
-  autoCompleteComponent: {
-    flex: '2',
-  },
-  autoCompleteInput: {
-    minHeight: '21px'
-  },
-  autoCompleteList: {
-    borderStyle: 'solid',
-    borderWidth: '2px',
-    borderColor: '#3f51b5',
-    backgroundColor: lighten('#efefef', 0.5),
-    marginBlockEnd: theme.spacing(1.5)
-  },
-  addUserButton: {
-    height: '40px'
-  },
+  },  
   pendingUserCell: {
     color: theme.palette.info.main,
     fontStyle: 'italic'

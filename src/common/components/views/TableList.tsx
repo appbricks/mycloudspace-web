@@ -27,8 +27,9 @@ const TableList: FunctionComponent<TableListProps> = ({
   rows,
   tableRowFormat,
   toolbarProps,
-  selected,
-  handleRowsSelected,
+  multiSelect = true,
+  selected = [],
+  handleRowsSelected = (selected) => {},
   disabled
 }) => {
   const classes = useStyles();
@@ -61,22 +62,31 @@ const TableList: FunctionComponent<TableListProps> = ({
 
   const handleClick = (event: React.MouseEvent<unknown>, keyValue: Value) => {
     const selectedIndex = selected.indexOf(keyValue);
-    let newSelected: Value[] = [];
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, keyValue);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
+    if (multiSelect) {
+      let newSelected: Value[] = [];
+
+      if (selectedIndex === -1) {
+        newSelected = newSelected.concat(selected, keyValue);
+      } else if (selectedIndex === 0) {
+        newSelected = newSelected.concat(selected.slice(1));
+      } else if (selectedIndex === selected.length - 1) {
+        newSelected = newSelected.concat(selected.slice(0, -1));
+      } else if (selectedIndex > 0) {
+        newSelected = newSelected.concat(
+          selected.slice(0, selectedIndex),
+          selected.slice(selectedIndex + 1),
+        );
+      }  
+      handleRowsSelected(newSelected);
+
+    } else {
+      if (selectedIndex === -1) {
+        handleRowsSelected([keyValue]);
+      } else {
+        handleRowsSelected([]);
+      }
     }
-
-    handleRowsSelected(newSelected);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -111,6 +121,7 @@ const TableList: FunctionComponent<TableListProps> = ({
             disabled={disabled}
             order={order}
             orderBy={orderBy}
+            multiSelect={multiSelect}
             numSelected={selected.length}
             rowCount={rows.length}
             columns={columns}
@@ -264,6 +275,7 @@ type TableListProps = {
   // title and actions to show in toolbar
   toolbarProps?: TableToolbarProps
 
+  multiSelect?: boolean
   selected: Value[]
   handleRowsSelected: (selected: Value[]) => void
 
@@ -290,6 +302,7 @@ const ExTableHead: FunctionComponent<ExTableHeadProps> = ({
   disabled,
   order,
   orderBy,
+  multiSelect,
   numSelected,
   rowCount,
   columns,
@@ -308,7 +321,7 @@ const ExTableHead: FunctionComponent<ExTableHeadProps> = ({
     <TableHead>
       <TableRow>
         <TableCell padding='checkbox' className={classes.tableHeadCell}>
-          <Checkbox
+          {multiSelect && <Checkbox
             size='small'
             indeterminate={indeterminate}
             checked={rowCount > 0 && numSelected === rowCount}
@@ -316,7 +329,7 @@ const ExTableHead: FunctionComponent<ExTableHeadProps> = ({
             inputProps={{ 'aria-label': 'select all users' }}
             color='primary'
             disabled={disabled}
-          />
+          />}
         </TableCell>
         {columns.map(col => (
           <TableCell
@@ -350,6 +363,7 @@ interface ExTableHeadProps {
   disabled?: boolean
   order: Order
   orderBy: string
+  multiSelect: boolean
   numSelected: number
   rowCount: number
   columns: ColumnProps[]
@@ -383,7 +397,7 @@ const ExTableToolbar: FunctionComponent<ExTableToolbarProps> = ({
   title,
   defaultActions = [],
   selectedItemName,
-  selectedItemActions,
+  selectedItemActions = [],
   numSelected
 }) => {
   const classes = useToolbarStyles();
@@ -409,10 +423,10 @@ const ExTableToolbar: FunctionComponent<ExTableToolbarProps> = ({
     <Toolbar
       variant='dense'
       className={cx(classes.root, {
-        [classes.highlight]: numSelected > 0,
+        [classes.highlight]: numSelected > 0 && selectedItemName,
       })}
     >
-      {numSelected > 0 ? (
+      {numSelected > 0 && selectedItemName ? (
         <>
           <Typography className={classes.title} color='inherit' variant='subtitle1' component='div'>
             &nbsp;&nbsp;{numSelected} {selectedItemName}{numSelected > 1 ? 's': ''} selected
@@ -438,8 +452,8 @@ interface ExTableToolbarProps extends TableToolbarProps {
 export interface TableToolbarProps {
   title: string
   defaultActions?: ToolbarAction[]
-  selectedItemName: string
-  selectedItemActions: ToolbarAction[]
+  selectedItemName?: string
+  selectedItemActions?: ToolbarAction[]
 }
 
 type ToolbarAction = {

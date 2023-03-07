@@ -1,6 +1,7 @@
 import React, { 
   FunctionComponent,
-  ReactElement
+  ReactElement,
+  useEffect
 } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import MuiCard from '@material-ui/core/Card';
@@ -24,10 +25,7 @@ const Tile: FunctionComponent<TileProps> = ({
   insetHeader,
   actions,
   centerActions,
-  toggleExpand,
-  toggleExpandLabel,
-  toggleBadgeValue = 0,
-  expandedContent,
+  toggles = [],
   children,
   ...other
 }) => {
@@ -36,15 +34,30 @@ const Tile: FunctionComponent<TileProps> = ({
     minWidth, 
     height, 
     minHeight,
-    centerActions,
-    isExpandButton: !!toggleExpandLabel
+    centerActions
   });
 
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = React.useState(-1);
 
-  const handleExpand = () => {
-    setExpanded(!expanded);
+  const handleExpand = (index: number) => {
+    if (index == expanded) {
+      setExpanded(-1);
+    } else if (expanded != -1) {
+      // expanded content needs to be collapsed 
+      // before new content at index is expanded
+      setExpanded(-(index+2));
+    } else {
+      setExpanded(index);
+    }
   };
+
+  useEffect(() => {
+    if (expanded < -1) {
+      // expand content that was switched to
+      setExpanded(-(expanded+2));
+    }
+    return () => {};
+  });
 
   return (
     <MuiCard className={styles.root}>
@@ -54,51 +67,59 @@ const Tile: FunctionComponent<TileProps> = ({
         {children}
       </CardContent>
 
-      {(actions || toggleExpand) &&
+      {(actions || toggles.length > 0) &&
         <>
           <Divider variant='middle' />
-          <CardActions disableSpacing className={styles.action}>
+          <CardActions className={styles.action}>
             {actions}
-            {toggleExpand && (
-              toggleExpandLabel
-                ? <Chip
-                    label={toggleExpandLabel}
-                    clickable
-                    color='primary'
-                    variant='outlined'
-                    onClick={handleExpand}
-                    onDelete={handleExpand}
-                    deleteIcon={
-                      <Badge badgeContent={toggleBadgeValue} color='primary' classes={{colorPrimary: styles.badgeColor}}>
-                        <ExpandMoreIcon 
-                          className={cx(
-                            styles.actionButtonColor,
-                            styles.expand, 
-                            {[styles.expandOpen]: expanded}
-                          )}
-                        />
-                      </Badge>
-                    }
-                    className={styles.actionButtonColor}
-                  />
-                : <IconButton
-                    size='small'
-                    className={cx(
-                      styles.expandToggleOnly, 
-                      styles.expand, {[styles.expandOpen]: expanded})}
-                    onClick={handleExpand}
-                  >
-                    <ExpandMoreIcon />
-                  </IconButton>
-            )}
+            {toggles.map((toggle, index) => {
+              return toggle.expandable 
+                ? toggle.expandLabel
+                  ? (
+                    <Chip
+                      key={index}
+                      label={toggle.expandLabel}
+                      clickable
+                      color='primary'
+                      variant='outlined'
+                      onClick={() => handleExpand(index)}
+                      onDelete={() => handleExpand(index)}
+                      deleteIcon={
+                        <Badge badgeContent={toggle.badgeValue} color='primary' classes={{colorPrimary: styles.badgeColor}}>
+                          <ExpandMoreIcon 
+                            className={cx(
+                              styles.actionButtonColor,
+                              styles.expand, 
+                              {[styles.expandOpen]: (expanded == index)}
+                            )}
+                          />
+                        </Badge>
+                      }
+                      className={styles.actionButtonColor}
+                    />
+                  )
+                  : (
+                    <IconButton
+                      key={index}
+                      size='small'
+                      className={cx(
+                        styles.expandToggleOnly, 
+                        styles.expand, {[styles.expandOpen]: (expanded == index)})}
+                      onClick={() => handleExpand(index)}
+                    >
+                      <ExpandMoreIcon />
+                    </IconButton>
+                  )
+                : (<div key={index} />)
+            })}
           </CardActions>
         </>
       }
 
-      <Collapse in={expanded} timeout='auto' unmountOnExit>
+      <Collapse in={expanded >= 0} timeout='auto' unmountOnExit>
         <Divider variant='middle' />
         <CardContent>
-          {expandedContent}
+          {expanded < 0 ? <></> : toggles[expanded].content}
         </CardContent>
       </Collapse>
     </MuiCard>
@@ -171,10 +192,14 @@ type TileProps = {
   actions?: ReactElement
   centerActions?: boolean
 
-  toggleExpand?: boolean
-  toggleExpandLabel?: string
-  toggleBadgeValue?: number
-  expandedContent?: ReactElement
+  toggles: TileToggle[]
+}
+
+export type TileToggle = {
+  expandable: boolean
+  expandLabel?: string
+  badgeValue?: number
+  content: ReactElement
 }
 
 type StyleProps = {
@@ -184,6 +209,4 @@ type StyleProps = {
   minHeight?: number
 
   centerActions?: boolean
-
-  isExpandButton?: boolean
 }
