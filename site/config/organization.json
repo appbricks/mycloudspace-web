@@ -11,7 +11,8 @@
       "phone": "+1-716-575-5305",
       "email": "marketing@appbricks.io",
       "supportEmail": "support@appbricks.io",
-      "supportChannel": "https://appbricks.slack.io"
+      "supportChannel": "https://appbricks.slack.io",
+      "smsNumber": "+1-888-594-5003"
     }
   }
 }

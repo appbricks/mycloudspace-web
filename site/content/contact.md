@@ -35,3 +35,4 @@ __Phone__: <SiteContact field='phone'></SiteContact><br/>
 __Email__: <SiteContact field='email'></SiteContact><br/>
 __Support Email__: <SiteContact field='supportEmail'></SiteContact><br/>
 __Support Channel__: <SiteContact field='supportChannel'></SiteContact><br/>
+__SMS Sender ID__: <SiteContact field='smsNumber'></SiteContact><br/>

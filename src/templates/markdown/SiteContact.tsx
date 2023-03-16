@@ -19,6 +19,7 @@ const SiteContact: FunctionComponent<SiteContactProps> = (props) => {
                   phone
                   supportEmail
                   supportChannel
+                  smsNumber
                 }
               }
             }      
