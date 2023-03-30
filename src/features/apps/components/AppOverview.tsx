@@ -49,11 +49,13 @@ const AppOverview: FunctionComponent<AppOverviewProps> = ({ app, isOwner }) => {
         </>
       }}
       width={400}
-      toggleExpand={isOwner as boolean}
-      toggleExpandLabel='Users'
-      expandedContent={<>
-        <AppUserList app={app!} />
-      </>}
+      toggles={[
+        {
+          expandable: isOwner,
+          expandLabel: 'Users',
+          content: <AppUserList app={app!} />
+        }
+      ]}
     >
       <div className={styles.body}>
         <Typography component='div'>
