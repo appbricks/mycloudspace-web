@@ -192,7 +192,7 @@ type TileProps = {
   actions?: ReactElement
   centerActions?: boolean
 
-  toggles: TileToggle[]
+  toggles?: TileToggle[]
 }
 
 export type TileToggle = {
