@@ -16,6 +16,7 @@ import {
 
 const Text: FunctionComponent<TextProps> = ({
   data, 
+  animateChange = false,
   emphasisColor = '#0f9015'
 }) => {
 
@@ -25,7 +26,7 @@ const Text: FunctionComponent<TextProps> = ({
   const lastValue = useRef<string>('');
 
   useEffect(() => {
-    if (ref.current) {
+    if (animateChange && ref.current) {
       // calculate color transition to animate 
       // font highlight when a change is detected
       const baseColor = getRgbaComponents(window.getComputedStyle(ref.current).getPropertyValue('color'));
@@ -64,7 +65,7 @@ const Text: FunctionComponent<TextProps> = ({
     },
     '@keyframes highlight': highlightFrames.current
   }))();
-  const highlight = lastValue.current && lastValue.current.length > 0 && data != lastValue.current;
+  const highlight = animateChange && lastValue.current && lastValue.current.length > 0 && data != lastValue.current;
   lastValue.current = data;
 
   return <span ref={ref} className={cx(highlight && highlightStyle.highlight)}>{data}</span>
@@ -74,5 +75,6 @@ export default Text;
 
 type TextProps = {
   data: string,
+  animateChange?: boolean
   emphasisColor?: string
 }
