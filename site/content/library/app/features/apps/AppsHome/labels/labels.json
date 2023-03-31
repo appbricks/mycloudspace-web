@@ -17,6 +17,18 @@
       "text": "Space Owner"
     },
     {
+      "id": "appSpaceOwner",
+      "text": "Space Owner"
+    },
+    {
+      "id": "appDomainName",
+      "text": "Domain Name"
+    },
+    {
+      "id": "appPorts",
+      "text": "Service Ports"
+    },
+    {
       "id": "appSettingsDialog",
       "text": "App Settings"
     },

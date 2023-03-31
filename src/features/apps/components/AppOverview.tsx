@@ -64,13 +64,20 @@ const AppOverview: FunctionComponent<AppOverviewProps> = ({ app, isOwner }) => {
         </Typography>
         <Divider variant="fullWidth" className={styles.divider} />
         <Typography component='div'>
-          <strong>{labelLookup('appLastSeen').text()}: </strong><Text data={app.lastSeen}/>
+          <strong>{labelLookup('appLastSeen').text()}: </strong><Text data={app.lastSeen} />
         </Typography>
         <Typography component='div'>
           <strong>{labelLookup('appInstalledSpace').text()}: </strong>{app!.installedSpace}
         </Typography>
         <Typography component='div'>
           <strong>{labelLookup('appSpaceOwner').text()}: </strong>{app!.spaceOwner}
+        </Typography>
+        <Divider variant="fullWidth" className={styles.divider} />
+        <Typography component='div'>
+          <strong>{labelLookup('appDomainName').text()}: </strong><Text data={app!.domainName} enableCopy />
+        </Typography>
+        <Typography component='div'>
+          <strong>{labelLookup('appPorts').text()}: </strong><Text data={app!.ports} enableCopy />
         </Typography>
       </div>
     </Tile>
