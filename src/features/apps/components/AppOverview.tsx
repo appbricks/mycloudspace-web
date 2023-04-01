@@ -39,6 +39,7 @@ const AppOverview: FunctionComponent<AppOverviewProps> = ({ app, isOwner }) => {
     <Tile 
       header={{
         title: app.name,
+        subheader: app.description,
         action: <>
           <IconButton 
             aria-label="settings"
