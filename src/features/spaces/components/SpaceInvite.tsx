@@ -146,16 +146,16 @@ const SpaceInvite: FunctionComponent<SpaceInviteProps> = (props) => {
         </Typography>
         <Divider variant="fullWidth" className={styles.divider} />
         <Typography component='div'>
-          <strong>{labelLookup('spaceLastSeen').text()}: </strong><Text data={space.lastSeen}/>
+          <strong>{labelLookup('spaceLastSeen').text()}: </strong>{space.lastSeen}
         </Typography>
         <Typography component='div'>
-          <strong>{labelLookup('spaceClients').text()}: </strong><Text data={space.clientsConnected.toString()}/>
+          <strong>{labelLookup('spaceClients').text()}: </strong><Text data={space.clientsConnected.toString()} animateChange />
         </Typography>
         <Typography component='div'>
-          <strong>{labelLookup('spaceBytesIn').text()}: </strong><Text data={space.dataUsageIn}/>
+          <strong>{labelLookup('spaceBytesIn').text()}: </strong><Text data={space.dataUsageIn} animateChange />
         </Typography>
         <Typography component='div'>
-          <strong>{labelLookup('spaceBytesOut').text()}: </strong><Text data={space.dataUsageOut}/>
+          <strong>{labelLookup('spaceBytesOut').text()}: </strong><Text data={space.dataUsageOut} animateChange />
         </Typography>
         <Divider variant="fullWidth" className={styles.divider} />
         <Typography component='div'>
@@ -168,7 +168,7 @@ const SpaceInvite: FunctionComponent<SpaceInviteProps> = (props) => {
           <strong>{labelLookup('spaceLocation').text()}: </strong>{space!.location}
         </Typography>
         <Typography component='div'>
-          <strong>{labelLookup('spaceVersion').text()}: </strong><Text data={space!.version}/>
+          <strong>{labelLookup('spaceVersion').text()}: </strong><Text data={space!.version} animateChange />
         </Typography>
         <Typography component='div'>
           <strong>{labelLookup('spaceOwner').text()}: </strong>{space!.ownerAdmin}

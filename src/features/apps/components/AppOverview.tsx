@@ -39,6 +39,7 @@ const AppOverview: FunctionComponent<AppOverviewProps> = ({ app, isOwner }) => {
     <Tile 
       header={{
         title: app.name,
+        subheader: app.description,
         action: <>
           <IconButton 
             aria-label="settings"
@@ -49,11 +50,13 @@ const AppOverview: FunctionComponent<AppOverviewProps> = ({ app, isOwner }) => {
         </>
       }}
       width={400}
-      toggleExpand={isOwner as boolean}
-      toggleExpandLabel='Users'
-      expandedContent={<>
-        <AppUserList app={app!} />
-      </>}
+      toggles={[
+        {
+          expandable: isOwner,
+          expandLabel: 'Users',
+          content: <AppUserList app={app!} />
+        }
+      ]}
     >
       <div className={styles.body}>
         <Typography component='div'>
@@ -62,13 +65,20 @@ const AppOverview: FunctionComponent<AppOverviewProps> = ({ app, isOwner }) => {
         </Typography>
         <Divider variant="fullWidth" className={styles.divider} />
         <Typography component='div'>
-          <strong>{labelLookup('appLastSeen').text()}: </strong><Text data={app.lastSeen}/>
+          <strong>{labelLookup('appLastSeen').text()}: </strong><Text data={app.lastSeen} />
         </Typography>
         <Typography component='div'>
           <strong>{labelLookup('appInstalledSpace').text()}: </strong>{app!.installedSpace}
         </Typography>
         <Typography component='div'>
           <strong>{labelLookup('appSpaceOwner').text()}: </strong>{app!.spaceOwner}
+        </Typography>
+        <Divider variant="fullWidth" className={styles.divider} />
+        <Typography component='div'>
+          <strong>{labelLookup('appDomainName').text()}: </strong><Text data={app!.domainName} enableCopy />
+        </Typography>
+        <Typography component='div'>
+          <strong>{labelLookup('appPorts').text()}: </strong><Text data={app!.ports} enableCopy />
         </Typography>
       </div>
     </Tile>

@@ -60,7 +60,7 @@ const AppUserList: FunctionComponent<AppUserListProps> = (props) => {
   const actionStatusTracker = React.useRef(new ActionStatusTracker());
 
   React.useEffect(() => {
-    userspaceService!.userSearch('', 10);
+    userspaceService!.userSearch('', 50);
     return () => {
       userspaceService!.clearUserSearchResults();
     };
@@ -96,7 +96,7 @@ const AppUserList: FunctionComponent<AppUserListProps> = (props) => {
 
   const handleUpdateOptionList = (filter: string) => {
     actionStatusTracker.current.track(
-      userspaceService!.userSearch(filter, 20)
+      userspaceService!.userSearch(filter, 50)
     );
   };
 

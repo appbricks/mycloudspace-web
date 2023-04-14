@@ -102,17 +102,17 @@ const DeviceOverview: FunctionComponent<DeviceOverviewProps> = ({ device, isOwne
         </Typography>
         {isOwner &&
           <Typography component='div'>
-            <strong>{labelLookup('deviceAccessedBy').text()}: </strong><Text data={device.lastAccessedBy}/>
+            <strong>{labelLookup('deviceAccessedBy').text()}: </strong><Text data={device.lastAccessedBy} animateChange />
           </Typography>
         }
         <Typography component='div'>
-          <strong>{labelLookup('deviceConnectedTo').text()}: </strong><Text data={device.lastSpaceConnectedTo}/>
+          <strong>{labelLookup('deviceConnectedTo').text()}: </strong><Text data={device.lastSpaceConnectedTo} animateChange />
         </Typography>
         <Typography component='div'>
-          <strong>{labelLookup('deviceBytesIn').text()}: </strong><Text data={device.dataUsageIn}/>
+          <strong>{labelLookup('deviceBytesIn').text()}: </strong><Text data={device.dataUsageIn} animateChange />
         </Typography>
         <Typography component='div'>
-          <strong>{labelLookup('deviceBytesOut').text()}: </strong><Text data={device.dataUsageOut}/>
+          <strong>{labelLookup('deviceBytesOut').text()}: </strong><Text data={device.dataUsageOut} animateChange />
         </Typography>
         {!isOwner && 
           <>
