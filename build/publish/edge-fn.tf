@@ -37,7 +37,7 @@ resource "aws_lambda_function" "edge-fn" {
   filename         = local.cloudfront_edge_fn_source
   source_code_hash = filebase64sha256(local.cloudfront_edge_fn_source)
   handler          = "index.handler"
-  runtime          = "nodejs12.x"
+  runtime          = "nodejs20.x"
 
   role    = aws_iam_role.edge-fn.arn
   publish = true
