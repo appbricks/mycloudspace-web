@@ -5,18 +5,31 @@ resource "aws_s3_bucket" "appbricks-io" {
   bucket = local.env_domain
 }
 
+resource "aws_s3_bucket_ownership_controls" "appbricks-io" {
+  bucket = aws_s3_bucket.appbricks-io.id
+
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
 resource "aws_s3_bucket_public_access_block" "appbricks-io" {
   bucket = aws_s3_bucket.appbricks-io.id
 
   block_public_acls       = false
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
 }
 
 resource "aws_s3_bucket_acl" "appbricks-io" {
   bucket = aws_s3_bucket.appbricks-io.id
   acl    = "public-read"
+
+  depends_on = [
+    aws_s3_bucket_ownership_controls.appbricks-io,
+    aws_s3_bucket_public_access_block.appbricks-io,
+  ]
 }
 
 resource "aws_s3_bucket_policy" "appbricks-io" {
