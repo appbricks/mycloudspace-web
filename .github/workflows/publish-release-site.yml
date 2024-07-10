@@ -25,7 +25,7 @@ jobs:
     
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     # Download published release
     - name: Download site content
@@ -46,7 +46,7 @@ jobs:
         echo "Initializing for production environment."
         terraform -chdir=build/publish init \
           -backend-config="key=website/appbricks-io" \
-          -backend-config="bucket=appbricks-tfstate-useast1"
+          -backend-config="bucket=appbricks-tfstate-us-east-1"
 
     # Generates an execution plan for Terraform
     - name: Site update plan (Terraform Plan)

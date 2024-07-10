@@ -47,7 +47,7 @@ jobs:
 
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     #
     # Configure and run site content build
@@ -62,7 +62,7 @@ jobs:
         gatsby build
 
     - name: Upload site content
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@v4
       with:
         name: site-content
         path: ${{ github.workspace }}/public
@@ -82,11 +82,11 @@ jobs:
 
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     # Retrieve built content from previous job
     - name: Download site content for release
-      uses: actions/download-artifact@master
+      uses: actions/download-artifact@v4
       with:
         name: site-content
         path: ${{ github.workspace }}/public
@@ -165,11 +165,11 @@ jobs:
 
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     # Retrieve built content from previous job
     - name: Download site content to be staged
-      uses: actions/download-artifact@master
+      uses: actions/download-artifact@v4
       with:
         name: site-content
         path: ${{ github.workspace }}/public
@@ -182,7 +182,7 @@ jobs:
         echo "Initializing for environment: $TF_VAR_env"
         terraform -chdir=build/publish init \
           -backend-config="key=website/appbricks-io_${TF_VAR_env}" \
-          -backend-config="bucket=appbricks-tfstate-useast1"
+          -backend-config="bucket=appbricks-tfstate-us-east-1"
 
     # Generates an execution plan for Terraform
     - name: Site update plan (Terraform Plan)
