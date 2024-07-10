@@ -48,6 +48,8 @@ resource "aws_s3_bucket_policy" "appbricks-io" {
   ]
 }
 POLICY
+
+  depends_on = [aws_s3_bucket_acl.appbricks-io]
 }
 
 #
@@ -98,5 +100,5 @@ resource "aws_s3_object" "content" {
   content_type = local.publish_file_list_mime[count.index]
   etag         = filemd5(local.publish_file_list[count.index])
 
-  depends_on = [aws_s3_bucket.appbricks-io]
+  depends_on = [aws_s3_bucket_policy.appbricks-io]
 }
