@@ -5,6 +5,15 @@ resource "aws_s3_bucket" "appbricks-io" {
   bucket = local.env_domain
 }
 
+resource "aws_s3_bucket_public_access_block" "appbricks-io" {
+  bucket = aws_s3_bucket.appbricks-io.id
+
+  block_public_acls       = false
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
 resource "aws_s3_bucket_acl" "appbricks-io" {
   bucket = aws_s3_bucket.appbricks-io.id
   acl    = "public-read"
