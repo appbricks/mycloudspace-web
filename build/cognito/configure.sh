@@ -58,9 +58,9 @@ identity_outputs=$(aws --region ${aws_region} \
   | jq '.Stacks[0].Outputs[]' \
   | sed 's|\\n|\\\\n|g')
 
-api_outputs=$(aws --region ${aws_region} \
+api_gql_outputs=$(aws --region ${aws_region} \
   cloudformation describe-stacks \
-  --stack-name ${env_name}-api \
+  --stack-name ${env_name}-api-gql \
   | jq '.Stacks[0].Outputs[]' \
   | sed 's|\\n|\\\\n|g')
 
@@ -69,20 +69,20 @@ cognitoRegion=$(echo "$identity_outputs" | jq -r 'select(.OutputKey=="Region") |
 userPoolId=$(echo "$identity_outputs" | jq -r 'select(.OutputKey=="UserPoolId") | .OutputValue')
 webClientID=$(echo "$identity_outputs" | jq -r 'select(.OutputKey=="UserPoolWebClientId") | .OutputValue')
 cliClientID=$(echo "$identity_outputs" | jq -r 'select(.OutputKey=="UserPoolCLIClientId") | .OutputValue')
-appsyncRegion=$(echo "$api_outputs" | jq -r 'select(.OutputKey=="Region") | .OutputValue')
-userSpaceApiUrl=$(echo "$api_outputs" | jq -r 'select(.OutputKey=="UserSpaceApiUrl") | .OutputValue')
+appsyncRegion=$(echo "$api_gql_outputs" | jq -r 'select(.OutputKey=="Region") | .OutputValue')
+userSpaceApiUrl=$(echo "$api_gql_outputs" | jq -r 'select(.OutputKey=="UserSpaceApiUrl") | .OutputValue')
 
-set +e
-result=$(aws --region ${aws_region} \
-  cognito-idp set-ui-customization \
-  --user-pool-id "${userPoolId}" \
-  --client-id "${cliClientID}" \
-  --image-file "fileb://${home_dir}/site/images/appbricks-logo-name.png" \
-  --css "$(cat ${home_dir}/build/cognito/ui-customization.css)")
-if [[ $? -ne 0 ]]; then
-  echo -e "ERROR! Unable to set hosted UI customization.\n${result}\n"
-fi
-set -e
+# set +e
+# result=$(aws --region ${aws_region} \
+#   cognito-idp set-ui-customization \
+#   --user-pool-id "${userPoolId}" \
+#   --client-id "${cliClientID}" \
+#   --image-file "fileb://${home_dir}/site/images/appbricks-logo-name.png" \
+#   --css "$(cat ${home_dir}/build/cognito/ui-customization.css)")
+# if [[ $? -ne 0 ]]; then
+#   echo -e "ERROR! Unable to set hosted UI customization.\n${result}\n"
+# fi
+# set -e
 
 # aws amplify config for mycloudspace web app
 cat << ---EOF > ${home_dir}/src/aws-exports.ts
