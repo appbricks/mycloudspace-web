@@ -96,6 +96,13 @@ jobs:
         name: site-content
         path: ${{ github.workspace }}/public
 
+    # Setup Terraform CLI
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3.1.2
+      with:
+          terraform_version: ^1.5.7
+          terraform_wrapper: false
+
     # Initialize a new or existing Terraform working
     # directory by creating initial files, loading any
     # remote state, downloading modules, etc.
