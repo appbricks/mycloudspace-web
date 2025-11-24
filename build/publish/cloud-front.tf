@@ -2,10 +2,10 @@
 # Publish S3 content to a secured CloudFront website
 #
 
-data "aws_acm_certificate" "appbricks-io" {
-  domain = var.domain
-  statuses = ["ISSUED"]
-}
+# data "aws_acm_certificate" "appbricks-io" {
+#   domain = var.domain
+#   statuses = ["ISSUED"]
+# }
 
 resource "aws_cloudfront_distribution" "appbricks-io" {
   price_class = "PriceClass_100"
@@ -63,15 +63,15 @@ resource "aws_cloudfront_distribution" "appbricks-io" {
     ? tolist([local.env_domain, "www.${local.env_domain}"])
     : [])
 
-  dynamic "viewer_certificate" {
-    # production
-    for_each = length(var.env) == 0 ? [1] : []
-    content {
-      acm_certificate_arn      = data.aws_acm_certificate.appbricks-io.arn
-      ssl_support_method       = "sni-only"
-      minimum_protocol_version = "TLSv1.1_2016"
-    }
-  }
+  # dynamic "viewer_certificate" {
+  #   # production
+  #   for_each = length(var.env) == 0 ? [1] : []
+  #   content {
+  #     acm_certificate_arn      = data.aws_acm_certificate.appbricks-io.arn
+  #     ssl_support_method       = "sni-only"
+  #     minimum_protocol_version = "TLSv1.1_2016"
+  #   }
+  # }
   dynamic "viewer_certificate" {
     # non-production
     for_each = length(var.env) == 0 ? [] : [1]
